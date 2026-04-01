@@ -1,0 +1,95 @@
+# Series whose episode numbers should never be stripped during semantic matching
+series_keep_episode_nos:
+  - tele-gym
+  - telekolleg
+  - the movies
+  - willkommen österreich
+  - quarks
+  - ein jahrhundertleben
+  - drunter und drüber
+  - hüttengeschichten
+  - come fly with me
+  - das gipfeltreffen
+  - ladies night
+  - smeilingen
+  - das große kleinkunstfestival
+  - olafs klub
+  - kabarettgipfel
+  - hader spielt
+  - bestes kabarett
+  - nuhr
+
+# Keywords in the episode part that prevent episode number stripping
+episode_keep_keywords:
+  - großbritannien
+  - britannien
+  - britisch
+  - österreich
+  - österreichisch
+  - deutschland
+  - deutsch
+  - frankreich
+  - französisch
+  - belgien
+  - belgisch
+  - dänemark
+  - dänisch
+  - schweden
+  - schwedisch
+  - finnland
+  - finnisch
+  - norwegen
+  - norwegisch
+  - spanien
+  - spanisch
+  - italien
+  - italienisch
+  - niederlande
+  - niederländisch
+  - usa
+  - amerikanisch
+  - gb
+  - uk
+  - schweiz
+  - schweizer
+  - comedy
+  - serie
+  - staffel
+  - season
+  - near-future
+  - achtteilige
+  - familiengeschichte
+  - reisegeschichten
+  - ost-west
+  - teilig
+  - teiler
+  - republik
+  - die geschichte von
+  - erstausstrahlung
+  - nach einer idee
+  - n. einer idee
+  - schwerpunkt
+  - engrenages
+  - wie städter zu sennen werden
+  - das abenteuer
+  - peter gysling
+  - talente der eliteschule
+  - tierdoku
+  - dokumentation
+  - von alaska nach feuerland
+  - thorsten kutschke
+  - vom fjell zu den fjorden
+  - caveman
+  - nach einem roman
+  - ist sie für beifall noch zu jung
+
+# Year-based keywords that prevent episode number stripping (for multi-part entries)
+episode_keep_keywords_years:
+  - großbritannien
+  - "2017"
+  - "2018"
+  - "2019"
+  - "2020"
+  - "2021"
+  - "2022"
+  - "2023"

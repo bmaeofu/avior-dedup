@@ -1,0 +1,3 @@
+# Files to ignore completely (matched by basename, case-insensitive)
+- log.txt
+- duplicate_case_files_found.txt

@@ -1,0 +1,51 @@
+from __future__ import annotations
+
+from typing import Any, Literal
+
+from pydantic import BaseModel, Field
+
+
+class JobRequest(BaseModel):
+    mode: Literal["m", "f"]
+    source: str
+    target: str
+    logname: str = "dedup_log.txt"
+    duptype: Literal["case", "exact", "semantic", "both", "all"] = "case"
+    prefer_errors: bool = False
+    error_target: str | None = None
+    novideo_target: str | None = None
+    max_errors_when_mc: int = 0
+    semantic_prefixes: list[str] = Field(default_factory=lambda: [r"terra\s*x\s*-\s*"])
+    remove_episode_nos: bool = False
+
+
+class ProgressSnapshot(BaseModel):
+    phase: str = ""
+    current_file: str | None = None
+    current_dir: str | None = None
+    dirs_completed: int = 0
+    dirs_total: int = 0
+    files_scanned: int = 0
+    groups_found: int = 0
+    files_planned: int = 0
+    files_moved: int = 0
+    total_files_to_move: int = 0
+
+
+class JobResult(BaseModel):
+    files_scanned: int
+    groups_found: int
+    action_counts: dict[str, int]
+    log_path: str | None
+
+
+class JobStatus(BaseModel):
+    job_id: str
+    state: str
+    progress: ProgressSnapshot | None = None
+    result: JobResult | None = None
+    error: str | None = None
+
+
+class ConfigUpdate(BaseModel):
+    content: Any

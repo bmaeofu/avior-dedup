@@ -1,0 +1,21 @@
+# Exclude heavy .git dirs but keep HEAD, refs, and packed-refs for version hash
+.git/objects
+.git/hooks
+.git/logs
+.git/info
+.git/modules
+.vscode
+.venv
+__pycache__
+*.pyc
+node_modules
+frontend/node_modules
+frontend/dist
+tests/
+secrets.yaml
+secrets.env
+*.md
+!README.md
+.dockerignore
+Dockerfile
+docker-compose.yml
