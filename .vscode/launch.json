@@ -1,0 +1,134 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "avior-dedup: FilmeHD_sonst semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic",  "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: DokHD case",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["f", "\\\\UMS\\media\\tv\\DokHD","\\\\UMS\\media\\tv\\found_duplicates\\DokHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "case", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: DokHD semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\tv\\DokHD","\\\\UMS\\media\\tv\\found_duplicates\\DokHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--semantic-prefixes", "terra\\s*x\\s*-\\s*", "^erlebnis\\s+erde\\s*-?\\s*", "^abenteuer\\s+wildnis\\s*-?\\s*", "--remove-episode-nos", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: KrimiHD semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\tv\\KrimiHD", "\\\\UMS\\media\\tv\\found_duplicates\\KrimiHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--semantic-prefixes", "^heiter\\s+bis\\s+t[oö]dlich*", "--remove-episode-nos", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: SerienHD semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\tv\\SerienHD", "\\\\UMS\\media\\tv\\found_duplicates\\SerienHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--remove-episode-nos", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: FilmeHD case",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["f", "\\\\UMS\\media\\tv\\FilmeHD","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_case", "duplicate_case_files_found.txt",  "--duptype", "case",  "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: obsolete.old semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\transcoded\\.obsolete\\.obsolete.old","\\\\UMS\\media\\tv\\found_duplicates\\.obsolete.old", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--semantic-prefixes", "\\s+logmatchmodule.*(?=\\.)", "--remove-episode-nos", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: obsolete.old errors",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\transcoded\\.obsolete\\.obsolete.old","\\\\UMS\\media\\tv\\found_duplicates\\.obsolete.old_with_errors", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--semantic-prefixes", "\\s+errorreplacemodule.*(?=\\.)", "--remove-episode-nos", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: Bereinigte Duplikate DokHD",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\Bereinigte Duplikate\\DokHD","\\\\UMS\\media\\tv\\found_duplicates\\DokHD", "duplicate_case_files_found.txt",  "--duptype", "case", "--prefer-errors", "--error-target", "\\\\UMS\\media\\bad_recording_duplicates\\DokHD"]
+        },
+        {
+            "name": "avior-dedup: Unterhaltung semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["f", "\\\\UMS\\media\\tv\\Unterhaltung, Kabarret & Comedy","\\\\UMS\\media\\tv\\found_duplicates\\Unterhaltung, Kabarret & Comedy", "duplicate_case_files_found.txt", "--duptype", "semantic", "--remove-episode-nos", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup: MusikvideosHD semantic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["m", "\\\\UMS\\media\\tv\\MusikvideosHD", "\\\\UMS\\media\\tv\\found_duplicates\\MusikvideosHD", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
+            "name": "avior-dedup-server: Backend API",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup.server",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "AVIOR_DEDUP_HOST": "0.0.0.0",
+                "AVIOR_DEDUP_PORT": "8642"
+            }
+        },
+        {
+            "name": "avior-dedup-frontend: Vite Dev Server",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/frontend",
+            "runtimeExecutable": "pnpm",
+            "runtimeArgs": ["dev"],
+            "console": "integratedTerminal"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "avior-dedup: Full Stack (Backend + Frontend)",
+            "configurations": [
+                "avior-dedup-server: Backend API",
+                "avior-dedup-frontend: Vite Dev Server"
+            ]
+        }
+    ]
+}
