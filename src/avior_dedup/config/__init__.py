@@ -1,17 +1,42 @@
 from __future__ import annotations
 
+import os
+import shutil
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-_CONFIG_DIR = Path(__file__).parent
+_BUNDLED_DIR = Path(__file__).parent
+_CONFIG_DIR: Path | None = None
 _cache: dict[str, Any] = {}
+
+
+def _resolve_config_dir() -> Path:
+    """Return the active config directory, initialising from defaults if needed."""
+    global _CONFIG_DIR
+    if _CONFIG_DIR is not None:
+        return _CONFIG_DIR
+
+    env = os.getenv("AVIOR_DEDUP_CONFIG_DIR")
+    if env:
+        target = Path(env)
+        target.mkdir(parents=True, exist_ok=True)
+        # Seed with bundled defaults if the directory is empty
+        for yaml_file in _BUNDLED_DIR.glob("*.yaml"):
+            dest = target / yaml_file.name
+            if not dest.exists():
+                shutil.copy2(yaml_file, dest)
+        _CONFIG_DIR = target
+    else:
+        _CONFIG_DIR = _BUNDLED_DIR
+
+    return _CONFIG_DIR
 
 
 def _load_yaml(filename: str) -> Any:
     if filename not in _cache:
-        with open(_CONFIG_DIR / filename, "r", encoding="utf-8") as f:
+        with open(_resolve_config_dir() / filename, "r", encoding="utf-8") as f:
             _cache[filename] = yaml.safe_load(f)
     return _cache[filename]
 
@@ -54,7 +79,7 @@ def episode_keep_keywords_years() -> list[str]:
 
 def config_dir() -> Path:
     """Return the directory containing the YAML config files."""
-    return _CONFIG_DIR
+    return _resolve_config_dir()
 
 
 def config_files() -> dict[str, str]:

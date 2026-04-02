@@ -25,6 +25,9 @@ COPY --from=frontend-build /app/frontend/dist /app/frontend-dist
 ENV AVIOR_DEDUP_HOST=0.0.0.0
 ENV AVIOR_DEDUP_PORT=8642
 ENV AVIOR_DEDUP_FRONTEND_DIST=/app/frontend-dist
+ENV AVIOR_DEDUP_CONFIG_DIR=/config
+
+VOLUME /config
 
 EXPOSE 8642
 
