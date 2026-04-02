@@ -58,6 +58,35 @@ uv run avior-dedup-server   # API + frontend on port 8642
 
 You get a job form with all the CLI options as proper controls, live progress over WebSocket, results with action stats, and a config editor for the YAML files. Supports light and dark mode.
 
+### Docker
+
+A combined image bundles the frontend and backend. Config files are seeded into the mounted volume on first start.
+
+```yaml
+# docker-compose.yaml
+services:
+  avior-dedup:
+    build: .
+    # or: image: ghcr.io/your-org/avior-dedup:latest
+    ports:
+      - "8642:8642"
+    volumes:
+      - ./config:/config         # YAML config files (seeded on first run)
+      - /mnt/media:/mnt/media    # make your media directories accessible
+    environment:
+      - AVIOR_DEDUP_PORT=8642    # optional, 8642 is default
+```
+
+| Variable | Default | Description |
+|---|---|---|
+| `AVIOR_DEDUP_HOST` | `0.0.0.0` | Server bind address |
+| `AVIOR_DEDUP_PORT` | `8642` | Server port |
+| `AVIOR_DEDUP_CONFIG_DIR` | `/config` | Config directory (mounted volume) |
+
+```bash
+docker compose up -d
+```
+
 ### Frontend development
 
 Frontend is in `frontend/`, built with Vite. A nix shell provides pnpm:
@@ -84,15 +113,17 @@ Keyword lists and filters live in YAML files under `src/avior_dedup/config/`. Yo
 
 ```
 src/avior_dedup/
-├── cli.py          # CLI entry point
-├── server.py       # FastAPI + WebSocket progress
-├── schemas.py      # Pydantic models
-├── progress.py     # Thread-safe progress reporter
-├── scanner.py      # Directory walking, duplicate detection
-├── planner.py      # Move plan building and execution
-├── reporting.py    # Log sorting and summary
-├── normalize.py    # Filename normalization
-├── suffix.py       # Suffix matching
-├── models.py       # FileRecord, MoveAction
-└── config/         # YAML config files and loader
+├── cli.py              # CLI entry point
+├── config/             # YAML config files and loader
+├── dedup/              # Core dedup logic
+│   ├── scanner.py      # Directory walking, duplicate detection
+│   ├── planner.py      # Move plan building and execution
+│   ├── reporting.py    # Log sorting and summary
+│   ├── normalize.py    # Filename normalization
+│   ├── suffix.py       # Suffix matching
+│   └── models.py       # FileRecord, MoveAction
+└── server/             # Web interface
+    ├── server.py       # FastAPI + WebSocket progress
+    ├── schemas.py      # Pydantic models
+    └── progress.py     # Thread-safe progress reporter
 ```
