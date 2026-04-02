@@ -15,11 +15,11 @@ from fastapi.staticfiles import StaticFiles
 
 from avior_dedup import config
 from avior_dedup.cli import get_numbered_log_file
-from avior_dedup.planner import build_move_plan, execute_move_plan
-from avior_dedup.progress import JobCancelled, ProgressReporter
-from avior_dedup.reporting import sort_and_finalize_log
-from avior_dedup.scanner import find_duplicates
-from avior_dedup.schemas import (
+from avior_dedup.dedup.planner import build_move_plan, execute_move_plan
+from avior_dedup.dedup.reporting import sort_and_finalize_log
+from avior_dedup.dedup.scanner import find_duplicates
+from avior_dedup.server.progress import JobCancelled, ProgressReporter
+from avior_dedup.server.schemas import (
     ConfigUpdate,
     JobRequest,
     JobResult,
@@ -321,7 +321,9 @@ async def ws_job_progress(websocket: WebSocket, job_id: str) -> None:
 # Static file serving (production frontend build)
 # ---------------------------------------------------------------------------
 
-_FRONTEND_DIST = Path(__file__).parent.parent.parent / "frontend" / "dist"
+_FRONTEND_DIST = Path(os.getenv("AVIOR_DEDUP_FRONTEND_DIST", ""))
+if not _FRONTEND_DIST.is_dir():
+    _FRONTEND_DIST = Path(__file__).parent.parent.parent.parent / "frontend" / "dist"
 if _FRONTEND_DIST.is_dir():
     app.mount("/", StaticFiles(directory=str(_FRONTEND_DIST), html=True), name="static")
 

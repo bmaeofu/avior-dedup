@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue'
 import { useConfig } from '../composables/useConfig'
-import ChipListEditor from './ChipListEditor.vue'
+import ListEditor from './ListEditor.vue'
 
 const props = defineProps<{
   configName: string
+  columns?: number
 }>()
+
+const dictKeys = computed(() => {
+  if (!localData.value || !isDict.value) return []
+  return Object.keys(localData.value)
+})
+
+const leftKeys = computed(() => dictKeys.value.filter((_, i) => i % 2 === 0))
+const rightKeys = computed(() => dictKeys.value.filter((_, i) => i % 2 === 1))
 
 const { data, loading, error, saved, load, save } = useConfig(props.configName)
 const localData = ref<any>(null)
@@ -46,12 +55,51 @@ function handleSave() {
     <v-alert v-if="error" type="error" density="compact" class="mb-3">{{ error }}</v-alert>
 
     <template v-if="localData !== null && isList">
-      <ChipListEditor :model-value="localData" @update:model-value="updateList" />
+      <ListEditor :model-value="localData" @update:model-value="updateList" />
+    </template>
+
+    <template v-else-if="localData !== null && isDict && columns === 2">
+      <div class="d-flex ga-4 flex-column flex-md-row align-start">
+        <div class="flex-1-1-0">
+          <div v-for="key in leftKeys" :key="key" class="mb-4">
+            <ListEditor
+              v-if="Array.isArray(localData[key])"
+              :model-value="localData[key]"
+              @update:model-value="(v: string[]) => updateDictKey(key, v)"
+              :label="key"
+            />
+            <v-text-field
+              v-else
+              v-model="localData[key]"
+              :label="key"
+              density="compact"
+              variant="outlined"
+            />
+          </div>
+        </div>
+        <div class="flex-1-1-0">
+          <div v-for="key in rightKeys" :key="key" class="mb-4">
+            <ListEditor
+              v-if="Array.isArray(localData[key])"
+              :model-value="localData[key]"
+              @update:model-value="(v: string[]) => updateDictKey(key, v)"
+              :label="key"
+            />
+            <v-text-field
+              v-else
+              v-model="localData[key]"
+              :label="key"
+              density="compact"
+              variant="outlined"
+            />
+          </div>
+        </div>
+      </div>
     </template>
 
     <template v-else-if="localData !== null && isDict">
       <div v-for="(value, key) in localData" :key="key" class="mb-4">
-        <ChipListEditor
+        <ListEditor
           v-if="Array.isArray(value)"
           :model-value="localData[key]"
           @update:model-value="(v: string[]) => updateDictKey(String(key), v)"

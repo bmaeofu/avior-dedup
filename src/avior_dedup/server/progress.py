@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from avior_dedup.schemas import ProgressSnapshot
+from avior_dedup.server.schemas import ProgressSnapshot
 
 
 class JobCancelled(Exception):

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed, ref, onMounted } from 'vue'
 import type { JobRequest } from '../types'
-import ChipListEditor from './ChipListEditor.vue'
+import ListEditor from './ListEditor.vue'
 
 const emit = defineEmits<{
   start: [request: JobRequest]
@@ -59,33 +59,19 @@ function submit() {
 
 <template>
   <v-card>
-    <v-card-title>Dedup Job</v-card-title>
+    <v-card-item>
+      <v-card-title class="text-none">Dedup Scan</v-card-title>
+    </v-card-item>
+    <v-divider />
     <v-card-text>
-      <v-row dense>
-        <v-col cols="12" md="6">
-          <v-btn-toggle v-model="form.mode" mandatory color="primary" density="compact" class="mb-4">
-            <v-btn v-for="item in modeItems" :key="item.value" :value="item.value">
-              {{ item.title }}
-            </v-btn>
-          </v-btn-toggle>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-select
-            v-model="form.duptype"
-            :items="dupTypeItems"
-            label="Duplicate type"
-            density="compact"
-            variant="outlined"
-          />
-        </v-col>
-      </v-row>
-
+      <!-- Directories -->
+      <div class="text-subtitle-2 text-medium-emphasis mb-2">Directories</div>
       <v-row dense>
         <v-col cols="12" md="6">
           <v-combobox
             v-model="form.source"
             :items="sourceSuggestions"
-            label="Source directory"
+            label="Source"
             density="compact"
             variant="outlined"
             prepend-inner-icon="mdi-folder"
@@ -96,7 +82,7 @@ function submit() {
           <v-combobox
             v-model="form.target"
             :items="targetSuggestions"
-            label="Target directory"
+            label="Target"
             density="compact"
             variant="outlined"
             prepend-inner-icon="mdi-folder-move"
@@ -105,57 +91,43 @@ function submit() {
         </v-col>
       </v-row>
 
-      <v-row dense>
+      <v-divider class="my-4" />
+
+      <!-- Scan settings -->
+      <div class="text-subtitle-2 text-medium-emphasis mb-2">Scan settings</div>
+      <v-row dense align="center">
+        <v-col cols="12" md="4">
+          <v-select
+            v-model="form.duptype"
+            :items="dupTypeItems"
+            label="Duplicate type"
+            density="compact"
+            variant="outlined"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-btn-toggle v-model="form.mode" mandatory color="primary" density="compact">
+            <v-btn v-for="item in modeItems" :key="item.value" :value="item.value" class="text-none">
+              {{ item.title }}
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
         <v-col cols="12" md="4">
           <v-text-field
             v-model="form.logname"
             label="Log filename"
             density="compact"
             variant="outlined"
+            hide-details
           />
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="form.error_target"
-            label="Error target (optional)"
-            density="compact"
-            variant="outlined"
-            clearable
-            hint="Leave empty for <target>/errors"
-            persistent-hint
-          >
-            <template #append-inner>
-              <v-tooltip location="top" max-width="300">
-                <template #activator="{ props: tp }">
-                  <v-icon v-bind="tp" size="small">mdi-help-circle-outline</v-icon>
-                </template>
-                Directory where duplicates with encoding errors are moved to. When the best recording is kept, inferior copies that have errors in their .log files end up here instead of the main target.
-              </v-tooltip>
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="form.novideo_target"
-            label="No-video target (optional)"
-            density="compact"
-            variant="outlined"
-            clearable
-            hint="Leave empty for <target>/no_video"
-            persistent-hint
-          >
-            <template #append-inner>
-              <v-tooltip location="top" max-width="300">
-                <template #activator="{ props: tp }">
-                  <v-icon v-bind="tp" size="small">mdi-help-circle-outline</v-icon>
-                </template>
-                Directory where metadata files (logs, nfo, images) with no corresponding video file are moved to.
-              </v-tooltip>
-            </template>
-          </v-text-field>
         </v-col>
       </v-row>
 
+      <v-divider class="my-4" />
+
+      <!-- Error handling -->
+      <div class="text-subtitle-2 text-medium-emphasis mb-2">Error handling</div>
       <v-row dense>
         <v-col cols="12" md="4">
           <v-text-field
@@ -165,17 +137,60 @@ function submit() {
             density="compact"
             variant="outlined"
             min="0"
+            hide-details
           >
             <template #append-inner>
               <v-tooltip location="top" max-width="300">
                 <template #activator="{ props: tp }">
                   <v-icon v-bind="tp" size="small">mdi-help-circle-outline</v-icon>
                 </template>
-                Maximum number of encoding errors allowed for a multichannel (AC3 5.x) recording to still be considered a good copy. Recordings exceeding this are treated as error duplicates.
+                Maximum encoding errors allowed for a multichannel recording to still be considered good.
               </v-tooltip>
             </template>
           </v-text-field>
         </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+            v-model="form.error_target"
+            label="Error target"
+            density="compact"
+            variant="outlined"
+            clearable
+            hide-details
+            placeholder="Default: <target>/errors"
+          >
+            <template #append-inner>
+              <v-tooltip location="top" max-width="300">
+                <template #activator="{ props: tp }">
+                  <v-icon v-bind="tp" size="small">mdi-help-circle-outline</v-icon>
+                </template>
+                Directory where duplicates with encoding errors are moved to.
+              </v-tooltip>
+            </template>
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+            v-model="form.novideo_target"
+            label="No-video target"
+            density="compact"
+            variant="outlined"
+            clearable
+            hide-details
+            placeholder="Default: <target>/no_video"
+          >
+            <template #append-inner>
+              <v-tooltip location="top" max-width="300">
+                <template #activator="{ props: tp }">
+                  <v-icon v-bind="tp" size="small">mdi-help-circle-outline</v-icon>
+                </template>
+                Directory where metadata files with no corresponding video are moved to.
+              </v-tooltip>
+            </template>
+          </v-text-field>
+        </v-col>
+      </v-row>
+      <v-row dense class="mt-1">
         <v-col cols="12" md="4">
           <v-checkbox
             v-model="form.prefer_errors"
@@ -184,6 +199,13 @@ function submit() {
             hide-details
           />
         </v-col>
+      </v-row>
+
+      <v-divider class="my-4" />
+
+      <!-- Semantic matching -->
+      <div class="text-subtitle-2 text-medium-emphasis mb-2">Semantic matching</div>
+      <v-row dense>
         <v-col cols="12" md="4">
           <v-checkbox
             v-model="form.remove_episode_nos"
@@ -193,16 +215,16 @@ function submit() {
           />
         </v-col>
       </v-row>
-
-      <v-row dense>
+      <v-row dense class="mt-1">
         <v-col cols="12">
-          <ChipListEditor
+          <ListEditor
             v-model="form.semantic_prefixes"
             label="Semantic prefixes (regex patterns to strip)"
           />
         </v-col>
       </v-row>
     </v-card-text>
+    <v-divider />
     <v-card-actions>
       <v-spacer />
       <v-btn
@@ -211,6 +233,7 @@ function submit() {
         :disabled="!canSubmit"
         prepend-icon="mdi-play"
         @click="submit"
+        class="text-none"
       >
         Start Scan
       </v-btn>

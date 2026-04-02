@@ -5,8 +5,8 @@ import shutil
 from collections import Counter
 from typing import Callable, Optional
 
-from avior_dedup.models import FileRecord, MoveAction
-from avior_dedup.scanner import get_film_error_count
+from avior_dedup.dedup.models import FileRecord, MoveAction
+from avior_dedup.dedup.scanner import get_film_error_count
 
 
 def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, dict[str, str]]) -> str:
@@ -27,12 +27,39 @@ def select_best_film(
     valid_records: list[FileRecord],
     prefer_errors: bool,
     max_errors_when_mc: Optional[int],
+    max_duration_diff: int = 600,
 ) -> FileRecord:
     """Select the best recording to keep from a list of valid (video exists) records."""
-    if len(valid_records) == 1:
-        return valid_records[0]
+    # Hard exclusion criterion (highest priority):
+    # keep-candidates must have both durations and may not be more than 10 min longer than rec_duration.
+    keep_candidates = [
+        r
+        for r in valid_records
+        if r.video_duration is not None
+        and r.rec_duration is not None
+        and (r.video_duration - r.rec_duration) <= max_duration_diff
+    ]
 
-    mc = [r for r in valid_records if r.multichannel]
+    # Exception: allow a too-long recording if otherwise no error-free candidate exists.
+    too_long_error_free = [
+        r
+        for r in valid_records
+        if r.video_duration is not None
+        and r.rec_duration is not None
+        and (r.video_duration - r.rec_duration) > max_duration_diff
+        and r.error_count == 0
+    ]
+    keep_has_error_free = any(r.error_count == 0 for r in keep_candidates)
+
+    if too_long_error_free and not keep_has_error_free:
+        pool = too_long_error_free
+    else:
+        pool = keep_candidates if keep_candidates else valid_records
+
+    if len(pool) == 1:
+        return pool[0]
+
+    mc = [r for r in pool if r.multichannel]
     mc_good = mc
     if max_errors_when_mc is not None:
         mc_good = [
@@ -43,13 +70,13 @@ def select_best_film(
     if not prefer_errors:
         if mc_good:
             return max(mc_good, key=lambda r: r.mod_date or 0)
-        return max(valid_records, key=lambda r: r.mod_date or 0)
+        return max(pool, key=lambda r: r.mod_date or 0)
 
     # prefer_errors: pick fewest errors, then newest
     if mc_good:
         return min(mc_good, key=lambda r: (r.error_count, -(r.mod_date or 0)))
     return min(
-        valid_records,
+        pool,
         key=lambda r: (
             r.error_count if r.error_count is not None else 10**9,
             -(r.mod_date or 0),
@@ -68,6 +95,7 @@ def build_move_plan(
     file_to_groupkey: dict[str, dict[str, str]],
     log_fn: Callable[[str], None],
     progress_cb: Callable[[int, int], None] | None = None,
+    max_duration_diff: int = 600,
 ) -> tuple[dict[str, MoveAction], Counter]:
     """Decide what to do with each file. Returns (files_to_move, action_counter)."""
     film_info_cache: dict[str, FileRecord] = {}
@@ -98,7 +126,12 @@ def build_move_plan(
                 files_to_move[r.file] = MoveAction(novideo_target, "NO_VIDEO", group_name)
             continue
 
-        best_film = select_best_film(valid_records, prefer_errors, max_errors_when_mc)
+        best_film = select_best_film(
+            valid_records,
+            prefer_errors,
+            max_errors_when_mc,
+            max_duration_diff=max_duration_diff,
+        )
 
         for r in records:
             src = r.file
@@ -114,13 +147,20 @@ def build_move_plan(
                 continue
 
             # Determine move destination
+            has_errors = r.error_count is not None and r.error_count > 0
+            has_duration_values = r.video_duration is not None and r.rec_duration is not None
+            is_too_long = has_duration_values and (r.video_duration - r.rec_duration) > max_duration_diff
+
             if not r.video_exists:
                 dst_root = novideo_target
                 action = "NO_VIDEO"
-            elif prefer_errors and not r.multichannel and r.error_count and r.error_count > 0:
+            elif is_too_long:
+                dst_root = error_target
+                action = "DUPLICATE_WITH_LONGER_DURATION"
+            elif prefer_errors and not r.multichannel and has_errors:
                 dst_root = error_target
                 action = "DUPLICATE_WITH_ERRORS"
-            elif r.multichannel and r.error_count and r.error_count > 0:
+            elif r.multichannel and has_errors:
                 dst_root = error_target
                 action = "DUPLICATE_WITH_ERRORS_MC"
             else:

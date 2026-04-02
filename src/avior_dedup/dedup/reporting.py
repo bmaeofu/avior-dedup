@@ -6,6 +6,8 @@ from collections import Counter
 from datetime import datetime
 from typing import IO, Optional
 
+from avior_dedup.dedup.io_utils import read_text
+
 
 def write_summary(
     log_handle: Optional[IO[str]],
@@ -57,8 +59,10 @@ def sort_and_finalize_log(log_path: str, action_counter: Counter, args: argparse
     if not log_path or not os.path.exists(log_path):
         return
 
-    with open(log_path, "r", encoding="utf-8") as f:
-        lines = f.readlines()
+    content = read_text(log_path)
+    if content is None:
+        return
+    lines = content.splitlines()
 
     sorted_lines = sorted(
         set(line.rstrip("\n") for line in lines if line.strip()),

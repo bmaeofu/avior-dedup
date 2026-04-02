@@ -11,6 +11,8 @@ class FileRecord:
     error_count: Optional[int] = None
     mod_date: Optional[float] = None
     multichannel: Optional[bool] = None
+    video_duration: Optional[float] = None
+    rec_duration: Optional[int] = None
 
 
 @dataclass

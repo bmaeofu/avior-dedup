@@ -1,37 +1,76 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useTheme } from 'vuetify'
 
 const theme = useTheme()
 const drawer = ref(true)
+const rail = ref(true)
 
-function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+type ThemeMode = 'auto' | 'light' | 'dark'
+const themeMode = ref<ThemeMode>((localStorage.getItem('themeMode') as ThemeMode) ?? 'auto')
+
+const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+function applyTheme() {
+  if (themeMode.value === 'auto') {
+    theme.global.name.value = mediaQuery.matches ? 'dark' : 'light'
+  } else {
+    theme.global.name.value = themeMode.value
+  }
 }
+
+function cycleTheme() {
+  const modes: ThemeMode[] = ['auto', 'light', 'dark']
+  const next = modes[(modes.indexOf(themeMode.value) + 1) % modes.length]
+  themeMode.value = next
+}
+
+const themeIcon = ref('')
+function updateIcon() {
+  if (themeMode.value === 'auto') themeIcon.value = 'mdi-theme-light-dark'
+  else if (themeMode.value === 'light') themeIcon.value = 'mdi-weather-sunny'
+  else themeIcon.value = 'mdi-weather-night'
+}
+
+watch(themeMode, () => {
+  localStorage.setItem('themeMode', themeMode.value)
+  applyTheme()
+  updateIcon()
+})
+
+mediaQuery.addEventListener('change', () => {
+  if (themeMode.value === 'auto') applyTheme()
+})
+
+onMounted(() => {
+  applyTheme()
+  updateIcon()
+})
 </script>
 
 <template>
   <v-app>
     <v-app-bar density="compact" elevation="2">
-      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <v-app-bar-nav-icon @click="rail = !rail" />
       <v-app-bar-title>Avior Dedup</v-app-bar-title>
       <v-spacer />
       <v-btn
-        :icon="theme.global.current.value.dark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-        @click="toggleTheme"
+        :icon="themeIcon"
+        @click="cycleTheme"
       />
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" rail>
-      <v-list nav>
+    <v-navigation-drawer v-model="drawer" :width="rail ? 56 : 200" class="sidebar-transition">
+      <v-list nav density="compact">
+        <v-list-subheader>Dedup</v-list-subheader>
         <v-list-item
           prepend-icon="mdi-magnify-scan"
-          title="Job"
+          title="Scan"
           to="/"
         />
         <v-list-item
           prepend-icon="mdi-cog"
-          title="Configuration"
+          title="Settings"
           to="/config"
         />
       </v-list>
@@ -44,3 +83,12 @@ function toggleTheme() {
     </v-main>
   </v-app>
 </template>
+
+<style>
+.sidebar-transition {
+  transition: width 0.2s ease !important;
+}
+.sidebar-transition + .v-main {
+  transition: padding-left 0.2s ease !important;
+}
+</style>

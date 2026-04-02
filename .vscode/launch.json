@@ -2,6 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "avior-dedup: FilmeHD_sonst_duplicates_obsolete",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["f", "\\\\UMS\\media\\transcoded\\.obsolete\\Duplicates\\FilmeHD_semantic_noepisode_normalization_duplicates","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic",  "--prefer-errors", "--max-errors-when-mc", "5"]
+        },
+        {
             "name": "avior-dedup: FilmeHD_sonst semantic",
             "type": "debugpy",
             "request": "launch",

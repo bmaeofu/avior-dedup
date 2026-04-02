@@ -3,9 +3,9 @@ from __future__ import annotations
 import argparse
 import os
 
-from avior_dedup.planner import build_move_plan, execute_move_plan
-from avior_dedup.reporting import sort_and_finalize_log
-from avior_dedup.scanner import find_duplicates
+from avior_dedup.dedup.planner import build_move_plan, execute_move_plan
+from avior_dedup.dedup.reporting import sort_and_finalize_log
+from avior_dedup.dedup.scanner import find_duplicates
 
 
 def get_numbered_log_file(path: str) -> str:
