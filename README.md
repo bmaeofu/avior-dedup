@@ -1,4 +1,4 @@
-# avior-dedup
+# Avior Tools
 
 Finds and cleans up duplicate media files in DVR recording libraries. If you record TV, you end up with multiple copies of the same thing -- different encodings, leftover metadata, multichannel and stereo versions with different error counts. This tool sorts through that mess.
 
