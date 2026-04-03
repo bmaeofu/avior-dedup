@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import os
 
+from avior_dedup.dedup.models import SelectionPriority
 from avior_dedup.dedup.planner import build_move_plan, execute_move_plan
 from avior_dedup.dedup.reporting import sort_and_finalize_log
 from avior_dedup.dedup.scanner import find_duplicates
@@ -37,6 +38,25 @@ def main() -> None:
     parser.add_argument("--error-target", help="Directory where worse recordings are moved")
     parser.add_argument("--novideo-target", help="Directory where metadata with no video are moved")
     parser.add_argument("--max-errors-when-mc", type=int, default=0, help="Max allowed errors for multichannel to be considered good")
+    parser.add_argument(
+        "--max-duration-diff-longer",
+        type=int,
+        default=600,
+        help="Max allowed positive difference (video_duration - rec_duration) in seconds",
+    )
+    parser.add_argument(
+        "--max-duration-diff-shorter",
+        type=int,
+        default=120,
+        help="Max allowed negative difference (rec_duration - video_duration) in seconds",
+    )
+    parser.add_argument(
+        "--selection-priorities",
+        nargs="+",
+        default=["multichannel", "fewer_errors", "closest_duration"],
+        choices=[p.value for p in SelectionPriority],
+        help="Ordered priority list for best-film selection (default: multichannel fewer_errors closest_duration)",
+    )
     parser.add_argument(
         "--semantic-prefixes",
         nargs="+",
@@ -74,7 +94,9 @@ def main() -> None:
     print(f"Prefer errors: {args.prefer_errors}")
     print(f"Mode: {'MOVE' if args.mode == 'm' else 'FIND ONLY'}\n")
 
-    files_to_move, action_counter = build_move_plan(
+    selection_prios = [SelectionPriority(v) for v in args.selection_priorities]
+
+    files_to_move, action_counter, size_counter = build_move_plan(
         groups=groups,
         target_root=target_root,
         error_target=error_target,
@@ -84,9 +106,12 @@ def main() -> None:
         duptype=args.duptype,
         file_to_groupkey=file_to_groupkey,
         log_fn=log_fn,
+        max_duration_diff_longer=args.max_duration_diff_longer,
+        max_duration_diff_shorter=args.max_duration_diff_shorter,
+        selection_priorities=selection_prios,
     )
 
-    execute_move_plan(files_to_move, source_root, args.mode, action_counter, log_fn)
+    execute_move_plan(files_to_move, source_root, args.mode, action_counter, log_fn, size_counter=size_counter)
 
     log_handle.close()
-    sort_and_finalize_log(log_path, action_counter, args)
+    sort_and_finalize_log(log_path, action_counter, args, size_counter)

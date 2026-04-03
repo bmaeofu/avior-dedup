@@ -4,6 +4,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from avior_dedup.dedup.models import SelectionPriority
+
 
 class JobRequest(BaseModel):
     mode: Literal["m", "f"]
@@ -15,6 +17,15 @@ class JobRequest(BaseModel):
     error_target: str | None = None
     novideo_target: str | None = None
     max_errors_when_mc: int = 0
+    max_duration_diff_longer: int = 600
+    max_duration_diff_shorter: int = 120
+    selection_priorities: list[SelectionPriority] = Field(
+        default_factory=lambda: [
+            SelectionPriority.MULTICHANNEL,
+            SelectionPriority.FEWER_ERRORS,
+            SelectionPriority.CLOSEST_DURATION,
+        ]
+    )
     semantic_prefixes: list[str] = Field(default_factory=lambda: [r"terra\s*x\s*-\s*"])
     remove_episode_nos: bool = False
 
@@ -36,6 +47,7 @@ class JobResult(BaseModel):
     files_scanned: int
     groups_found: int
     action_counts: dict[str, int]
+    action_sizes: dict[str, int] = {}
     log_path: str | None
 
 

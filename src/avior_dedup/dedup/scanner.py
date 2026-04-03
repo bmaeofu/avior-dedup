@@ -7,7 +7,7 @@ from typing import Callable, Optional, Tuple
 
 from avior_dedup import config
 from avior_dedup.dedup.io_utils import read_text
-from avior_dedup.dedup.models import FileRecord
+from avior_dedup.dedup.models import FileRecord, GroupKeys
 from avior_dedup.dedup.normalize import normalize_film_name
 from avior_dedup.dedup.suffix import match_suffix
 
@@ -321,7 +321,7 @@ def find_duplicates(
     files_by_lower: dict[str, list[str]] = {}
     files_by_exact: dict[str, list[str]] = {}
     files_by_semantic: dict[str, list[str]] = {}
-    file_to_groupkey: dict[str, dict[str, str]] = {}
+    file_to_groupkey: dict[str, GroupKeys] = {}
     files_scanned = 0
 
     # Enumerate top-level entries to provide directory-level progress
@@ -354,15 +354,18 @@ def find_duplicates(
         files_scanned += 1
 
         files_by_exact.setdefault(name, []).append(full_path)
-        file_to_groupkey[full_path] = {"exact": name}
 
         lower_name = name.lower()
         files_by_lower.setdefault(lower_name, []).append(full_path)
-        file_to_groupkey[full_path]["case"] = lower_name
 
         semantic_name = normalize_film_name(name, semantic_prefixes, remove_episode_nos)
         files_by_semantic.setdefault(semantic_name, []).append(full_path)
-        file_to_groupkey[full_path]["semantic"] = semantic_name
+
+        file_to_groupkey[full_path] = GroupKeys(
+            exact=name,
+            lower=lower_name,
+            semantic=semantic_name,
+        )
 
     def _scan_dir(dir_path: str) -> None:
         """Recursively scan a directory using scandir, reporting after each subdir."""

@@ -1,3 +1,5 @@
+export type SelectionPriority = 'multichannel' | 'fewer_errors' | 'closest_duration'
+
 export interface JobRequest {
   mode: 'm' | 'f'
   source: string
@@ -8,6 +10,9 @@ export interface JobRequest {
   error_target: string | null
   novideo_target: string | null
   max_errors_when_mc: number
+  max_duration_diff_longer: number
+  max_duration_diff_shorter: number
+  selection_priorities: SelectionPriority[]
   semantic_prefixes: string[]
   remove_episode_nos: boolean
 }

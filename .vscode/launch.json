@@ -2,22 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "avior-dedup: FilmeHD_sonst_duplicates_obsolete",
+            "name": "avior-dedup: FilmeHD semantic",
             "type": "debugpy",
             "request": "launch",
             "module": "avior_dedup",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["f", "\\\\UMS\\media\\transcoded\\.obsolete\\Duplicates\\FilmeHD_semantic_noepisode_normalization_duplicates","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic",  "--prefer-errors", "--max-errors-when-mc", "5"]
-        },
-        {
-            "name": "avior-dedup: FilmeHD_sonst semantic",
-            "type": "debugpy",
-            "request": "launch",
-            "module": "avior_dedup",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "args": ["m", "\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic",  "--prefer-errors", "--max-errors-when-mc", "5"]
+            "args": ["f", "\\\\UMS\\media\\tv\\FilmeHD","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic",  "--prefer-errors", "--max-errors-when-mc", "3"]
         },
         {
             "name": "avior-dedup: DokHD case",
@@ -118,7 +109,8 @@
             "justMyCode": true,
             "env": {
                 "AVIOR_DEDUP_HOST": "0.0.0.0",
-                "AVIOR_DEDUP_PORT": "8642"
+                "AVIOR_DEDUP_PORT": "8642",
+                "AVIOR_DEDUP_RELOAD": "true"
             }
         },
         {

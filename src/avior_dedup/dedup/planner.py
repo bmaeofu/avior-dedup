@@ -3,13 +3,19 @@ from __future__ import annotations
 import os
 import shutil
 from collections import Counter
-from typing import Callable, Optional
+from typing import Callable
 
-from avior_dedup.dedup.models import FileRecord, MoveAction
+from avior_dedup.dedup.models import (
+    DEFAULT_SELECTION_PRIORITIES,
+    FileRecord,
+    GroupKeys,
+    MoveAction,
+    SelectionPriority,
+)
 from avior_dedup.dedup.scanner import get_film_error_count
 
 
-def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, dict[str, str]]) -> str:
+def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, GroupKeys]) -> str:
     """Return the grouping name relevant for the given duptype."""
     basename = os.path.basename(file_path)
     if duptype == "exact":
@@ -17,71 +23,82 @@ def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, dic
     elif duptype == "case":
         return basename.lower()
     elif duptype in ("semantic", "all"):
-        return file_to_groupkey.get(file_path, {}).get("semantic", basename)
+        keys = file_to_groupkey.get(file_path)
+        return keys.semantic if keys else basename
     elif duptype == "both":
         return basename.lower()
     return basename
 
 
+def _sort_key(
+    r: FileRecord,
+    priorities: list[SelectionPriority],
+    max_errors_when_mc: int | None = None,
+) -> tuple:
+    """Build a comparable sort key based on the priority list (lower = better).
+
+    For MULTICHANNEL priority: if the record has more errors than
+    ``max_errors_when_mc``, its multichannel advantage is ignored (treated as
+    non-MC for ranking purposes).
+    """
+    key: list[float] = []
+    for p in priorities:
+        if p == SelectionPriority.MULTICHANNEL:
+            is_good_mc = bool(r.multichannel)
+            if is_good_mc and max_errors_when_mc is not None:
+                errors = r.error_count if r.error_count is not None else 0
+                if errors > max_errors_when_mc:
+                    is_good_mc = False
+            key.append(0 if is_good_mc else 1)
+        elif p == SelectionPriority.FEWER_ERRORS:
+            key.append(r.error_count if r.error_count is not None else 10**9)
+        elif p == SelectionPriority.CLOSEST_DURATION:
+            if r.video_duration is not None and r.rec_duration is not None:
+                key.append(abs(r.video_duration - r.rec_duration))
+            else:
+                key.append(10**9)
+    # Tiebreaker: newest file wins
+    key.append(-(r.mod_date or 0))
+    return tuple(key)
+
+
 def select_best_film(
     valid_records: list[FileRecord],
-    prefer_errors: bool,
-    max_errors_when_mc: Optional[int],
-    max_duration_diff: int = 600,
+    max_duration_diff_longer: int = 600,
+    max_duration_diff_shorter: int = 120,
+    selection_priorities: list[SelectionPriority] | None = None,
+    max_errors_when_mc: int | None = None,
 ) -> FileRecord:
-    """Select the best recording to keep from a list of valid (video exists) records."""
-    # Hard exclusion criterion (highest priority):
-    # keep-candidates must have both durations and may not be more than 10 min longer than rec_duration.
+    """Select the best recording to keep from a list of valid (video exists) records.
+
+    At least one film is always kept, even if all candidates fall outside the
+    duration window.
+    """
+    if selection_priorities is None:
+        selection_priorities = DEFAULT_SELECTION_PRIORITIES
+
+    # Hard exclusion: keep-candidates must have both durations and stay within window.
     keep_candidates = [
         r
         for r in valid_records
         if r.video_duration is not None
         and r.rec_duration is not None
-        and (r.video_duration - r.rec_duration) <= max_duration_diff
+        and (r.video_duration - r.rec_duration) <= max_duration_diff_longer
+        and (r.video_duration - r.rec_duration) >= -max_duration_diff_shorter
     ]
 
-    # Exception: allow a too-long recording if otherwise no error-free candidate exists.
-    too_long_error_free = [
-        r
-        for r in valid_records
-        if r.video_duration is not None
-        and r.rec_duration is not None
-        and (r.video_duration - r.rec_duration) > max_duration_diff
-        and r.error_count == 0
-    ]
-    keep_has_error_free = any(r.error_count == 0 for r in keep_candidates)
+    # Guarantee: always keep at least one — fall back to full list if nothing qualifies.
+    pool = keep_candidates if keep_candidates else valid_records
 
-    if too_long_error_free and not keep_has_error_free:
-        pool = too_long_error_free
-    else:
-        pool = keep_candidates if keep_candidates else valid_records
+    return min(pool, key=lambda r: _sort_key(r, selection_priorities, max_errors_when_mc))
 
-    if len(pool) == 1:
-        return pool[0]
 
-    mc = [r for r in pool if r.multichannel]
-    mc_good = mc
-    if max_errors_when_mc is not None:
-        mc_good = [
-            r for r in mc
-            if r.error_count is not None and r.error_count <= max_errors_when_mc
-        ]
-
-    if not prefer_errors:
-        if mc_good:
-            return max(mc_good, key=lambda r: r.mod_date or 0)
-        return max(pool, key=lambda r: r.mod_date or 0)
-
-    # prefer_errors: pick fewest errors, then newest
-    if mc_good:
-        return min(mc_good, key=lambda r: (r.error_count, -(r.mod_date or 0)))
-    return min(
-        pool,
-        key=lambda r: (
-            r.error_count if r.error_count is not None else 10**9,
-            -(r.mod_date or 0),
-        ),
-    )
+def _get_file_size(path: str) -> int:
+    """Return the file size in bytes, or 0 if the file cannot be accessed."""
+    try:
+        return os.path.getsize(path)
+    except OSError:
+        return 0
 
 
 def build_move_plan(
@@ -92,16 +109,19 @@ def build_move_plan(
     prefer_errors: bool,
     max_errors_when_mc: int,
     duptype: str,
-    file_to_groupkey: dict[str, dict[str, str]],
+    file_to_groupkey: dict[str, GroupKeys],
     log_fn: Callable[[str], None],
     progress_cb: Callable[[int, int], None] | None = None,
-    max_duration_diff: int = 600,
-) -> tuple[dict[str, MoveAction], Counter]:
-    """Decide what to do with each file. Returns (files_to_move, action_counter)."""
+    max_duration_diff_longer: int = 600,
+    max_duration_diff_shorter: int = 120,
+    selection_priorities: list[SelectionPriority] | None = None,
+) -> tuple[dict[str, MoveAction], Counter, Counter]:
+    """Decide what to do with each file. Returns (files_to_move, action_counter, size_counter)."""
     film_info_cache: dict[str, FileRecord] = {}
     files_to_move: dict[str, MoveAction] = {}
     already_logged: set[tuple[str, str]] = set()
     action_counter: Counter = Counter()
+    size_counter: Counter = Counter()
     total_groups = len(groups)
 
     for group_idx, group in enumerate(groups):
@@ -128,9 +148,10 @@ def build_move_plan(
 
         best_film = select_best_film(
             valid_records,
-            prefer_errors,
-            max_errors_when_mc,
-            max_duration_diff=max_duration_diff,
+            max_duration_diff_longer=max_duration_diff_longer,
+            max_duration_diff_shorter=max_duration_diff_shorter,
+            selection_priorities=selection_priorities,
+            max_errors_when_mc=max_errors_when_mc,
         )
 
         for r in records:
@@ -143,13 +164,15 @@ def build_move_plan(
                 if key not in already_logged:
                     log_fn(f"{group_name}\t[{action}]\t{src}")
                     action_counter[action] += 1
+                    size_counter[action] += _get_file_size(src)
                     already_logged.add(key)
                 continue
 
             # Determine move destination
             has_errors = r.error_count is not None and r.error_count > 0
             has_duration_values = r.video_duration is not None and r.rec_duration is not None
-            is_too_long = has_duration_values and (r.video_duration - r.rec_duration) > max_duration_diff
+            is_too_long = has_duration_values and (r.video_duration - r.rec_duration) > max_duration_diff_longer
+            is_too_short = has_duration_values and (r.video_duration - r.rec_duration) < -max_duration_diff_shorter
 
             if not r.video_exists:
                 dst_root = novideo_target
@@ -157,6 +180,9 @@ def build_move_plan(
             elif is_too_long:
                 dst_root = error_target
                 action = "DUPLICATE_WITH_LONGER_DURATION"
+            elif is_too_short:
+                dst_root = error_target
+                action = "DUPLICATE_WITH_SHORTER_DURATION"
             elif prefer_errors and not r.multichannel and has_errors:
                 dst_root = error_target
                 action = "DUPLICATE_WITH_ERRORS"
@@ -169,7 +195,7 @@ def build_move_plan(
 
             files_to_move[src] = MoveAction(dst_root, action, group_name)
 
-    return files_to_move, action_counter
+    return files_to_move, action_counter, size_counter
 
 
 def execute_move_plan(
@@ -179,16 +205,21 @@ def execute_move_plan(
     action_counter: Counter,
     log_fn: Callable[[str], None],
     progress_cb: Callable[[int, int], None] | None = None,
+    size_counter: Counter | None = None,
 ) -> None:
     """Execute or dry-run the move plan."""
+    if size_counter is None:
+        size_counter = Counter()
     sorted_items = sorted(files_to_move.items())
     total = len(sorted_items)
     for idx, (file_path, move) in enumerate(sorted_items):
         rel = os.path.relpath(file_path, source_root)
         dst = os.path.join(move.dst_root, rel)
 
+        file_size = _get_file_size(file_path)
         log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}")
         action_counter[move.action] += 1
+        size_counter[move.action] += file_size
 
         if progress_cb is not None:
             progress_cb(idx + 1, total)

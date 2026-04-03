@@ -15,6 +15,7 @@ Once it finds duplicates, it picks which copy to keep based on:
 - Whether there's actually a video file (or just orphaned metadata)
 - Multichannel audio (AC3 5.x) over stereo, when available
 - Encoding error count from `.log` files
+- Allowed duration delta window (`video_duration - rec_duration`) with separate limits for longer/shorter
 - Modification date as a tiebreaker
 
 Everything that isn't the best copy gets moved out: normal duplicates to one directory, error-laden copies to another, orphaned metadata to a third. You can also run in dry-run mode to just see what it would do before committing.
@@ -39,7 +40,9 @@ uv run avior-dedup f /path/to/source /path/to/target log.txt --duptype case
 uv run avior-dedup m /path/to/source /path/to/target log.txt \
   --duptype semantic \
   --prefer-errors \
-  --max-errors-when-mc 3
+  --max-errors-when-mc 3 \
+  --max-duration-diff-longer 600 \
+  --max-duration-diff-shorter 600
 
 # Semantic matching with custom prefix stripping
 uv run avior-dedup f /path/to/docs /path/to/target log.txt \

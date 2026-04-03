@@ -5,6 +5,7 @@ import os
 import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -27,10 +28,17 @@ from avior_dedup.server.schemas import (
     ProgressSnapshot,
 )
 
+
+@dataclass
+class JobEntry:
+    """In-memory state for a running or completed job."""
+    status: JobStatus
+    reporter: ProgressReporter
+
+
 app = FastAPI(title="avior-dedup API", version="0.1.0")
 
-# In-memory job store: job_id -> {"status": JobStatus, "reporter": ProgressReporter}
-_jobs: dict[str, dict[str, Any]] = {}
+_jobs: dict[str, JobEntry] = {}
 _executor = ThreadPoolExecutor(max_workers=4)
 
 
@@ -99,7 +107,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
                 raise JobCancelled
             reporter.update(phase="planning", files_planned=current, total_files_to_move=total)
 
-        files_to_move, action_counter = build_move_plan(
+        files_to_move, action_counter, size_counter = build_move_plan(
             groups=groups,
             target_root=target_root,
             error_target=error_target,
@@ -110,6 +118,9 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             file_to_groupkey=file_to_groupkey,
             log_fn=log_fn,
             progress_cb=plan_cb,
+            max_duration_diff_longer=req.max_duration_diff_longer,
+            max_duration_diff_shorter=req.max_duration_diff_shorter,
+            selection_priorities=req.selection_priorities,
         )
 
         total_to_move = len(files_to_move)
@@ -132,6 +143,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             action_counter,
             log_fn,
             progress_cb=exec_cb,
+            size_counter=size_counter,
         )
 
         log_handle.close()
@@ -146,10 +158,13 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             duptype = req.duptype
             prefer_errors = req.prefer_errors
             max_errors_when_mc = req.max_errors_when_mc
+            max_duration_diff_longer = req.max_duration_diff_longer
+            max_duration_diff_shorter = req.max_duration_diff_shorter
+            selection_priorities = req.selection_priorities
             semantic_prefixes = req.semantic_prefixes
             remove_episode_nos = req.remove_episode_nos
 
-        sort_and_finalize_log(log_path, action_counter, _Args())
+        sort_and_finalize_log(log_path, action_counter, _Args(), size_counter)
 
         scanned = reporter.snapshot.files_scanned
         print(f"[avior-dedup] Job {job_id} done: files_scanned={scanned}, groups={len(groups)}, actions={dict(action_counter)}")
@@ -157,9 +172,10 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             files_scanned=scanned,
             groups_found=len(groups),
             action_counts=dict(action_counter),
+            action_sizes=dict(size_counter),
             log_path=log_path,
         )
-        _jobs[job_id]["status"] = JobStatus(
+        _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="completed",
             progress=reporter.snapshot.model_copy(),
@@ -167,13 +183,13 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
         )
 
     except JobCancelled:
-        _jobs[job_id]["status"] = JobStatus(
+        _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="cancelled",
             progress=reporter.snapshot.model_copy(),
         )
     except Exception as exc:  # noqa: BLE001
-        _jobs[job_id]["status"] = JobStatus(
+        _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="failed",
             progress=reporter.snapshot.model_copy(),
@@ -192,14 +208,14 @@ async def create_job(req: JobRequest) -> dict[str, str]:
     job_id = str(uuid.uuid4())
     reporter = ProgressReporter(loop)
 
-    _jobs[job_id] = {
-        "status": JobStatus(
+    _jobs[job_id] = JobEntry(
+        status=JobStatus(
             job_id=job_id,
             state="running",
             progress=ProgressSnapshot(),
         ),
-        "reporter": reporter,
-    }
+        reporter=reporter,
+    )
 
     loop.run_in_executor(_executor, _run_job, job_id, req, reporter)
     return {"job_id": job_id}
@@ -212,15 +228,13 @@ async def get_job(job_id: str) -> JobStatus:
     if entry is None:
         raise HTTPException(status_code=404, detail="Job not found")
     # Merge live progress into the stored status for running jobs
-    status: JobStatus = entry["status"]
-    if status.state == "running":
-        reporter: ProgressReporter = entry["reporter"]
+    if entry.status.state == "running":
         return JobStatus(
             job_id=job_id,
             state="running",
-            progress=reporter.snapshot.model_copy(),
+            progress=entry.reporter.snapshot.model_copy(),
         )
-    return status
+    return entry.status
 
 
 @app.delete("/api/jobs/{job_id}", status_code=204)
@@ -229,8 +243,7 @@ async def cancel_job(job_id: str) -> None:
     entry = _jobs.get(job_id)
     if entry is None:
         raise HTTPException(status_code=404, detail="Job not found")
-    reporter: ProgressReporter = entry["reporter"]
-    reporter.cancelled = True
+    entry.reporter.cancelled = True
 
 
 # ---------------------------------------------------------------------------
@@ -276,8 +289,7 @@ async def ws_job_progress(websocket: WebSocket, job_id: str) -> None:
         return
 
     await websocket.accept()
-    reporter: ProgressReporter = entry["reporter"]
-    queue = reporter.subscribe()
+    queue = entry.reporter.subscribe()
 
     try:
         last_sent = 0.0
@@ -298,10 +310,9 @@ async def ws_job_progress(websocket: WebSocket, job_id: str) -> None:
                 pending = None
 
             # Check if job finished
-            status: JobStatus = entry["status"]
-            if status.state in ("completed", "failed", "cancelled") and queue.empty():
+            if entry.status.state in ("completed", "failed", "cancelled") and queue.empty():
                 # Send final status and close
-                await websocket.send_text(status.model_dump_json())
+                await websocket.send_text(entry.status.model_dump_json())
                 break
 
             # Wait briefly for next update or yield control
@@ -314,7 +325,7 @@ async def ws_job_progress(websocket: WebSocket, job_id: str) -> None:
     except WebSocketDisconnect:
         pass
     finally:
-        reporter.unsubscribe(queue)
+        entry.reporter.unsubscribe(queue)
 
 
 # ---------------------------------------------------------------------------
@@ -336,7 +347,8 @@ def run() -> None:
     """Start the uvicorn server."""
     host = os.getenv("AVIOR_DEDUP_HOST", "0.0.0.0")
     port = int(os.getenv("AVIOR_DEDUP_PORT", "8642"))
-    uvicorn.run("avior_dedup.server:app", host=host, port=port)
+    reload = os.getenv("AVIOR_DEDUP_RELOAD", "").lower() in ("1", "true", "yes")
+    uvicorn.run("avior_dedup.server.server:app", host=host, port=port, reload=reload)
 
 
 if __name__ == "__main__":
