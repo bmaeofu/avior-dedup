@@ -1,4 +1,7 @@
-.git
+.git/objects
+.git/logs
+.git/hooks
+.git/lfs
 .github
 .claude
 .cortex
