@@ -29,12 +29,11 @@ const form = reactive<JobRequest>({
   target: '',
   logname: 'dedup_log.txt',
   duptype: 'case',
-  prefer_errors: false,
   error_target: null,
   novideo_target: null,
   max_errors_when_mc: 3,
   max_duration_diff_longer: 600,
-  max_duration_diff_shorter: 120,
+  max_duration_diff_shorter: 150,
   selection_priorities: ['multichannel', 'fewer_errors', 'closest_duration'] as SelectionPriority[],
   semantic_prefixes: ['terra\\s*x\\s*-\\s*'],
   remove_episode_nos: false,
@@ -249,17 +248,6 @@ function submit() {
           </v-text-field>
         </v-col>
       </v-row>
-      <v-row dense class="mt-1">
-        <v-col cols="12" md="4">
-          <v-checkbox
-            v-model="form.prefer_errors"
-            label="Prefer fewer errors"
-            density="compact"
-            hide-details
-          />
-        </v-col>
-      </v-row>
-
       <v-divider class="my-4" />
 
       <!-- Selection priorities -->

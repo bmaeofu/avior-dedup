@@ -34,7 +34,6 @@ def main() -> None:
         default="case",
         help="case = case-insensitive, exact = exact name, semantic = normalized name, both = case+exact, all = all types",
     )
-    parser.add_argument("--prefer-errors", action="store_true", help="Keep film with fewer errors according to .log")
     parser.add_argument("--error-target", help="Directory where worse recordings are moved")
     parser.add_argument("--novideo-target", help="Directory where metadata with no video are moved")
     parser.add_argument("--max-errors-when-mc", type=int, default=0, help="Max allowed errors for multichannel to be considered good")
@@ -47,8 +46,8 @@ def main() -> None:
     parser.add_argument(
         "--max-duration-diff-shorter",
         type=int,
-        default=120,
-        help="Max allowed negative difference (rec_duration - video_duration) in seconds",
+        default=150,
+        help="Maxallowed negative difference (rec_duration - video_duration) in seconds",
     )
     parser.add_argument(
         "--selection-priorities",
@@ -91,7 +90,6 @@ def main() -> None:
 
     print(f"\nDuplicate groups found: {len(groups)}")
     print(f"Duplicate type: {args.duptype}")
-    print(f"Prefer errors: {args.prefer_errors}")
     print(f"Mode: {'MOVE' if args.mode == 'm' else 'FIND ONLY'}\n")
 
     selection_prios = [SelectionPriority(v) for v in args.selection_priorities]
@@ -101,7 +99,6 @@ def main() -> None:
         target_root=target_root,
         error_target=error_target,
         novideo_target=novideo_target,
-        prefer_errors=args.prefer_errors,
         max_errors_when_mc=args.max_errors_when_mc,
         duptype=args.duptype,
         file_to_groupkey=file_to_groupkey,

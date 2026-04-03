@@ -6,7 +6,6 @@ export interface JobRequest {
   target: string
   logname: string
   duptype: 'case' | 'exact' | 'semantic' | 'both' | 'all'
-  prefer_errors: boolean
   error_target: string | null
   novideo_target: string | null
   max_errors_when_mc: number
@@ -34,6 +33,7 @@ export interface JobResult {
   files_scanned: number
   groups_found: number
   action_counts: Record<string, number>
+  action_sizes: Record<string, number>
   log_path: string | null
 }
 

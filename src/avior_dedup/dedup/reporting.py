@@ -41,7 +41,6 @@ def write_summary(
         f"  Error target:          {args.error_target or 'default'}",
         f"  No-video target:       {args.novideo_target or 'default'}",
         f"  Duplicate type:        {args.duptype}",
-        f"  Prefer errors:         {'yes' if args.prefer_errors else 'no'}",
         f"  Max errors (MC):       {args.max_errors_when_mc}",
         f"  Max duration +diff:    {args.max_duration_diff_longer}",
         f"  Max duration -diff:    {args.max_duration_diff_shorter}",

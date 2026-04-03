@@ -13,7 +13,6 @@ class JobRequest(BaseModel):
     target: str
     logname: str = "dedup_log.txt"
     duptype: Literal["case", "exact", "semantic", "both", "all"] = "case"
-    prefer_errors: bool = False
     error_target: str | None = None
     novideo_target: str | None = None
     max_errors_when_mc: int = 0

@@ -106,7 +106,6 @@ def build_move_plan(
     target_root: str,
     error_target: str,
     novideo_target: str,
-    prefer_errors: bool,
     max_errors_when_mc: int,
     duptype: str,
     file_to_groupkey: dict[str, GroupKeys],
@@ -159,7 +158,21 @@ def build_move_plan(
             group_name = get_group_name(src, duptype, file_to_groupkey)
 
             if src == best_film.file:
-                action = "KEEP_MC" if r.multichannel else "KEEP"
+                base_action = "KEEP_MC" if r.multichannel else "KEEP"
+                has_errors = r.error_count is not None and r.error_count > 0
+                has_duration_values = r.video_duration is not None and r.rec_duration is not None
+                is_too_long = has_duration_values and (r.video_duration - r.rec_duration) > max_duration_diff_longer
+                is_too_short = has_duration_values and (r.video_duration - r.rec_duration) < -max_duration_diff_shorter
+
+                if is_too_long:
+                    action = f"{base_action}_WITH_LONGER_DURATION"
+                elif is_too_short:
+                    action = f"{base_action}_WITH_SHORTER_DURATION"
+                elif has_errors:
+                    action = f"{base_action}_WITH_ERRORS"
+                else:
+                    action = base_action
+
                 key = (action, src)
                 if key not in already_logged:
                     log_fn(f"{group_name}\t[{action}]\t{src}")
@@ -183,7 +196,7 @@ def build_move_plan(
             elif is_too_short:
                 dst_root = error_target
                 action = "DUPLICATE_WITH_SHORTER_DURATION"
-            elif prefer_errors and not r.multichannel and has_errors:
+            elif not r.multichannel and has_errors:
                 dst_root = error_target
                 action = "DUPLICATE_WITH_ERRORS"
             elif r.multichannel and has_errors:

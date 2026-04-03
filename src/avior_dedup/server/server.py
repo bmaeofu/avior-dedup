@@ -112,7 +112,6 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             target_root=target_root,
             error_target=error_target,
             novideo_target=novideo_target,
-            prefer_errors=req.prefer_errors,
             max_errors_when_mc=req.max_errors_when_mc,
             duptype=req.duptype,
             file_to_groupkey=file_to_groupkey,
@@ -156,7 +155,6 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             error_target = req.error_target
             novideo_target = req.novideo_target
             duptype = req.duptype
-            prefer_errors = req.prefer_errors
             max_errors_when_mc = req.max_errors_when_mc
             max_duration_diff_longer = req.max_duration_diff_longer
             max_duration_diff_shorter = req.max_duration_diff_shorter

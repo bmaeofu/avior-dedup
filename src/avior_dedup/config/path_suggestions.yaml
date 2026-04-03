@@ -1,24 +1,22 @@
-# Directory path suggestions shown in the source/target dropdowns
 source_paths:
-  - //UMS/media/tv/FilmeHD/FilmeHD_sonst
-  - //UMS/media/tv/DokHD
-  - //UMS/media/tv/KrimiHD
-  - //UMS/media/tv/SerienHD
-  - //UMS/media/tv/FilmeHD
-  - //UMS/media/tv/MusikvideosHDwha
-  - //UMS/media/tv/Unterhaltung, Kabarret & Comedy
-  - //UMS/media/transcoded/.obsolete/.obsolete.old
-  - //UMS/media/Bereinigte Duplikate/DokHD
-
-
+- //UMS/media/tv/FilmeHD/FilmeHD_sonst
+- //UMS/media/tv/DokHD
+- //UMS/media/tv/KrimiHD
+- //UMS/media/tv/SerienHD
+- //UMS/media/tv/FilmeHD
+- //UMS/media/tv/MusikvideosHDwha
+- //UMS/media/tv/Unterhaltung, Kabarret & Comedy
+- //UMS/media/transcoded/.obsolete/.obsolete.old
+- //UMS/media/Bereinigte Duplikate/DokHD
 target_paths:
-  - //UMS/media/tv/found_duplicates/FilmeHD_semantisch
-  - //UMS/media/tv/found_duplicates/DokHD_semantisch
-  - //UMS/media/tv/found_duplicates/KrimiHD_semantisch
-  - //UMS/media/tv/found_duplicates/SerienHD_semantisch
-  - //UMS/media/tv/found_duplicates/FilmeHD_case
-  - //UMS/media/tv/found_duplicates/MusikvideosHD
-  - //UMS/media/tv/found_duplicates/Unterhaltung, Kabarret & Comedy
-  - //UMS/media/tv/found_duplicates/.obsolete.old
-  - //UMS/media/tv/found_duplicates/.obsolete.old_with_errors
-  - //UMS/media/tv/found_duplicates/DokHD
+- //UMS/media/tv/found_duplicates/FilmeHD_semantisch
+- //UMS/media/tv/found_duplicates/DokHD_semantisch
+- //UMS/media/tv/found_duplicates/KrimiHD_semantisch
+- //UMS/media/tv/found_duplicates/SerienHD_semantisch
+- //UMS/media/tv/found_duplicates/FilmeHD_case
+- //UMS/media/tv/found_duplicates/MusikvideosHD
+- //UMS/media/tv/found_duplicates/Unterhaltung, Kabarret & Comedy
+- //UMS/media/tv/found_duplicates/.obsolete.old
+- //UMS/media/tv/found_duplicates/.obsolete.old_with_errors
+- //UMS/media/tv/found_duplicates/DokHD
+- //UMS/media/tv/found_duplicates/FilmeHD_sonst
