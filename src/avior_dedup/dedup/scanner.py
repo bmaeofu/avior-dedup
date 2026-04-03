@@ -237,6 +237,10 @@ def get_video_length(path: str, use_epg: bool) -> Tuple[bool, str, Optional[floa
     else:
         rec_duration = get_real_rec_time_from_log(path)
 
+    # Fallback: try the other method if primary returned nothing
+    if rec_duration is None:
+        rec_duration = get_real_rec_time_from_log(path) if use_epg else get_epg_duration(path)
+
     if rec_duration is None:
         return False, "no reference duration", video_duration, None
 

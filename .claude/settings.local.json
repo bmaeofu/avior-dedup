@@ -14,7 +14,8 @@
       "mcp__plugin_context-mode_context-mode__ctx_fetch_and_index",
       "Bash(uv run:*)",
       "Bash(uv add:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "mcp__plugin_context-mode_context-mode__ctx_execute"
     ]
   }
 }

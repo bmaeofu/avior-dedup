@@ -36,6 +36,8 @@ class JobEntry:
     reporter: ProgressReporter
 
 
+GIT_HASH = os.getenv("GIT_HASH", "dev")
+
 app = FastAPI(title="avior-dedup API", version="0.1.0")
 
 _jobs: dict[str, JobEntry] = {}
@@ -199,6 +201,12 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
 # REST endpoints
 # ---------------------------------------------------------------------------
 
+@app.get("/api/version")
+async def get_version() -> dict[str, str]:
+    """Return the current git commit hash."""
+    return {"git_hash": GIT_HASH}
+
+
 @app.post("/api/jobs", response_model=dict[str, str], status_code=201)
 async def create_job(req: JobRequest) -> dict[str, str]:
     """Start a dedup job. Returns the job_id immediately."""
@@ -346,6 +354,7 @@ def run() -> None:
     host = os.getenv("AVIOR_DEDUP_HOST", "0.0.0.0")
     port = int(os.getenv("AVIOR_DEDUP_PORT", "8642"))
     reload = os.getenv("AVIOR_DEDUP_RELOAD", "").lower() in ("1", "true", "yes")
+    print(f"[avior-dedup] Starting server (commit: {GIT_HASH})")
     uvicorn.run("avior_dedup.server.server:app", host=host, port=port, reload=reload)
 
 

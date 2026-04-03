@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useTheme } from 'vuetify'
 
+const gitHash = import.meta.env.VITE_GIT_HASH || 'dev'
 const theme = useTheme()
 const drawer = ref(true)
 const rail = ref(true)
@@ -54,6 +55,7 @@ onMounted(() => {
       <v-app-bar-nav-icon @click="rail = !rail" />
       <v-app-bar-title>Avior Dedup</v-app-bar-title>
       <v-spacer />
+      <span class="text-caption text-medium-emphasis mr-2">{{ gitHash }}</span>
       <v-btn
         :icon="themeIcon"
         @click="cycleTheme"
