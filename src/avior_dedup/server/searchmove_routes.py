@@ -21,6 +21,7 @@ from avior_dedup.server.progress import JobCancelled, ProgressReporter
 from avior_dedup.server.schemas import (
     JobStatus,
     ProgressSnapshot,
+    SearchMoveMatchEntry,
     SearchMoveRequest,
     SearchMoveResult,
 )
@@ -100,6 +101,14 @@ def _run_searchmove_job(
             files_scanned=result.files_scanned,
             files_matched=result.files_matched,
             action_counts=result.action_counts,
+            matches=[
+                SearchMoveMatchEntry(
+                    file_path=m.file_path,
+                    matched_expression=m.matched_expression,
+                    found_values=m.found_values,
+                )
+                for m in result.matches
+            ],
             log_path=log_path,
         )
         _jobs[job_id].status = JobStatus(

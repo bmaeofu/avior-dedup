@@ -60,6 +60,8 @@ VOLUME /config
 
 EXPOSE 8642
 
+USER 99:100
+
 CMD GIT_HASH=$(cat /app/git_hash.txt 2>/dev/null || echo unknown); \
     export GIT_HASH; \
     exec avior-dedup-server

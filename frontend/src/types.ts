@@ -59,10 +59,17 @@ export interface SearchMoveRequest {
   logname: string
 }
 
+export interface SearchMoveMatchEntry {
+  file_path: string
+  matched_expression: string
+  found_values: string
+}
+
 export interface SearchMoveResult {
   files_scanned: number
   files_matched: number
   action_counts: Record<string, number>
+  matches: SearchMoveMatchEntry[]
   log_path: string | null
 }
 
