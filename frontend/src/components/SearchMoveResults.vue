@@ -57,7 +57,7 @@ const matchHeaders = [
           class="elevation-1"
         >
           <template #item.file_path="{ value }">
-            <span class="text-body-2 text-truncate d-inline-block" style="max-width: 400px;" :title="value">
+            <span class="text-body-2" style="word-break: break-all;">
               {{ value }}
             </span>
           </template>

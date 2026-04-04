@@ -112,11 +112,14 @@ def execute_file_action(
 
 
 def _resolve_case_insensitive(path: str) -> str:
-    """Resolve a path using existing directories with case-insensitive matching.
+    """Resolve a path to use the actual on-disk casing of each component.
 
-    Walks the path from root, and for each component checks if a
-    case-variant already exists on disk. If so, uses the existing name
-    instead of creating a new directory with different casing.
+    Walks the path from root, and for each component looks up the real
+    directory name on disk (case-insensitive match). This prevents creating
+    ``tobescraped`` when ``ToBeScraped`` already exists, even on systems
+    where ``os.path.exists`` is case-insensitive (Windows/SMB).
+
+    Components that don't exist on disk yet are kept as-is.
     """
     parts = os.path.normpath(path).replace("\\", "/").split("/")
     # Handle UNC paths (//server/share/...)
@@ -133,21 +136,18 @@ def _resolve_case_insensitive(path: str) -> str:
     for part in remaining:
         if not part:
             continue
-        candidate = os.path.join(resolved, part)
-        if os.path.exists(candidate):
-            # Exact match exists, use it
-            resolved = candidate
-            continue
-        # Check for case-insensitive match
+        # Always list the parent to find the real on-disk name
         try:
             existing = os.listdir(resolved)
             match = next((e for e in existing if e.lower() == part.lower()), None)
             if match:
                 resolved = os.path.join(resolved, match)
             else:
-                resolved = candidate
+                # Doesn't exist yet — keep user-provided casing
+                resolved = os.path.join(resolved, part)
         except OSError:
-            resolved = candidate
+            # Parent doesn't exist either — keep as-is
+            resolved = os.path.join(resolved, part)
 
     return resolved
 
