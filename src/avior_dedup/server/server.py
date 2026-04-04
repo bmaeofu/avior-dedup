@@ -12,6 +12,7 @@ from typing import Any
 import uvicorn
 import yaml
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from avior_dedup import config
@@ -27,7 +28,7 @@ from avior_dedup.server.schemas import (
     JobStatus,
     ProgressSnapshot,
 )
-from avior_dedup.server.searchmove_routes import create_routes as create_searchmove_routes
+from avior_dedup.server.searchmove_routes import router as searchmove_router
 
 
 @dataclass
@@ -44,8 +45,8 @@ app = FastAPI(title="avior-dedup API", version="0.1.0")
 _jobs: dict[str, JobEntry] = {}
 _executor = ThreadPoolExecutor(max_workers=4)
 
-# Register Search & Move routes (shares job state and executor)
-app.include_router(create_searchmove_routes(_jobs, _executor))
+# Register Search & Move routes (independent job storage)
+app.include_router(searchmove_router)
 
 
 # ---------------------------------------------------------------------------
@@ -346,7 +347,17 @@ _FRONTEND_DIST = Path(os.getenv("AVIOR_DEDUP_FRONTEND_DIST", ""))
 if not _FRONTEND_DIST.is_dir():
     _FRONTEND_DIST = Path(__file__).parent.parent.parent.parent / "frontend" / "dist"
 if _FRONTEND_DIST.is_dir():
-    app.mount("/", StaticFiles(directory=str(_FRONTEND_DIST), html=True), name="static")
+    _INDEX_HTML = _FRONTEND_DIST / "index.html"
+
+    # SPA catch-all: serve index.html for Vue Router history-mode routes
+    @app.get("/{full_path:path}")
+    async def spa_fallback(full_path: str) -> FileResponse:
+        # Serve actual static files if they exist
+        static_file = _FRONTEND_DIST / full_path
+        if full_path and static_file.is_file():
+            return FileResponse(static_file)
+        return FileResponse(_INDEX_HTML)
+
 
 
 # ---------------------------------------------------------------------------

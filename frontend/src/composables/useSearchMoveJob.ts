@@ -16,7 +16,7 @@ export function useSearchMoveJob() {
 
   function connectWs(id: string) {
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
-    ws = new WebSocket(`${protocol}//${location.host}/api/ws/searchmove/jobs/${id}`)
+    ws = new WebSocket(`${protocol}//${location.host}/api/searchmove/ws/jobs/${id}`)
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)

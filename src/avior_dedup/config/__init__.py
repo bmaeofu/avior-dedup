@@ -90,4 +90,6 @@ def config_files() -> dict[str, str]:
         "suffixes": "suffixes.yaml",
         "episode_keywords": "episode_keywords.yaml",
         "path_suggestions": "path_suggestions.yaml",
+        "searchmove_paths": "searchmove_paths.yaml",
+        "searchmove_templates": "searchmove_templates.yaml",
     }

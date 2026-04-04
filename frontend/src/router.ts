@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import JobView from './views/JobView.vue'
 import ConfigView from './views/ConfigView.vue'
 import SearchMoveView from './views/SearchMoveView.vue'
+import SearchMoveConfigView from './views/SearchMoveConfigView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -9,6 +10,7 @@ const router = createRouter({
     { path: '/', name: 'job', component: JobView },
     { path: '/config', name: 'config', component: ConfigView },
     { path: '/searchmove', name: 'searchmove', component: SearchMoveView },
+    { path: '/searchmove/config', name: 'searchmove-config', component: SearchMoveConfigView },
   ],
 })
 

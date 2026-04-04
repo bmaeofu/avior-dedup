@@ -1,8 +1,45 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { SearchMoveRequest } from '../types'
 
 const emit = defineEmits<{ start: [req: SearchMoveRequest] }>()
+
+interface Template {
+  name: string
+  extensions: string[]
+  search_expressions: string[]
+}
+
+const sourceSuggestions = ref<string[]>([])
+const destSuggestions = ref<string[]>([])
+const templates = ref<Template[]>([])
+const selectedTemplate = ref<string | null>(null)
+
+onMounted(async () => {
+  const [pathsRes, templatesRes] = await Promise.allSettled([
+    fetch('/api/config/searchmove_paths'),
+    fetch('/api/config/searchmove_templates'),
+  ])
+
+  if (pathsRes.status === 'fulfilled' && pathsRes.value.ok) {
+    const data = await pathsRes.value.json()
+    sourceSuggestions.value = data.source_paths ?? []
+    destSuggestions.value = data.dest_paths ?? []
+  }
+
+  if (templatesRes.status === 'fulfilled' && templatesRes.value.ok) {
+    templates.value = await templatesRes.value.json()
+  }
+})
+
+function applyTemplate(name: string | null) {
+  if (!name) return
+  const tmpl = templates.value.find(t => t.name === name)
+  if (!tmpl) return
+  extensions.value = [...tmpl.extensions]
+  expressionGroups.value = [...tmpl.search_expressions]
+  rawMode.value = false
+}
 
 const mode = ref<'copy' | 'move' | 'delete' | 'test'>('test')
 const source = ref('')
@@ -64,8 +101,9 @@ function submit() {
       <div class="text-subtitle-2 text-medium-emphasis mb-2">Directories</div>
       <v-row dense>
         <v-col cols="12" md="6">
-          <v-text-field
+          <v-combobox
             v-model="source"
+            :items="sourceSuggestions"
             label="Source"
             density="compact"
             variant="outlined"
@@ -74,8 +112,9 @@ function submit() {
           />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field
+          <v-combobox
             v-model="dest"
+            :items="destSuggestions"
             label="Destination"
             density="compact"
             variant="outlined"
@@ -137,6 +176,19 @@ function submit() {
       <!-- Search expressions -->
       <div class="d-flex align-center mb-2">
         <div class="text-subtitle-2 text-medium-emphasis">Search Expressions</div>
+        <v-select
+          v-if="templates.length > 0"
+          v-model="selectedTemplate"
+          :items="templates.map(t => t.name)"
+          label="Template"
+          density="compact"
+          variant="outlined"
+          hide-details
+          clearable
+          class="ml-4"
+          style="max-width: 300px;"
+          @update:model-value="applyTemplate"
+        />
         <v-spacer />
         <v-btn
           :prepend-icon="rawMode ? 'mdi-format-list-bulleted' : 'mdi-code-tags'"

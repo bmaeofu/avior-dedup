@@ -84,6 +84,11 @@ onMounted(() => {
           title="Search"
           to="/searchmove"
         />
+        <v-list-item
+          prepend-icon="mdi-cog"
+          title="Settings"
+          to="/searchmove/config"
+        />
       </v-list>
     </v-navigation-drawer>
 

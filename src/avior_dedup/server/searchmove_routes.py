@@ -1,12 +1,19 @@
-"""API router for Search & Move jobs."""
+"""API router for Search & Move jobs.
+
+Has its own job storage and WebSocket endpoint so it runs independently
+from the dedup module.
+"""
 
 from __future__ import annotations
 
 import asyncio
 import os
+import time
 import uuid
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 
 from avior_dedup.searchmove.models import ActivityMode
 from avior_dedup.searchmove.runner import run_search_move_job
@@ -28,11 +35,25 @@ _MODE_MAP: dict[str, ActivityMode] = {
 }
 
 
+@dataclass
+class _SmJobEntry:
+    """In-memory state for a running or completed search-move job."""
+    status: JobStatus
+    reporter: ProgressReporter
+
+
+_jobs: dict[str, _SmJobEntry] = {}
+_executor = ThreadPoolExecutor(max_workers=4)
+
+
+# ---------------------------------------------------------------------------
+# Job runner (runs in thread pool)
+# ---------------------------------------------------------------------------
+
 def _run_searchmove_job(
     job_id: str,
     req: SearchMoveRequest,
     reporter: ProgressReporter,
-    jobs: dict,
 ) -> None:
     """Execute a search-move job in a thread pool worker."""
     try:
@@ -81,7 +102,7 @@ def _run_searchmove_job(
             action_counts=result.action_counts,
             log_path=log_path,
         )
-        jobs[job_id].status = JobStatus(
+        _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="completed",
             progress=reporter.snapshot.model_copy(),
@@ -89,13 +110,13 @@ def _run_searchmove_job(
         )
 
     except JobCancelled:
-        jobs[job_id].status = JobStatus(
+        _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="cancelled",
             progress=reporter.snapshot.model_copy(),
         )
     except Exception as exc:  # noqa: BLE001
-        jobs[job_id].status = JobStatus(
+        _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="failed",
             progress=reporter.snapshot.model_copy(),
@@ -103,50 +124,97 @@ def _run_searchmove_job(
         )
 
 
-def create_routes(jobs: dict, executor) -> APIRouter:
-    """Build the router with access to shared job state and executor."""
+# ---------------------------------------------------------------------------
+# REST endpoints
+# ---------------------------------------------------------------------------
 
-    @router.post("/jobs", response_model=dict[str, str], status_code=201)
-    async def create_searchmove_job(req: SearchMoveRequest) -> dict[str, str]:
-        """Start a search-move job. Returns the job_id immediately."""
-        loop = asyncio.get_running_loop()
-        job_id = str(uuid.uuid4())
-        reporter = ProgressReporter(loop)
+@router.post("/jobs", response_model=dict[str, str], status_code=201)
+async def create_searchmove_job(req: SearchMoveRequest) -> dict[str, str]:
+    """Start a search-move job. Returns the job_id immediately."""
+    loop = asyncio.get_running_loop()
+    job_id = str(uuid.uuid4())
+    reporter = ProgressReporter(loop)
 
-        from avior_dedup.server.server import JobEntry
+    _jobs[job_id] = _SmJobEntry(
+        status=JobStatus(
+            job_id=job_id,
+            state="running",
+            progress=ProgressSnapshot(),
+        ),
+        reporter=reporter,
+    )
 
-        jobs[job_id] = JobEntry(
-            status=JobStatus(
-                job_id=job_id,
-                state="running",
-                progress=ProgressSnapshot(),
-            ),
-            reporter=reporter,
+    loop.run_in_executor(_executor, _run_searchmove_job, job_id, req, reporter)
+    return {"job_id": job_id}
+
+
+@router.get("/jobs/{job_id}", response_model=JobStatus)
+async def get_searchmove_job(job_id: str) -> JobStatus:
+    """Return current status of a search-move job."""
+    entry = _jobs.get(job_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    if entry.status.state == "running":
+        return JobStatus(
+            job_id=job_id,
+            state="running",
+            progress=entry.reporter.snapshot.model_copy(),
         )
+    return entry.status
 
-        loop.run_in_executor(executor, _run_searchmove_job, job_id, req, reporter, jobs)
-        return {"job_id": job_id}
 
-    @router.get("/jobs/{job_id}", response_model=JobStatus)
-    async def get_searchmove_job(job_id: str) -> JobStatus:
-        """Return current status of a search-move job."""
-        entry = jobs.get(job_id)
-        if entry is None:
-            raise HTTPException(status_code=404, detail="Job not found")
-        if entry.status.state == "running":
-            return JobStatus(
-                job_id=job_id,
-                state="running",
-                progress=entry.reporter.snapshot.model_copy(),
-            )
-        return entry.status
+@router.delete("/jobs/{job_id}", status_code=204)
+async def cancel_searchmove_job(job_id: str) -> None:
+    """Signal a running search-move job to cancel."""
+    entry = _jobs.get(job_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    entry.reporter.cancelled = True
 
-    @router.delete("/jobs/{job_id}", status_code=204)
-    async def cancel_searchmove_job(job_id: str) -> None:
-        """Signal a running search-move job to cancel."""
-        entry = jobs.get(job_id)
-        if entry is None:
-            raise HTTPException(status_code=404, detail="Job not found")
-        entry.reporter.cancelled = True
 
-    return router
+# ---------------------------------------------------------------------------
+# WebSocket — live progress stream
+# ---------------------------------------------------------------------------
+
+@router.websocket("/ws/jobs/{job_id}")
+async def ws_searchmove_progress(websocket: WebSocket, job_id: str) -> None:
+    """Stream ProgressSnapshot JSON at up to 10 msgs/sec."""
+    entry = _jobs.get(job_id)
+    if entry is None:
+        await websocket.close(code=4004)
+        return
+
+    await websocket.accept()
+    queue = entry.reporter.subscribe()
+
+    try:
+        last_sent = 0.0
+        pending: ProgressSnapshot | None = None
+
+        while True:
+            try:
+                while True:
+                    pending = queue.get_nowait()
+            except asyncio.QueueEmpty:
+                pass
+
+            now = time.monotonic()
+            if pending is not None and (now - last_sent) >= 0.1:
+                await websocket.send_text(pending.model_dump_json())
+                last_sent = now
+                pending = None
+
+            if entry.status.state in ("completed", "failed", "cancelled") and queue.empty():
+                await websocket.send_text(entry.status.model_dump_json())
+                break
+
+            try:
+                snapshot = await asyncio.wait_for(queue.get(), timeout=0.05)
+                pending = snapshot
+            except asyncio.TimeoutError:
+                pass
+
+    except WebSocketDisconnect:
+        pass
+    finally:
+        entry.reporter.unsubscribe(queue)
