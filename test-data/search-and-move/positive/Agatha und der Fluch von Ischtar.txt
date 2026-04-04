@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=11.03.2026 20:14:31
+Channel=ONE HD (AC3,deu)
+
+[0]
+Id=54486
+Date=11.03.2026
+Time=20:15:00
+Duration=01:35:00
+Title=Agatha und der Fluch von Ischtar
+Info=Spielfilm Großbritannien 2019 (Agatha and the Curse of Ishtar)
+Description=Ausstrahlung auch im englischen Originalton||Zwei Jahre nach ihrem Abtauchen aus der Öffentlichkeit reist Agatha nach Bagdad, auf der Suche nach Ruhe und kultureller Ablenkung. Was sie findet, ist Max, einen attraktiven, jungen Archäologen, der über die Göttin Ishtar schwadroniert.|Agatha stößt in ein Umfeld aus eifersüchtigen Kollegen, korrupten Beamten, Antiquitätenschmugglern und wütenden lokalen Bewohnern, die über den Diebstahl ihres kulturellen Erbes empört sind. Als die Zahl der Toten steigt und Agatha merkt, dass sie sich in Max verliebt, wird offensichtlich, dass der Schlüssel zu diesem Rätsel außerhalb dieser Mauern liegt.||[16:9] [SUB] [12+]   [PDC 11.03. 20:15]
+Charset=255
+Content=16
+MinimumAge=12
+TimerID={EDBDF958-8917-4042-A0DF-04223712C746}
+
+[Stats]
+Errors=0
+Size=2,21 GB (2371267124 bytes)
+Avr. Datarate=0,399 MB/s
+Device=Tvheadend:9983 20d48b009f 6
+

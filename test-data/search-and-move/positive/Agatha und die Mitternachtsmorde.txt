@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=18.03.2026 20:14:38
+Channel=ONE HD (AC3,deu)
+
+[0]
+Id=54684
+Date=18.03.2026
+Time=20:15:00
+Duration=01:30:00
+Title=Agatha und die Mitternachtsmorde
+Info=Spielfilm Großbritannien 2020 (Agatha and the Midnight Murders)
+Description=Ausstrahlung auch im englischen Originalton||London 1940: Während der deutschen Luftangriffe trifft Agatha die Entscheidung, ihre bekannteste Roman-Figur zu töten.|Nach zwölf Romanen in sechs Jahren sollte Agatha eine reiche Frau sein. Stattdessen kämpft sie darum, über die Runden zu kommen. Doch sie hat einen Plan: Sie verkauft den Roman an einen privaten Käufer, einen Superfan, der bereit ist, alles zu zahlen, um ein Stück Geschichte zu besitzen. Christie und ihr Bodyguard treffen auf die potenziellen Käufer und eine bunte Gruppe von Hotelgästen. Die Spannung steigt, als es im Hotel zu einer Reihe von Morden kommt.||[16:9] [SUB] [12+]   [PDC 18.03. 20:15]
+Charset=255
+Content=16
+MinimumAge=12
+TimerID={435C6C27-F1F0-4D55-A583-27BFD566C50A}
+
+[Stats]
+Errors=0
+Size=2,23 GB (2391650648 bytes)
+Avr. Datarate=0,431 MB/s
+Device=Tvheadend:9983 20d48b009f 6
+

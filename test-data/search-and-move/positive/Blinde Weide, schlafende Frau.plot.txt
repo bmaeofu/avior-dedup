@@ -1,0 +1,16 @@
+Datum: 2026-04-04 11:35:52 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Nach dem Tōhoku-Erdbeben gilt es, weiterzuleben. Ein Bankangestellter begibt sich auf eine bereichernde Reise. Seine Frau hat ihn verlassen, um ihrer Jugend nachzujagen. Währenddessen stellt sich ein Kollege von ihm vor, Tokyo vor einem zweiten Unglück retten zu müssen.
+______
+
+TXT:
+nach dem t_hoku-erdbeben gilt es, weiterzuleben. ein bankangestellter begibt sich auf eine bereichernde reise. seine frau hat ihn verlassen, um ihrer jugend nachzujagen. währenddessen stellt sich ein kollege von ihm vor, tokio vor einem zweiten unglück retten zu müssen. fantasievoller animationsfilm von pierre földes, nach den surrealistischen kurzgeschichten von haruki murakami.||
+#####
+
+End of Plot
+
+similarity_score:1.0000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-03-24
+Score:17.5000
+nfo_year: 2023

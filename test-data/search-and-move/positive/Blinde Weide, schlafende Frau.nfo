@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Blinde Weide, schlafende Frau</title>
+    <originaltitle>Saules aveugles, femme endormie</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>7.100000</value>
+            <votes>1056</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>6.759000</value>
+            <votes>27</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Nach dem Tōhoku-Erdbeben gilt es, weiterzuleben. Ein Bankangestellter begibt sich auf eine bereichernde Reise. Seine Frau hat ihn verlassen, um ihrer Jugend nachzujagen. Währenddessen stellt sich ein Kollege von ihm vor, Tokyo vor einem zweiten Unglück retten zu müssen.</plot>
+    <tagline />
+    <runtime>104</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/sZwCoTBd4k2RqxMLPPVYqnetdUT.jpg">https://image.tmdb.org/t/p/original/sZwCoTBd4k2RqxMLPPVYqnetdUT.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/3iciUeTd2UdlhQHpYzUYV8UO1pL.jpg">https://image.tmdb.org/t/p/original/3iciUeTd2UdlhQHpYzUYV8UO1pL.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/gxFxVarvIJX09yNntnMszrjK4EW.jpg">https://image.tmdb.org/t/p/original/gxFxVarvIJX09yNntnMszrjK4EW.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/gM7B8hBBIOq1BgrUlbLIWclDUFR.jpg">https://image.tmdb.org/t/p/original/gM7B8hBBIOq1BgrUlbLIWclDUFR.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/zbRTeLkaxTNwMrXBZSqbCsXUkB2.jpg">https://image.tmdb.org/t/p/original/zbRTeLkaxTNwMrXBZSqbCsXUkB2.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/fKvc5AqG34BVgEOolnhxOzUCccP.jpg">https://image.tmdb.org/t/p/original/fKvc5AqG34BVgEOolnhxOzUCccP.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/swngBbhr1XFLXIqO2aGRlqzg3ff.jpg">https://image.tmdb.org/t/p/original/swngBbhr1XFLXIqO2aGRlqzg3ff.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/6fKo6KoFZ6ix3Fs5vV9cN9zFxaG.jpg">https://image.tmdb.org/t/p/original/6fKo6KoFZ6ix3Fs5vV9cN9zFxaG.jpg</thumb>
+    <fanart />
+    <mpaa>Rated 15</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt9320184</id>
+    <uniqueid type="imdb" default="true">tt9320184</uniqueid>
+    <uniqueid type="tmdb">678299</uniqueid>
+    <genre>Animation</genre>
+    <genre>Drama</genre>
+    <genre>Science Fiction</genre>
+    <country>Canada</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Pierre Földes</credits>
+    <director>Pierre Földes</director>
+    <premiered>2023-02-24</premiered>
+    <year>2023</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Cinéma Defacto</studio>
+    <trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=HS-zg2-0rqU</trailer>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6246</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Katharine King So</name>
+        <role>Shimao (voice)</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/A1giE59gq1zupkhAgru7FpdJwWe.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Shoshana Wilder</name>
+        <role>Kyoko (voice)</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/a0BBn8F1Ps5sHBazNPFG2xYK6FD.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jesse Noah Gruman</name>
+        <role>Junpei (voice)</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/e011WymyvXO90SrFKtHybK070Yo.jpg</thumb>
+    </actor>
+    <actor>
+        <name>John Vamvas</name>
+        <role>Manager (voice)</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/u31OggFSUe59ecdcVfqBW7u9ehf.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Zag Dorison</name>
+        <role>Ken (voice)</role>
+        <order>4</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Amaury de Crayencour</name>
+        <role>Komura (voice)</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/jmyKusA9ETzSzajpppC440GBlEp.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Mathilde Auneveux</name>
+        <role>Kyoko (voice)</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/whBAZhVIfPPGhgJr0qvsnEUSdFk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Arnaud Maillard</name>
+        <role>Katagiri (voice)</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/zfOujhJVucQtGTY2S2loEDLdtkY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bruno Paviot</name>
+        <role>Sasaki (voice)</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/pGVf8YttW85MdqPfFjVKliOaS7e.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Féodor Atkine</name>
+        <role>M. Suzuki (voice)</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/qCpSPJyM7v9p3fGBJV8ZqGETBr0.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Pierre Földes</name>
+        <role>Frog (voice)</role>
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Théophile Baquet</name>
+        <role>Junpei (voice)</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/pk5WAcM9ojU1brd89U3i5t6rYyF.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Julien Crampon</name>
+        <role>Hiroshi (voice)</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/d6Gi0u2qXMrd4lXbogCJXagBu5U.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Damien Zanoly</name>
+        <role>Shiraoka (voice)</role>
+        <order>13</order>
+        <thumb>https://image.tmdb.org/t/p/original/v7itHqOAgzDisgSaa3WeXJj5P2N.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Laurent Stocker</name>
+        <role>Ken (voice)</role>
+        <order>14</order>
+        <thumb>https://image.tmdb.org/t/p/original/4EhK8uFnlSjoFXi6Mz7a6dSO5W1.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jean-Pierre Malignon</name>
+        <role>Restaurant Owner (voice)</role>
+        <order>15</order>
+        <thumb>https://image.tmdb.org/t/p/original/1TDx1yL94fwfNd5WoeCpldfknRX.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jean-Pierre Kalfon</name>
+        <role>Old Man (voice)</role>
+        <order>16</order>
+        <thumb>https://image.tmdb.org/t/p/original/r55H3IrpdYD8Dq04PpboZCmmiPB.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Isabelle Vitari</name>
+        <role>Keiko (voice)</role>
+        <order>17</order>
+        <thumb>https://image.tmdb.org/t/p/original/tdCxFJbAmpi6I4muv5K7XyRZgha.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Géraldine Schitter</name>
+        <role>Shimao (voice)</role>
+        <order>18</order>
+        <thumb>https://image.tmdb.org/t/p/original/287TOxZ5JohlrY2QbrOjXhty3pU.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ingrid Donnadieu</name>
+        <role>Nurse (voice)</role>
+        <order>19</order>
+        <thumb>https://image.tmdb.org/t/p/original/rQCtNmz0nTCDDiaOp9ya421U5M3.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marie-Christine Barrault</name>
+        <role>Komura's Mother (voice)</role>
+        <order>20</order>
+        <thumb>https://image.tmdb.org/t/p/original/sVJxEzQupuhk1n2g4HpisKGXSSY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Noée Abita</name>
+        <role>Lass (voice)</role>
+        <order>21</order>
+        <thumb>https://image.tmdb.org/t/p/original/3dyRKujOLn1VsCo9ZQ6HOwMj4Ew.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-14 00:31:09</dateadded>
+    <plot_sim_score_date>2026-03-24</plot_sim_score_date>
+    <ratings_updated>2026-03-24</ratings_updated>
+    <plot_sim_score>1.0000</plot_sim_score>
+</movie>

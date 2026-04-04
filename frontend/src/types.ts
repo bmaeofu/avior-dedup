@@ -44,3 +44,32 @@ export interface JobStatus {
   result: JobResult | null
   error: string | null
 }
+
+// ---------------------------------------------------------------------------
+// Search & Move
+// ---------------------------------------------------------------------------
+
+export interface SearchMoveRequest {
+  mode: 'copy' | 'move' | 'delete' | 'test'
+  source: string
+  dest: string
+  extensions: string[]
+  search_expressions: string[]
+  recursive: boolean
+  logname: string
+}
+
+export interface SearchMoveResult {
+  files_scanned: number
+  files_matched: number
+  action_counts: Record<string, number>
+  log_path: string | null
+}
+
+export interface SearchMoveJobStatus {
+  job_id: string
+  state: 'running' | 'completed' | 'failed' | 'cancelled'
+  progress: ProgressSnapshot | null
+  result: SearchMoveResult | null
+  error: string | null
+}

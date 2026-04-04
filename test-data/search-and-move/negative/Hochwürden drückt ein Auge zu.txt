@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=08.03.2026 00:38:49
+Channel=SWR BW HD (AC3,deu)
+
+[0]
+Id=5762
+Date=08.03.2026
+Time=00:35:00
+Duration=01:35:00
+Title=Hochwürden drückt ein Auge zu
+Info=Spielfilm Deutschland 1971
+Description=Seit Jahren tuckert der alte Kapitän Jansen mit seinem Dampfschiff "Antonia" über den Wörthersee. Als ihn der erfolgreiche Fuhrunternehmer Springer als Konkurrenten ausschalten will, bekommt er Hilfe vom patenten Pfarrer Himmelreich.||[16:9] [SUB] [6+]   [PDC 08.03. 00:35]
+Charset=255
+Content=16
+MinimumAge=6
+TimerID={E9E99459-E780-4904-9D7F-106629777E7A}
+
+[Stats]
+Errors=0
+Size=8,56 GB (9189718052 bytes)
+Avr. Datarate=1,603 MB/s
+Device=Tvheadend:9983 20d48b009f 7
+

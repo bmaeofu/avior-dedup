@@ -15,7 +15,9 @@
       "Bash(uv run:*)",
       "Bash(uv add:*)",
       "Bash(python:*)",
-      "mcp__plugin_context-mode_context-mode__ctx_execute"
+      "mcp__plugin_context-mode_context-mode__ctx_execute",
+      "Read(//c/Users/MM/.claude/plans/**)",
+      "Bash(pnpm run:*)"
     ]
   }
 }

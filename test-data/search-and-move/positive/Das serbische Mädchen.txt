@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=09.03.2026 23:17:20
+Channel=NDR FS HH HD (AC3,deu)
+
+[0]
+Id=6800
+Date=09.03.2026
+Time=23:15:00
+Duration=01:30:00
+Title=Das serbische Mädchen
+Info=Spielfilm Deutschland 1989
+Description=Die 18-jährige Dobrilla macht sich aus ihrem serbischen Heimatdorf auf den Weg nach Hamburg. Sie will zu ihrer Urlaubsliebe Achim, den sie vier Monate zuvor kennengelernt hat und von dem sie ein Kind erwartet. In einem Transporter reist sie illegal über die Grenze nach Österreich und weiter nach Deutschland. Unter erheblichen Strapazen erreicht sie tatsächlich ihr Ziel, doch der Empfang bei Achim und seiner Familie ist alles andere als warmherzig. Achim scheint sich nicht über das Wiedersehen zu freuen.||[16:9] [SUB]   [PDC 09.03. 23:15]
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={54A00AC8-7738-423B-93E6-BDBD6D925F20}
+
+[Stats]
+Errors=0
+Size=9,04 GB (9709670780 bytes)
+Avr. Datarate=1,733 MB/s
+Device=Tvheadend:9983 20d48b009f 6
+

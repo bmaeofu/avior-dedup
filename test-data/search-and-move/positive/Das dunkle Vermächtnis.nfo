@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Das dunkle Vermächtnis</title>
+    <originaltitle>Das dunkle Vermächtnis</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10" default="true">
+            <value>6.000000</value>
+            <votes>1</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Im Zentrum des Thrillers steht die Himmelsscheibe von Nebra, ein archäologischer Fund, der Jahre zurückliegt und mit einem aktuellen Mord in Verbindung gebracht wird, und die Frage: Lastet ein unheimlicher Fluch auf dem historischen Gegenstand oder handelt es sich hier um einen perfiden Mord.  Die Hamburger Fotografin Kim Weinrich kehrt in ihre Heimatstadt Nebra zurück und bei der Polizei eine Aussage zu machen  Ihr Vater Paul steht unter Mordverdacht: Er soll seinen ehemals besten Freund Arko im Streit niedergestochen haben.</plot>
+    <tagline />
+    <runtime>88</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/yscGhaMFUGnbbOynjlYLzL77Ij.jpg">https://image.tmdb.org/t/p/original/yscGhaMFUGnbbOynjlYLzL77Ij.jpg</thumb>
+    <fanart />
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt39722578</id>
+    <uniqueid type="imdb" default="true">tt39722578</uniqueid>
+    <uniqueid type="tmdb">1629587</uniqueid>
+    <genre>Krimi</genre>
+    <genre>Drama</genre>
+    <country>Germany</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Thomas Sieben</credits>
+    <director>Ziska Riemann</director>
+    <premiered>2026-03-12</premiered>
+    <year>2026</year>
+    <status />
+    <code />
+    <aired />
+    <studio>MadeFor Film</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5313</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>8</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Felicitas Woll</name>
+        <role>Kim Wenrich</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/dgErPN7Az41tGsd5zbdh4qIwrog.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Torben Liebrecht</name>
+        <role>Kommissar Ritter</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/2wOsGzDKRbKA5phd4o5zkx6lzIS.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Elmar Gutmann</name>
+        <role>Paul Wenrich</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/tarPurX3S9am6ywwc1BryryuWxY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Walter Plathe</name>
+        <role>Arko Haumann</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/7UbU2pwiyh2CCNNDcfJ1VfBwH6.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Florian Bartholomäi</name>
+        <role>Jonas „Jonny“ Haumann</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/7iILONJhMET8FHXc1vhYQffQC9s.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Barbara Philipp</name>
+        <role>Agnes Schneider</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/oWU8aLNm9i4i0uAitcMblLnYvXE.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Neda Rahmanian</name>
+        <role>Rebecca Rosen</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/tNNPwhfG9ulbahftehYyTTKGrYT.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Romy Miesner</name>
+        <role>Marleen Wenrich/Kim Wenrich</role>
+        <order>7</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Sebastian Fräsdorf</name>
+        <role>Arko Haumann (jung)</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/5unLO0ePsCEx7FMPsaY177xvL9J.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Merlin Leonhardt</name>
+        <role>Paul Wenrich (jung)</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/q0RbAJ0EOUVKGYRVrhFDXkNbc0B.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marysol Remy</name>
+        <role>Agnes Schneider (jung)</role>
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Negah Amiri</name>
+        <role>Mehrin Karimi</role>
+        <order>11</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Stephan Kampwirth</name>
+        <role>Stefan</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/A9B8Qdrej95XaNzEmZBsaR5IxwV.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Mia Antonia Tack</name>
+        <role />
+        <order>13</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-15 03:45:18</dateadded>
+    <ratings_updated>2026-03-24</ratings_updated>
+</movie>

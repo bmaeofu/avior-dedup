@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=14.03.2026 20:15:38
+Channel=Das Erste HD (AC3,deu)
+
+[0]
+Id=5666
+Date=14.03.2026
+Time=20:15:00
+Duration=01:30:00
+Title=Das dunkle Vermächtnis
+Info=Spielfilm Deutschland 2025
+Description=Die Himmelsscheibe von Nebra trägt eine jahrtausendalte Wissenschaft in sich. Doch liegt auf ihr auch ein tödlicher Fluch? Eine wahre Begebenheit, den Sensationsfund durch zwei Hobbyschatzsucher im Jahr 1999, nimmt der fiktionale Fernsehfilm zum Ausgangspunkt für einen spannenden Mysterythriller.|Während Torben Liebrecht in der Rolle des umsichtigen Kommissars Ritter einen Mordfall aufklären muss, begibt sich Felicitas Woll als Tochter des Hauptverdächtigen auf eine düstere Reise in ihre Vergangenheit ...||[16:9] [5.1] [SUB] [AD] [12+]   [PDC 14.03. 20:15]
+Charset=255
+Content=16
+MinimumAge=12
+TimerID={0871A94B-16EB-4DF8-A0D0-F301BC88DF11}
+
+[Stats]
+Errors=0
+Size=7,33 GB (7867385272 bytes)
+Avr. Datarate=1,412 MB/s
+Device=Tvheadend:9983 20d48b009f 5
+

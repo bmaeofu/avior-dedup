@@ -27,6 +27,7 @@ from avior_dedup.server.schemas import (
     JobStatus,
     ProgressSnapshot,
 )
+from avior_dedup.server.searchmove_routes import create_routes as create_searchmove_routes
 
 
 @dataclass
@@ -42,6 +43,9 @@ app = FastAPI(title="avior-dedup API", version="0.1.0")
 
 _jobs: dict[str, JobEntry] = {}
 _executor = ThreadPoolExecutor(max_workers=4)
+
+# Register Search & Move routes (shares job state and executor)
+app.include_router(create_searchmove_routes(_jobs, _executor))
 
 
 # ---------------------------------------------------------------------------

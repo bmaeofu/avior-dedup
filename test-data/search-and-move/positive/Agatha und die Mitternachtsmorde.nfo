@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Agatha und die Mitternachtsmorde</title>
+    <originaltitle>Agatha and the Midnight Murders</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>5.500000</value>
+            <votes>2660</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>6.269000</value>
+            <votes>52</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>London 1940: Als der Blitz wütet und ihre Zukunft durch die Auswirkungen des Krieges bedroht ist, trifft Agatha Christie die Entscheidung, ihre berühmteste Schöpfung zu töten.\r Nach zwölf Poirot-Romanen in sechs Jahren sollte Agatha eine reiche Frau sein. Stattdessen kämpft sie darum, über die Runden zu kommen. Poirot inmitten dieses Aufruhrs zu töten, scheint fast boshaft, aber Agatha hat einen Plan: Sie verkauft den Roman an einen privaten Käufer, einen Superfan, der alles zahlen würde, um ein Stück Geschichte zu besitzen.\r Ein Treffen in einem berüchtigten Londoner Hotel wird arrangiert, bei dem trotz der Anwesenheit eines alten Freundes die Dinge schnell schief gehen. Als die Bomben fallen und sich die Leichen stapeln, wird die wahre Gefahr ihrer Situation deutlich: Das Einzige, was wertvoller ist als der letzte Poirot-Roman, ist das letzte Buch, das Agatha Christie je geschrieben hat.</plot>
+    <tagline />
+    <runtime>88</runtime>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/b3rsxQCugazGsFOkyg1ALSeS4M3.jpg">https://image.tmdb.org/t/p/original/b3rsxQCugazGsFOkyg1ALSeS4M3.jpg</thumb>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/k3jrg6NUn9wshdI1AIFwGqwHU1K.jpg">https://image.tmdb.org/t/p/original/k3jrg6NUn9wshdI1AIFwGqwHU1K.jpg</thumb>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/tF7ywT3lm0ji19jYIR8q2fU8Ae1.jpg">https://image.tmdb.org/t/p/original/tF7ywT3lm0ji19jYIR8q2fU8Ae1.jpg</thumb>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/73a9Vtw9SZPVCdkixQkouzvNpt3.jpg">https://image.tmdb.org/t/p/original/73a9Vtw9SZPVCdkixQkouzvNpt3.jpg</thumb>
+    <thumb aspect="set.fanart" preview="https://image.tmdb.org/t/p/w500/wpnXZWJwVEskE0CgQP83w3RkfWE.jpg">https://image.tmdb.org/t/p/original/wpnXZWJwVEskE0CgQP83w3RkfWE.jpg</thumb>
+    <thumb aspect="set.fanart" preview="https://image.tmdb.org/t/p/w500/2u9pERn69s8N7W9QIX5NmnOtW5w.jpg">https://image.tmdb.org/t/p/original/2u9pERn69s8N7W9QIX5NmnOtW5w.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/irV5m9TNccLSluETdX2KNy6noGp.jpg">https://image.tmdb.org/t/p/original/irV5m9TNccLSluETdX2KNy6noGp.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/yAelUtcdiehTELYmX8UBFStTTZt.jpg">https://image.tmdb.org/t/p/original/yAelUtcdiehTELYmX8UBFStTTZt.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/8er2AqOjoBOojkyUU6S3YBfcTJb.jpg">https://image.tmdb.org/t/p/original/8er2AqOjoBOojkyUU6S3YBfcTJb.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/pXDhbTaVf8R2qQOUl97rhxSVht.jpg">https://image.tmdb.org/t/p/original/pXDhbTaVf8R2qQOUl97rhxSVht.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/42uaDLu8iUuExUHIoU1PDrjLcKK.jpg">https://image.tmdb.org/t/p/original/42uaDLu8iUuExUHIoU1PDrjLcKK.jpg</thumb>
+    <thumb aspect="landscape" preview="https://image.tmdb.org/t/p/w780/o8ScNzx7BKeoaz5qwRrnsdp5NWs.jpg">https://image.tmdb.org/t/p/original/o8ScNzx7BKeoaz5qwRrnsdp5NWs.jpg</thumb>
+    <thumb aspect="landscape" preview="https://image.tmdb.org/t/p/w780/714FCFd8N3so0iOCaAlmkRNeHwf.jpg">https://image.tmdb.org/t/p/original/714FCFd8N3so0iOCaAlmkRNeHwf.jpg</thumb>
+    <fanart />
+    <mpaa>Rated 15</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt11062400</id>
+    <uniqueid type="imdb" default="true">tt11062400</uniqueid>
+    <uniqueid type="tmdb">749395</uniqueid>
+    <genre>Mystery</genre>
+    <genre>Drama</genre>
+    <country>United Kingdom</country>
+    <set>
+        <name>Agatha Filmreihe</name>
+        <overview>962619</overview>
+    </set>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Tom Dalton</credits>
+    <director>Joe Stephenson</director>
+    <premiered>2020-10-07</premiered>
+    <year>2020</year>
+    <status />
+    <code />
+    <aired />
+    <studio>DSP</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5292</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Helen Baxendale</name>
+        <role>Agatha Christie</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/lS5HixP4NOe1QIn8EMKpKG2K2af.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Blake Harrison</name>
+        <role>Travis Pickford</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/nySNwcX863hwevtLbJPOdlTLftf.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jacqueline Boatswain</name>
+        <role>Audrey Evans</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/Ahv7Dh44USxMoGSz4yuoegfB5mk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gina Bramhill</name>
+        <role>Grace Nicory</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/4szCYnbyuKoYedL6hU4YBKbfBIX.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Daniel Caltagirone</name>
+        <role>Eli Schneider</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/2LUz4M9PVRxMePqJ74hP05Wdwi3.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Thomas Chaanhing</name>
+        <role>Frankie Lei</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/zGYtPCqOn2OsFRAOTXYUV0f01Sq.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Scott Chambers</name>
+        <role>Clarence Allen</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/pANsw8kWaQzSwuVmr1Em5di9u4o.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Vanessa Grasse</name>
+        <role>Nell Lewis</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/dugeh2yv95JtnnAwI9w8KFdUIdF.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jodie McNee</name>
+        <role>PC O'Hanauer</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/feaGnwj28NTQglvrIbb1vddDrvt.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Elizabeth Tan</name>
+        <role>Jun Yuhuan</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/tHrduQAmTOo8U00v4Y5SbKPBaRP.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Morgan Watkins</name>
+        <role>Rocco Vella</role>
+        <order>10</order>
+        <thumb>https://image.tmdb.org/t/p/original/9uVJgLyyQewhlsLyVJdyIP0T0Bd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alistair Petrie</name>
+        <role>Sir Malcolm Campbell</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/b6KUFhtWtmmTIcs7gL9kZktzJzl.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-19 01:59:11</dateadded>
+    <ratings_updated>2026-03-24</ratings_updated>
+</movie>

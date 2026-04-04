@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Agatha und der Fluch von Ischtar</title>
+    <originaltitle>Agatha and the Curse of Ishtar</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>6.000000</value>
+            <votes>2786</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>5.697000</value>
+            <votes>76</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Agatha Christie reist Ende der 1920er Jahre zu einer archäologischen Ausgrabung in die Wüste des Irak, wo sie eine Reihe mysteriöser Morde aufklärt.</plot>
+    <tagline>Has Agatha met her match?</tagline>
+    <runtime>94</runtime>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/b3rsxQCugazGsFOkyg1ALSeS4M3.jpg">https://image.tmdb.org/t/p/original/b3rsxQCugazGsFOkyg1ALSeS4M3.jpg</thumb>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/k3jrg6NUn9wshdI1AIFwGqwHU1K.jpg">https://image.tmdb.org/t/p/original/k3jrg6NUn9wshdI1AIFwGqwHU1K.jpg</thumb>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/tF7ywT3lm0ji19jYIR8q2fU8Ae1.jpg">https://image.tmdb.org/t/p/original/tF7ywT3lm0ji19jYIR8q2fU8Ae1.jpg</thumb>
+    <thumb aspect="set.poster" preview="https://image.tmdb.org/t/p/w500/73a9Vtw9SZPVCdkixQkouzvNpt3.jpg">https://image.tmdb.org/t/p/original/73a9Vtw9SZPVCdkixQkouzvNpt3.jpg</thumb>
+    <thumb aspect="set.fanart" preview="https://image.tmdb.org/t/p/w500/wpnXZWJwVEskE0CgQP83w3RkfWE.jpg">https://image.tmdb.org/t/p/original/wpnXZWJwVEskE0CgQP83w3RkfWE.jpg</thumb>
+    <thumb aspect="set.fanart" preview="https://image.tmdb.org/t/p/w500/2u9pERn69s8N7W9QIX5NmnOtW5w.jpg">https://image.tmdb.org/t/p/original/2u9pERn69s8N7W9QIX5NmnOtW5w.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/vpKLc5LCxuI7VJ57ZYIpAEpF0bp.jpg">https://image.tmdb.org/t/p/original/vpKLc5LCxuI7VJ57ZYIpAEpF0bp.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/bcHrfQ7gT4XBbrENzJEJ69PRKu1.jpg">https://image.tmdb.org/t/p/original/bcHrfQ7gT4XBbrENzJEJ69PRKu1.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/btzqoiCdVfV8eXeaqxIbKihXL2R.jpg">https://image.tmdb.org/t/p/original/btzqoiCdVfV8eXeaqxIbKihXL2R.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/lYu4AHDjX4MmGtn36SVo2rMzWXN.jpg">https://image.tmdb.org/t/p/original/lYu4AHDjX4MmGtn36SVo2rMzWXN.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/mLsP17mfRHZAr0LFlEZbrITTJwM.jpg">https://image.tmdb.org/t/p/original/mLsP17mfRHZAr0LFlEZbrITTJwM.jpg</thumb>
+    <thumb aspect="landscape" preview="https://image.tmdb.org/t/p/w780/stkdsZF651wsPClhF5PbgOTaBJW.jpg">https://image.tmdb.org/t/p/original/stkdsZF651wsPClhF5PbgOTaBJW.jpg</thumb>
+    <fanart />
+    <mpaa>Rated PG-13</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt10964992</id>
+    <uniqueid type="imdb" default="true">tt10964992</uniqueid>
+    <uniqueid type="tmdb">655730</uniqueid>
+    <genre>Krimi</genre>
+    <country>United Kingdom</country>
+    <set>
+        <name>Agatha Filmreihe</name>
+        <overview>962619</overview>
+    </set>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Tom Dalton</credits>
+    <director>Sam Yates</director>
+    <premiered>2019-12-15</premiered>
+    <year>2019</year>
+    <status />
+    <code />
+    <aired />
+    <studio>DSP</studio>
+    <trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=YX-xoD73B7A</trailer>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5667</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Lyndsey Marshal</name>
+        <role>Agatha Christie</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/rhgtb80RXEIwL2LFw9L1nMxoRxd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jonah Hauer-King</name>
+        <role>Max Mallowan</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/yXGsk9UtOV9tprU5ZSuhwdFtaBB.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bronagh Waugh</name>
+        <role>Lucy</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/oMpBW59gmv1VFEOr3fzkadJ0SWo.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Rory Fleck-Byrne</name>
+        <role>Lord Ponsonby -- Marmaduke</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/iwPrSa41IxD5jy3Fb7IVF0O5DQ2.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jack Deam</name>
+        <role>Leonard Woolley</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/4EYUpMI6V3iZ91z3pHuw6KqisXF.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Katherine Kingsley</name>
+        <role>Katharine Woolley</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/4kkxVQyONdh7WbmlYrIEJAXD19O.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Crystal Clarke</name>
+        <role>Pearl</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/3MogiGnT0d5gZ7PecM9jOLMi9US.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Stanley Townsend</name>
+        <role>Sir Constance</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/ry1kek817WYHOh1npa3ojxmGJcI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Liran Nathan</name>
+        <role>Faisal</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/4pcKpaZkqObqhkOpkkv7qIOfmZh.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Waj Ali</name>
+        <role>Ezekiel</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/jRGHlAx1SXcEvdC52WplWByEpyd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Walles Hamonde</name>
+        <role>Ahkam</role>
+        <order>10</order>
+        <thumb>https://image.tmdb.org/t/p/original/uoKuXFqmL7uwjJro1runny5N822.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Waleed Elgadi</name>
+        <role>Doctor Al-Memar</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/7YOAlGYW2TnDbi76gWBqOfEEhjK.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Mark Lambert</name>
+        <role>Godfrey</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/mHxSviZSUGqSs9rQVSeMLJebPXc.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Daniel Gosling</name>
+        <role>Hugo</role>
+        <order>13</order>
+        <thumb>https://image.tmdb.org/t/p/original/8eZVAQYRyOY9YbkryTbwKw5nzoI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Colin Farrell</name>
+        <role>Hutchins</role>
+        <order>14</order>
+        <thumb>https://image.tmdb.org/t/p/original/h19BfuFuE7FBmdtTD7n3z4JTg5q.jpg</thumb>
+    </actor>
+    <actor>
+        <name>James Staddon</name>
+        <role>Patrick Mulholland</role>
+        <order>15</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Sharif Dorani</name>
+        <role>Hadi</role>
+        <order>16</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Emma Darlow</name>
+        <role>Claire</role>
+        <order>17</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Clyde Cassar</name>
+        <role>Butler</role>
+        <order>18</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-12 02:44:02</dateadded>
+    <ratings_updated>2026-03-24</ratings_updated>
+</movie>

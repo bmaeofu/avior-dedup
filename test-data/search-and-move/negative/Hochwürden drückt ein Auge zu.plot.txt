@@ -1,0 +1,18 @@
+Datum: 2026-04-04 11:38:49 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Der wirtschaftlich angeschlagene Dampferkapitän Jansen steht kurz vor dem Ruin; mit seinem veralteten Schiff ist er kaum noch in der Lage die Fahrpläne einzuhalten. Als sich dann auch noch der schmierige Fuhrunternehmer Springer im Ort ansiedelt, ist der Bankrott Jansens kaum noch zu verhindern.  Doch der alte Kapitän hat noch zwei Asse im Ärmel: Zum einen ist seine Tochter der neue Schwarm von Springers Sohn, zum anderen ist der gewitzte, ortsansässige Pfarrer auf der Seite Jansens. Im Kampf um die Kunden sind sich beide Parteien für keine Untat zu schade. Den Höhepunkt der Rivalität bildet ein Wettrennen, das die Entscheidung bringen soll.
+______
+
+TXT:
+seit jahren tuckert der alte kapitän jansen mit seinem dampfschiff "antonia" über den wörthersee. als ihn der erfolgreiche fuhrunternehmer springer als konkurrenten ausschalten will, bekommt er hilfe vom patenten pfarrer himmelreich.||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:15.5000
+txt_year: 1971
+nfo_year: 1971
+year_diff: 0.0

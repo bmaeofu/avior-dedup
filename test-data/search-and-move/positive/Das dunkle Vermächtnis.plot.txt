@@ -1,0 +1,18 @@
+Datum: 2026-04-04 11:35:52 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Im Zentrum des Thrillers steht die Himmelsscheibe von Nebra, ein archäologischer Fund, der Jahre zurückliegt und mit einem aktuellen Mord in Verbindung gebracht wird, und die Frage: Lastet ein unheimlicher Fluch auf dem historischen Gegenstand oder handelt es sich hier um einen perfiden Mord.  Die Hamburger Fotografin Kim Weinrich kehrt in ihre Heimatstadt Nebra zurück und bei der Polizei eine Aussage zu machen  Ihr Vater Paul steht unter Mordverdacht: Er soll seinen ehemals besten Freund Arko im Streit niedergestochen haben.
+______
+
+TXT:
+die himmelsscheibe von nebra trägt eine jahrtausendalte wissenschaft in sich. doch liegt auf ihr auch ein tödlicher fluch? eine wahre begebenheit, den sensationsfund durch zwei hobbyschatzsucher im jahr 1999, nimmt der fiktionale fernsehfilm zum ausgangspunkt für einen spannenden mysterythriller.|während torben liebrecht in der rolle des umsichtigen kommissars ritter einen mordfall aufklären muss, begibt sich felicitas woll als tochter des hauptverdächtigen auf eine düstere reise in ihre vergangenheit ...||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:23.0000
+txt_year: 2025
+nfo_year: 2026
+year_diff: 1.0

@@ -1,0 +1,18 @@
+Datum: 2026-04-04 11:35:52 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+London 1940: Als der Blitz wütet und ihre Zukunft durch die Auswirkungen des Krieges bedroht ist, trifft Agatha Christie die Entscheidung, ihre berühmteste Schöpfung zu töten.\r Nach zwölf Poirot-Romanen in sechs Jahren sollte Agatha eine reiche Frau sein. Stattdessen kämpft sie darum, über die Runden zu kommen. Poirot inmitten dieses Aufruhrs zu töten, scheint fast boshaft, aber Agatha hat einen Plan: Sie verkauft den Roman an einen privaten Käufer, einen Superfan, der alles zahlen würde, um ein Stück Geschichte zu besitzen.\r Ein Treffen in einem berüchtigten Londoner Hotel wird arrangiert, bei dem trotz der Anwesenheit eines alten Freundes die Dinge schnell schief gehen. Als die Bomben fallen und sich die Leichen stapeln, wird die wahre Gefahr ihrer Situation deutlich: Das Einzige, was wertvoller ist als der letzte Poirot-Roman, ist das letzte Buch, das Agatha Christie je geschrieben hat.
+______
+
+TXT:
+ausstrahlung auch im englischen originalton||london 1940: während der deutschen luftangriffe trifft agatha die entscheidung, ihre bekannteste roman-figur zu töten.|nach zwölf romanen in sechs jahren sollte agatha eine reiche frau sein. stattdessen kämpft sie darum, über die runden zu kommen. doch sie hat einen plan: sie verkauft den roman an einen privaten käufer, einen superfan, der bereit ist, alles zu zahlen, um ein stück geschichte zu besitzen. christie und ihr bodyguard treffen auf die potenziellen käufer und eine bunte gruppe von hotelgästen. die spannung steigt, als es im hotel zu einer reihe von morden kommt.||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:14.5000
+txt_year: 2020
+nfo_year: 2020
+year_diff: 0.0

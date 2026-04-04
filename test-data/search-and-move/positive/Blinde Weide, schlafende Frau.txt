@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=11.03.2026 22:56:00
+Channel=arte HD (deu)
+
+[0]
+Id=58766
+Date=11.03.2026
+Time=22:55:00
+Duration=01:45:00
+Title=Blinde Weide, schlafende Frau
+Info=Zeichentrick Kanada, Frankreich, Ungarn 2018
+Description=Nach dem T_hoku-Erdbeben gilt es, weiterzuleben. Ein Bankangestellter begibt sich auf eine bereichernde Reise. Seine Frau hat ihn verlassen, um ihrer Jugend nachzujagen. Währenddessen stellt sich ein Kollege von ihm vor, Tokio vor einem zweiten Unglück retten zu müssen. Fantasievoller Animationsfilm von Pierre Földes, nach den surrealistischen Kurzgeschichten von Haruki Murakami.||[16:9] [SUB]   [PDC 11.03. 22:55]
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={C4190538-D643-412B-A72E-730AAF3E75A9}
+
+[Stats]
+Errors=0
+Size=5,93 GB (6368767900 bytes)
+Avr. Datarate=0,972 MB/s
+Device=Tvheadend:9983 20d48b009f 7
+

@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=03.03.2026 00:58:40
+Channel=ZDF HD (AC3,deu)
+
+[0]
+Id=31875
+Date=03.03.2026
+Time=00:55:00
+Duration=01:35:00
+Title=Ende des Kreises
+Info=
+Description=Drama, Deutschland 2025|Vier Frauengenerationen zwischen Mutterrolle und Selbstverwirklichung. In einem zeitlosen Dialog über Träume und alte Muster flammt die Frage auf: Wird der Kreislauf endlich durchbrochen?||Ihre eigenen Träume und ihr Wunsch nach Selbstverwirklichung bleiben dabei oft auf der Strecke - zu jeder Zeit. Wie schafft man es, die Traumata der Vergangenheit nicht immer an die nächste Generation weiterzugeben? Schließt sich der Kreis, oder endet er irgendwann?|Darsteller:|Marla - Kara Schröder|Luna - Greta Krämer|Jade - Alva Schäfer|Nelia - Elisabeth Niederer|Erika - Cornelia Werner|Lilo - Helga Seebacher|Regie: Mareike Sophie Danisch|Buch/Autor: Mareike Sophie Danisch|Kamera: Anselm Belser|Schnitt: Marc Buehler|Musik: Emily Jane Hawkins|HD-Produktion||[16:9] [SUB] [AD]   [PDC 02.03. 23:55]
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={FF2A6B3B-5E05-428A-927B-B28B3725FF87}
+
+[Stats]
+Errors=0
+Size=7,87 GB (8448297940 bytes)
+Avr. Datarate=1,415 MB/s
+Device=Tvheadend:9983 20d48b009f 5
+

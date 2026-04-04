@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Hochwürden drückt ein Auge zu</title>
+    <originaltitle>Hochwürden drückt ein Auge zu</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>4.300000</value>
+            <votes>167</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>4.500000</value>
+            <votes>3</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Der wirtschaftlich angeschlagene Dampferkapitän Jansen steht kurz vor dem Ruin; mit seinem veralteten Schiff ist er kaum noch in der Lage die Fahrpläne einzuhalten. Als sich dann auch noch der schmierige Fuhrunternehmer Springer im Ort ansiedelt, ist der Bankrott Jansens kaum noch zu verhindern.  Doch der alte Kapitän hat noch zwei Asse im Ärmel: Zum einen ist seine Tochter der neue Schwarm von Springers Sohn, zum anderen ist der gewitzte, ortsansässige Pfarrer auf der Seite Jansens. Im Kampf um die Kunden sind sich beide Parteien für keine Untat zu schade. Den Höhepunkt der Rivalität bildet ein Wettrennen, das die Entscheidung bringen soll.</plot>
+    <tagline />
+    <runtime>91</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/lxSG33rkXSFOtxpGMhJFFnzirKL.jpg">https://image.tmdb.org/t/p/original/lxSG33rkXSFOtxpGMhJFFnzirKL.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/bQNtiFPsx4Qt4mpVCm5dPB8fzyh.jpg">https://image.tmdb.org/t/p/original/bQNtiFPsx4Qt4mpVCm5dPB8fzyh.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/7kyOZ9U0Bbw8OBYatZIQdELFeFn.jpg">https://image.tmdb.org/t/p/original/7kyOZ9U0Bbw8OBYatZIQdELFeFn.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/dWQdC6vjow2CZWs7UqkjOH2FuAt.jpg">https://image.tmdb.org/t/p/original/dWQdC6vjow2CZWs7UqkjOH2FuAt.jpg</thumb>
+    <fanart />
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0199601</id>
+    <uniqueid type="imdb" default="true">tt0199601</uniqueid>
+    <uniqueid type="tmdb">146940</uniqueid>
+    <genre>Komödie</genre>
+    <country>Germany</country>
+    <set>
+        <name>Hochwürden Pfarrer Himmelreich Filmreihe</name>
+        <overview>723680</overview>
+    </set>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Harald Vock</credits>
+    <director>Harald Vock</director>
+    <premiered>1971-11-26</premiered>
+    <year>1971</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Divina-Film</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5466</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Georg Thomalla</name>
+        <role>Pastor Himmelreich</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/jHNtq4rTovRmzajSN3LhgV0y0ik.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Peter Weck</name>
+        <role>Thomas Springer</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/mgJXR5NxDK9kvY4Zu3fYDavCMdI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Heinz Reincke</name>
+        <role>Alfred</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/qjKPSxnGI0vNNRq9UAPwULNthwW.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Roy Black</name>
+        <role>Michael Springer</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/pD4Tc3xei8DlMxtPnPRugY6F1LD.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Uschi Glas</name>
+        <role>Barbara Jansen</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/pLtYUsfQk1HjIpCYud1Ohylz8tE.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Fritz Eckhardt</name>
+        <role>Bishop</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/2lOV9v2MSseH5AheJhFUJOluPr1.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Hans Tügel</name>
+        <role>Captain Jansen</role>
+        <order>6</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Elisabeth Felchner</name>
+        <role>Mathilde</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/ufLwP6hGFTKQTaXEyfkE32DjjIs.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Erik Frey</name>
+        <role>Mayor</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/h04qZIgOPCu45boilyBoUEDbfQB.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alexander Grill</name>
+        <role>Bus driver</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/2YikWegIhr8KCW8RXqjqtcKEI1Y.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Felix Dvorak</name>
+        <role>Branmeister</role>
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ernst H. Hilbich</name>
+        <role>Policeman</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/h1kqTp557he1QVGRpnyi2gXn2Ym.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Rudi Carrell</name>
+        <role>Rudi</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/8ieIDHA8yzOPrVNTSEcsfYKJelW.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Heidi Hansen</name>
+        <role>Doris</role>
+        <order>13</order>
+        <thumb>https://image.tmdb.org/t/p/original/6iyNmxpW9Z9fj6ZhYbWDfNUkj0F.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Chris Roberts</name>
+        <role>Georg</role>
+        <order>14</order>
+        <thumb>https://image.tmdb.org/t/p/original/mWbZl2O1D3ZuKcxqaRnOccB6lse.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Guido Wieland</name>
+        <role>Jochen</role>
+        <order>15</order>
+        <thumb>https://image.tmdb.org/t/p/original/sTulUl4SqmPZr6v4Jb9tusviYkd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Johann Sklenka</name>
+        <role>Matrose</role>
+        <order>16</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Paul Klinger</name>
+        <role>Narrator</role>
+        <order>17</order>
+        <thumb>https://image.tmdb.org/t/p/original/vN42kndW4FZ4QwkzB3PY1BlwQDq.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Elisabeth Stiepl</name>
+        <role>Frau Bürgermeister</role>
+        <order>18</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-08 04:20:17</dateadded>
+    <ratings_updated>2026-03-24</ratings_updated>
+</movie>

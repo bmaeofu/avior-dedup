@@ -62,9 +62,9 @@ onMounted(() => {
       />
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" :width="rail ? 56 : 200" class="sidebar-transition">
+    <v-navigation-drawer v-model="drawer" :rail="rail">
       <v-list nav density="compact">
-        <v-list-subheader>Dedup</v-list-subheader>
+        <v-list-subheader v-show="!rail">Dedup</v-list-subheader>
         <v-list-item
           prepend-icon="mdi-magnify-scan"
           title="Scan"
@@ -74,6 +74,15 @@ onMounted(() => {
           prepend-icon="mdi-cog"
           title="Settings"
           to="/config"
+        />
+
+        <v-divider class="my-1" />
+
+        <v-list-subheader v-show="!rail">Search & Move</v-list-subheader>
+        <v-list-item
+          prepend-icon="mdi-file-search"
+          title="Search"
+          to="/searchmove"
         />
       </v-list>
     </v-navigation-drawer>
@@ -86,11 +95,3 @@ onMounted(() => {
   </v-app>
 </template>
 
-<style>
-.sidebar-transition {
-  transition: width 0.2s ease !important;
-}
-.sidebar-transition + .v-main {
-  transition: padding-left 0.2s ease !important;
-}
-</style>

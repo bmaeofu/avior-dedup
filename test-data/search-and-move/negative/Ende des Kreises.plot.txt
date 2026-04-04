@@ -1,0 +1,18 @@
+Datum: 2026-04-04 11:38:49 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Marla – als Archäologin versucht sie, mit mäßigem Erfolg, die matriarchalen Ursprünge der Menschheit zu beweisen. Als alleinerziehende Mutter versucht sie, die Gegenwart zu bewältigen. Mit mäßigem Erfolg. Vier Frauengenerationen zwischen Mutterrolle und Selbstverwirklichung. In einem zeitlosen Dialog über Träume und alte Muster flammt die Frage auf: Wird der Kreislauf endlich durchbrochen?
+______
+
+TXT:
+drama, deutschland 2025|vier frauengenerationen zwischen mutterrolle und selbstverwirklichung. in einem zeitlosen dialog über träume und alte muster flammt die frage auf: wird der kreislauf endlich durchbrochen?||ihre eigenen träume und ihr wunsch nach selbstverwirklichung bleiben dabei oft auf der strecke - zu jeder zeit. wie schafft man es, die traumata der vergangenheit nicht immer an die nächste generation weiterzugeben? schließt sich der kreis, oder endet er irgendwann?|darsteller:|marla - kara schröder|luna - greta krämer|jade - alva schäfer|nelia - elisabeth niederer|erika - cornelia werner|lilo - helga seebacher|regie: mareike sophie danisch|buch/autor: mareike sophie danisch|kamera: anselm belser|schnitt: marc buehler|musik: emily jane hawkins|hd-produktion||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:31.5000
+txt_year: 2025
+nfo_year: 2025
+year_diff: 0.0

@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Das serbische Mädchen</title>
+    <originaltitle>Das serbische Mädchen</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>6.500000</value>
+            <votes>85</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>The naive 18 year old Dobrila leaves her little Serbian village to travel to Hamburg, Germany, where her boyfriend lives. The trip is not easy. Finally in Hamburg she has to realize her boyfriend is not very interested in a relationship. She doesn't tell him she's pregnant and starts on her way home to Serbia, which turns out to be even more exhausting.</plot>
+    <tagline />
+    <runtime>89</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/34N2qsjI4j0yqLv5xcRJTJ2VWa6.jpg">https://image.tmdb.org/t/p/original/34N2qsjI4j0yqLv5xcRJTJ2VWa6.jpg</thumb>
+    <fanart />
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0102880</id>
+    <uniqueid type="imdb" default="true">tt0102880</uniqueid>
+    <uniqueid type="tmdb">279963</uniqueid>
+    <genre>Drama</genre>
+    <country>Germany</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Peter Sehr</credits>
+    <credits>Siegfried Lenz</credits>
+    <director>Peter Sehr</director>
+    <premiered>1991-01-31</premiered>
+    <year>1991</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Trebitsch Produktion International GmbH</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5344</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Mirjana Joković</name>
+        <role>Dobrila</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/x7FJaCev5abs2kq1XgS01Ei6mX2.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ben Becker</name>
+        <role>Achim</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/kqbs0HjBo8LCErYXMgNfiC1YlD2.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Pascal Breuer</name>
+        <role>Max</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/zybtINYqYYDfKRbAMsJ1CV7fADk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Vladimir Torbica</name>
+        <role>Vladi</role>
+        <order>3</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Joachim Regelien</name>
+        <role>Rudi</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/bX5EdjMVOupjKn6a8qMQnlxxefR.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Volker Prechtel</name>
+        <role />
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/kBNe9UD2doAGhWeNWSdFTlFMM3r.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Werner Asam</name>
+        <role />
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/7rGdpijlMtRkcvUUDbxEnhOflbD.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Peter Carsten</name>
+        <role />
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/syHxulGZWwKYW7uIZVhmdA6vui5.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Borut Alujevič</name>
+        <role />
+        <order>8</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Martin Maria Abram</name>
+        <role />
+        <order>9</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Joachim Bauer</name>
+        <role />
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ivan Bekjarev</name>
+        <role />
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/yZIv9T8o0GHzC4yrH4FaiOcJZmd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Karl Exner</name>
+        <role />
+        <order>12</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Axel Ganz</name>
+        <role />
+        <order>13</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Karl-Friedrich Gerster</name>
+        <role />
+        <order>14</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Miodrag 'Miki' Krstovic</name>
+        <role />
+        <order>15</order>
+        <thumb>https://image.tmdb.org/t/p/original/jq4qulORVUDadbz3Lb7uepObtJG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ratko Tankosić</name>
+        <role />
+        <order>16</order>
+        <thumb>https://image.tmdb.org/t/p/original/n9ktO46QOrMpqwNzXZ7bC2alEl8.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Božo Šprajc</name>
+        <role />
+        <order>17</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Dario Varga</name>
+        <role />
+        <order>18</order>
+        <thumb>https://image.tmdb.org/t/p/original/oLFrlnNXHkesjsPWWfyTCu1rjld.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dušan Janićijević</name>
+        <role />
+        <order>19</order>
+        <thumb>https://image.tmdb.org/t/p/original/rldu4USSagtESqqQBYzHOpb3Ycw.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Snežana Nikšić</name>
+        <role />
+        <order>20</order>
+        <thumb>https://image.tmdb.org/t/p/original/pKEegJLsUs2UoDtkUb1K4grBjyd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Takahiro Murajama</name>
+        <role />
+        <order>21</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Miloš Kandić</name>
+        <role />
+        <order>22</order>
+        <thumb>https://image.tmdb.org/t/p/original/sx52ZtujMAEwV3ybU0XcTtXKN7G.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Charlie Rinn</name>
+        <role />
+        <order>23</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Yakup Öksüzoglu</name>
+        <role />
+        <order>24</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Janez Vrhovec</name>
+        <role />
+        <order>25</order>
+        <thumb>https://image.tmdb.org/t/p/original/kZybCJbHbVCGHDcTH5dcvuAumcd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Martin Walch</name>
+        <role>Zöllner</role>
+        <order>26</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Minja Vojvodić</name>
+        <role />
+        <order>27</order>
+        <thumb>https://image.tmdb.org/t/p/original/6EoAFSOMXJiai1RMVUMRZFz3T7C.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Johannes Silberschneider</name>
+        <role />
+        <order>28</order>
+        <thumb>https://image.tmdb.org/t/p/original/lDkHRRpnGDtsk7zt48uq8jwUo4M.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ünal Silver</name>
+        <role />
+        <order>29</order>
+        <thumb>https://image.tmdb.org/t/p/original/a6NMW31xqoKJY7zQbBM5ppMHpQV.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Predrag 'Preža' Milinković</name>
+        <role />
+        <order>30</order>
+        <thumb>https://image.tmdb.org/t/p/original/qh48nHWSbHT7uzgQtq4LUlvcvKi.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Hans Paetsch</name>
+        <role />
+        <order>31</order>
+        <thumb>https://image.tmdb.org/t/p/original/zCeXmJ7ff8TkkzT5EM0JN762cVF.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Robert Spitz</name>
+        <role />
+        <order>32</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Dagmar Laurens</name>
+        <role />
+        <order>33</order>
+        <thumb>https://image.tmdb.org/t/p/original/ngD3lnuli6k3sXwtUyuuEje0t09.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Silvia Thurn</name>
+        <role />
+        <order>34</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Winfried Steinhoff</name>
+        <role />
+        <order>35</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Sabrina Noack</name>
+        <role />
+        <order>36</order>
+        <thumb>https://image.tmdb.org/t/p/original/yGU41ceQVQLDPAvJC0pqZ7xsni9.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Josef Schwarz</name>
+        <role />
+        <order>37</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Wilfried Zander</name>
+        <role />
+        <order>38</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Heidrun Petersen</name>
+        <role />
+        <order>39</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Drago Ragutin</name>
+        <role />
+        <order>40</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Michael Mertens</name>
+        <role />
+        <order>41</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Michael Schreiner</name>
+        <role />
+        <order>42</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-10 03:45:19</dateadded>
+    <plot_sim_score_date>2026-03-24</plot_sim_score_date>
+    <ratings_updated>2026-03-24</ratings_updated>
+    <plot_sim_score>0.9000</plot_sim_score>
+</movie>

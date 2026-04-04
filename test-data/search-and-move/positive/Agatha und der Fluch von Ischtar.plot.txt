@@ -1,0 +1,18 @@
+Datum: 2026-04-04 11:35:52 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Agatha Christie reist Ende der 1920er Jahre zu einer archäologischen Ausgrabung in die Wüste des Irak, wo sie eine Reihe mysteriöser Morde aufklärt.
+______
+
+TXT:
+ausstrahlung auch im englischen originalton||zwei jahre nach ihrem abtauchen aus der öffentlichkeit reist agatha nach bagdad, auf der suche nach ruhe und kultureller ablenkung. was sie findet, ist max, einen attraktiven, jungen archäologen, der über die göttin ishtar schwadroniert.|agatha stößt in ein umfeld aus eifersüchtigen kollegen, korrupten beamten, antiquitätenschmugglern und wütenden lokalen bewohnern, die über den diebstahl ihres kulturellen erbes empört sind. als die zahl der toten steigt und agatha merkt, dass sie sich in max verliebt, wird offensichtlich, dass der schlüssel zu diesem rätsel außerhalb dieser mauern liegt.||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:15.5000
+txt_year: 2019
+nfo_year: 2019
+year_diff: 0.0

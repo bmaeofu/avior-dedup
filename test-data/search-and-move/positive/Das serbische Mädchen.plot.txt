@@ -1,0 +1,18 @@
+Datum: 2026-04-04 11:35:54 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+The naive 18 year old Dobrila leaves her little Serbian village to travel to Hamburg, Germany, where her boyfriend lives. The trip is not easy. Finally in Hamburg she has to realize her boyfriend is not very interested in a relationship. She doesn't tell him she's pregnant and starts on her way home to Serbia, which turns out to be even more exhausting.
+______
+
+TXT:
+die 18-jährige dobrilla macht sich aus ihrem serbischen heimatdorf auf den weg nach hamburg. sie will zu ihrer urlaubsliebe achim, den sie vier monate zuvor kennengelernt hat und von dem sie ein kind erwartet. in einem transporter reist sie illegal über die grenze nach österreich und weiter nach deutschland. unter erheblichen strapazen erreicht sie tatsächlich ihr ziel, doch der empfang bei achim und seiner familie ist alles andere als warmherzig. achim scheint sich nicht über das wiedersehen zu freuen.||
+#####
+
+End of Plot
+
+similarity_score:0.9000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-03-24
+Score:15.5000
+txt_year: 1989
+nfo_year: 1991
+year_diff: 2.0

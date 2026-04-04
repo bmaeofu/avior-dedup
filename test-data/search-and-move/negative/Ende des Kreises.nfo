@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Ende des Kreises</title>
+    <originaltitle>Ende des Kreises</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10" default="true">
+            <value>4.375000</value>
+            <votes>4</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Marla – als Archäologin versucht sie, mit mäßigem Erfolg, die matriarchalen Ursprünge der Menschheit zu beweisen. Als alleinerziehende Mutter versucht sie, die Gegenwart zu bewältigen. Mit mäßigem Erfolg. Vier Frauengenerationen zwischen Mutterrolle und Selbstverwirklichung. In einem zeitlosen Dialog über Träume und alte Muster flammt die Frage auf: Wird der Kreislauf endlich durchbrochen?</plot>
+    <tagline />
+    <runtime>94</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/7UySuvd47zgHfUPeClohrEPkNBI.jpg">https://image.tmdb.org/t/p/original/7UySuvd47zgHfUPeClohrEPkNBI.jpg</thumb>
+    <fanart />
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt38342529</id>
+    <uniqueid type="imdb" default="true">tt38342529</uniqueid>
+    <uniqueid type="tmdb">1559055</uniqueid>
+    <genre>Drama</genre>
+    <country>Germany</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <director>Mareike Sophie Danisch</director>
+    <premiered>2025-10-24</premiered>
+    <year>2025</year>
+    <status />
+    <code />
+    <aired />
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5692</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Kara Schröder</name>
+        <role>Marla</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/qrGn5PJ0p6XO5GSrzYJu3FBj2ZO.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Greta Krämer</name>
+        <role>Luna</role>
+        <order>1</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Alva Schäfer</name>
+        <role>Jade</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/gmACgBuKD8DuKijx0nCyfBvC4tJ.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Cornelia Werner</name>
+        <role>Erika</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/esaoFcnYM84MTHZrJHk3gkaDpue.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Elisabeth Niederer</name>
+        <role>Nelia</role>
+        <order>4</order>
+        <thumb>http://image.tmdb.org/t/p/original/i1MoULhWrCFLuLQ8ctzPXXBWYZ6.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Helga Seebacher</name>
+        <role>Lilo</role>
+        <order>5</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Sara-Hiruth Zoude</name>
+        <role>Inana</role>
+        <order>6</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Caroline Erikson</name>
+        <role>Frau Böhme</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/tz4nRGiuGCEZQzPq3CZW4SOrFFG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ännie Engelhardt</name>
+        <role>Frau Erikson</role>
+        <order>8</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2026-03-03 03:55:41</dateadded>
+    <ratings_updated>2026-03-24</ratings_updated>
+</movie>

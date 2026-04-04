@@ -50,11 +50,36 @@ class JobResult(BaseModel):
     log_path: str | None
 
 
+# ---------------------------------------------------------------------------
+# Search & Move schemas
+# ---------------------------------------------------------------------------
+
+class SearchMoveRequest(BaseModel):
+    mode: Literal["copy", "move", "delete", "test"]
+    source: str
+    dest: str
+    extensions: list[str] = Field(default_factory=lambda: [".nfo"])
+    search_expressions: list[str]
+    recursive: bool = False
+    logname: str = "searchmove_log.txt"
+
+
+class SearchMoveResult(BaseModel):
+    files_scanned: int
+    files_matched: int
+    action_counts: dict[str, int]
+    log_path: str | None
+
+
+# ---------------------------------------------------------------------------
+# Shared schemas
+# ---------------------------------------------------------------------------
+
 class JobStatus(BaseModel):
     job_id: str
     state: str
     progress: ProgressSnapshot | None = None
-    result: JobResult | None = None
+    result: JobResult | SearchMoveResult | None = None
     error: str | None = None
 
 

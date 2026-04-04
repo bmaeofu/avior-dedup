@@ -14,6 +14,7 @@ dependencies = [
 [project.scripts]
 avior-dedup = "avior_dedup.cli:main"
 avior-dedup-server = "avior_dedup.server:run"
+avior-searchmove = "avior_dedup.searchmove.cli:main"
 
 [build-system]
 requires = ["hatchling"]
