@@ -111,6 +111,47 @@ def execute_file_action(
         return MoveRecord(src=src, dst=dst, status=f"error: {e}")
 
 
+def _resolve_case_insensitive(path: str) -> str:
+    """Resolve a path using existing directories with case-insensitive matching.
+
+    Walks the path from root, and for each component checks if a
+    case-variant already exists on disk. If so, uses the existing name
+    instead of creating a new directory with different casing.
+    """
+    parts = os.path.normpath(path).replace("\\", "/").split("/")
+    # Handle UNC paths (//server/share/...)
+    if path.replace("\\", "/").startswith("//"):
+        resolved = "//" + parts[2] + "/" + parts[3]
+        remaining = parts[4:]
+    elif parts[0].endswith(":"):
+        resolved = parts[0] + "/"
+        remaining = parts[1:]
+    else:
+        resolved = parts[0] or "/"
+        remaining = parts[1:]
+
+    for part in remaining:
+        if not part:
+            continue
+        candidate = os.path.join(resolved, part)
+        if os.path.exists(candidate):
+            # Exact match exists, use it
+            resolved = candidate
+            continue
+        # Check for case-insensitive match
+        try:
+            existing = os.listdir(resolved)
+            match = next((e for e in existing if e.lower() == part.lower()), None)
+            if match:
+                resolved = os.path.join(resolved, match)
+            else:
+                resolved = candidate
+        except OSError:
+            resolved = candidate
+
+    return resolved
+
+
 def process_match(
     matched_path: str,
     dest_dir: str,
@@ -120,11 +161,13 @@ def process_match(
     """Move/copy/delete all files related to a matched file.
 
     Skips the operation if source and destination directories are the same.
+    Uses case-insensitive directory resolution to avoid creating duplicate
+    directories with different casing.
     """
     src_dir = os.path.dirname(os.path.abspath(matched_path))
-    abs_dest = os.path.abspath(dest_dir)
+    dest_dir = _resolve_case_insensitive(os.path.abspath(dest_dir))
 
-    if src_dir == abs_dest:
+    if src_dir == dest_dir:
         return []
 
     os.makedirs(dest_dir, exist_ok=True)

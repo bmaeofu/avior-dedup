@@ -16,7 +16,7 @@ from avior_dedup.searchmove.models import (
     SearchMatch,
     SearchMoveJobResult,
 )
-from avior_dedup.searchmove.mover import process_match
+from avior_dedup.searchmove.mover import process_match, _resolve_case_insensitive
 from avior_dedup.searchmove.parser import parse_search_expression
 from avior_dedup.searchmove.searcher import search_text_file, search_xml_file
 
@@ -58,6 +58,7 @@ def run_search_move_job(
         cancel_check = lambda: False  # noqa: E731
 
     search_groups = parse_search_expression(search_expressions)
+    dest = _resolve_case_insensitive(dest)
     os.makedirs(dest, exist_ok=True)
 
     # Collect files to search
@@ -120,6 +121,7 @@ def run_search_move_job(
         files_scanned=total,
         files_matched=len(matches),
         action_counts=dict(action_counter),
+        matches=matches,
         log_path=log_path_out,
     )
 

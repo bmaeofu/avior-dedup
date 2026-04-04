@@ -40,6 +40,7 @@ class SearchMoveJobResult:
     files_scanned: int = 0
     files_matched: int = 0
     action_counts: dict[str, int] = field(default_factory=dict)
+    matches: list[SearchMatch] = field(default_factory=list)
     log_path: str | None = None
 
 

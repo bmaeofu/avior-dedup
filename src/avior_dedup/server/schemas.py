@@ -64,10 +64,17 @@ class SearchMoveRequest(BaseModel):
     logname: str = "searchmove_log.txt"
 
 
+class SearchMoveMatchEntry(BaseModel):
+    file_path: str
+    matched_expression: str
+    found_values: str
+
+
 class SearchMoveResult(BaseModel):
     files_scanned: int
     files_matched: int
     action_counts: dict[str, int]
+    matches: list[SearchMoveMatchEntry] = []
     log_path: str | None
 
 
