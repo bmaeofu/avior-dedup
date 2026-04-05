@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+import unicodedata
 
 from avior_dedup import config
 
@@ -12,7 +13,8 @@ def normalize_film_name(
     remove_episode_nos: bool,
 ) -> str:
     """Normalize a film filename for semantic duplicate detection."""
-    base = name.lower().strip()
+    # Normalize Unicode representation first and use casefold for robust case-insensitive matching.
+    base = unicodedata.normalize("NFKC", name).casefold().strip()
     candidate_suffixes = config.candidate_suffixes()
 
     matched_suffix = ""
@@ -71,6 +73,6 @@ def normalize_film_name(
     if matched_suffix:
         base = f"{base}{matched_suffix}".strip()
     elif ext:
-        base = f"{base}.{ext}".strip()
+        base = f"{base}{ext}".strip()
 
     return base

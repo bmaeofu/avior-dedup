@@ -1,0 +1,61 @@
+Gleich nach Starten des Jobs auf localhost instanz
+
+[Errno 13] Permission denied: '\\UMS\media\tv\found_duplicates\FilmeHD_sonst\dedup_log_002.txt'
+
+Analyse und Vorschlag Copilot
+
+Das ist der Schlüssel. Der Commit 9a370ce hat USER 99:100 ins Dockerfile eingebaut – seitdem läuft Docker als UID 99 (Unraid-nobody) statt als root.
+
+Das erklärt genau das Problem: Alle Ausgabe-Verzeichnisse unter found_duplicates/ wurden vorher von Docker als root angelegt. Docker (jetzt UID 99) kann trotzdem schreiben, weil Unraid die Verzeichnisse mit GID-Write (GID 100 = users) anlegt. Der Windows-Samba-Client dagegen kommt mit einer anderen effektiven GID auf dem Share an – kein GID-100-Write-Recht → Errno 13 beim Anlegen neuer Dateien.
+
+Das ist ein Samba-Rechteproblem an den vorher von root erstellten Verzeichnissen, kein Code-Bug. Überprüfe direkt auf dem Unraid-System:
+
+# Rechte der Zielverzeichnisse prüfen
+ls -la /mnt/user/media/tv/found_duplicates/FilmeHD_sonst/
+
+# Wie die Samba-Session den Windows-User mappt
+smbstatus | grep <dein-windows-user>
+
+
+Was du auf Unraid fixen kannst:
+
+# Verzeichnisse rekursiv an UID 99 / GID 100 übergeben
+chown -R 99:100 /mnt/user/media/tv/found_duplicates/
+
+# Sicherstellen dass GID 100 write hat (775)
+chmod -R 775 /mnt/user/media/tv/found_duplicates/
+
+Alternativ im Unraid-Samba-Share unter Settings → Edit die Option "Force User" auf nobody und "Force Group" auf users setzen – dann schreibt auch der Windows-Client immer als UID 99 / GID 100.
+
+Im Code liegt kein Fehler. Ich mache dort nichts.
+
+as Listing bestätigt die Ursache sehr klar:
+
+Alles gehört nobody:users.
+Verzeichnis-Rechte sind drwxr-xr-x (755).
+Dateien sind -rw-r--r-- (644).
+Mit 755 kann nur der Owner (nobody) im Verzeichnis neue Dateien anlegen.
+Mit 644 kann nur der Owner bestehende Logs überschreiben.
+
+Darum:
+
+Docker (läuft als 99:100 = nobody:users) funktioniert.
+Dein Windows-Samba-User bekommt Errno 13, obwohl er in Samba evtl. "voll" aussieht.
+Wenn du willst, dass Windows + Docker beide schreiben können, setz Group-Write + setgid + Default-ACL:
+
+# auf dem Zielordner
+chown -R nobody:users /mnt/user/media/tv/found_duplicates/FilmeHD_sonst
+chmod -R 2775 /mnt/user/media/tv/found_duplicates/FilmeHD_sonst
+
+# optional, aber sehr sinnvoll für neu erzeugte Dateien/Ordner:
+setfacl -R -m g:users:rwx /mnt/user/media/tv/found_duplicates/FilmeHD_sonst
+setfacl -R -d -m g:users:rwx /mnt/user/media/tv/found_duplicates/FilmeHD_sonst
+
+Kurz erklärt:
+
+2775 sorgt für gruppen-schreibbar und vererbt die Gruppe users.
+Default ACL sorgt dafür, dass neue Dateien/Ordner künftig ebenfalls gruppen-schreibbar bleiben.
+Wenn setfacl bei dir nicht vorhanden ist, reicht erstmal:
+
+chmod -R g+rwX /mnt/user/media/tv/found_duplicates/FilmeHD_sonst
+find /mnt/user/media/tv/found_duplicates/FilmeHD_sonst -type d -exec chmod g+s {} \;

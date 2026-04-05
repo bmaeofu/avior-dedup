@@ -20,6 +20,7 @@ from avior_dedup.cli import get_numbered_log_file
 from avior_dedup.dedup.planner import build_move_plan, execute_move_plan
 from avior_dedup.dedup.reporting import sort_and_finalize_log
 from avior_dedup.dedup.scanner import find_duplicates
+from avior_dedup.permissions import apply_runtime_umask, ensure_output_permissions
 from avior_dedup.server.progress import JobCancelled, ProgressReporter
 from avior_dedup.server.schemas import (
     ConfigUpdate,
@@ -56,6 +57,8 @@ app.include_router(searchmove_router)
 def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
     """Execute the full dedup pipeline, pushing progress via reporter."""
     try:
+        apply_runtime_umask()
+
         source_root = os.path.abspath(req.source.strip())
         target_root = os.path.abspath(req.target.strip())
         print(f"[avior-dedup] Job {job_id} starting: source={source_root!r}, target={target_root!r}")
@@ -77,9 +80,13 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
         os.makedirs(target_root, exist_ok=True)
         os.makedirs(error_target, exist_ok=True)
         os.makedirs(novideo_target, exist_ok=True)
+        ensure_output_permissions(target_root, is_dir=True)
+        ensure_output_permissions(error_target, is_dir=True)
+        ensure_output_permissions(novideo_target, is_dir=True)
 
         log_path = get_numbered_log_file(os.path.join(target_root, req.logname))
         log_handle = open(log_path, "w", encoding="utf-8")
+        ensure_output_permissions(log_path, is_dir=False)
 
         def log_fn(msg: str) -> None:
             log_handle.write(msg + "\n")

@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+import unicodedata
 from typing import Callable, Optional, Tuple
 
 from avior_dedup import config
@@ -10,6 +11,11 @@ from avior_dedup.dedup.io_utils import read_text
 from avior_dedup.dedup.models import FileRecord, GroupKeys
 from avior_dedup.dedup.normalize import normalize_film_name
 from avior_dedup.dedup.suffix import match_suffix
+
+
+def _canonical_case_key(name: str) -> str:
+    """Return a Unicode-normalized key for case-insensitive filename grouping."""
+    return unicodedata.normalize("NFKC", name).casefold()
 
 def _hms_to_seconds(hms: str) -> int:
     h, m, s = map(int, hms.split(":"))
@@ -319,8 +325,8 @@ def find_duplicates(
 
     progress_cb signature: (current_dir, dirs_completed, dirs_total, files_scanned)
     """
-    ignored_dirs_lower = {x.lower() for x in config.ignored_dirs()}
-    ignored_files_lower = {x.lower() for x in config.ignored_files()}
+    ignored_dirs_lower = {_canonical_case_key(x) for x in config.ignored_dirs()}
+    ignored_files_lower = {_canonical_case_key(x) for x in config.ignored_files()}
 
     files_by_lower: dict[str, list[str]] = {}
     files_by_exact: dict[str, list[str]] = {}
@@ -341,7 +347,7 @@ def find_duplicates(
     for entry in top_entries:
         full = os.path.join(source_root, entry)
         if os.path.isdir(full):
-            if entry.lower() not in ignored_dirs_lower:
+            if _canonical_case_key(entry) not in ignored_dirs_lower:
                 top_dirs.append(entry)
         else:
             root_files.append(entry)
@@ -352,14 +358,14 @@ def find_duplicates(
 
     def _process_file(name: str, dir_path: str) -> None:
         nonlocal files_scanned
-        if name.lower() in ignored_files_lower:
+        if _canonical_case_key(name) in ignored_files_lower:
             return
         full_path = os.path.join(dir_path, name)
         files_scanned += 1
 
         files_by_exact.setdefault(name, []).append(full_path)
 
-        lower_name = name.lower()
+        lower_name = _canonical_case_key(name)
         files_by_lower.setdefault(lower_name, []).append(full_path)
 
         semantic_name = normalize_film_name(name, semantic_prefixes, remove_episode_nos)
@@ -392,7 +398,7 @@ def find_duplicates(
         # Then recurse into subdirectories
         for entry in entries:
             if entry.is_dir(follow_symlinks=False):
-                if entry.name.lower() not in ignored_dirs_lower:
+                if _canonical_case_key(entry.name) not in ignored_dirs_lower:
                     _scan_dir(entry.path)
 
     # Process files in the source root itself

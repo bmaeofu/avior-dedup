@@ -7,6 +7,7 @@ from avior_dedup.dedup.models import SelectionPriority
 from avior_dedup.dedup.planner import build_move_plan, execute_move_plan
 from avior_dedup.dedup.reporting import sort_and_finalize_log
 from avior_dedup.dedup.scanner import find_duplicates
+from avior_dedup.permissions import apply_runtime_umask, ensure_output_permissions
 
 
 def get_numbered_log_file(path: str) -> str:
@@ -23,6 +24,8 @@ def get_numbered_log_file(path: str) -> str:
 
 
 def main() -> None:
+    apply_runtime_umask()
+
     parser = argparse.ArgumentParser(description="Duplicate film files finder/mover")
     parser.add_argument("mode", choices=["m", "f"], help="m = move, f = find only")
     parser.add_argument("source", help="source directory")
@@ -78,9 +81,13 @@ def main() -> None:
     os.makedirs(target_root, exist_ok=True)
     os.makedirs(error_target, exist_ok=True)
     os.makedirs(novideo_target, exist_ok=True)
+    ensure_output_permissions(target_root, is_dir=True)
+    ensure_output_permissions(error_target, is_dir=True)
+    ensure_output_permissions(novideo_target, is_dir=True)
 
     log_path = get_numbered_log_file(os.path.join(target_root, args.logname))
     log_handle = open(log_path, "w", encoding="utf-8")
+    ensure_output_permissions(log_path, is_dir=False)
 
     def log_fn(msg: str) -> None:
         print(msg)

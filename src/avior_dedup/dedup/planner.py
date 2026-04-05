@@ -13,6 +13,7 @@ from avior_dedup.dedup.models import (
     SelectionPriority,
 )
 from avior_dedup.dedup.scanner import get_film_error_count
+from avior_dedup.permissions import ensure_output_permissions
 
 
 def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, GroupKeys]) -> str:
@@ -238,9 +239,12 @@ def execute_move_plan(
             progress_cb(idx + 1, total)
 
         if mode == "m":
-            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            dst_dir = os.path.dirname(dst)
+            os.makedirs(dst_dir, exist_ok=True)
+            ensure_output_permissions(dst_dir, is_dir=True)
             if not os.path.exists(dst):
                 shutil.move(file_path, dst)
+                ensure_output_permissions(dst, is_dir=False)
             else:
                 log_fn(f"{move.group_name}\t[SKIP_EXISTS]\t{dst}")
                 action_counter["SKIP_EXISTS"] += 1
