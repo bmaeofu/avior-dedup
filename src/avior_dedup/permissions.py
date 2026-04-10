@@ -13,34 +13,62 @@ def _parse_octal_env(name: str, default: int) -> int:
         return default
 
 
+def _parse_int_env(name: str, default: int) -> int:
+    value = os.getenv(name)
+    if value is None or value == "":
+        return default
+    try:
+        return int(value, 10)
+    except ValueError:
+        return default
+
+
 def apply_runtime_umask() -> None:
     """Set process umask for newly created files and directories.
 
-    Default is 0o002 so files become group-writable (e.g. 664) and directories
-    become group-writable (e.g. 775). On non-POSIX platforms this is a no-op.
+    Default is 0o000 so that files/directories are created with the full
+    requested mode bits (e.g. 0o666 / 0o777) and the container user's
+    permissions match what Samba/other clients expect. On non-POSIX platforms
+    this is a no-op.
     """
     if os.name != "posix":
         return
-    os.umask(_parse_octal_env("AVIOR_DEDUP_UMASK", 0o002))
+    os.umask(_parse_octal_env("AVIOR_DEDUP_UMASK", 0o000))
 
 
 def ensure_output_permissions(path: str, is_dir: bool) -> None:
-    """Best-effort chmod for output artifacts.
+    """Best-effort chmod/chown for output artifacts.
 
     Controlled via env vars:
-      - AVIOR_DEDUP_OUTPUT_DIR_MODE (default: 2775)
-      - AVIOR_DEDUP_OUTPUT_FILE_MODE (default: 664)
+      - AVIOR_DEDUP_OUTPUT_DIR_MODE  (default: 0777)
+      - AVIOR_DEDUP_OUTPUT_FILE_MODE (default: 0666)
+      - AVIOR_DEDUP_OUTPUT_UID       (default: 99,  -1 to disable)
+      - AVIOR_DEDUP_OUTPUT_GID       (default: 100, -1 to disable)
+
+    On non-POSIX (Windows) this is a no-op. Failures are swallowed so the
+    job is not aborted by permission-tuning issues (e.g. not running as root
+    or on a filesystem that does not support chown).
     """
     if os.name != "posix":
         return
 
     mode = _parse_octal_env(
         "AVIOR_DEDUP_OUTPUT_DIR_MODE" if is_dir else "AVIOR_DEDUP_OUTPUT_FILE_MODE",
-        0o2775 if is_dir else 0o664,
+        0o777 if is_dir else 0o666,
     )
 
     try:
         os.chmod(path, mode)
     except OSError:
-        # Do not fail the job on permission-tuning issues.
+        pass
+
+    uid = _parse_int_env("AVIOR_DEDUP_OUTPUT_UID", 99)
+    gid = _parse_int_env("AVIOR_DEDUP_OUTPUT_GID", 100)
+    if uid == -1 and gid == -1:
+        return
+
+    try:
+        os.chown(path, uid, gid)  # type: ignore[attr-defined]
+    except (OSError, AttributeError):
+        # Typical on non-root containers; do not fail the job.
         return
