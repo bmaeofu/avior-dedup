@@ -27,6 +27,7 @@ def run_search_move_job(
     mode: ActivityMode,
     extensions: list[str],
     search_expressions: list[str],
+    ignored_directories: list[str] | None = None,
     recursive: bool = False,
     progress_cb: Callable[..., None] | None = None,
     log_fn: Callable[[str], None] | None = None,
@@ -63,12 +64,19 @@ def run_search_move_job(
 
     # Collect files to search
     progress_cb(phase="scanning", current_dir=source)
-    files_to_search = _collect_files(source, extensions, recursive, progress_cb, cancel_check)
+    files_to_search = _collect_files(
+        source,
+        extensions,
+        recursive,
+        ignored_directories or [],
+        progress_cb,
+        cancel_check,
+    )
 
     # Search phase
     matches: list[SearchMatch] = []
     total = len(files_to_search)
-    progress_cb(phase="searching", files_scanned=0, dirs_total=total)
+    progress_cb(phase="searching", files_scanned=0, dirs_total=total, groups_found=0)
 
     # Open output file for writing match results
     out_handle = None
@@ -84,6 +92,15 @@ def run_search_move_job(
             if cancel_check():
                 raise _Cancelled
 
+            # Heartbeat before expensive matching (XML parse / SMB sibling checks)
+            progress_cb(
+                phase="searching",
+                current_file=file_path,
+                files_scanned=i,
+                dirs_total=total,
+                groups_found=len(matches),
+            )
+
             ext = os.path.splitext(file_path)[1].lower()
             if ext == ".nfo":
                 match = search_xml_file(file_path, search_groups)
@@ -96,7 +113,13 @@ def run_search_move_job(
                 if out_handle:
                     out_handle.write(f"{match.file_path}\t{match.matched_expression}\t{match.found_values}\n")
 
-            progress_cb(phase="searching", files_scanned=i + 1, dirs_total=total)
+            progress_cb(
+                phase="searching",
+                current_file=file_path,
+                files_scanned=i + 1,
+                dirs_total=total,
+                groups_found=len(matches),
+            )
     finally:
         if out_handle:
             out_handle.close()
@@ -134,38 +157,61 @@ def _collect_files(
     source: str,
     extensions: list[str],
     recursive: bool,
+    ignored_directories: list[str] | None,
     progress_cb: Callable[..., None],
     cancel_check: Callable[[], bool],
 ) -> list[str]:
     """Walk the source path and collect files matching the requested extensions."""
     files: list[str] = []
+    scan_count = 0
+    update_every = 250
+    ignored_names = {os.path.basename(x).strip().lower() for x in (ignored_directories or []) if (x or "").strip()}
+    ignored_paths = {os.path.abspath(x).strip().lower() for x in (ignored_directories or []) if (x or "").strip()}
+
+    def _is_ignored_dir(path: str) -> bool:
+        abs_path = os.path.abspath(path).lower()
+        base = os.path.basename(abs_path).lower()
+        return abs_path in ignored_paths or base in ignored_names
 
     if os.path.isfile(source):
         ext = os.path.splitext(source)[1]
         if not extensions or ext in extensions:
             files.append(source)
+            scan_count = 1
+        progress_cb(phase="scanning", current_dir=os.path.dirname(source) or source, files_scanned=scan_count)
         return files
 
     if recursive:
-        for dirpath, _, filenames in os.walk(source):
+        for dirpath, dirnames, filenames in os.walk(source):
             if cancel_check():
                 raise _Cancelled
-            progress_cb(phase="scanning", current_dir=dirpath)
+            dirnames[:] = [d for d in dirnames if not _is_ignored_dir(os.path.join(dirpath, d))]
+            progress_cb(phase="scanning", current_dir=dirpath, files_scanned=scan_count)
             for fname in filenames:
                 ext = os.path.splitext(fname)[1]
                 if not extensions or ext in extensions:
                     files.append(os.path.join(dirpath, fname))
+                    scan_count += 1
+                    if scan_count % update_every == 0:
+                        progress_cb(phase="scanning", current_dir=dirpath, files_scanned=scan_count)
+        progress_cb(phase="scanning", current_dir=source, files_scanned=scan_count)
     else:
-        progress_cb(phase="scanning", current_dir=source)
+        progress_cb(phase="scanning", current_dir=source, files_scanned=scan_count)
         try:
             with os.scandir(source) as entries:
                 for entry in entries:
                     if cancel_check():
                         raise _Cancelled
+                    if entry.is_dir() and _is_ignored_dir(entry.path):
+                        continue
                     if entry.is_file():
                         ext = os.path.splitext(entry.name)[1]
                         if not extensions or ext in extensions:
                             files.append(entry.path)
+                            scan_count += 1
+                            if scan_count % update_every == 0:
+                                progress_cb(phase="scanning", current_dir=source, files_scanned=scan_count)
+            progress_cb(phase="scanning", current_dir=source, files_scanned=scan_count)
         except OSError as e:
             print(f"Error scanning directory {source}: {e}")
 

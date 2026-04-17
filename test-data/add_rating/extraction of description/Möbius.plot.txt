@@ -1,0 +1,24 @@
+Datum: 2026-04-11 09:32:02 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Im Auftrag des russischen Geheimdienstes FSB soll der überaus erfolgreiche Spion Grégory Lioubov  gegen den zwielichtigen russischen Oligarchen Ivan Rostovsky ermitteln. Um belastendes Material zu beschaffen, rekrutiert er die gewitzte Finanzjongleurin Alice. Alice soll für ihn als Undercover-Agentin bei Rostovsky unterkommen, welcher sein Imperium von Monaco aus lenkt. Doch schon nach kurzer Zeit ist sich Grégory nicht mehr sicher, wem er noch trauen kann. Auch Alice kommt als Informationsleck in Frage und so entscheidet er sich, gegen seine oberste Regel eine Affäre mit der kühlen Bankerin zu beginnen, um an Informationen zu kommen. Er findet heraus, dass nicht nur Russland hinter Rostovsky her ist, sondern auch die CIA mitmischt. Bald entbrennt ein Machtkampf zwischen den beiden Nationen.
+______
+
+TXT:
+die programme der nasa sollen mit computerviren infiziert werden, weil ein skrupelloser us-senator sich von einem raumfahrtzwischenfall vorteile für seine präsidentschaftskandidatur verspricht. eine unerfahrene cia-agentin, die in diesem bösen spiel als marionette missbraucht wird, merkt (fast) zu spät, dass der eigene chef in das komplott verstrickt ist.
+als sie versucht, die katastrophe zu verhindern, gerät sie in höchste lebensgefahr.
+#####
+
+End of Plot
+
+similarity_score:0.0000
+explanation:Deep model explanation: 
+Deep model finish reason: stop
+Deep model tokens: 100
+Time deepcompare: 28.465s
+
+Score:5.5000
+txt_year: 1996
+nfo_year: 2013
+year_diff: 17.0
+Rescrape: True

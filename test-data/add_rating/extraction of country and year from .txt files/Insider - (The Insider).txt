@@ -1,0 +1,28 @@
+[General]
+Version=1.1
+
+[Media]
+Created=09.04.2018 01:14:47
+Channel=Einsfestival HD (AC3,deu)
+
+[0]
+Id=40712
+Date=09.04.2018
+Time=01:15:00
+Duration=02:30:00
+Title=Insider
+Info=(The Insider) - Spielfilm USA 1999
+Series=
+Description=Jeffrey Wigand, Forschungsleiter eines großen Zigarettenherstellers, verliert unter fadenscheinigen Gründen seinen Job. Nach langen Zweifeln will der gefeuerte Chemiker sein Insiderwissen über die Versetzung des Tabaks mit gesundheitsschädlichen Suchtstoffen an die Öffentlichkeit bringen. Doch der Fernsehsender, dem er ein spektakuläres Exklusivinterview gibt, befürchtet eine Milliardenklage der Tabaklobby und macht einen Rückzieher. Jeffrey hat neben dem Job auch seine Familie verloren und steht nach monatelangem Psychoterror vor dem Selbstmord.|Produziert in HD|[16:9] [H.264] [HD]|[stereo] [deu]|[Dolby Digital 5.1] [deu]|[stereo] [deu]|[Teletext subtitles] [deu]|[DVB subtitles] [deu]|PDC: 09.04. 01:15 (303183)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={02E1D4A0-51B3-4668-A253-DCB678489BE2}
+
+[Stats]
+Errors=0
+Size=6,19 GB (6642111252 bytes)
+Avr. Datarate=0,711 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 2 (2)
+
+ 

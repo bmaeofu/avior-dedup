@@ -1,125 +1,154 @@
-- name: "High rated (>5.4) with valid NFO"
-  extensions: [".nfo"]
+- extensions:
+  - .mkv
+  name: MKV with NFO file
   search_expressions:
-    - "rating:>5.4&nfostatus:!exists"
-    - "rating:>5.4&nfostatus:"
-    - "rating:>5.4&nfostatus:nfo file ok"
-
-- name: "Low rated (<=5.4) with valid NFO"
-  extensions: [".nfo"]
+  - sibling:.nfo:exists
+- extensions:
+  - .mkv
+  name: MKV without NFO file
   search_expressions:
-    - "rating:>0.1&rating:<=5.4&nfostatus:!exists"
-    - "rating:>0.1&rating:<=5.4&nfostatus:"
-    - "rating:>0.1&rating:<=5.4&nfostatus:nfo file ok"
-
-- name: "Zero/no rating"
-  extensions: [".nfo"]
+  - sibling:.nfo:!exists
+- extensions:
+  - .nfo
+  name: High rated (>5.4) with valid NFO
   search_expressions:
-    - "rating:0&nfostatus:!exists"
-    - "ratings_status:no ratings found&nfostatus:!exists"
-    - "rating:0&nfostatus:nfo file ok"
-    - "ratings_status:no ratings found&nfostatus:nfo file ok"
-
-- name: "Has any rating with valid NFO"
-  extensions: [".nfo"]
+  - rating:>5.4&nfostatus:!exists
+  - 'rating:>5.4&nfostatus:'
+  - rating:>5.4&nfostatus:nfo file ok
+- extensions:
+  - .nfo
+  name: Low rated (<=5.4) with valid NFO
   search_expressions:
-    - "rating:>0&nfostatus:!exists"
-    - "rating:>0&nfostatus:"
-    - "rating:>0&nfostatus:nfo file ok"
-
-- name: "Check NFO file issues"
-  extensions: [".nfo"]
+  - rating:>0.1&rating:<=5.4&nfostatus:!exists
+  - 'rating:>0.1&rating:<=5.4&nfostatus:'
+  - rating:>0.1&rating:<=5.4&nfostatus:nfo file ok
+- extensions:
+  - .nfo
+  name: Zero/no rating
   search_expressions:
-    - "nfostatus:Check nfo file*"
-
-- name: "Empty plot in NFO"
-  extensions: [".nfo"]
+  - rating:0&nfostatus:!exists
+  - ratings_status:no ratings found&nfostatus:!exists
+  - rating:0&nfostatus:nfo file ok
+  - ratings_status:no ratings found&nfostatus:nfo file ok
+- extensions:
+  - .nfo
+  name: Has any rating with valid NFO
   search_expressions:
-    - "nfostatus:*plot is empty*"
-
-- name: "Correctly scraped (year match, perfect similarity)"
-  extensions: [".nfo"]
+  - rating:>0&nfostatus:!exists
+  - 'rating:>0&nfostatus:'
+  - rating:>0&nfostatus:nfo file ok
+- extensions:
+  - .nfo
+  name: Check NFO file issues
   search_expressions:
-    - "nfostatus:*Year difference=0)&plot_sim_score:1.0"
-
-- name: "Rescrape candidates (year diff 1-3, high similarity)"
-  extensions: [".nfo"]
+  - nfostatus:Check nfo file*
+- extensions:
+  - .nfo
+  name: Empty plot in NFO
   search_expressions:
-    - "nfostatus:*Year difference=1)&plot_sim_score:>0.9"
-    - "nfostatus:*Year difference=2)&plot_sim_score:>0.9"
-    - "nfostatus:*Year difference=3)&plot_sim_score:>0.9"
-
-- name: "Rescrape candidates (year diff 4-6, high similarity)"
-  extensions: [".nfo"]
+  - nfostatus:*plot is empty*
+- extensions:
+  - .nfo
+  name: Correctly scraped (year match, perfect similarity)
   search_expressions:
-    - "nfostatus:*Year difference=4)&plot_sim_score:>0.9"
-    - "nfostatus:*Year difference=5)&plot_sim_score:>0.9"
-    - "nfostatus:*Year difference=6)&plot_sim_score:>0.9"
-
-- name: "Rescrape candidates (year diff 4-6, medium similarity)"
-  extensions: [".nfo"]
+  - nfostatus:*Year difference=0)&plot_sim_score:1.0
+- extensions:
+  - .nfo
+  name: Rescrape candidates (year diff 1-3, high similarity)
   search_expressions:
-    - "nfostatus:*Year difference=4)&plot_sim_score:>0.5"
-    - "nfostatus:*Year difference=5)&plot_sim_score:>0.5"
-    - "nfostatus:*Year difference=6)&plot_sim_score:>0.5"
-
-- name: "Any year difference"
-  extensions: [".nfo"]
+  - nfostatus:*Year difference=1)&plot_sim_score:>0.9
+  - nfostatus:*Year difference=2)&plot_sim_score:>0.9
+  - nfostatus:*Year difference=3)&plot_sim_score:>0.9
+- extensions:
+  - .nfo
+  name: Rescrape candidates (year diff 4-6, high similarity)
   search_expressions:
-    - "nfostatus:*Year difference*"
-
-- name: "Rescrape flagged files"
-  extensions: [".txt"]
+  - nfostatus:*Year difference=4)&plot_sim_score:>0.9
+  - nfostatus:*Year difference=5)&plot_sim_score:>0.9
+  - nfostatus:*Year difference=6)&plot_sim_score:>0.9
+- extensions:
+  - .nfo
+  name: Rescrape candidates (year diff 4-6, medium similarity)
   search_expressions:
-    - "Rescrape: True"
-
-- name: "Documentary genre"
-  extensions: [".nfo", ".txt"]
+  - nfostatus:*Year difference=4)&plot_sim_score:>0.5
+  - nfostatus:*Year difference=5)&plot_sim_score:>0.5
+  - nfostatus:*Year difference=6)&plot_sim_score:>0.5
+- extensions:
+  - .nfo
+  name: Any year difference
   search_expressions:
-    - "genre:Dokumentarfilm"
-    - "genre:Dokumentation"
-    - "genre:Documentary"
-
-- name: "Krimi/Crime genre"
-  extensions: [".nfo", ".txt"]
+  - nfostatus:*Year difference*
+- extensions:
+  - .txt
+  name: Rescrape flagged files
   search_expressions:
-    - "genre:Krimi"
-    - "genre:Kriminalfilm"
-    - "genre:Crime"
-    - "Krimi"
-    - "Kriminalfilm"
-
-- name: "AC3 5.1 surround audio"
-  extensions: [".log"]
+  - 'Rescrape: True'
+- extensions:
+  - .nfo
+  - .txt
+  name: Documentary genre
   search_expressions:
-    - "AC3 Audio 5.1"
-
-- name: "Lost data files"
-  extensions: [".log"]
+  - genre:Dokumentarfilm
+  - genre:Dokumentation
+  - genre:Documentary
+- extensions:
+  - .nfo
+  - .txt
+  name: Krimi/Crime genre
   search_expressions:
-    - ") Lost Data: "
-
-- name: "No duration found"
-  extensions: [".log"]
+  - genre:Krimi
+  - genre:Kriminalfilm
+  - genre:Crime
+  - Krimi
+  - Kriminalfilm
+- extensions:
+  - .log
+  name: AC3 5.1 surround audio
   search_expressions:
-    - "No duration found with ffprobe!"
-
-- name: "Recording overdue/cancelled"
-  extensions: [".log"]
+  - AC3 Audio 5.1
+- extensions:
+  - .log
+  name: Lost data files
   search_expressions:
-    - "program overdue - recording canceled"
-
-- name: "Encoding exit code errors"
-  extensions: [".log"]
+  - ') Lost Data: '
+- extensions:
+  - .log
+  name: No duration found
   search_expressions:
-    - "exit code not ok"
-
-- name: "AV1 QSV encoded"
-  extensions: [".log"]
+  - No duration found with ffprobe!
+- extensions:
+  - .log
+  name: Recording overdue/cancelled
   search_expressions:
-    - "-c:v av1_qsv -preset veryslow"
-
-- name: "Durations inconsistent"
-  extensions: [".log"]
+  - program overdue - recording canceled
+- extensions:
+  - .log
+  name: Encoding exit code errors
   search_expressions:
-    - "Durations inconsistent"
+  - exit code not ok
+- extensions:
+  - .log
+  name: AV1 QSV encoded
+  search_expressions:
+  - -c:v av1_qsv -preset veryslow
+- extensions:
+  - .log
+  name: Durations inconsistent
+  search_expressions:
+  - Durations inconsistent
+- extensions:
+  - .nfo
+  name: Exceeds threshold longer time than EPG
+  search_expressions:
+  - videostatus:longer:*
+- extensions:
+  - .nfo
+  name: Video length is not longer or does not exist
+  search_expressions:
+  - videostatus:shorter:*
+  - videostatus:!exists
+- extensions:
+  - .txt
+  name: No year recognized in movie md
+  search_expressions:
+  - 'txt_year: none'

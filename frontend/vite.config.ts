@@ -9,12 +9,16 @@ export default defineConfig({
   ],
   server: {
     proxy: {
+      '/api/searchmove/ws': {
+        target: 'http://127.0.0.1:8642',
+        ws: true,
+      },
       '/api/ws': {
-        target: 'http://localhost:8642',
+        target: 'http://127.0.0.1:8642',
         ws: true,
       },
       '/api': {
-        target: 'http://localhost:8642',
+        target: 'http://127.0.0.1:8642',
       },
     },
   },

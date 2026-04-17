@@ -12,19 +12,26 @@ interface Template {
 
 const sourceSuggestions = ref<string[]>([])
 const destSuggestions = ref<string[]>([])
+const ignoredDirSuggestions = ref<string[]>([])
 const templates = ref<Template[]>([])
 const selectedTemplate = ref<string | null>(null)
 
 onMounted(async () => {
-  const [pathsRes, templatesRes] = await Promise.allSettled([
+  const [pathsRes, templatesRes, ignoredRes] = await Promise.allSettled([
     fetch('/api/config/searchmove_paths'),
     fetch('/api/config/searchmove_templates'),
+    fetch('/api/config/searchmove_ignored_dirs'),
   ])
 
   if (pathsRes.status === 'fulfilled' && pathsRes.value.ok) {
     const data = await pathsRes.value.json()
     sourceSuggestions.value = data.source_paths ?? []
     destSuggestions.value = data.dest_paths ?? []
+  }
+
+  if (ignoredRes.status === 'fulfilled' && ignoredRes.value.ok) {
+    const ignoredFromConfig = await ignoredRes.value.json()
+    ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
   }
 
   if (templatesRes.status === 'fulfilled' && templatesRes.value.ok) {
@@ -45,6 +52,7 @@ const mode = ref<'copy' | 'move' | 'delete' | 'test'>('test')
 const source = ref('')
 const dest = ref('')
 const extensions = ref(['.nfo'])
+const ignoredDirectories = ref<string[]>([])
 const recursive = ref(false)
 const logname = ref('searchmove_log.txt')
 
@@ -82,6 +90,7 @@ function submit() {
     mode: mode.value,
     source: source.value,
     dest: dest.value,
+    ignored_directories: ignoredDirectories.value,
     extensions: extensions.value,
     search_expressions: expressions,
     recursive: recursive.value,
@@ -122,6 +131,21 @@ function submit() {
             hide-details
           />
         </v-col>
+        <v-col cols="12">
+          <v-combobox
+            v-model="ignoredDirectories"
+            :items="ignoredDirSuggestions"
+            label="Ignored directories (optional)"
+            density="compact"
+            variant="outlined"
+            prepend-inner-icon="mdi-folder-remove"
+            hide-details
+            multiple
+            chips
+            closable-chips
+            clearable
+          />
+        </v-col>
       </v-row>
 
       <v-divider class="my-4" />
@@ -147,7 +171,7 @@ function submit() {
             multiple
             chips
             closable-chips
-            :items="['.nfo', '.txt', '.log']"
+            :items="['.nfo', '.mkv', '.txt', '.log']"
           />
         </v-col>
         <v-col cols="12" md="4">
@@ -209,7 +233,7 @@ function submit() {
           variant="outlined"
           rows="3"
           hide-details
-          placeholder="rating:>5.4&nfostatus:!exists&#10;genre:*Action*&rating:>7|genre:Comedy"
+          placeholder="sibling:.nfo:exists&fileext:.mkv&#10;rating:>5.4&nfostatus:!exists"
         />
       </template>
       <template v-else>
@@ -221,7 +245,7 @@ function submit() {
               density="compact"
               variant="outlined"
               hide-details
-              placeholder="rating:>5.4&nfostatus:!exists"
+              placeholder="sibling:.nfo:exists&fileext:.mkv"
             >
               <template #append-inner>
                 <v-btn
@@ -250,7 +274,9 @@ function submit() {
         Use <code>&amp;</code> for AND, <code>|</code> for OR.
         XML tags: <code>tag:value</code>, wildcards: <code>tag:*val*</code>,
         existence: <code>tag:exists</code> / <code>tag:!exists</code>,
-        numeric: <code>rating:&gt;7</code>, range: <code>rating:4-6</code>
+        numeric: <code>rating:&gt;7</code>, range: <code>rating:4-6</code>,
+        metadata: <code>sibling:.nfo:exists</code> / <code>sibling:.nfo:!exists</code>,
+        <code>fileext:.mkv</code>
       </div>
     </v-card-text>
     <v-divider />

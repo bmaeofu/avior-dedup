@@ -1,3 +1,14 @@
+dest_paths:
+- //UMS/media/tv/tobescraped
+- //UMS/media/transcoded/check_nfo
+- //UMS/media/transcoded/Highrated
+- //UMS/media/transcoded/Lowrated
+- //UMS/media/transcoded/zerorated
+- //UMS/media/tv/DokHD/DokHD4
+- //UMS/media/tv/KrimiHD/neu
+- //UMS/media/tv/SerienHD
+- //UMS/media/tv/MusikvideosHD/Neu
+- //UMS/media/moved
 source_paths:
 - //UMS/media/transcoded/check_nfo
 - //UMS/media/transcoded/HD720
@@ -11,15 +22,4 @@ source_paths:
 - //UMS/media/tv/MusikvideosHD
 - //UMS/recording_pool/recording
 - //UMS/recording_pool/recording/exists
-
-dest_paths:
-- //UMS/media/tv/tobescraped
-- //UMS/media/transcoded/check_nfo
-- //UMS/media/transcoded/Highrated
-- //UMS/media/transcoded/Lowrated
-- //UMS/media/transcoded/zerorated
-- //UMS/media/tv/DokHD/DokHD4
-- //UMS/media/tv/KrimiHD/neu
-- //UMS/media/tv/SerienHD
-- //UMS/media/tv/MusikvideosHD/Neu
-- //UMS/media/moved
+- //UMS/media/tv/FilmeHD/FilmeHD7

@@ -89,7 +89,7 @@ function handleSave() {
                 multiple
                 chips
                 closable-chips
-                :items="['.nfo', '.txt', '.log']"
+                :items="['.nfo', '.mkv', '.txt', '.log']"
               />
             </v-col>
           </v-row>
@@ -98,6 +98,10 @@ function handleSave() {
             v-model="tmpl.search_expressions"
             label="Search expressions"
           />
+          <div class="text-caption text-medium-emphasis mt-2">
+            Examples: <code>sibling:.nfo:exists</code>, <code>sibling:.nfo:!exists</code>,
+            <code>fileext:.mkv</code>, <code>rating:&gt;7&amp;genre:*Action*</code>
+          </div>
 
           <div class="d-flex mt-3">
             <v-btn

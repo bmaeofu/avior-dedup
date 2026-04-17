@@ -4,6 +4,7 @@ export interface JobRequest {
   mode: 'm' | 'f'
   source: string
   target: string
+  ignored_directories: string[]
   logname: string
   duptype: 'case' | 'exact' | 'semantic' | 'both' | 'all'
   error_target: string | null
@@ -53,6 +54,7 @@ export interface SearchMoveRequest {
   mode: 'copy' | 'move' | 'delete' | 'test'
   source: string
   dest: string
+  ignored_directories: string[]
   extensions: string[]
   search_expressions: string[]
   recursive: boolean

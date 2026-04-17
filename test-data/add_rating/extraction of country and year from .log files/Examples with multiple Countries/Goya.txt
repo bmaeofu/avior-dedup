@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=18.12.2020 03:13:01
+Channel=rbb Berlin HD (AC3,deu)
+
+[0]
+Id=1362
+Date=18.12.2020
+Time=03:10:00
+Duration=02:08:00
+Title=Goya
+Info=Spielfilm DDR/UdSSR 1971
+Description=Als Hofmaler Karl IV. von Spanien ist Don Francisco de Goya Lucientes zu Ansehen und Wohlstand gekommen. Er glaubt an den König und die Kirche, genießt seinen Ruhm bei Hofe und fühlt sich leidenschaftlich zu Herzogin Alba hingezogen. Doch Goya ist auch durch und durch Spanier und liebt das Volk. In einer Madrider Taverne lernt er die wahren Patrioten Spaniens kennen.|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [deu]|[Dolby Digital 2.0] [deu]|[DVB subtitles] [deu]|Minimum age: deu 6|PDC: 18.12. 03:10 (614602)
+Charset=255
+Content=112
+MinimumAge=6
+TimerID={1803B4B3-117E-4588-8702-89CC1A206E8B}
+
+[Stats]
+Errors=2
+Size=11,91 GB (12787792336 bytes)
+Avr. Datarate=1,581 MB/s
+Device=DVBViewer Media Server (VDR-M) 5
+

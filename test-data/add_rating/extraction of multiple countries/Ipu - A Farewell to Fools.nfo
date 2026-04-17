@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Bon Voyage, ihr Idioten</title>
+    <originaltitle>A Farewell to Fools</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>5.400000</value>
+            <votes>581</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>1945, im von deutschen Truppen besetzten Rumänien: Der elfjährige Alex lebt in einem Dorf und verbringt seine Zeit damit, mit dem alten Außenseiter Ipu Krieg zu spielen. Als der Junge die Leiche eines deutschen Soldaten entdeckt, wird den Dorfbewohnern ein Ultimatum gestellt: Wenn der Mörder sich bis zum folgenden Morgen nicht stellt, werden die zehn einflussreichsten Würdenträger des Ortes hingerichtet. Bürgermeister, Pfarrer, Arzt, Notar und Polizeidirektor sind sich einig: Wenn sich kein Schuldiger findet, muss eben einer erfunden werden - um jeden Preis. Der alte Ipu scheint das perfekte Opfer zu sein.</plot>
+    <tagline />
+    <runtime>80</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/5ck97acjp66bWTdqdUsoUfJQwD6.jpg">https://image.tmdb.org/t/p/original/5ck97acjp66bWTdqdUsoUfJQwD6.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/5pnN3w0jYiMWdhyxMPwn7YA7DHq.jpg">https://image.tmdb.org/t/p/original/5pnN3w0jYiMWdhyxMPwn7YA7DHq.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/AsyM42R63dCAgUEPWfLJg43CvS0.jpg">https://image.tmdb.org/t/p/original/AsyM42R63dCAgUEPWfLJg43CvS0.jpg</thumb>
+    <fanart />
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt1634055</id>
+    <uniqueid type="imdb" default="true">tt1634055</uniqueid>
+    <uniqueid type="tmdb">248401</uniqueid>
+    <genre>Komödie</genre>
+    <genre>Drama</genre>
+    <genre>Kriegsfilm</genre>
+    <country>Belgium</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Anusavan Salamanian</credits>
+    <credits>Titus Popovici</credits>
+    <director>Bogdan Dumitrescu</director>
+    <premiered>2013-03-15</premiered>
+    <year>2013</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Shoreline Entertainment</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>2.176870</aspect>
+                <width>1280</width>
+                <height>588</height>
+                <durationinseconds>4854</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language />
+                <channels>6</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Gérard Depardieu</name>
+        <role>Ipu</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/cibkIAJN6ctlqHohhdDEcfbiCAL.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Harvey Keitel</name>
+        <role>Father Johanis</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/7P30hza1neYWW3r7rSQOC736K2Z.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Laura Morante</name>
+        <role>Margherita</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/dHPaab9C8how2C8tj3TseePEa7k.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bogdan Iancu</name>
+        <role>Alex</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/h4KOKv2v2wTOOUyRZYgyi02Orms.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alexandru Bindea</name>
+        <role>Gossman</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/vDRnU7BL3gg2oLkd7IbMNiraopC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Nicodim Ungureanu</name>
+        <role>Mayor</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/t35jTdqQ3uTbCEHPhpAxapsRgnj.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gheorghe Visu</name>
+        <role>Notary</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/sF1O44PyKqaPjuRfNBAqQl0txdY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Hubert Damen</name>
+        <role>Doctor</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/sNklLkykNcVXXlgw5iXY6UKum5O.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Adina Cartianu</name>
+        <role>Clara</role>
+        <order>8</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Daniela Nane</name>
+        <role>Doctor's wife</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/bebLd2VSXY5kEHsFbEfSF1x4lfN.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gabriela Baluta</name>
+        <role>Linda</role>
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Andrei Seusan</name>
+        <role>Friederich</role>
+        <order>11</order>
+        <thumb>https://ia.media-imdb.com/images/M/MV5BODI3NTU5NzEyMl5BMl5BanBnXkFtZTgwOTU5NTA0OTE@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Richard Bovnoczki</name>
+        <role>Filip</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/CU8YobMwxFE9LNZ0mdowRFXGEe.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dragos Stemate</name>
+        <role>Policeman 1</role>
+        <order>13</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Iulia Boros</name>
+        <role>Flora</role>
+        <order>14</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-06-23 01:31:46</dateadded>
+    <nfostatus>Check nfo file (Year difference=3)</nfostatus>
+    <ratings_updated>2026-04-04</ratings_updated>
+    <plot_sim_score>1.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-04</plot_sim_score_date>
+</movie>

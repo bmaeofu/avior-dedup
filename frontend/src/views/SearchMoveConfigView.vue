@@ -15,6 +15,9 @@ const tab = ref('templates')
       <v-tab value="paths" prepend-icon="mdi-folder-star" class="text-none">
         Path Suggestions
       </v-tab>
+      <v-tab value="ignored" prepend-icon="mdi-folder-remove" class="text-none">
+        Ignored Directories
+      </v-tab>
     </v-tabs>
 
     <v-card-text>
@@ -24,6 +27,9 @@ const tab = ref('templates')
         </v-tabs-window-item>
         <v-tabs-window-item value="paths">
           <ConfigEditor config-name="searchmove_paths" :columns="1" />
+        </v-tabs-window-item>
+        <v-tabs-window-item value="ignored">
+          <ConfigEditor config-name="searchmove_ignored_dirs" :columns="1" />
         </v-tabs-window-item>
       </v-tabs-window>
     </v-card-text>

@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Die Möbius-Affäre</title>
+    <originaltitle>Möbius</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>6.200000</value>
+            <votes>6053</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Im Auftrag des russischen Geheimdienstes FSB soll der überaus erfolgreiche Spion Grégory Lioubov  gegen den zwielichtigen russischen Oligarchen Ivan Rostovsky ermitteln. Um belastendes Material zu beschaffen, rekrutiert er die gewitzte Finanzjongleurin Alice. Alice soll für ihn als Undercover-Agentin bei Rostovsky unterkommen, welcher sein Imperium von Monaco aus lenkt. Doch schon nach kurzer Zeit ist sich Grégory nicht mehr sicher, wem er noch trauen kann. Auch Alice kommt als Informationsleck in Frage und so entscheidet er sich, gegen seine oberste Regel eine Affäre mit der kühlen Bankerin zu beginnen, um an Informationen zu kommen. Er findet heraus, dass nicht nur Russland hinter Rostovsky her ist, sondern auch die CIA mitmischt. Bald entbrennt ein Machtkampf zwischen den beiden Nationen.</plot>
+    <tagline>Auf welcher Seite stehst du?</tagline>
+    <runtime>89</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/mEAmNYypaH74HJkZ5qDuxZE8QIw.jpg">https://image.tmdb.org/t/p/original/mEAmNYypaH74HJkZ5qDuxZE8QIw.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/qb12BJC9KxWW2l2l9PQzNby4TOL.jpg">https://image.tmdb.org/t/p/original/qb12BJC9KxWW2l2l9PQzNby4TOL.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/4XC0g5bhwZXMm96luINLVOIanEM.jpg">https://image.tmdb.org/t/p/original/4XC0g5bhwZXMm96luINLVOIanEM.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/jXt7fgIpXuQUp5QC6RI33LYabnW.jpg">https://image.tmdb.org/t/p/original/jXt7fgIpXuQUp5QC6RI33LYabnW.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/8OA7xqy0mvq62DYVloqnRvmUkmM.jpg">https://image.tmdb.org/t/p/original/8OA7xqy0mvq62DYVloqnRvmUkmM.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/h1GbwLjb6izLLB5ryTuL2KiaCoj.jpg">https://image.tmdb.org/t/p/original/h1GbwLjb6izLLB5ryTuL2KiaCoj.jpg</thumb>
+    <fanart>
+        <thumb preview="https://assets.fanart.tv/preview/mbius-5b0c42535f74a.jpg">https://assets.fanart.tv/fanart/mbius-5b0c42535f74a.jpg</thumb>
+        <thumb preview="https://assets.fanart.tv/preview/mbius-5b0c4276c6a34.jpg">https://assets.fanart.tv/fanart/mbius-5b0c4276c6a34.jpg</thumb>
+        <thumb preview="https://assets.fanart.tv/preview/mbius-5349b32fc081b.jpg">https://assets.fanart.tv/fanart/mbius-5349b32fc081b.jpg</thumb>
+    </fanart>
+    <mpaa>Rated TP</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt2106550</id>
+    <uniqueid type="imdb" default="true">tt2106550</uniqueid>
+    <uniqueid type="tmdb">170689</uniqueid>
+    <genre>Drama</genre>
+    <genre>Thriller</genre>
+    <country>Luxembourg</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Éric Rochant</credits>
+    <director>Éric Rochant</director>
+    <premiered>2013-02-17</premiered>
+    <year>2013</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Récifilms</studio>
+    <trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=lc_tBR4f3YM</trailer>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5354</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Jean Dujardin</name>
+        <role>Moïse / Grégory Liubov</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/iPtSWWoO8vajj6fIUQLQeuGOCsk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Cécile De France</name>
+        <role>Alice</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/8nzL3XON3VfUevvP2KvYbnbF5sT.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Tim Roth</name>
+        <role>Ivan Rostovsky</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/qSizF2i9gz6c6DbAC5RoIq8sVqX.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Émilie Dequenne</name>
+        <role>Sandra</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/aNGdK8n9GCzgHbxcucqdgmKM8lR.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Oleksiy Horbunov</name>
+        <role>Khorzov</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/itHyvJXXKBjSjjxCfR2GIVReKVA.jpg</thumb>
+    </actor>
+    <actor>
+        <name>John Lynch</name>
+        <role>Joshua</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/4TG8HYZ5SEFh1Yk5CCG4fXD55j9.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dean Constantin</name>
+        <role>Joshua's colleague - CIA</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/aHppSogWv8qWfMaRZUmd3FlK5jL.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dmitri Nazarov</name>
+        <role>Inzirillo</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/A7MMEY1HnLxwsZ4DIC57PyaByib.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Branka Katić</name>
+        <role>Ava</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/z6g9uFbrytRr5TAc7eVSIipe3ds.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Prasanna Puwanarajah</name>
+        <role>Saïd</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/soIlyi4qNdRX11etHhoMFrlUJcI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Éric Viellard</name>
+        <role>De Maux</role>
+        <order>10</order>
+        <thumb>https://image.tmdb.org/t/p/original/spi6sPJs8fQmFiiENJV7AWCzvAS.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Wendell Pierce</name>
+        <role>Bob</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/r6yKahL6Z8l9aUX5qvWxTmWl8Nm.jpg</thumb>
+    </actor>
+    <actor>
+        <name>John Scurti</name>
+        <role>Honey</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/g9xeW1p3Zxe3yK0GJqg42zX6Ulz.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Vicky Krieps</name>
+        <role>Olga</role>
+        <order>13</order>
+        <thumb>https://image.tmdb.org/t/p/original/9laK3w40qBnE5UY41wJfnUAYMmC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Clémence Bollet</name>
+        <role>Chic bar dancer</role>
+        <order>14</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Vladimir Menshov</name>
+        <role>Cherkachin</role>
+        <order>15</order>
+        <thumb>https://image.tmdb.org/t/p/original/uFcUO36vMhZuI4e8KSfM4UckODG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Maksim Vitorgan</name>
+        <role>Sobchak</role>
+        <order>16</order>
+        <thumb>https://image.tmdb.org/t/p/original/nAk4NvQymH9yIWKgcOD7WXcIvlH.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Brad Leland</name>
+        <role>Agent CIA Möbius</role>
+        <order>17</order>
+        <thumb>https://image.tmdb.org/t/p/original/3jWExZ1SpkMvZtZiKnfiH3HCfSp.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Michael Shannon</name>
+        <role>Alice's father</role>
+        <order>18</order>
+        <thumb>https://image.tmdb.org/t/p/original/ktIBsqGGZDkEmaoDWWTEL1IKPWT.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Sergueï Vladimirov</name>
+        <role>Officier russe</role>
+        <order>19</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Miglen Mirtchev</name>
+        <role>Homme aéroport</role>
+        <order>20</order>
+        <thumb>https://image.tmdb.org/t/p/original/jO5E9TeX1GNBD6mRB9FMgBLIXCm.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Anouk Wagener</name>
+        <role>Secrétaire BCI</role>
+        <order>21</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BZDcwY2M4YWUtYzdjNy00NmRkLWFmN2UtZTRmOWExYjNjMmRiXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Erico Salamone</name>
+        <role />
+        <order>22</order>
+        <thumb>https://image.tmdb.org/t/p/original/nSUUnH7moMM00YRsNuG6PW8uuqG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jules Werner</name>
+        <role />
+        <order>23</order>
+        <thumb>https://image.tmdb.org/t/p/original/xiDYT0EeGNLFlyMGFD6wUTtPEZk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Hervé Sogne</name>
+        <role />
+        <order>24</order>
+        <thumb>https://image.tmdb.org/t/p/original/7vzqT97we29ahRfDzU7CFPzSzUt.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Pierre Baux</name>
+        <role>Birnbaum</role>
+        <order>25</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Pierre 'Pitt' Simon</name>
+        <role>Serveur Apocalypse</role>
+        <order>26</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Yannick Géraud</name>
+        <role>Agent CIA hôpital</role>
+        <order>27</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Mustapha Souaidi</name>
+        <role>Serveur bar</role>
+        <order>28</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Erico Salamone</name>
+        <role>Maître d'hôtel restaurant chic</role>
+        <order>29</order>
+        <thumb>https://image.tmdb.org/t/p/original/nSUUnH7moMM00YRsNuG6PW8uuqG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jules Werner</name>
+        <role>Avocat Rostovski</role>
+        <order>30</order>
+        <thumb>https://image.tmdb.org/t/p/original/xiDYT0EeGNLFlyMGFD6wUTtPEZk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Grégoire Camuzet</name>
+        <role>Danseur bar chic</role>
+        <order>31</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-07-10 19:11:26</dateadded>
+    <nfostatus>Check nfo file (Year difference=17)</nfostatus>
+    <nfo_updated>2026-04-11</nfo_updated>
+    <plot_sim_score>0.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-11</plot_sim_score_date>
+</movie>

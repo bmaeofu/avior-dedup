@@ -92,4 +92,5 @@ def config_files() -> dict[str, str]:
         "path_suggestions": "path_suggestions.yaml",
         "searchmove_paths": "searchmove_paths.yaml",
         "searchmove_templates": "searchmove_templates.yaml",
+        "searchmove_ignored_dirs": "searchmove_ignored_dirs.yaml",
     }

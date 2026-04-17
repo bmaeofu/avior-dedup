@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Add rating to .nfo file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/add_rating.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            //"args": ["\\\\UMS\\media\\transcoded\\zerorated"],
+            //"args": ["\\\\UMS\\media\\transcoded\\HD720"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10", "--all-nfo-ok", "--remove-ratings"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "90", "--all-nfo-ok", "--print-score"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10", "--print-score"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            "args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["C:\\avior-go\\Python\\Add_rating_from imdb_themoviedb\\Test", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--all-nfo-ok"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--all-nfo-ok"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo\\HD2", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--enable-rescraping", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\HD720",  "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\nfo_ok", "--max-days", "0", "--nfostatus-reset", "--print-score"],
+            //"args": ["\\\\UMS\\media\\transcoded\\nfo_ok", "--max-days", "0", "--nfostatus-reset", "--print-score"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--nfostatus-reset", "--print-score"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--all_nfo_ok"],
+            //"args": ["\\\\UMS\\media\\transcoded\\Lowrated", "--max-days", "90"],
+            //"args": ["\\\\UMS\\media\\transcoded\\Highrated", "--max-days", "0", "--nfostatus-reset"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst\\tobecut", "--max-days", "90"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD2", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD1", "--max-days", "0","--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD7", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\recording_pool\\tbd", "-e", ".log", "-s", "no encode - recording too short: r:-1m" "-o", "Lost_Data_Rec.txt"],
+            //"args": ["\\\\UMS\\recording_pool\\recording", "-e", ".log", "-s", "no encode - recording too short: r:-1m" "-o", "Lost_Data_Rec.txt"]
+        },
+    ]
+}

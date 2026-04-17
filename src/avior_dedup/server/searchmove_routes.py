@@ -18,6 +18,7 @@ from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from avior_dedup.searchmove.models import ActivityMode
 from avior_dedup.searchmove.runner import run_search_move_job
 from avior_dedup.server.progress import JobCancelled, ProgressReporter
+from avior_dedup.permissions import ensure_output_permissions
 from avior_dedup.server.schemas import (
     JobStatus,
     ProgressSnapshot,
@@ -66,7 +67,23 @@ def _run_searchmove_job(
             raise FileNotFoundError(f"Source does not exist: {source}")
 
         os.makedirs(dest, exist_ok=True)
+        ensure_output_permissions(dest, is_dir=True)
+
         log_path = os.path.join(dest, req.logname)
+        output_path = os.path.join(dest, "results.txt")
+
+        # Delete existing files first — they may have been created by a different
+        # user (e.g. Docker UID 99) and cannot be overwritten via SMB even if the
+        # current user has write permission on the directory.
+        for _p in (log_path, output_path):
+            try:
+                if os.path.exists(_p):
+                    os.unlink(_p)
+            except OSError:
+                pass
+
+        ensure_output_permissions(log_path, is_dir=False)
+        ensure_output_permissions(output_path, is_dir=False)
         log_handle = open(log_path, "w", encoding="utf-8")
 
         def log_fn(msg: str) -> None:
@@ -80,12 +97,11 @@ def _run_searchmove_job(
         def cancel_check() -> bool:
             return reporter.cancelled
 
-        output_path = os.path.join(dest, "results.txt")
-
         result = run_search_move_job(
             source=source,
             dest=dest,
             mode=mode,
+            ignored_directories=req.ignored_directories,
             extensions=req.extensions,
             search_expressions=req.search_expressions,
             recursive=req.recursive,

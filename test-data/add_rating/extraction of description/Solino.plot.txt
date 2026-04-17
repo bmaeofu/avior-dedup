@@ -1,0 +1,15 @@
+Datum: 2026-04-12 12:15:05 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+In the sixties Romano Amato, his wife Rosa and their two sons Giancarlo and Gigi emigrate from Solino in Italy to Duisburg in the Ruhr area and establish the first Pizza restaurant in town. Their business emerges well and both children get used to Germany.
+______
+
+TXT:
+#####
+
+End of Plot
+
+similarity_score:0.0000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-04-11
+Score:3.5000
+nfo_year: 2002

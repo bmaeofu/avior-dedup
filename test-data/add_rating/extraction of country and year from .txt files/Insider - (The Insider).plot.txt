@@ -1,0 +1,20 @@
+Datum: 2026-04-14 12:20:55 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Der CBS-Journalist Lowell Bergman wittert eine gute Story für seine investigative Nachrichtensendung '60 Minutes' im Fernsehen, als er den Wissenschaftler Jeffrey Wigand, entlassener Manager der Tabakindustrie, vor das Mikrofon bekommt. Wigand weiß einiges, vor allem über den Zusatz von Suchtmitteln zu dem normalen Zigarettentabak. Leider hat er auch eine Verschwiegenheitsklausel unterzeichnet und gefährdet seine Existenz und die seiner Familie.Doch der Drang zur Wahrheit ist stärker und Wigand gibt das entscheidende Interview. Doch dann geht alles schief: Wigands Familie zerbricht unter dem Druck und dem Terror des Tabakgiganten und CBS hält den Beitrag aus Furcht vor einer Milliardenklage zurück. Bergman, der noch nie einen Informanten sitzengelassen hat, muß sich entscheiden: seine Karriere oder seine Berufsethik...
+______
+
+TXT:
+jeffrey wigand, forschungsleiter eines großen zigarettenherstellers, verliert unter fadenscheinigen gründen seinen job. nach langen zweifeln will der gefeuerte chemiker sein insiderwissen über die versetzung des tabaks mit gesundheitsschädlichen suchtstoffen an die öffentlichkeit bringen. doch der fernsehsender, dem er ein spektakuläres exklusivinterview gibt, befürchtet eine milliardenklage der tabaklobby und macht einen rückzieher. jeffrey hat neben dem job auch seine familie verloren und steht nach monatelangem psychoterror vor dem selbstmord.|produziert in hd|
+#####
+
+End of Plot
+
+similarity_score:0.8000
+explanation:Deep model explanation: 
+Deep model finish reason: stop
+Deep model tokens: 100
+Time deepcompare: 3.425s
+
+Score:16.5000
+nfo_year: 1999

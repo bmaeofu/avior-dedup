@@ -1,0 +1,18 @@
+in der .txt Datei zum Film gibt es nur wenige Positionen wo sich  Land und Datum  findenlassen
+
+In  der Infozeile:
+nfo=(The Insider) - Spielfilm USA 1999
+
+Am Anfang der Description vordem ersten Zeichen "|" :
+Description=Historienfilm, Tschechien 2017|Martin Luther schlägt vor 500 Jahren seine 95 Thesen an und stellt damit die Welt auf den Kopf. Thomas Müntzer schließt sich Luther und seinen Ideen anfangs begeistert an.|Wittenberg 1517: Amerika ist bereits entdeckt, der Buchdruck schon erfunden, aber in Wittenberg ist das Mittelalter noch nicht vorbei. Dass ausgerechnet eine akademische Streitschrift des Mönchs Martin Luther eine neue Zeit einläutet, damit hat niemand gerechnet.|Darsteller:|Martin Luther - Maximilian Brückner|Thomas Müntzer - Jan Krauter|Andreas Bodenstein - Johannes Klaußner|Katharina von Bora - Frida-Lovisa Hamann|Ottilie von Gersen - Aylin Tezel|Georg Spalatin - Fabian Hinrichs|Regie: Uwe Janson|Buch/Autor: Stefan Dähnert, Marianne Wendt|Kamera: Michael Wiesweg|Schnitt: Melania Singer, Sabine Brose|Musik: Andreas Lonardoni, Michael Klaukien|HD-Produktion|Altersfreigabe: 12
+
+Auch nach  Description kommt vor auch in der Regel beginnend mit dem Zeichen "|" welches den Bereich zur eingetlichen Beschreibung abtrennt
+
+|Großbritannien, 1998
+
+Muss abeerr nur genutzt werden wenn in der Infozeile nichts dazu steht
+
+Bitet beachten "England 1554."  Am Anfang der Beschreibung ist keine Quelle für Land und VeröffentlichungsJahr da zur eigentlichen beschreibung nicht durch "|" ebgetrennt
+
+Beispiel
+Description=England 1554. Unter der Herrschaft der katholischen Königin Mary, erlebt das Land schwere Zeiten: Aufkeimende Religionskämpfe zwischen Katholiken und Anglikanern werden mit harter Hand erstickt. Die militärische Schwäche der Regierung schürt Unruhe. |Trotz aller Intrigen gelingt es Elizabeth mithilfe einiger Getreuer, ihre Herrschaft zu festigen. Dass in diesem Prozess ihre Liebe zu Lord Robert Dudley zerstört wird, gehört zu den tragischen Opfern, die ihr die Machterhaltung abverlangt. |Großbritannien, 1998

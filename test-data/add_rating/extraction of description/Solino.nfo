@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Solino</title>
+    <originaltitle>Solino</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>7.300000</value>
+            <votes>5874</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>7.036000</value>
+            <votes>69</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline>In the sixties Romano Amato, his wife Rosa and their two sons Giancarlo and Gigi emigrate from Solino in Italy to Duisburg in the Ruhr area and establish the first Pizza restaurant in town. Their business emerges well and both children get used to Germany.</outline>
+    <plot>In the sixties Romano Amato, his wife Rosa and their two sons Giancarlo and Gigi emigrate from Solino in Italy to Duisburg in the Ruhr area and establish the first Pizza restaurant in town. Their business emerges well and both children get used to Germany.</plot>
+    <tagline />
+    <runtime>129</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/nFtE6RBMnZd2bXu7n8yy0jszdFB.jpg">https://image.tmdb.org/t/p/original/nFtE6RBMnZd2bXu7n8yy0jszdFB.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/w7rClzJ6dJ2opSAXzfpiE7tJsjF.jpg">https://image.tmdb.org/t/p/original/w7rClzJ6dJ2opSAXzfpiE7tJsjF.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/7sjkWpIzeEInCaiuGnCwbJBEpHm.jpg">https://image.tmdb.org/t/p/original/7sjkWpIzeEInCaiuGnCwbJBEpHm.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/3WgpuuJVnR7uVZL0PMCSqItyMUQ.jpg">https://image.tmdb.org/t/p/original/3WgpuuJVnR7uVZL0PMCSqItyMUQ.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/qAcaaIdrmZkZEFSZ4rzR1T8sqaJ.jpg">https://image.tmdb.org/t/p/original/qAcaaIdrmZkZEFSZ4rzR1T8sqaJ.jpg</thumb>
+    <fanart>
+        <thumb preview="https://image.tmdb.org/t/p/w780/96kQiPZw8YEbjXmBqVBKIE39KY9.jpg">https://image.tmdb.org/t/p/original/96kQiPZw8YEbjXmBqVBKIE39KY9.jpg</thumb>
+        <thumb preview="https://image.tmdb.org/t/p/w780/e3wwC2Rx0jqnteHpTcVa4FmRtA9.jpg">https://image.tmdb.org/t/p/original/e3wwC2Rx0jqnteHpTcVa4FmRtA9.jpg</thumb>
+        <thumb preview="https://image.tmdb.org/t/p/w780/5AP8JGd5GrIjvDQM8QDkUlU58Aw.jpg">https://image.tmdb.org/t/p/original/5AP8JGd5GrIjvDQM8QDkUlU58Aw.jpg</thumb>
+        <thumb preview="https://image.tmdb.org/t/p/w780/4LEzcAsEuah0AVWiuM7aBW9TzVB.jpg">https://image.tmdb.org/t/p/original/4LEzcAsEuah0AVWiuM7aBW9TzVB.jpg</thumb>
+    </fanart>
+    <mpaa>Rated 13</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0292242</id>
+    <uniqueid type="imdb" default="true">tt0292242</uniqueid>
+    <uniqueid type="tmdb">11628</uniqueid>
+    <genre>Drama</genre>
+    <genre>Comedy</genre>
+    <country>Germany</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <director>Fatih Akin</director>
+    <premiered>2002-09-23</premiered>
+    <year>2002</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Wüste Film</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>7797</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Barnaby Metschurat</name>
+        <role>Gigi Amato</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/iWBe6D6l0idyTNJ2qeLplSBSthn.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Moritz Bleibtreu</name>
+        <role>Giancarlo Amato</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/uWAtkeIRE4I1EnkWw44Qhhi1Tx0.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Antonella Attili</name>
+        <role>Rosa Amato</role>
+        <order>2</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BMTY2MzEyMjA3Ml5BMl5BanBnXkFtZTcwNTYzNDAzMQ@@._V1_QL75_UX140_CR0,3,140,140_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Patrycia Ziolkowska</name>
+        <role>Jo</role>
+        <order>3</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BZjk1ZDRlMDAtMjc1OC00MWYzLWI2YzgtZjVmYzc4NGUwN2ViXkEyXkFqcGc@._V1_QL75_UX140_CR0,0,140,140_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Franco Javarone</name>
+        <role>Alfredo</role>
+        <order>4</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BNTNlMjc3NDUtYjVkZi00OGI4LTk4MjUtYTg1MzUzMDgzODliXkEyXkFqcGc@._V1_QL75_UY140_CR56,0,140,140_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Rosa Di Brigida</name>
+        <role>Paola</role>
+        <order>5</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BNjYwYTEwYzktZjAyYi00MzZlLTkxZjYtNWNjMTAzNDVhOWZlXkEyXkFqcGc@._V1_QL75_UX140_CR0,14,140,140_.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-06-25 21:23:20</dateadded>
+    <nfostatus>rescrape failed (no TMDB results, score=3.5)</nfostatus>
+    <plot_sim_score>0.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-11</plot_sim_score_date>
+    <nfo_updated>2026-04-12</nfo_updated>
+</movie>

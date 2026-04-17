@@ -11,6 +11,7 @@ class JobRequest(BaseModel):
     mode: Literal["m", "f"]
     source: str
     target: str
+    ignored_directories: list[str] = Field(default_factory=list)
     logname: str = "dedup_log.txt"
     duptype: Literal["case", "exact", "semantic", "both", "all"] = "case"
     error_target: str | None = None
@@ -58,6 +59,7 @@ class SearchMoveRequest(BaseModel):
     mode: Literal["copy", "move", "delete", "test"]
     source: str
     dest: str
+    ignored_directories: list[str] = Field(default_factory=list)
     extensions: list[str] = Field(default_factory=lambda: [".nfo"])
     search_expressions: list[str]
     recursive: bool = False

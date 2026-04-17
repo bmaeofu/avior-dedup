@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Charly</title>
+    <originaltitle>Charly</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>6.900000</value>
+            <votes>7613</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>6.400000</value>
+            <votes>116</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Nicolas, ein zielloser Teenager, der seinen Platz im Leben noch nicht gefunden hat, verlässt das Haus seiner Großeltern, trampt in eine Kleinstadt und freundet sich mit Charly an, einer resoluten, etwas älteren Prostituierten – einer rothaarigen Schönheit, die ihrem Gewerbe mit derselben pragmatischen Art nachgeht, mit der sie das Frühstücksgeschirr abräumt. Sie scheint etwas Liebenswertes an Nicolas' zerzaustem Haar und seinem verträumten Gesicht zu finden und nimmt ihn deshalb in ihrem winzigen Wohnwagen auf, den sie mit so urkomischer Pedanterie instand hält. Während sich ihre ungewöhnliche Wohnsituation entwickelt, stolpern beide verletzlich in neues emotionales Terrain.</plot>
+    <tagline />
+    <runtime>104</runtime>
+    <fanart>
+        <thumb preview="http://image.tmdb.org/t/p/w780/k8eNKfE7qp3xKN1Le0xlWKzecTp.jpg">http://image.tmdb.org/t/p/original/k8eNKfE7qp3xKN1Le0xlWKzecTp.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0494045</id>
+    <uniqueid type="imdb" default="true">tt0494045</uniqueid>
+    <genre>Drama</genre>
+    <country>France</country>
+    <credits>Isild Le Besco</credits>
+    <director>Isild Le Besco</director>
+    <year>2007</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Sangsho Film</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6290</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Julie-Marie Parmentier</name>
+        <role>Charly</role>
+        <order>0</order>
+        <thumb>http://image.tmdb.org/t/p/original/osoVaIwPAg0TL6094KNdT2JycQM.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Kolia Litscher</name>
+        <role>Nicolas</role>
+        <order>1</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jeanne Mauborgne</name>
+        <role>Vieille Dame</role>
+        <order>2</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Abdelkader Belkhodja</name>
+        <role>Vieil Homme</role>
+        <order>3</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Philippe Chevassu</name>
+        <role>Le Prof</role>
+        <order>4</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jean-Max Causse</name>
+        <role>L'automobiliste</role>
+        <order>5</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Camille Grynko</name>
+        <role>Le motard</role>
+        <order>6</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2012-07-03 19:36:30</dateadded>
+    <nfostatus>Check nfo file (score=3.50 &lt; 10.0 plot_sim=0.0000)</nfostatus>
+    <plot_sim_score>0.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-11</plot_sim_score_date>
+    <nfo_updated>2026-04-11</nfo_updated>
+</movie>

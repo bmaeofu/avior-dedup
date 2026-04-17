@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import shutil
 from collections.abc import Callable
+from functools import lru_cache
 
 from avior_dedup.searchmove.models import (
     ActivityMode,
@@ -52,23 +53,25 @@ def find_related_files(path: str) -> list[str]:
     directory, filename = os.path.split(path)
     search_dir = directory or "."
     stem = _strip_to_stem(filename)
-    lower_stem = stem.lower()
-
-    lower_candidates = sorted((s.lower() for s in RELATED_SUFFIXES), key=len, reverse=True)
-    related: list[str] = []
 
     try:
         with os.scandir(search_dir) as it:
-            for entry in it:
-                if not entry.is_file():
-                    continue
-                ename_low = entry.name.lower()
-                for suf in lower_candidates:
-                    if ename_low == lower_stem + suf:
-                        related.append(entry.path)
-                        break
+            entries = {entry.name.lower(): entry.path for entry in it if entry.is_file()}
     except OSError as e:
         print(f"Error scanning directory {search_dir}: {e}")
+        return []
+
+    lower_stem = stem.lower()
+    lower_candidates = sorted((s.lower() for s in RELATED_SUFFIXES), key=len, reverse=True)
+
+    related: list[str] = []
+    seen: set[str] = set()
+    for suffix in lower_candidates:
+        wanted = lower_stem + suffix
+        found = entries.get(wanted)
+        if found and found not in seen:
+            related.append(found)
+            seen.add(found)
 
     return related
 
@@ -83,6 +86,11 @@ def execute_file_action(
 
     Returns a ``MoveRecord`` describing what happened.
     """
+    # TEST mode should avoid expensive SMB stat/exists checks.
+    if mode == ActivityMode.TEST:
+        log_fn(f"{src}\t{dst}\ttest run")
+        return MoveRecord(src=src, dst=dst, status="test run")
+
     if not os.path.isfile(src):
         return MoveRecord(src=src, dst=dst, status="error: source not found")
 
@@ -103,7 +111,7 @@ def execute_file_action(
             os.remove(src)
             log_fn(f"{src}\t\tdeleted")
             return MoveRecord(src=src, dst="", status="deleted")
-        else:  # TEST
+        else:  # defensive fallback
             log_fn(f"{src}\t{dst}\ttest run")
             return MoveRecord(src=src, dst=dst, status="test run")
     except IOError as e:
@@ -111,6 +119,7 @@ def execute_file_action(
         return MoveRecord(src=src, dst=dst, status=f"error: {e}")
 
 
+@lru_cache(maxsize=512)
 def _resolve_case_insensitive(path: str) -> str:
     """Resolve a path to use the actual on-disk casing of each component.
 
@@ -152,6 +161,13 @@ def _resolve_case_insensitive(path: str) -> str:
     return resolved
 
 
+@lru_cache(maxsize=512)
+def _ensure_dest_dir(path: str) -> str:
+    """Create destination directory once per path and return it."""
+    os.makedirs(path, exist_ok=True)
+    return path
+
+
 def process_match(
     matched_path: str,
     dest_dir: str,
@@ -165,14 +181,25 @@ def process_match(
     directories with different casing.
     """
     src_dir = os.path.dirname(os.path.abspath(matched_path))
-    dest_dir = _resolve_case_insensitive(os.path.abspath(dest_dir))
+    abs_dest = os.path.abspath(dest_dir)
 
-    if src_dir == dest_dir:
+    # Cheap same-dir check first; avoids UNC/listdir work in TEST mode.
+    if os.path.normcase(src_dir) == os.path.normcase(abs_dest):
+        log_fn(f"{matched_path}\t{abs_dest}\tskipped: source and destination are the same directory")
         return []
 
-    os.makedirs(dest_dir, exist_ok=True)
+    if mode != ActivityMode.TEST:
+        dest_dir = _ensure_dest_dir(_resolve_case_insensitive(abs_dest))
+    else:
+        dest_dir = abs_dest
 
     related = find_related_files(matched_path)
+    if not related and os.path.isfile(matched_path):
+        # Fallback: never silently no-op for a confirmed match.
+        # If the related-files stem index misses, process the matched file itself.
+        related = [matched_path]
+        log_fn(f"{matched_path}\t\tfallback: no related files found; processing matched file only")
+
     records: list[MoveRecord] = []
 
     for src in related:

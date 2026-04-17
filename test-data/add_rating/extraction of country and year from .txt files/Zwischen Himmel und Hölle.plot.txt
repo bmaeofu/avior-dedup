@@ -1,0 +1,16 @@
+Datum: 2026-04-15 11:01:05 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Für Philipp Hochmair geht im Festspielsommer 2024 ein Lebenstraum in Erfüllung: Der Schauspieler ist der offizielle Salzburger Jedermann. “Den Jedermann zu spielen ist die absolute Krönung und ein wichtiger Wendepunkt in meinem Leben“, so Hochmair. Dem Salzburger Publikum ist er von Festspiel-Auftritten bekannt
+______
+
+TXT:
+historienfilm, tschechien 2017|martin luther schlägt vor 500 jahren seine 95 thesen an und stellt damit die welt auf den kopf. thomas müntzer schließt sich luther und seinen ideen anfangs begeistert an.|wittenberg 1517: amerika ist bereits entdeckt, der buchdruck schon erfunden, aber in wittenberg ist das mittelalter noch nicht vorbei. dass ausgerechnet eine akademische streitschrift des mönchs martin luther eine neue zeit einläutet, damit hat niemand gerechnet.|darsteller:|martin luther - maximilian brückner|thomas müntzer - jan krauter|andreas bodenstein - johannes klaußner|katharina von bora - frida-lovisa hamann|ottilie von gersen - aylin tezel|georg spalatin - fabian hinrichs|regie: uwe janson|buch/autor: stefan dähnert, marianne wendt|kamera: michael wiesweg|schnitt: melania singer, sabine brose|musik: andreas lonardoni, michael klaukien|hd-produktion|altersfreigabe: 12|
+#####
+
+End of Plot
+
+similarity_score:0.0000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-04-14
+Score:4.0000
+nfo_year: 2024

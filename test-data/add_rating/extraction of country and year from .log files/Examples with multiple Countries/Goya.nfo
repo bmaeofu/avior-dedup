@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Goya – oder Der arge Weg der Erkenntnis</title>
+    <originaltitle>Goya – oder Der arge Weg der Erkenntnis</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10" default="true">
+            <value>5.100000</value>
+            <votes>14</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Als Hofmaler Karls IV. von Spanien ist Don Francisco de Goya Lucientes zu Ansehen und Wohlstand gekommen. Seine Gemälde zieren die Galerien der Schlösser. In leidenschaftlicher Liebe fühlt er sich zu der Herzogin Alba hingezogen, und gleichzeitig hasst er die hochnäsige Aristokratin in ihr. Er glaubt an den König und die Kirche, genießt seine Stellung bei Hofe. Doch er ist durch und durch Spanier und liebt das Volk . Dieser Widerspruch bringt ihn auf den "argen Weg der Erkenntnis". Sein Mitarbeiter und Freund Esteve führt ihn zu den wahren Patrioten des Landes. In einer Madrider Taverne begegnet er der Sängerin Maria Rosario, später muß er miterleben, wie sie von der Inquisition verurteilt wird. Von dem Lied, das Maria als Beweis ihrer Schuld vortragen muß, ist er tief erschüttert.</plot>
+    <tagline />
+    <runtime>128</runtime>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/47Si2cGXydi4tB8k7iTDYdEMzwb.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/iI5v3xApoEEOlzSNvBCE3gXzKuu.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/gxMM7XGww4wDtfZJZxwP7ciJcnp.jpg</thumb>
+    <fanart>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/iI5v3xApoEEOlzSNvBCE3gXzKuu.jpg">https://image.tmdb.org/t/p/original/iI5v3xApoEEOlzSNvBCE3gXzKuu.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/gxMM7XGww4wDtfZJZxwP7ciJcnp.jpg">https://image.tmdb.org/t/p/original/gxMM7XGww4wDtfZJZxwP7ciJcnp.jpg</thumb>
+    </fanart>
+    <mpaa>Rated 6</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>219484</id>
+    <uniqueid type="imdb">tt0067155</uniqueid>
+    <uniqueid type="tmdb" default="true">219484</uniqueid>
+    <genre>Drama</genre>
+    <genre>Historie</genre>
+    <country>Bulgaria</country>
+    <country>East Germany</country>
+    <country>Soviet Union</country>
+    <country>Yugoslavia</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Konrad Wolf</credits>
+    <credits>Angel Vagenshtain</credits>
+    <director>Konrad Wolf</director>
+    <premiered>1971-09-15</premiered>
+    <year>1971</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Bosna Film</studio>
+    <trailer>plugin://plugin.video.youtube/play/?video_id=c9qo6kJvVqc</trailer>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>7714</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Donatas Banionis</name>
+        <role>Goya</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/vz0TKZFu1qW5HZFhvIi0JZG9W7D.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Olivera Katarina</name>
+        <role>Herzogin von Alba</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/1bvjL3XKW4IgmranqyTqDP9Z6ek.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Fred Düren</name>
+        <role>Agustin Esteve</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/oRQ8qszZLfkSK0Nw6yTPmmLc0FN.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Rolf Hoppe</name>
+        <role>König Karl IV.</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/eniQcrI1PKCBumgm3AysmidGD1R.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ernst Busch</name>
+        <role>Jovellanos</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/cBvLvT1OpWYERA93nsmeK0nUQcZ.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gustaw Holoubek</name>
+        <role>Bermudez</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/sKfHQS9JgwomP9CzSbfceoXyNbC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Wolfgang Kieling</name>
+        <role>Godoy</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/fWjtjmyMOxXblncNwdqj7Lk1wtV.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Günter Schubert</name>
+        <role>Ortiz</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/h39szOOnjCChsSBtk54K8pjJlpJ.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Tatyana Lolova</name>
+        <role />
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/2lZ2aYLh6bpMv35KWkZ964fRvvK.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Mieczysław Voit</name>
+        <role />
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/b3DMaFl0HKVQnNflKiMmeupEqyv.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Михаил Козаков</name>
+        <role />
+        <order>10</order>
+        <thumb>https://image.tmdb.org/t/p/original/mWRsbW2PSq7a19dgZULKdZBpbSp.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Irén Sütő</name>
+        <role />
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/mYQszYvmKkyrBsHEqBYbvqTIqtS.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Andrzej Szalawski</name>
+        <role />
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/gYV1u3BSCuXutz9E3WkmeitrzUR.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Martin Flörchinger</name>
+        <role />
+        <order>13</order>
+        <thumb>https://image.tmdb.org/t/p/original/ohNonVH2kCtDYgl9rf9VoVFFbSO.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-07-06 11:09:14</dateadded>
+    <plot_sim_score_date>2026-03-26</plot_sim_score_date>
+    <ratings_updated>2026-03-26</ratings_updated>
+    <plot_sim_score>0.8000</plot_sim_score>
+</movie>

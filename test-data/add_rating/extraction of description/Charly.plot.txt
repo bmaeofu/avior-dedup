@@ -1,0 +1,15 @@
+Datum: 2026-04-11 09:46:16 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Nicolas, ein zielloser Teenager, der seinen Platz im Leben noch nicht gefunden hat, verlässt das Haus seiner Großeltern, trampt in eine Kleinstadt und freundet sich mit Charly an, einer resoluten, etwas älteren Prostituierten – einer rothaarigen Schönheit, die ihrem Gewerbe mit derselben pragmatischen Art nachgeht, mit der sie das Frühstücksgeschirr abräumt. Sie scheint etwas Liebenswertes an Nicolas' zerzaustem Haar und seinem verträumten Gesicht zu finden und nimmt ihn deshalb in ihrem winzigen Wohnwagen auf, den sie mit so urkomischer Pedanterie instand hält. Während sich ihre ungewöhnliche Wohnsituation entwickelt, stolpern beide verletzlich in neues emotionales Terrain.
+______
+
+TXT:
+#####
+
+End of Plot
+
+similarity_score:0.0000
+explanation:Insufficient content in one or both texts
+Score:3.5000
+nfo_year: 2007

@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Der Liebeswunsch</title>
+    <originaltitle>Der Liebeswunsch</originaltitle>
+    <ratings>
+        <rating name="default" max="10" default="true">
+            <value>5.600000</value>
+            <votes>130</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>3.500000</value>
+            <votes>5</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Mit seiner pedantischen und verklemmten Art trieb Leonhard (Tobias Moretti) einst seine Gattin Marlene (Barbara Auer) geradewegs in die Arme seines besten Freundes Jan (Ulrich Thomsen). Nur mit Mühe gelang es dem Trio danach, die gemeinsame Freundschaft aufrecht zu erhalten. Inzwischen ist die Situation wieder einigermaßen stabil. Da heiratet Leonhard eine sehr viel jüngere Studentin. Und auch Anja (Jessica Schwarz) wird es in der Obhut Leonhards bald zu kalt und eng.\r Starke Darsteller in einer dramatischen Beziehungsgeschichte. Torsten C. Fischer inszenierte nach dem gleichnamigen Roman von Dieter Wellershoff.</plot>
+    <tagline>Die Suche nach dem wahren Leben</tagline>
+    <runtime>110</runtime>
+    <thumb aspect="poster" preview="http://image.tmdb.org/t/p/w500/iq20GXXGFr1lkbxj5iwo5CZtDQ8.jpg">http://image.tmdb.org/t/p/original/iq20GXXGFr1lkbxj5iwo5CZtDQ8.jpg</thumb>
+    <thumb aspect="poster" preview="http://image.tmdb.org/t/p/w500/iq20GXXGFr1lkbxj5iwo5CZtDQ8.jpg">http://image.tmdb.org/t/p/original/iq20GXXGFr1lkbxj5iwo5CZtDQ8.jpg</thumb>
+    <mpaa>Rated 12</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0353667</id>
+    <uniqueid type="imdb" default="true">tt0353667</uniqueid>
+    <genre>Drama</genre>
+    <genre>Lovestory</genre>
+    <country>Germany</country>
+    <director>Torsten C. Fischer</director>
+    <year>2007</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Almena Films</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6656</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>aac</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Tobias Moretti</name>
+        <role>Leonhard</role>
+        <order>0</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BOTg0MTk3ODk3MV5BMl5BanBnXkFtZTgwNjUyMTI3MzE@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jessica Schwarz</name>
+        <role>Anja</role>
+        <order>1</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BMjA2NTk4NTI3N15BMl5BanBnXkFtZTcwMjA3MjkxOA@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ulrich Thomsen</name>
+        <role>Jan</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/e1XN63iALgaAc9gKAvd4uG2ljws.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Barbara Auer</name>
+        <role>Marlene</role>
+        <order>3</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BYjZmNjZkY2MtMzJkYi00ZWJkLTgwOGEtNGY5MDA1YTkzNGM3XkEyXkFqcGdeQXVyNTkyOTA4MjM@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2013-05-13 23:28:56</dateadded>
+    <nfostatus>Check nfo file (score=3.50 &lt; 10.0 plot_sim=0.0000)</nfostatus>
+    <plot_sim_score>0.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-11</plot_sim_score_date>
+    <nfo_updated>2026-04-12</nfo_updated>
+    <rescrape_status>rescrape failed (no TMDB results, score=3.5)</rescrape_status>
+    <rescrape_date>2026-04-12</rescrape_date>
+</movie>

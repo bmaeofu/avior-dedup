@@ -1,0 +1,23 @@
+Datum: 2026-04-04 14:54:07 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+1945, im von deutschen Truppen besetzten Rumänien: Der elfjährige Alex lebt in einem Dorf und verbringt seine Zeit damit, mit dem alten Außenseiter Ipu Krieg zu spielen. Als der Junge die Leiche eines deutschen Soldaten entdeckt, wird den Dorfbewohnern ein Ultimatum gestellt: Wenn der Mörder sich bis zum folgenden Morgen nicht stellt, werden die zehn einflussreichsten Würdenträger des Ortes hingerichtet. Bürgermeister, Pfarrer, Arzt, Notar und Polizeidirektor sind sich einig: Wenn sich kein Schuldiger findet, muss eben einer erfunden werden - um jeden Preis. Der alte Ipu scheint das perfekte Opfer zu sein.
+______
+
+TXT:
+1945, im von deutschen truppen besetzten rumänien: der elfjährige alex lebt in einem dorf und verbringt seine zeit damit, mit dem alten außenseiter ipu krieg zu spielen. als der junge die leiche eines deutschen soldaten entdeckt, wird den dorfbewohnern ein ultimatum gestellt: wenn der mörder sich bis zum folgenden morgen nicht stellt, werden die zehn einflussreichsten würdenträger des ortes hingerichtet. bürgermeister, pfarrer, arzt, notar und polizeidirektor sind sich einig: wenn sich kein schuldiger findet, muss eben einer erfunden werden - um jeden preis. der alte ipu scheint das perfekte opfer zu sein.|produziert in hd|
+#####
+
+End of Plot
+
+similarity_score:1.0000
+explanation:Deep model explanation: 
+Deep model finish reason: stop
+Deep model tokens: 100
+Time deepcompare: 63.123s
+
+Score:15.0000
+txt_year: 2010
+nfo_year: 2013
+year_diff: 3.0
+Rescrape: True

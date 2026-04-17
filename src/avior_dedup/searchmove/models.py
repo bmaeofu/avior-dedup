@@ -45,17 +45,20 @@ class SearchMoveJobResult:
 
 
 # File suffixes considered part of the same media set.
-# Ordered longest-first so greedy matching strips the right suffix.
-RELATED_SUFFIXES: list[str] = sorted(
-    [
-        ".txt", ".log", ".mp2", ".mp4", ".mkv", ".ts", ".nfo",
-        ".mp2.log", ".mpg.log", ".mkv.log", ".plot.txt",
-        "-fanart.jpg", "-poster.jpg", "-landscape.jpg", "-thumb.jpg", "-keyart.jpg",
-        ".mp4.INFO.log", ".mp2.INFO.log", ".ts.INFO.log", ".mkv.INFO.log",
-    ],
-    key=len,
-    reverse=True,
-)
+# The md-candidates are legacy sidecar suffixes associated with one movie stem.
+MD_CANDIDATES: list[str] = [
+    ".txt", ".log", ".mp2", ".mp4", ".mkv", ".ts", ".nfo",
+    ".mp2.log", ".mpg.log", ".mkv.log", ".plot.txt",
+    "-fanart.jpg", "-poster.jpg", "-landscape.jpg", "-thumb.jpg",
+    ".mp4.INFO.log", ".mp2.INFO.log", ".ts.INFO.log", ".mkv.INFO.log",
+]
+
+# Video suffixes used for stem normalization and sibling grouping.
+VIDEO_SUFFIXES: list[str] = [".mkv", ".ts", ".mpg", ".mp4"]
+
+# Unified sibling suffixes (md candidates + video suffixes), ordered longest-first
+# so greedy matching strips the right suffix.
+RELATED_SUFFIXES: list[str] = sorted(set(MD_CANDIDATES + VIDEO_SUFFIXES), key=len, reverse=True)
 
 # Extensions that should be stripped repeatedly from the stem
 # (e.g. "movie.mkv.INFO" -> "movie")

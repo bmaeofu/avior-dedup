@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=30.09.2015 23:03:50
+Channel=arte HD (AC3,deu)
+
+[0]
+Id=25805
+Date=30.09.2015
+Time=23:05:00
+Duration=01:20:00
+Title=Ipu - A Farewell to Fools
+Info=Spielfilm Rumänien / Deutschland / Frankreich 2010 (Condamnat la viata)
+Series=
+Description=1945, im von deutschen Truppen besetzten Rumänien: Der elfjährige Alex lebt in einem Dorf und verbringt seine Zeit damit, mit dem alten Außenseiter Ipu Krieg zu spielen. Als der Junge die Leiche eines deutschen Soldaten entdeckt, wird den Dorfbewohnern ein Ultimatum gestellt: Wenn der Mörder sich bis zum folgenden Morgen nicht stellt, werden die zehn einflussreichsten Würdenträger des Ortes hingerichtet. Bürgermeister, Pfarrer, Arzt, Notar und Polizeidirektor sind sich einig: Wenn sich kein Schuldiger findet, muss eben einer erfunden werden - um jeden Preis. Der alte Ipu scheint das perfekte Opfer zu sein.|Produziert in HD|[16:9] [H.264] [HD]|[stereo] [deu]|franz. oder Audiodeskription [mis]|[stereo] [fra]|[AC-3] [mul]|[DVB subtitles] [deu]|[DVB subtitles] [fra]|[DVB subtitles] [deu]|PDC: 30.09. 23:05 (1002949)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={9DE3F195-3ED7-4684-A3D9-C77F9F29FA0B}
+
+[Stats]
+Errors=0
+Size=2,94 GB (3161542044 bytes)
+Avr. Datarate=0,621 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

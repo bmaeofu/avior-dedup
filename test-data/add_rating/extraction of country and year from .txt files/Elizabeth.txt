@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=20.11.2013 01:15:02
+Channel=ZDF HD (AC3,ger)
+
+[0]
+Id=17893
+Date=20.11.2013
+Time=01:15:00
+Duration=01:55:00
+Title=Elizabeth
+Info=Historienfilm GB/1998
+Series=
+Description=England 1554. Unter der Herrschaft der katholischen Königin Mary, erlebt das Land schwere Zeiten: Aufkeimende Religionskämpfe zwischen Katholiken und Anglikanern werden mit harter Hand erstickt. Die militärische Schwäche der Regierung schürt Unruhe. |Trotz aller Intrigen gelingt es Elizabeth mithilfe einiger Getreuer, ihre Herrschaft zu festigen. Dass in diesem Prozess ihre Liebe zu Lord Robert Dudley zerstört wird, gehört zu den tragischen Opfern, die ihr die Machterhaltung abverlangt. |Großbritannien, 1998|HD-Produktion|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 5.1] [deu]|[DVB subtitles] [deu]|PDC: 20.11. 00:49 (677937)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={01552D80-B68E-45A1-9B72-A0751F750D97}
+
+[Stats]
+Errors=0
+Size=10,53 GB (11303118736 bytes)
+Avr. Datarate=1,563 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

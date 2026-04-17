@@ -9,14 +9,33 @@ const emit = defineEmits<{
 
 const sourceSuggestions = ref<string[]>([])
 const targetSuggestions = ref<string[]>([])
+const ignoredDirSuggestions = ref<string[]>([])
 
 onMounted(async () => {
   try {
-    const res = await fetch('/api/config/path_suggestions')
-    if (res.ok) {
-      const data = await res.json()
+    const [pathsRes, ignoredRes] = await Promise.allSettled([
+      fetch('/api/config/path_suggestions'),
+      fetch('/api/config/ignored_dirs'),
+    ])
+
+    const ignoredFromConfig =
+      ignoredRes.status === 'fulfilled' && ignoredRes.value.ok
+        ? await ignoredRes.value.json()
+        : []
+
+    if (pathsRes.status === 'fulfilled' && pathsRes.value.ok) {
+      const data = await pathsRes.value.json()
       sourceSuggestions.value = data.source_paths ?? []
       targetSuggestions.value = data.target_paths ?? []
+      ignoredDirSuggestions.value = [
+        ...new Set([
+          ...(data.source_paths ?? []),
+          ...(data.target_paths ?? []),
+          ...(Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []),
+        ]),
+      ]
+    } else {
+      ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
     }
   } catch {
     // suggestions are optional, ignore errors
@@ -27,13 +46,14 @@ const form = reactive<JobRequest>({
   mode: 'f',
   source: '',
   target: '',
+  ignored_directories: [],
   logname: 'dedup_log.txt',
   duptype: 'case',
   error_target: null,
   novideo_target: null,
   max_errors_when_mc: 3,
   max_duration_diff_longer: 600,
-  max_duration_diff_shorter: 150,
+  max_duration_diff_shorter: 180,
   selection_priorities: ['multichannel', 'fewer_errors', 'closest_duration'] as SelectionPriority[],
   semantic_prefixes: ['terra\\s*x\\s*-\\s*'],
   remove_episode_nos: false,
@@ -103,6 +123,23 @@ function submit() {
             variant="outlined"
             prepend-inner-icon="mdi-folder-move"
             hide-details
+          />
+        </v-col>
+        <v-col cols="12">
+          <v-combobox
+            v-model="form.ignored_directories"
+            :items="ignoredDirSuggestions"
+            label="Ignored directories (optional)"
+            density="compact"
+            variant="outlined"
+            prepend-inner-icon="mdi-folder-remove"
+            hide-details
+            multiple
+            chips
+            closable-chips
+            clearable
+            hint="Per-job ignore list; accepts full paths or simple directory names"
+            persistent-hint
           />
         </v-col>
       </v-row>

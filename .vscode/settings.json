@@ -1,0 +1,6 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "c:/repos/avior-dedup/.venv/Scripts/python.exe": true,
+        "pnpm.cmd": true
+    }
+}

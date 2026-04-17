@@ -1,0 +1,15 @@
+Datum: 2026-04-12 15:29:47 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Mit seiner pedantischen und verklemmten Art trieb Leonhard (Tobias Moretti) einst seine Gattin Marlene (Barbara Auer) geradewegs in die Arme seines besten Freundes Jan (Ulrich Thomsen). Nur mit Mühe gelang es dem Trio danach, die gemeinsame Freundschaft aufrecht zu erhalten. Inzwischen ist die Situation wieder einigermaßen stabil. Da heiratet Leonhard eine sehr viel jüngere Studentin. Und auch Anja (Jessica Schwarz) wird es in der Obhut Leonhards bald zu kalt und eng.\r Starke Darsteller in einer dramatischen Beziehungsgeschichte. Torsten C. Fischer inszenierte nach dem gleichnamigen Roman von Dieter Wellershoff.
+______
+
+TXT:
+#####
+
+End of Plot
+
+similarity_score:0.0000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-04-11
+Score:3.5000
+nfo_year: 2007

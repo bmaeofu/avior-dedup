@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=12.12.2020 15:48:20
+Channel=zdf_neo HD (AC3,ger)
+
+[0]
+Id=3953
+Date=12.12.2020
+Time=15:50:00
+Duration=01:25:00
+Title=Der Salzprinz
+Info=Slowakisches Märchen
+Description=BRD / Slowakei 1982|Das Märchen vom Salzprinzen erzählt die alte Sage von König Pravoslav, der seine drei Töchter auf eine schwierige Probe stellt. Er will wissen, welche ihn am meisten liebt.||Die jüngste Tochter - heimlich verlobt mit dem Salzprinzen, dem Sohn des Königs der Unterwelt - antwortet, sie liebe ihren Vater so sehr wie die Menschen das Salz. Daraufhin verstößt König Pravoslav die jüngste Tochter.|Darsteller:|König Pravoslav - Karol Machata|Hofnarr - Josef Kroner|Prinzessin Wanda - Luzena Kocurikova|Prinzessin Barbara - Dietlinde Turban|Prinzessin Maruschka - Libuse Safránková|König Norbert - Jurai Kukura|Regie: Martin Holly||HD-Produktion|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|[DVB subtitles] [deu]|PDC: 12.12. 15:50 (418802)
+Charset=255
+Content=80
+MinimumAge=0
+TimerID={17F3640B-E154-4502-B5AB-D3898B602E92}
+
+[Stats]
+Errors=0
+Size=8,56 GB (9186386504 bytes)
+Avr. Datarate=1,730 MB/s
+Device=DVBViewer Media Server (VDR-M) 6
+

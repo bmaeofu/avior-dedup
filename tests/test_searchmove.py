@@ -2,6 +2,8 @@
 
 Uses the test-data/search-and-move/ positive/negative NFO files
 with the criteria: rating:>5.4 & nfostatus:!exists (OR two alternatives).
+
+Also tests metadata-based matching (fileext, sibling) for binary files.
 """
 
 from __future__ import annotations
@@ -16,7 +18,7 @@ import pytest
 from avior_dedup.searchmove.models import ActivityMode
 from avior_dedup.searchmove.parser import parse_condition, parse_search_expression
 from avior_dedup.searchmove.runner import run_search_move_job
-from avior_dedup.searchmove.searcher import search_xml_file
+from avior_dedup.searchmove.searcher import search_xml_file, search_text_file
 
 # Resolve test-data paths relative to repo root
 _REPO = Path(__file__).resolve().parent.parent
@@ -201,3 +203,221 @@ class TestRunSearchMoveJob:
             # Source should be empty (files moved out)
             src_remaining = [f for f in os.listdir(tmp_src) if "Blinde Weide" in f]
             assert len(src_remaining) == 0
+
+    def test_txt_match_moves_mpg_sibling(self):
+        """A .txt match should also move .mpg sibling files with same stem."""
+        with tempfile.TemporaryDirectory() as tmp_src, \
+             tempfile.TemporaryDirectory() as tmp_dest:
+            src = Path(tmp_src)
+            (src / "Europe.plot.txt").write_text("MATCH_TOKEN")
+            (src / "Europe.mpg").touch()
+
+            result = run_search_move_job(
+                source=tmp_src,
+                dest=tmp_dest,
+                mode=ActivityMode.MOVE,
+                extensions=[".txt"],
+                search_expressions=["MATCH_TOKEN"],
+                recursive=False,
+            )
+
+            assert result.files_matched == 1
+            assert (Path(tmp_dest) / "Europe.plot.txt").exists()
+            assert (Path(tmp_dest) / "Europe.mpg").exists()
+
+    def test_txt_match_moves_configured_md_candidates(self):
+        """A .txt match should move sibling files resolved via base+candidate suffixes."""
+        with tempfile.TemporaryDirectory() as tmp_src, \
+             tempfile.TemporaryDirectory() as tmp_dest:
+            src = Path(tmp_src)
+            (src / "Europe.txt").write_text("MATCH_EUROPE")
+            (src / "Europe.nfo").write_text("<?xml version='1.0'?><movie></movie>")
+            (src / "Europe.mkv").touch()
+            (src / "Europe.mpg.log").write_text("log")
+            (src / "Europe-fanart.jpg").touch()
+
+            result = run_search_move_job(
+                source=tmp_src,
+                dest=tmp_dest,
+                mode=ActivityMode.MOVE,
+                extensions=[".txt"],
+                search_expressions=["MATCH_EUROPE"],
+                recursive=False,
+            )
+
+            assert result.files_matched == 1
+            assert (Path(tmp_dest) / "Europe.txt").exists()
+            assert (Path(tmp_dest) / "Europe.nfo").exists()
+            assert (Path(tmp_dest) / "Europe.mkv").exists()
+            assert (Path(tmp_dest) / "Europe.mpg.log").exists()
+            assert (Path(tmp_dest) / "Europe-fanart.jpg").exists()
+
+
+# ---------------------------------------------------------------------------
+# Metadata-based matching tests (fileext:, sibling:)
+# ---------------------------------------------------------------------------
+
+class TestMetadataMatching:
+    """Test metadata-based search terms for binary file matching."""
+
+    def test_search_text_file_with_fileext(self):
+        """Test fileext: metadata term for .txt files."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            # Create a dummy .txt file
+            txt_file = Path(tmp_dir) / "test.txt"
+            txt_file.write_text("Some text content")
+
+            # Search for .txt files
+            search_groups = parse_search_expression(["fileext:.txt"])
+            result = search_text_file(str(txt_file), search_groups)
+            assert result is not None, "Should match fileext:.txt"
+
+            # Search for .mkv files (should not match)
+            search_groups = parse_search_expression(["fileext:.mkv"])
+            result = search_text_file(str(txt_file), search_groups)
+            assert result is None, "Should not match fileext:.mkv"
+
+    def test_search_text_file_with_sibling_exists(self):
+        """Test sibling: metadata term when sibling file exists."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            # Create .mkv and .nfo files
+            mkv_file = tmp_path / "movie.mkv"
+            nfo_file = tmp_path / "movie.nfo"
+            mkv_file.touch()
+            nfo_file.write_text("<movie></movie>")
+
+            # Search for .mkv with .nfo sibling
+            search_groups = parse_search_expression(["sibling:.nfo:exists"])
+            result = search_text_file(str(mkv_file), search_groups)
+            assert result is not None, "Should match sibling:.nfo:exists when .nfo exists"
+
+    def test_search_text_file_with_sibling_not_exists(self):
+        """Test sibling: metadata term when sibling file does not exist."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            # Create .mkv file without .nfo
+            mkv_file = tmp_path / "orphan.mkv"
+            mkv_file.touch()
+
+            # Search for .mkv without .nfo sibling
+            search_groups = parse_search_expression(["sibling:.nfo:!exists"])
+            result = search_text_file(str(mkv_file), search_groups)
+            assert result is not None, "Should match sibling:.nfo:!exists when .nfo does NOT exist"
+
+    def test_search_text_file_with_sibling_exists_negative(self):
+        """Test that missing sibling doesn't match :exists."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            # Create .mkv without .nfo
+            mkv_file = tmp_path / "orphan.mkv"
+            mkv_file.touch()
+
+            # Search for .nfo sibling (should NOT match)
+            search_groups = parse_search_expression(["sibling:.nfo:exists"])
+            result = search_text_file(str(mkv_file), search_groups)
+            assert result is None, "Should NOT match sibling:.nfo:exists when .nfo missing"
+
+    def test_search_text_file_with_sibling_not_exists_negative(self):
+        """Test that existing sibling doesn't match :!exists."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir)
+            # Create both .mkv and .nfo
+            mkv_file = tmp_path / "movie.mkv"
+            nfo_file = tmp_path / "movie.nfo"
+            mkv_file.touch()
+            nfo_file.write_text("<movie></movie>")
+
+            # Search for missing .nfo sibling (should NOT match)
+            search_groups = parse_search_expression(["sibling:.nfo:!exists"])
+            result = search_text_file(str(mkv_file), search_groups)
+            assert result is None, "Should NOT match sibling:.nfo:!exists when .nfo exists"
+
+    def test_search_xml_file_with_fileext(self):
+        """Test fileext: metadata term for .nfo XML files."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            # Create a dummy .nfo file with XML
+            nfo_file = Path(tmp_dir) / "movie.nfo"
+            nfo_file.write_text("<?xml version='1.0'?><movie></movie>")
+
+            # Search for .nfo files
+            search_groups = parse_search_expression(["fileext:.nfo"])
+            result = search_xml_file(str(nfo_file), search_groups)
+            assert result is not None, "Should match fileext:.nfo"
+
+            # Search for .mkv files (should not match)
+            search_groups = parse_search_expression(["fileext:.mkv"])
+            result = search_xml_file(str(nfo_file), search_groups)
+            assert result is None, "Should not match fileext:.mkv"
+
+    def test_combined_metadata_and_content_matching(self):
+        """Test combining metadata terms (fileext:) with content terms (rating:)."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            # Create a .nfo file that matches rating criteria with proper structure
+            nfo_file = Path(tmp_dir) / "good_movie.nfo"
+            nfo_file.write_text(
+                "<?xml version='1.0'?><movie>"
+                "<ratings><rating><value>8.0</value><votes>50</votes></rating></ratings>"
+                "</movie>"
+            )
+
+            # Search for .nfo files with rating > 7.0
+            search_groups = parse_search_expression(["fileext:.nfo&rating:>7.0"])
+            result = search_xml_file(str(nfo_file), search_groups)
+            assert result is not None, "Should match both fileext:.nfo and rating:>7.0"
+
+    def test_mkv_nfo_workflow_positive(self):
+        """Integration test: MKV+NFO workflow using new templates."""
+        with tempfile.TemporaryDirectory() as tmp_src, \
+             tempfile.TemporaryDirectory() as tmp_dest:
+            tmp_src_path = Path(tmp_src)
+
+            # Create test files: 2 MKV with NFO, 1 MKV without NFO
+            (tmp_src_path / "movie1.mkv").touch()
+            (tmp_src_path / "movie1.nfo").write_text("<movie></movie>")
+
+            (tmp_src_path / "movie2.mkv").touch()
+            (tmp_src_path / "movie2.nfo").write_text("<movie></movie>")
+
+            (tmp_src_path / "orphan.mkv").touch()
+
+            # Search in test mode for MKV with NFO
+            result = run_search_move_job(
+                source=tmp_src,
+                dest=tmp_dest,
+                mode=ActivityMode.TEST,
+                extensions=[".mkv"],
+                search_expressions=["sibling:.nfo:exists"],
+                recursive=False,
+            )
+            # Should find 2 MKV files with NFO siblings
+            assert result.files_scanned == 3, f"Expected 3 MKV files scanned, got {result.files_scanned}"
+            assert result.files_matched == 2, f"Expected 2 MKV with NFO to match, got {result.files_matched}"
+
+    def test_mkv_nfo_workflow_negative(self):
+        """Integration test: MKV without NFO workflow."""
+        with tempfile.TemporaryDirectory() as tmp_src, \
+             tempfile.TemporaryDirectory() as tmp_dest:
+            tmp_src_path = Path(tmp_src)
+
+            # Create test files: 2 MKV with NFO, 1 MKV without NFO
+            (tmp_src_path / "movie1.mkv").touch()
+            (tmp_src_path / "movie1.nfo").write_text("<movie></movie>")
+
+            (tmp_src_path / "movie2.mkv").touch()
+            (tmp_src_path / "movie2.nfo").write_text("<movie></movie>")
+
+            (tmp_src_path / "orphan.mkv").touch()
+
+            # Search in test mode for MKV without NFO
+            result = run_search_move_job(
+                source=tmp_src,
+                dest=tmp_dest,
+                mode=ActivityMode.TEST,
+                extensions=[".mkv"],
+                search_expressions=["sibling:.nfo:!exists"],
+                recursive=False,
+            )
+            # Should find 1 orphan MKV without NFO
+            assert result.files_scanned == 3, f"Expected 3 MKV files scanned, got {result.files_scanned}"
+            assert result.files_matched == 1, f"Expected 1 MKV without NFO to match, got {result.files_matched}"

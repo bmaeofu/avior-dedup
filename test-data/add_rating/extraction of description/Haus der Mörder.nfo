@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Haus der Mörder</title>
+    <originaltitle>La conciergerie</originaltitle>
+    <ratings>
+        <rating name="default" max="10" default="true">
+            <value>5.700000</value>
+            <votes>174</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Police detective Jacques Laniel's life becomes a nightmare the day drive-by shootists gun down his partner Thomas Colin. His colleagues make matters worse by blaming him for the death, and after his wife leaves him, Laniel decides to quit the force and launch a private investigation into Colin's murder. Soon afterward, Laniel finds the bullet-riddled body of famed author and literature professor Zachary Osborne tied to his car hood. The professor's wife hires Laniel to solve the murder, but what the detective finds is ugly: Osborne was a part of a lucrative land-speculation deal that involved the sale of a crumbling old rectory that had been turned into a halfway house called the Haven of the Monsters. The name is apt, for all the residents are convicted killers who were given inordinately light sentences. When Lanier starts questioning the Haven's tenants and their crimes are revealed via flashback, it takes on the character of a David Lynch production.</plot>
+    <tagline>L'immeuble où l'on compte le plus haut taux de meurtriers au mètre carré</tagline>
+    <runtime>114</runtime>
+    <thumb aspect="poster" preview="http://cf2.imgobject.com/t/p/w500/kJwCeiygYPrcPEkGshyp70hDHIj.jpg">http://cf2.imgobject.com/t/p/original/kJwCeiygYPrcPEkGshyp70hDHIj.jpg</thumb>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0122436</id>
+    <uniqueid type="imdb" default="true">tt0122436</uniqueid>
+    <genre>Crime</genre>
+    <genre>Drama</genre>
+    <genre>Thriller</genre>
+    <country>Canada</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Benoît Dutrizac</credits>
+    <credits>Michel Poulette</credits>
+    <director>Michel Poulette</director>
+    <year>1997</year>
+    <status />
+    <code />
+    <aired />
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6898</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <language />
+                <channels>6</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Macha Grenon</name>
+        <role>Claire Ricard</role>
+        <order>0</order>
+        <thumb>http://image.tmdb.org/t/p/original/xNtBSP8VXjg8I8yOE70knGxHE8p.jpg</thumb>
+    </actor>
+    <actor>
+        <name>David La Haye</name>
+        <role>Charles Bass</role>
+        <order>1</order>
+        <thumb>http://image.tmdb.org/t/p/original/8JQT0LMz3LMc4soF2uhTEfK7KMs.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Serge Dupire</name>
+        <role>Jacques Laniel</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/sIZiRHuq5uqoVqEle9iy0OnYCAP.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jacques Godin</name>
+        <role>Thomas Colin</role>
+        <order>3</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Monique Spaziani</name>
+        <role>Maria Colin</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/cYJTsDaFH9Ipl9Lhu9uRhsbcSs1.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Tania Kontoyanni</name>
+        <role>Carole Osborne</role>
+        <order>5</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jean-René Ouellet</name>
+        <role>Zachary Osborne</role>
+        <order>6</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Michel Forget</name>
+        <role>Gustave Blain</role>
+        <order>7</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Raymond Cloutier</name>
+        <role>Antoine Martineau</role>
+        <order>8</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Paul Dion</name>
+        <role>Édouard Rossi</role>
+        <order>9</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Carl Béchard</name>
+        <role>René Tremblay</role>
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Maka Kotto</name>
+        <role>Jean Marcheur</role>
+        <order>11</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Dorothée Berryman</name>
+        <role>Cécile Sirois</role>
+        <order>12</order>
+        <thumb>http://image.tmdb.org/t/p/original/tfynATxA1fcVDs23OwMEyhNRuUC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marie-Claude Lefebvre</name>
+        <role>Nathalie Sirois</role>
+        <order>13</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Isabel Richer</name>
+        <role>Estelle Artaud</role>
+        <order>14</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2012-06-20 11:12:14</dateadded>
+    <plot_sim_score>0.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-11</plot_sim_score_date>
+    <nfo_updated>2026-04-11</nfo_updated>
+    <nfostatus>Check nfo file (score=3.50 &lt; 10.0 plot_sim=0.0000)</nfostatus>
+</movie>

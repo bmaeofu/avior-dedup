@@ -1,0 +1,16 @@
+Datum: 2026-04-04 14:52:23 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Als Hofmaler Karls IV. von Spanien ist Don Francisco de Goya Lucientes zu Ansehen und Wohlstand gekommen. Seine Gemälde zieren die Galerien der Schlösser. In leidenschaftlicher Liebe fühlt er sich zu der Herzogin Alba hingezogen, und gleichzeitig hasst er die hochnäsige Aristokratin in ihr. Er glaubt an den König und die Kirche, genießt seine Stellung bei Hofe. Doch er ist durch und durch Spanier und liebt das Volk . Dieser Widerspruch bringt ihn auf den "argen Weg der Erkenntnis". Sein Mitarbeiter und Freund Esteve führt ihn zu den wahren Patrioten des Landes. In einer Madrider Taverne begegnet er der Sängerin Maria Rosario, später muß er miterleben, wie sie von der Inquisition verurteilt wird. Von dem Lied, das Maria als Beweis ihrer Schuld vortragen muß, ist er tief erschüttert.
+______
+
+TXT:
+als hofmaler karl iv. von spanien ist don francisco de goya lucientes zu ansehen und wohlstand gekommen. er glaubt an den könig und die kirche, genießt seinen ruhm bei hofe und fühlt sich leidenschaftlich zu herzogin alba hingezogen. doch goya ist auch durch und durch spanier und liebt das volk. in einer madrider taverne lernt er die wahren patrioten spaniens kennen.|
+#####
+
+End of Plot
+
+similarity_score:0.8000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-03-26
+Score:12.0000
+nfo_year: 1971

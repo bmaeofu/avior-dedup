@@ -1,0 +1,429 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Der Salzprinz</title>
+    <originaltitle>Soľ nad zlato</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>6.800000</value>
+            <votes>471</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>5.900000</value>
+            <votes>18</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Ein Film nach Motiven eines slowakischen Volksmärchens. Prinzessin Maruschka verleibt sich in den Sohn des Salzkönigs und erntet damit Spott und Verachtung bei ihrem Vater, dem König, und ihren Landsleuten, die von Gold und Edelsteinen verblendet sind. Erst als der Salzkönig einen furchtbaren Fluch über die Menschen schickt, erkennen sie den Wert des scheinbar so wertlosen Salzes. An Maruschka ist es nun, ihr Volk zu erlösen.</plot>
+    <tagline />
+    <runtime>84</runtime>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/yTw7lYfhFSExnQ4V6SblYCVAA5t.jpg">https://image.tmdb.org/t/p/original/yTw7lYfhFSExnQ4V6SblYCVAA5t.jpg</thumb>
+    <fanart />
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0171765</id>
+    <uniqueid type="imdb" default="true">tt0171765</uniqueid>
+    <uniqueid type="tmdb">208436</uniqueid>
+    <genre>Fantasy</genre>
+    <genre>Familie</genre>
+    <country>Czechoslovakia</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Martin Hollý</credits>
+    <credits>Peter Kováčik</credits>
+    <director>Martin Hollý</director>
+    <premiered>1983-02-27</premiered>
+    <year>1983</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Štúdio hraných filmov Bratislava</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5063</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Libuse Safránková</name>
+        <role>Princess Maruška</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/ylfmsG8AZu65PXnDlvNyOn02Tfv.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Karol Machata</name>
+        <role>King Pravoslav</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/qk7hhqu2tcclFR7GK1MmmA8q37.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jozef Kroner</name>
+        <role>Jester</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/dBCD9Gg3P9JTwtg6fwlckyBpg7z.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dietlinde Turban</name>
+        <role>Princess Barbora</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/7cWVyCK1wzCN7T7p4yNsVRGSrXj.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ľubomír Paulovič</name>
+        <role>Prince Kazimír</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/xua0drfL7bnRlRC3RCk7Kjo2q94.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Zuzana Kocúriková</name>
+        <role>Princess Vanda</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/QvVE8TLRv4VDgBnvWnkGXZxjEZ.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Juraj Kukura</name>
+        <role>King Norbert</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/xZhSoPJ35XytIlUj8laT6rLMQUC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ladislav Chudík</name>
+        <role>Salt King</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/hEPZ7VF738NrmSPHJ8kcIg2B2kd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gábor Nagy</name>
+        <role>Salt Prince</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/7NWhwcWpBr7BNS192tgjMlvy9Qf.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dieter Kirchlechner</name>
+        <role>Argonit</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/qsQtq38AtJXgf1r9jLyvpghqgP7.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Viera Strnisková</name>
+        <role />
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Tibor Bogdan</name>
+        <role />
+        <order>11</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ján Kramár</name>
+        <role />
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/pNSl6pAj6M7AyLPQCZirioMRms7.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Juraj Paška</name>
+        <role>Master of Ceremonies</role>
+        <order>13</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Anton Šulík st.</name>
+        <role />
+        <order>14</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Anton Korenči</name>
+        <role />
+        <order>15</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Vlasta Fabianová</name>
+        <role />
+        <order>16</order>
+        <thumb>https://image.tmdb.org/t/p/original/qUeH4mMH7xzprUqYqfgX0Ww8Rrm.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ivan Krivosudský</name>
+        <role />
+        <order>17</order>
+        <thumb>https://image.tmdb.org/t/p/original/1wWJ5cAMeeOl1RMA0h1UpPZDsad.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Milan Kiš</name>
+        <role />
+        <order>18</order>
+        <thumb>https://image.tmdb.org/t/p/original/AowbSKgjhsFigGzFfMgnHOze0nM.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jaroslav Rozsíval</name>
+        <role />
+        <order>19</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Boris Farkaš</name>
+        <role />
+        <order>20</order>
+        <thumb>https://image.tmdb.org/t/p/original/M3R5LNZKbrIAwDKvoONsWCAMkr.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Peter Rašev</name>
+        <role />
+        <order>21</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Boris Šnajdár</name>
+        <role />
+        <order>22</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Hana Gregorová</name>
+        <role />
+        <order>23</order>
+        <thumb>https://image.tmdb.org/t/p/original/crOdGat2PzuS433T1hnDrjdZQFn.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Helena Húsková</name>
+        <role />
+        <order>24</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Zuzana Gábrišová</name>
+        <role>Fairy</role>
+        <order>25</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Zuzana Grausová</name>
+        <role>Fairy</role>
+        <order>26</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Anna Chudá</name>
+        <role>Fairy</role>
+        <order>27</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Eva Hritzová</name>
+        <role>Fairy</role>
+        <order>28</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Anna Hýllová</name>
+        <role>Fairy</role>
+        <order>29</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Aurélia Jankovičová</name>
+        <role>Fairy</role>
+        <order>30</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Elena Svetlíková</name>
+        <role>Fairy</role>
+        <order>31</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ľudmila Tóthová</name>
+        <role>Fairy</role>
+        <order>32</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Soňa Romanovová</name>
+        <role>Fairy</role>
+        <order>33</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Petra Slováková</name>
+        <role>Fairy</role>
+        <order>34</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Zuzana Nesázalová</name>
+        <role>Fairy</role>
+        <order>35</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Gabriela Tesáková</name>
+        <role>Fairy</role>
+        <order>36</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Věra Volochová</name>
+        <role>Fairy</role>
+        <order>37</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Laura Vargová</name>
+        <role>Fairy</role>
+        <order>38</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Gabriela Vašeková</name>
+        <role>Fairy</role>
+        <order>39</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ľubica Valovičová</name>
+        <role>Fairy</role>
+        <order>40</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Marián Angelovič</name>
+        <role>Gnome</role>
+        <order>41</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Katarína Angelovičová</name>
+        <role>Gnome</role>
+        <order>42</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ladislav Bačo</name>
+        <role>Gnome</role>
+        <order>43</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Dušan Davidov</name>
+        <role>Gnome</role>
+        <order>44</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Vojtech Gergely</name>
+        <role>Gnome</role>
+        <order>45</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Štefan Huňák</name>
+        <role>Gnome</role>
+        <order>46</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Eva Hvizdáková</name>
+        <role>Gnome</role>
+        <order>47</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Dušan Macko</name>
+        <role>Gnome</role>
+        <order>48</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Mária Šuverová</name>
+        <role>Gnome</role>
+        <order>49</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Gabriel Seman</name>
+        <role>Gnome</role>
+        <order>50</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Katarína Stemprová</name>
+        <role>Gnome</role>
+        <order>51</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jaroslav Kotrba</name>
+        <role />
+        <order>52</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jana Nagyová Pulm</name>
+        <role>Princess Maruška (voice)</role>
+        <order>53</order>
+        <thumb>https://image.tmdb.org/t/p/original/aPKSFSqb42QzkzXIBj8Cz5HJBC7.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Kamila Magálová</name>
+        <role>Princess Barbora (voice)</role>
+        <order>54</order>
+        <thumb>https://image.tmdb.org/t/p/original/j12zc62nlPE3JP4dA4pgN8rNPyI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Štefan Kvietik</name>
+        <role>King Norbert (voice)</role>
+        <order>55</order>
+        <thumb>https://image.tmdb.org/t/p/original/gcWjtvZP3DZdxeVSf9a01Dlht9o.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alfréd Swan</name>
+        <role>Salt Prince (voice)</role>
+        <order>56</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Stano Dančiak</name>
+        <role>Argonit (voice)</role>
+        <order>57</order>
+        <thumb>https://image.tmdb.org/t/p/original/dHTvjtb52i8cPyuNoAJYN5uUUnh.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Vladimír Kostovič</name>
+        <role>Master of Ceremonies (voice)</role>
+        <order>58</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-07-04 03:15:36</dateadded>
+    <nfo_updated>2026-04-14</nfo_updated>
+</movie>

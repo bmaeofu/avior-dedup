@@ -49,7 +49,7 @@ def main() -> None:
     parser.add_argument(
         "--max-duration-diff-shorter",
         type=int,
-        default=150,
+        default=180,
         help="Maxallowed negative difference (rec_duration - video_duration) in seconds",
     )
     parser.add_argument(

@@ -1,0 +1,17 @@
+Datum: 2026-04-11 09:51:22 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Ein deutsches TV-Drama
+______
+
+TXT:
+ljuba ranjewskaja und ihr bruder garjew sind hoch verschuldete besitzer eines alten landguts mit legendärem kirschgarten. der junge erfolgreiche geschäftsmann lopachin, dessen vorfahren noch als knechte auf dem hof schufteten, schlägt vor, den kirschgarten abzuholzen um ferienhäuser zu bauen und zu vermieten. in erinnerung an die schöne, heile welt ihrer kindheit können sich die beiden zu nichts entschließen und verpassen so alle rettungschancen. ganz fatalistisch lassen sie die großen und kleinen katastrophen des lebens geschehen. sie sind unruhig, unzufrieden, sie stolpern über die widersprüche, die sie fast zerreißen, und so ist ihr unglück tragisch und komisch zugleich.
+3sat zeigt eine aufzeichnung des 2011 im schauspiel köln aufgeführten theaterstücks "der kirschgarten" von anton tschechow. kurz nach der premiere wurde die kölner aufführung als eine der besten inszenierungen des jahres ausgezeichnet. "ein fest der schauspieler" - so urteilten die kritiker über karin henkels werk. ein hervorragendes schauspieler-ensemble mit lena schwarz, lina beckmann und charly hübner treibt den abend mit wonne und esprit hin zu einem ende der ausweglosigkeit, die selten so bunt zu sehen war. tschechows letztes stück, uraufgeführt 1904, ist eine absurde komödie über die künste des missverstehens, über fatalismus, über realitätsverlust und über die bizarren verrückungen von wünschen und ängsten.
+#####
+
+End of Plot
+
+similarity_score:0.0000
+explanation:Insufficient content in one or both texts
+Score:5.5000
+nfo_year: 1970

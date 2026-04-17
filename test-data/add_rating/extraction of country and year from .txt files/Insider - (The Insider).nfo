@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Insider</title>
+    <originaltitle>The Insider</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>7.800000</value>
+            <votes>191269</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>7.500000</value>
+            <votes>2041</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline>Female cop blackmails her ex's brother with jail time unless he spies on a hooligan gang.</outline>
+    <plot>Der CBS-Journalist Lowell Bergman wittert eine gute Story für seine investigative Nachrichtensendung '60 Minutes' im Fernsehen, als er den Wissenschaftler Jeffrey Wigand, entlassener Manager der Tabakindustrie, vor das Mikrofon bekommt. Wigand weiß einiges, vor allem über den Zusatz von Suchtmitteln zu dem normalen Zigarettentabak. Leider hat er auch eine Verschwiegenheitsklausel unterzeichnet und gefährdet seine Existenz und die seiner Familie.Doch der Drang zur Wahrheit ist stärker und Wigand gibt das entscheidende Interview. Doch dann geht alles schief: Wigands Familie zerbricht unter dem Druck und dem Terror des Tabakgiganten und CBS hält den Beitrag aus Furcht vor einer Milliardenklage zurück. Bergman, der noch nie einen Informanten sitzengelassen hat, muß sich entscheiden: seine Karriere oder seine Berufsethik...</plot>
+    <tagline />
+    <runtime>148</runtime>
+    <thumb aspect="set.fanart" preview="https://image.tmdb.org/t/p/w500/8H0lBjRnrHFwnQd7kCdsb5vcBsX.jpg">https://image.tmdb.org/t/p/original/8H0lBjRnrHFwnQd7kCdsb5vcBsX.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/yOLnV1lM3NuMsgYwIhz454fQRgt.jpg">https://image.tmdb.org/t/p/original/yOLnV1lM3NuMsgYwIhz454fQRgt.jpg</thumb>
+    <thumb aspect="poster" preview="https://image.tmdb.org/t/p/w500/dbe1zKVKNBIczdmRcm7jxEphYLz.jpg">https://image.tmdb.org/t/p/original/dbe1zKVKNBIczdmRcm7jxEphYLz.jpg</thumb>
+    <fanart>
+        <thumb preview="https://image.tmdb.org/t/p/w780/2yo2k8CmgZxfBQYAZ8TnHIYzEme.jpg">https://image.tmdb.org/t/p/original/2yo2k8CmgZxfBQYAZ8TnHIYzEme.jpg</thumb>
+        <thumb preview="https://image.tmdb.org/t/p/w780/9WiWj08EqdzPWJFYLhRbnqRpvjK.jpg">https://image.tmdb.org/t/p/original/9WiWj08EqdzPWJFYLhRbnqRpvjK.jpg</thumb>
+        <thumb preview="https://image.tmdb.org/t/p/w780/4iPMoOExDdLImWeS0IlVQmJQkb7.jpg">https://image.tmdb.org/t/p/original/4iPMoOExDdLImWeS0IlVQmJQkb7.jpg</thumb>
+        <thumb preview="https://image.tmdb.org/t/p/w780/vSBLnJeh6UDsPXldeFkQmLthT9v.jpg">https://image.tmdb.org/t/p/original/vSBLnJeh6UDsPXldeFkQmLthT9v.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <genre>Action</genre>
+    <uniqueid type="tmdb" default="true">9008</uniqueid>
+    <uniqueid type="imdb">tt0140352</uniqueid>
+    <genre>Drama</genre>
+    <country>United States of America</country>
+    <set>
+        <name>Furioza Filmreihe</name>
+        <overview>1072703</overview>
+    </set>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Eric Roth</credits>
+    <credits>Michael Mann</credits>
+    <director>Michael Mann</director>
+    <premiered>1999-10-28</premiered>
+    <year>1999</year>
+    <status />
+    <code />
+    <aired />
+    <studio>2 Hungry Crocodiles</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>8909</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>ger</language>
+                <channels>6</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Al Pacino</name>
+        <role>Lowell Bergman</role>
+        <order>0</order>
+        <thumb>http://image.tmdb.org/t/p/original/m8HAAjq1T75JypKk0v1FFQn4ysZ.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Russell Crowe</name>
+        <role>Jeffrey Wigand</role>
+        <order>1</order>
+        <thumb>http://image.tmdb.org/t/p/original/uxiXuVH4vNWrKlJMVVPG1sxAJFe.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Christopher Plummer</name>
+        <role>Mike Wallace</role>
+        <order>2</order>
+        <thumb>http://image.tmdb.org/t/p/original/u0YBwss0ebEUp8sjRtQKnK2wZdR.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Diane Venora</name>
+        <role>Liane Wigand</role>
+        <order>3</order>
+        <thumb>http://image.tmdb.org/t/p/original/mZWVEZ18jMiJuS3A56tejPipdo8.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Philip Baker Hall</name>
+        <role>Don Hewitt</role>
+        <order>4</order>
+        <thumb>http://image.tmdb.org/t/p/original/ef7M9soBIv6iGnGEiCdsQ6ppjFl.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Lindsay Crouse</name>
+        <role>Sharon Tiller</role>
+        <order>5</order>
+        <thumb>http://image.tmdb.org/t/p/original/p9xfNphbZNvSfqxGA4za87VKuQI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Debi Mazar</name>
+        <role>Debbie De Luca</role>
+        <order>6</order>
+        <thumb>http://image.tmdb.org/t/p/original/cU3LhqOjXzOqpGCSDFj5otlZreu.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Stephen Tobolowsky</name>
+        <role>Eric Kluster</role>
+        <order>7</order>
+        <thumb>http://image.tmdb.org/t/p/original/uL8yfcm0dCFYFQt052kczVQVvac.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Colm Feore</name>
+        <role>Richard Scruggs</role>
+        <order>8</order>
+        <thumb>http://image.tmdb.org/t/p/original/jeotIVor4fH3oqxkRZ6qyUbgrJ3.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bruce McGill</name>
+        <role>Ron Motley</role>
+        <order>9</order>
+        <thumb>http://image.tmdb.org/t/p/original/j4mn0fPdhhXfRqQwheAwCU8Hwrm.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-06-23 01:24:33</dateadded>
+    <nfo_updated>2026-04-14</nfo_updated>
+    <rescrape_status>rescrape success[low_score] (old_tmdb=1072699, new_tmdb=9008, old_imdb=tt36265413, new_imdb=tt0140352, old_score=3.00, new_score=16.50)</rescrape_status>
+    <rescrape_date>2026-04-14</rescrape_date>
+    <plot_sim_score>0.8000</plot_sim_score>
+    <plot_sim_score_date>2026-04-14</plot_sim_score_date>
+</movie>

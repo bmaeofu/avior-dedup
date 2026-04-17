@@ -20,14 +20,16 @@ export function useSearchMoveJob() {
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      if (data.progress) {
-        progress.value = data.progress
-      }
-      if (data.state && data.state !== 'running') {
+      // JobStatus message (final): has 'state' field
+      if (data.state) {
         state.value = data.state
+        if (data.progress) progress.value = data.progress
         result.value = data.result ?? null
         error.value = data.error ?? null
-        ws?.close()
+        if (data.state !== 'running') ws?.close()
+      // ProgressSnapshot message (interim): has 'phase' field
+      } else if (data.phase !== undefined) {
+        progress.value = data
       }
     }
 

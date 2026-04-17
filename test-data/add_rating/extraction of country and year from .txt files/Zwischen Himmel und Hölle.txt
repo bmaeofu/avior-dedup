@@ -1,0 +1,28 @@
+[General]
+Version=1.1
+
+[Media]
+Created=30.10.2017 20:14:23
+Channel=ZDF HD (AC3,ger)
+
+[0]
+Id=30785
+Date=30.10.2017
+Time=20:15:00
+Duration=02:45:00
+Title=Zwischen Himmel und Hölle
+Info=Historische Verfilmung
+Series=
+Description=Historienfilm, Tschechien 2017|Martin Luther schlägt vor 500 Jahren seine 95 Thesen an und stellt damit die Welt auf den Kopf. Thomas Müntzer schließt sich Luther und seinen Ideen anfangs begeistert an.|Wittenberg 1517: Amerika ist bereits entdeckt, der Buchdruck schon erfunden, aber in Wittenberg ist das Mittelalter noch nicht vorbei. Dass ausgerechnet eine akademische Streitschrift des Mönchs Martin Luther eine neue Zeit einläutet, damit hat niemand gerechnet.|Darsteller:|Martin Luther - Maximilian Brückner|Thomas Müntzer - Jan Krauter|Andreas Bodenstein - Johannes Klaußner|Katharina von Bora - Frida-Lovisa Hamann|Ottilie von Gersen - Aylin Tezel|Georg Spalatin - Fabian Hinrichs|Regie: Uwe Janson|Buch/Autor: Stefan Dähnert, Marianne Wendt|Kamera: Michael Wiesweg|Schnitt: Melania Singer, Sabine Brose|Musik: Andreas Lonardoni, Michael Klaukien|HD-Produktion|Altersfreigabe: 12|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|[DVB subtitles] [deu]|PDC: 30.10. 20:15 (1004815)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={F89189EB-3CCC-49E4-AB86-B39D5ADD7D24}
+
+[Stats]
+Errors=1
+Size=16,39 GB (17594232672 bytes)
+Avr. Datarate=1,698 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+
+ 

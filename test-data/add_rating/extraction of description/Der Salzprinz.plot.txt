@@ -1,0 +1,18 @@
+Datum: 2026-04-14 17:40:06 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Ein Film nach Motiven eines slowakischen Volksmärchens. Prinzessin Maruschka verleibt sich in den Sohn des Salzkönigs und erntet damit Spott und Verachtung bei ihrem Vater, dem König, und ihren Landsleuten, die von Gold und Edelsteinen verblendet sind. Erst als der Salzkönig einen furchtbaren Fluch über die Menschen schickt, erkennen sie den Wert des scheinbar so wertlosen Salzes. An Maruschka ist es nun, ihr Volk zu erlösen.
+______
+
+TXT:
+brd / slowakei 1982|das märchen vom salzprinzen erzählt die alte sage von könig pravoslav, der seine drei töchter auf eine schwierige probe stellt. er will wissen, welche ihn am meisten liebt.||die jüngste tochter - heimlich verlobt mit dem salzprinzen, dem sohn des königs der unterwelt - antwortet, sie liebe ihren vater so sehr wie die menschen das salz. daraufhin verstößt könig pravoslav die jüngste tochter.|darsteller:|könig pravoslav - karol machata|hofnarr - josef kroner|prinzessin wanda - luzena kocurikova|prinzessin barbara - dietlinde turban|prinzessin maruschka - libuse safránková|könig norbert - jurai kukura|regie: martin holly||hd-produktion|
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:25.0000
+txt_year: 1982
+nfo_year: 1983
+year_diff: 1.0

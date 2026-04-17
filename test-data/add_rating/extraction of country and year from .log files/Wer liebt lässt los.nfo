@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Wer liebt, lässt los</title>
+    <originaltitle>Wer liebt, lässt los</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10" default="true">
+            <value>4.000000</value>
+            <votes>1</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Ein deutsches TV-Drama</plot>
+    <tagline />
+    <runtime>110</runtime>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/5e27hRUAObOnNMqqlVbpGuYNZ5s.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/kBxBCCbUVoEP9a1qediUgdeLwaX.jpg</thumb>
+    <thumb spoof="" cache="" aspect="keyart" preview="">https://image.tmdb.org/t/p/original/5e27hRUAObOnNMqqlVbpGuYNZ5s.jpg</thumb>
+    <fanart>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/kBxBCCbUVoEP9a1qediUgdeLwaX.jpg">https://image.tmdb.org/t/p/original/kBxBCCbUVoEP9a1qediUgdeLwaX.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>322344</id>
+    <uniqueid type="imdb">tt2659670</uniqueid>
+    <uniqueid type="tmdb" default="true">322344</uniqueid>
+    <genre>Drama</genre>
+    <country>Germany</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <director>Judith Kennel</director>
+    <premiered>2013-02-17</premiered>
+    <year>2013</year>
+    <status />
+    <code />
+    <aired />
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6656</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Ursula Karven</name>
+        <role>Luise Iwersen</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/3IVP7lmpcm1EM9m20cUdQVyd7Wq.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Pasquale Aleardi</name>
+        <role>Stephan Iwersen</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/zY9iu1ObHecBwRmZscIHbhDxiJw.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marcus Mittermeier</name>
+        <role>Jonas Elmer</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/pVPqzeLOYtvea4Fvmk6GBSy9cX3.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gaby Dohm</name>
+        <role>Viola</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/hcVYhYlLtQSVScWNL7ofrNp1iB5.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Kai Ivo Baulitz</name>
+        <role>Tobias</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/eWeOEUlIXDpR1ZhhjtcqvXOndKS.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Markus Quentin</name>
+        <role>Johnny</role>
+        <order>5</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Lilly Liefers</name>
+        <role>Lea</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/xH9f3rd6QUZ1oSKSHpsFAlJZcUN.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2013-04-05 16:34:54</dateadded>
+    <videostatus>longer:00:20:57</videostatus>
+    <nfostatus>Check nfo file (score=9.5 plot_sim=N/A)</nfostatus>
+    <ratings_updated>2026-04-04</ratings_updated>
+</movie>

@@ -1,0 +1,16 @@
+Datum: 2026-04-15 10:57:06 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Im unruhigen Fahrwasser des späten 16. Jahrhunderts sieht sich Elizabeth der größten Herausforderung ihres königlichen Lebens gegenüber. Intrigen am Hof bedrohen ihren Thron genauso wie die Kriegserklärung durch den spanischen König Philip II., der das protestantische England mit seiner gigantischen Armada für den katholischen Glauben zurückerobern will. Geprüft auch durch ihre Gefühle für den jungen Seefahrer Sir Walter Raleigh zieht Elizabeth in den Krieg gegen Spanien, während ihr wichtigster Berater Sir Francis Walsingham eine mörderische Verschwörung aufdeckt und damit unwissentlich England an den Rand des Untergangs bringt.
+______
+
+TXT:
+england 1554. unter der herrschaft der katholischen königin mary, erlebt das land schwere zeiten: aufkeimende religionskämpfe zwischen katholiken und anglikanern werden mit harter hand erstickt. die militärische schwäche der regierung schürt unruhe. |trotz aller intrigen gelingt es elizabeth mithilfe einiger getreuer, ihre herrschaft zu festigen. dass in diesem prozess ihre liebe zu lord robert dudley zerstört wird, gehört zu den tragischen opfern, die ihr die machterhaltung abverlangt. |großbritannien, 1998|hd-produktion|
+#####
+
+End of Plot
+
+similarity_score:0.5000
+explanation:Using plot similarity score stored in .nfo file from previous comparison dated 2026-04-14
+Score:9.5000
+nfo_year: 1998

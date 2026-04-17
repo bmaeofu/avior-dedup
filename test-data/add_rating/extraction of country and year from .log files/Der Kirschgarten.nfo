@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Der Kirschgarten</title>
+    <originaltitle>Der Kirschgarten</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>9.100000</value>
+            <votes>19</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Ein deutsches TV-Drama</plot>
+    <tagline />
+    <runtime>145</runtime>
+    <mpaa>Rated</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0186274</id>
+    <uniqueid type="imdb" default="true">tt0186274</uniqueid>
+    <genre>Drama</genre>
+    <country>Germany</country>
+    <director>Rudolf Noelte</director>
+    <year>1970</year>
+    <status />
+    <code />
+    <aired />
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>8749</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Maria Wimmer</name>
+        <role>Gutsbesitzerin Ranjewskaja</role>
+        <order>1</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Cordula Trantow</name>
+        <role>Anja</role>
+        <order>2</order>
+        <thumb>http://image.tmdb.org/t/p/original/l7omTvjVlDX6HnmvYNWhPyQxJBi.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Werner Kreindl</name>
+        <role>Kaufmann Lopachin</role>
+        <order>3</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Hugo Lindinger</name>
+        <role>Gutsbesitzer Simeonow</role>
+        <order>4</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Georg Lehn</name>
+        <role>Buchhalter Jepichodow</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/xGx8tGJD2JF3UlZ8jKKZA7nGfEe.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2012-07-21 17:10:19</dateadded>
+    <nfostatus>Check nfo file (score=5.50 &lt; 10.0 plot_sim=0.0000; plot is empty or too short)</nfostatus>
+    <plot_sim_score>0.0000</plot_sim_score>
+    <plot_sim_score_date>2026-04-11</plot_sim_score_date>
+    <nfo_updated>2026-04-11</nfo_updated>
+</movie>

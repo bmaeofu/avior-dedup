@@ -319,6 +319,7 @@ def find_duplicates(
     duptype: str,
     remove_episode_nos: bool,
     semantic_prefixes: list[str],
+    ignored_directories: list[str] | None = None,
     progress_cb: Callable[..., None] | None = None,
 ) -> tuple[list[list[str]], dict[str, dict[str, str]]]:
     """Walk source_root and group files into duplicate sets based on duptype.
@@ -326,6 +327,14 @@ def find_duplicates(
     progress_cb signature: (current_dir, dirs_completed, dirs_total, files_scanned)
     """
     ignored_dirs_lower = {_canonical_case_key(x) for x in config.ignored_dirs()}
+    ignored_dir_paths_lower: set[str] = set()
+    for raw in ignored_directories or []:
+        val = (raw or "").strip()
+        if not val:
+            continue
+        ignored_dirs_lower.add(_canonical_case_key(os.path.basename(val)))
+        ignored_dir_paths_lower.add(_canonical_case_key(os.path.abspath(val)))
+
     ignored_files_lower = {_canonical_case_key(x) for x in config.ignored_files()}
 
     files_by_lower: dict[str, list[str]] = {}
@@ -333,6 +342,12 @@ def find_duplicates(
     files_by_semantic: dict[str, list[str]] = {}
     file_to_groupkey: dict[str, GroupKeys] = {}
     files_scanned = 0
+
+    def _is_ignored_dir(name: str, full_path: str) -> bool:
+        return (
+            _canonical_case_key(name) in ignored_dirs_lower
+            or _canonical_case_key(os.path.abspath(full_path)) in ignored_dir_paths_lower
+        )
 
     # Enumerate top-level entries to provide directory-level progress
     try:
@@ -347,7 +362,7 @@ def find_duplicates(
     for entry in top_entries:
         full = os.path.join(source_root, entry)
         if os.path.isdir(full):
-            if _canonical_case_key(entry) not in ignored_dirs_lower:
+            if not _is_ignored_dir(entry, full):
                 top_dirs.append(entry)
         else:
             root_files.append(entry)
@@ -398,7 +413,7 @@ def find_duplicates(
         # Then recurse into subdirectories
         for entry in entries:
             if entry.is_dir(follow_symlinks=False):
-                if _canonical_case_key(entry.name) not in ignored_dirs_lower:
+                if not _is_ignored_dir(entry.name, entry.path):
                     _scan_dir(entry.path)
 
     # Process files in the source root itself

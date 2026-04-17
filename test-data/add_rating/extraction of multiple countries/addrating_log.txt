@@ -1,0 +1,8 @@
+Datum: 2026-04-04 14:48:15
+C:\avior-go\Python\Add_rating_from imdb_themoviedb\Test\Beispiele mit mehreren Ländern\Goya - score low, using existing plot similarity score 0.8000 in NFO aktualisiert vor 9 Tagen (max_days_plot=30) 
+SCORE:	C:\avior-go\Python\Add_rating_from imdb_themoviedb\Test\Beispiele mit mehreren Ländern\Goya.nfo	nfo_score=12.00	plot_similarity=0.8000
+RATINGS:	C:\avior-go\Python\Add_rating_from imdb_themoviedb\Test\Beispiele mit mehreren Ländern\Goya.nfo	themoviedb	value=5.1	votes=14 (default)
+"C:\avior-go\Python\Add_rating_from imdb_themoviedb\Test\Beispiele mit mehreren Ländern\Ipu - A Farewell to Fools" score low: 7.0000 starting plot similarity comparison...
+LOW SCORE: C:\avior-go\Python\Add_rating_from imdb_themoviedb\Test\Beispiele mit mehreren Ländern\Ipu - A Farewell to Fools.nfo - Check nfo file (Year difference=3)
+
+Processed 2 .nfo files

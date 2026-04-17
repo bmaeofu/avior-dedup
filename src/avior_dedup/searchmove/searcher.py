@@ -2,16 +2,130 @@
 
 Functions return ``SearchMatch`` on success, ``None`` on no match.
 Side-effect-free — callers decide what to do with matches.
+
+Supports both content-based terms (rating:, genre:, etc.) and metadata terms:
+  - sibling:.nfo:exists|!exists — check if a file with same stem and .nfo exists
+  - fileext:.mkv — check file extension (useful for binary files)
 """
 
 from __future__ import annotations
 
+import os
 import re
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
+from functools import lru_cache
 
-from avior_dedup.searchmove.models import SearchMatch
+from avior_dedup.searchmove.models import RELATED_SUFFIXES, STRIP_EXTENSIONS, SearchMatch
 from avior_dedup.searchmove.parser import parse_condition
+
+
+# ---------------------------------------------------------------------------
+# Generic helpers
+# ---------------------------------------------------------------------------
+
+_KNOWN_SUFFIXES_LOWER_SORTED: tuple[str, ...] = tuple(
+    sorted((s.lower() for s in RELATED_SUFFIXES), key=len, reverse=True)
+)
+
+_REPEATED_KNOWN_EXTENSIONS = frozenset(e.lower() for e in STRIP_EXTENSIONS)
+
+
+@lru_cache(maxsize=4096)
+def _directory_entries_lower(directory: str) -> frozenset[str]:
+    """Return case-normalized directory entries for fast sibling lookups."""
+    return frozenset(entry.lower() for entry in os.listdir(directory))
+
+def _strip_to_stem(filename: str) -> str:
+    """Extract base stem from a filename, stripping known suffixes.
+    
+    Removes compound suffixes (e.g. .mkv.INFO.log), then repeatedly strips
+    known extensions until only the base name remains.
+    """
+    lower = filename.lower()
+    
+    stem = filename
+    for suffix in _KNOWN_SUFFIXES_LOWER_SORTED:
+        if lower.endswith(suffix):
+            stem = filename[:-len(suffix)]
+            break
+    else:
+        stem = os.path.splitext(filename)[0]
+    
+    # Strip repeated known extensions
+    while True:
+        ext = os.path.splitext(stem)[1].lower()
+        if ext in _REPEATED_KNOWN_EXTENSIONS:
+            stem = os.path.splitext(stem)[0]
+        else:
+            break
+    
+    return stem
+
+
+def _has_sibling(path: str, suffix: str) -> bool:
+    """Check if a file with same stem and given suffix exists in same directory.
+    
+    Case-insensitive match for robustness on SMB/Windows.
+    """
+    directory = os.path.dirname(path) or "."
+    filename = os.path.basename(path)
+    stem = _strip_to_stem(filename)
+    candidate = os.path.join(directory, stem + suffix)
+    wanted_name = stem.lower() + suffix.lower()
+
+    # Fast path: direct lookup is much cheaper than listing large SMB dirs.
+    if os.path.exists(candidate):
+        return True
+
+    # On Windows/SMB, the lookup above is already case-insensitive.
+    if os.name == "nt":
+        return False
+    
+    try:
+        entries = _directory_entries_lower(directory)
+        return wanted_name in entries
+    except OSError:
+        return False
+
+
+def _match_metadata(path: str, term: str) -> str | None:
+    """Match metadata terms (fileext, sibling) without reading file contents.
+    
+    Returns matched value string or None.
+    Metadata terms: fileext:.mkv, sibling:.nfo:exists, sibling:.nfo:!exists
+    """
+    term_lower = term.lower()
+    
+    # fileext:.mkv
+    if term_lower.startswith("fileext:"):
+        requested_ext = term[8:].strip()  # After "fileext:"
+        _, file_ext = os.path.splitext(path)
+        if file_ext.lower() == requested_ext.lower():
+            return file_ext
+        return None
+    
+    # sibling:.nfo:exists or sibling:.nfo:!exists
+    if term_lower.startswith("sibling:"):
+        try:
+            _, rest = term.split(":", 1)
+            suffix, op = rest.rsplit(":", 1)
+            suffix = suffix.strip()
+            op = op.strip().lower()
+        except ValueError:
+            return None
+        
+        if not suffix.startswith("."):
+            suffix = "." + suffix
+        
+        has_sibling = _has_sibling(path, suffix)
+        
+        if op == "exists":
+            return "exists" if has_sibling else None
+        elif op == "!exists":
+            return "!exists" if not has_sibling else None
+    
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -46,20 +160,35 @@ def search_text_file(
     """Search a plain-text file for matching terms.
 
     Each term is matched as a case-insensitive regex against the full
-    file contents.
+    file contents, or as a metadata term (fileext, sibling) if applicable.
     """
-    try:
-        with open(path, "r", encoding="utf-8", errors="surrogateescape") as f:
-            contents = f.read()
-    except IOError:
-        return None
+    contents_cache: str | None = None
+    content_read_failed = False
 
     def _match_val(term: str) -> str | None:
+        nonlocal contents_cache, content_read_failed
         term = term.strip()
         if not term:
             return None
+        
+        # Check if it's a metadata term
+        if term.lower().startswith(("fileext:", "sibling:")):
+            return _match_metadata(path, term)
+        
+        # Fall back to content-based matching. Read file only once per path.
+        if contents_cache is None and not content_read_failed:
+            try:
+                with open(path, "r", encoding="utf-8", errors="surrogateescape") as f:
+                    contents_cache = f.read()
+            except IOError:
+                content_read_failed = True
+                return None
+
+        if contents_cache is None:
+            return None
+        
         pattern = re.escape(term)
-        m = re.search(pattern, contents, flags=re.IGNORECASE)
+        m = re.search(pattern, contents_cache, flags=re.IGNORECASE)
         return m.group(0) if m else None
 
     result = match_and_or(search_groups, _match_val)
@@ -193,22 +322,39 @@ def search_xml_file(
     path: str,
     search_groups: list[list[list[str]]],
 ) -> SearchMatch | None:
-    """Search an XML/NFO file for matching tag:value expressions."""
-    try:
-        tree = ET.parse(path)  # noqa: S314
-        root = tree.getroot()
-    except (ET.ParseError, IOError) as e:
-        print(f"XML parse error for {path}: {e}")
-        return None
-
-    selected_rating = _select_rating(root)
+    """Search an XML/NFO file for matching tag:value expressions or metadata terms."""
+    parsed_root: ET.Element | None = None
+    selected_rating: float | None = None
+    parse_attempted = False
+    parse_failed = False
 
     def _xml_match(search_string: str) -> str | None:
+        nonlocal parsed_root, selected_rating, parse_attempted, parse_failed
+        search_string = search_string.strip()
+        
+        # Check if it's a metadata term
+        if search_string.lower().startswith(("fileext:", "sibling:")):
+            return _match_metadata(path, search_string)
+        
+        # Fall back to XML content matching. Parse XML only once per path.
+        if not parse_attempted:
+            parse_attempted = True
+            try:
+                tree = ET.parse(path)  # noqa: S314
+                parsed_root = tree.getroot()
+                selected_rating = _select_rating(parsed_root)
+            except (ET.ParseError, IOError):
+                parse_failed = True
+                return None
+
+        if parse_failed or parsed_root is None:
+            return None
+        
         try:
-            tag, attrib = search_string.strip().split(":", 1)
+            tag, attrib = search_string.split(":", 1)
         except ValueError:
             return None
-        return _xml_tag_match(root, tag.strip().lower(), attrib.strip().lower(), selected_rating)
+        return _xml_tag_match(parsed_root, tag.strip().lower(), attrib.strip().lower(), selected_rating)
 
     result = match_and_or(search_groups, _xml_match)
     if result is None:
