@@ -8,11 +8,12 @@ You will do this in two stages, one is exploratory, the other is the implementat
 
 This section describes what add_rating does on a high level. You will verify this and ask questions on the implementation.
 
+primary Function:
 add_rating is capable of go through all .nfo files (XML Format) and update rarings from imdb and tmdb via the imdb_id and tmbd_id and provide a score for each to help decide whether the .nfo decsribes the movie (.mkv, .mp4 etc) it belongs to ar has been assigned incorrectly by KODI and their scrapers which is used for scraping at first place.
 to do this the metadata files (.log .txt) are scanned for data like countries, year of when the film was premiered, the actors and their roles, runtime of film from EPG.
 Usually all necessary Data like country, year description, runtime of movie can be obteined from the .txt file and a .log file contains recording data about timer, start and end of recording.
 However in earlier versions of the recordingservice there was a .log used for all that data together that was not sructured very well wirth keywords and also varies in what line which content can be found.
-That means if a .txt files is not present there is a fallback to extract the necessarz data from the .log file.
+That means if a .txt files is not present there is a fallback to extract the necessary data from the .log file.
 Some of the data may not be there and the comparison with the .nfo file is incomplete resulting in a lowe score.
 Also the .nfo file might miss data like Plot which is the description of the movie that is represented by the .nfo content
 
@@ -20,6 +21,9 @@ Several options allow to enhance its function.
 A llm for example helps in case of a low score with comparing plots of the metadata files (.log .txt) that where create by a recording service and the plot field in the corresponding .nfo file
 results from the evaluation are written to fields in the .nfo files.
 If a score stays low after all methods ahve been used to compare the .nfo content with the metadata files of the movie an option can be activated to rescrape and alter the .nfo to a better matching tmdb/imdb entry.
+
+Another function of the program allows to find the correct imdb/tmdb content matching the video (.mkv) and their metadata file .txt/.log  and add the .nfo files populated with with content from  imdb/tmdb.
+Option  "--create-missing-nfo" activates that part
 
 Please verify that this functionality exists within add_rating.py. 
 

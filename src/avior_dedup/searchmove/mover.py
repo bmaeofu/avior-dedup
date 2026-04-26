@@ -15,6 +15,13 @@ from avior_dedup.searchmove.models import (
 )
 
 
+_KNOWN_RELATED_SUFFIXES: tuple[str, ...] = tuple(
+    sorted((s.lower() for s in RELATED_SUFFIXES), key=len, reverse=True)
+)
+
+_DIRECTORY_FILE_INDEX_CACHE: dict[str, dict[str, str]] = {}
+
+
 def _strip_to_stem(filename: str) -> str:
     """Extract the base stem from a media filename.
 
@@ -23,10 +30,8 @@ def _strip_to_stem(filename: str) -> str:
     ``movie.mkv.INFO`` becomes ``movie``.
     """
     lower = filename.lower()
-    lower_candidates = sorted((s.lower() for s in RELATED_SUFFIXES), key=len, reverse=True)
-
     stem = filename
-    for suffix in lower_candidates:
+    for suffix in _KNOWN_RELATED_SUFFIXES:
         if lower.endswith(suffix):
             stem = filename[: -len(suffix)]
             break
@@ -44,6 +49,56 @@ def _strip_to_stem(filename: str) -> str:
     return stem
 
 
+def _directory_cache_key(directory: str) -> str:
+    """Return a stable cache key for a directory path."""
+    return os.path.normcase(os.path.abspath(directory or "."))
+
+
+def _get_directory_file_index(directory: str) -> dict[str, str]:
+    """Return a cached case-insensitive file index for one directory."""
+    cache_key = _directory_cache_key(directory)
+    entries = _DIRECTORY_FILE_INDEX_CACHE.get(cache_key)
+    if entries is not None:
+        return entries
+
+    try:
+        with os.scandir(directory) as it:
+            entries = {entry.name.lower(): entry.path for entry in it if entry.is_file()}
+    except OSError as e:
+        print(f"Error scanning directory {directory}: {e}")
+        entries = {}
+
+    _DIRECTORY_FILE_INDEX_CACHE[cache_key] = entries
+    return entries
+
+
+def _cache_add_file(path: str) -> None:
+    """Keep the cached directory file index in sync after file creation."""
+    directory, filename = os.path.split(path)
+    cache_key = _directory_cache_key(directory)
+    entries = _DIRECTORY_FILE_INDEX_CACHE.get(cache_key)
+    if entries is not None:
+        entries[filename.lower()] = path
+
+
+def _cache_remove_file(path: str) -> None:
+    """Keep the cached directory file index in sync after file removal."""
+    directory, filename = os.path.split(path)
+    cache_key = _directory_cache_key(directory)
+    entries = _DIRECTORY_FILE_INDEX_CACHE.get(cache_key)
+    if entries is not None:
+        entries.pop(filename.lower(), None)
+
+
+def _path_exists_in_directory_cache(path: str) -> bool:
+    """Check file existence via the cached directory index when possible."""
+    directory, filename = os.path.split(path)
+    if not filename:
+        return False
+    entries = _get_directory_file_index(directory or ".")
+    return filename.lower() in entries
+
+
 def find_related_files(path: str) -> list[str]:
     """Find all files sharing the same base stem in the same directory.
 
@@ -53,20 +108,13 @@ def find_related_files(path: str) -> list[str]:
     directory, filename = os.path.split(path)
     search_dir = directory or "."
     stem = _strip_to_stem(filename)
-
-    try:
-        with os.scandir(search_dir) as it:
-            entries = {entry.name.lower(): entry.path for entry in it if entry.is_file()}
-    except OSError as e:
-        print(f"Error scanning directory {search_dir}: {e}")
-        return []
+    entries = _get_directory_file_index(search_dir)
 
     lower_stem = stem.lower()
-    lower_candidates = sorted((s.lower() for s in RELATED_SUFFIXES), key=len, reverse=True)
 
     related: list[str] = []
     seen: set[str] = set()
-    for suffix in lower_candidates:
+    for suffix in _KNOWN_RELATED_SUFFIXES:
         wanted = lower_stem + suffix
         found = entries.get(wanted)
         if found and found not in seen:
@@ -74,6 +122,16 @@ def find_related_files(path: str) -> list[str]:
             seen.add(found)
 
     return related
+
+
+def get_action_sources(path: str) -> list[str]:
+    """Return all source files that will be acted on for one match."""
+    related = find_related_files(path)
+    if related:
+        return related
+    if os.path.isfile(path):
+        return [path]
+    return []
 
 
 def execute_file_action(
@@ -91,29 +149,33 @@ def execute_file_action(
         log_fn(f"{src}\t{dst}\ttest run")
         return MoveRecord(src=src, dst=dst, status="test run")
 
-    if not os.path.isfile(src):
-        return MoveRecord(src=src, dst=dst, status="error: source not found")
-
-    if mode != ActivityMode.DELETE and os.path.isfile(dst):
+    if mode != ActivityMode.DELETE and _path_exists_in_directory_cache(dst):
         log_fn(f"{src}\t{dst}\tDestination already exists")
         return MoveRecord(src=src, dst=dst, status="already exists")
 
     try:
         if mode == ActivityMode.COPY:
             shutil.copy2(src, dst)
+            _cache_add_file(dst)
             log_fn(f"{src}\t{dst}\tcopied")
             return MoveRecord(src=src, dst=dst, status="copied")
         elif mode == ActivityMode.MOVE:
             shutil.move(src, dst)
+            _cache_remove_file(src)
+            _cache_add_file(dst)
             log_fn(f"{src}\t{dst}\tmoved")
             return MoveRecord(src=src, dst=dst, status="moved")
         elif mode == ActivityMode.DELETE:
             os.remove(src)
+            _cache_remove_file(src)
             log_fn(f"{src}\t\tdeleted")
             return MoveRecord(src=src, dst="", status="deleted")
         else:  # defensive fallback
             log_fn(f"{src}\t{dst}\ttest run")
             return MoveRecord(src=src, dst=dst, status="test run")
+    except FileNotFoundError:
+        log_fn(f"{src}\t{dst}\tsource not found")
+        return MoveRecord(src=src, dst=dst, status="error: source not found")
     except IOError as e:
         log_fn(f"{src}\t{dst}\t{e}")
         return MoveRecord(src=src, dst=dst, status=f"error: {e}")
@@ -193,11 +255,10 @@ def process_match(
     else:
         dest_dir = abs_dest
 
-    related = find_related_files(matched_path)
+    related = get_action_sources(matched_path)
     if not related and os.path.isfile(matched_path):
         # Fallback: never silently no-op for a confirmed match.
         # If the related-files stem index misses, process the matched file itself.
-        related = [matched_path]
         log_fn(f"{matched_path}\t\tfallback: no related files found; processing matched file only")
 
     records: list[MoveRecord] = []

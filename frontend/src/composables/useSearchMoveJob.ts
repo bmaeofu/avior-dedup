@@ -13,6 +13,42 @@ export function useSearchMoveJob() {
   const isRunning = computed(() => state.value === 'running')
 
   let ws: WebSocket | null = null
+  let pollTimer: number | null = null
+
+  function stopPolling() {
+    if (pollTimer !== null) {
+      clearInterval(pollTimer)
+      pollTimer = null
+    }
+  }
+
+  async function pollJobStatus(id: string) {
+    try {
+      const resp = await fetch(`/api/searchmove/jobs/${id}`)
+      if (!resp.ok) return
+
+      const data: SearchMoveJobStatus = await resp.json()
+      state.value = data.state
+      if (data.progress) progress.value = data.progress
+
+      if (data.state !== 'running') {
+        result.value = data.result ?? null
+        error.value = data.error ?? null
+        stopPolling()
+        ws?.close()
+      }
+    } catch {
+      // Keep running and try again on next tick.
+    }
+  }
+
+  function startPolling(id: string) {
+    stopPolling()
+    pollJobStatus(id)
+    pollTimer = window.setInterval(() => {
+      void pollJobStatus(id)
+    }, 250)
+  }
 
   function connectWs(id: string) {
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
@@ -26,7 +62,10 @@ export function useSearchMoveJob() {
         if (data.progress) progress.value = data.progress
         result.value = data.result ?? null
         error.value = data.error ?? null
-        if (data.state !== 'running') ws?.close()
+        if (data.state !== 'running') {
+          stopPolling()
+          ws?.close()
+        }
       // ProgressSnapshot message (interim): has 'phase' field
       } else if (data.phase !== undefined) {
         progress.value = data
@@ -34,8 +73,11 @@ export function useSearchMoveJob() {
     }
 
     ws.onerror = () => {
-      state.value = 'failed'
-      error.value = 'WebSocket connection error'
+      // Polling fallback continues to provide progress.
+    }
+
+    ws.onclose = () => {
+      ws = null
     }
   }
 
@@ -58,6 +100,7 @@ export function useSearchMoveJob() {
     result.value = null
     error.value = null
     connectWs(body.job_id)
+    startPolling(body.job_id)
   }
 
   async function cancel() {
@@ -72,6 +115,7 @@ export function useSearchMoveJob() {
     error.value = null
     jobId.value = null
     sessionStorage.removeItem(STORAGE_KEY)
+    stopPolling()
     ws?.close()
     ws = null
   }
@@ -93,6 +137,7 @@ export function useSearchMoveJob() {
         state.value = 'running'
         progress.value = data.progress
         connectWs(savedId)
+        startPolling(savedId)
       } else {
         state.value = data.state
         progress.value = data.progress

@@ -25,6 +25,18 @@ const phaseColor = computed(() => {
   }
 })
 
+const currentLabel = computed(() => {
+  if (phase.value === 'executing' || phase.value === 'searching') return 'Current File'
+  return 'Current Directory'
+})
+
+const currentValue = computed(() => {
+  if (phase.value === 'executing' || phase.value === 'searching') {
+    return props.progress?.current_file ?? '—'
+  }
+  return props.progress?.current_dir ?? '—'
+})
+
 const percent = computed(() => {
   const p = props.progress
   if (!p) return 0
@@ -78,8 +90,8 @@ const isIndeterminate = computed(() => phase.value === 'scanning')
           <div class="text-h6">{{ progress?.files_moved?.toLocaleString() ?? 0 }} / {{ progress?.total_files_to_move?.toLocaleString() ?? 0 }}</div>
         </v-col>
         <v-col cols="6" md="3">
-          <div class="text-caption text-medium-emphasis">Current</div>
-          <div class="text-body-2 text-truncate">{{ progress?.current_dir ?? '—' }}</div>
+          <div class="text-caption text-medium-emphasis">{{ currentLabel }}</div>
+          <div class="text-body-2 text-truncate">{{ currentValue }}</div>
         </v-col>
       </v-row>
     </v-card-text>

@@ -10,6 +10,7 @@ import os
 from collections import Counter
 from collections.abc import Callable
 from datetime import datetime
+from time import monotonic
 
 from avior_dedup.searchmove.models import (
     ActivityMode,
@@ -61,8 +62,10 @@ def run_search_move_job(
     search_groups = parse_search_expression(search_expressions)
     dest = _resolve_case_insensitive(dest)
     os.makedirs(dest, exist_ok=True)
+    started_at = monotonic()
 
     # Collect files to search
+    scan_started_at = monotonic()
     progress_cb(phase="scanning", current_dir=source)
     files_to_search = _collect_files(
         source,
@@ -74,6 +77,7 @@ def run_search_move_job(
     )
 
     # Search phase
+    search_started_at = monotonic()
     matches: list[SearchMatch] = []
     total = len(files_to_search)
     progress_cb(phase="searching", files_scanned=0, dirs_total=total, groups_found=0)
@@ -88,6 +92,8 @@ def run_search_move_job(
     log_fn(f"Datum: {datetime.now().strftime('%y-%m-%d %H:%M:%S')}")
 
     try:
+        log_fn(f"SCAN_SECONDS\t{monotonic() - scan_started_at:.3f}")
+
         for i, file_path in enumerate(files_to_search):
             if cancel_check():
                 raise _Cancelled
@@ -123,21 +129,41 @@ def run_search_move_job(
     finally:
         if out_handle:
             out_handle.close()
+    log_fn(f"SEARCH_SECONDS\t{monotonic() - search_started_at:.3f}")
 
     # Execute phase — move/copy/delete matched file sets
     action_counter: Counter[str] = Counter()
-    total_matches = len(matches)
-    progress_cb(phase="executing", files_moved=0, total_files_to_move=total_matches)
+    execute_started_at = monotonic()
+    total_actions = len(matches)
+    files_acted = 0
+    progress_cb(phase="executing", files_moved=0, total_files_to_move=total_actions)
 
     for i, match in enumerate(matches):
         if cancel_check():
             raise _Cancelled
 
+        # Heartbeat before processing this match (video + its siblings = 1 unit).
+        progress_cb(
+            phase="executing",
+            current_file=match.file_path,
+            files_moved=files_acted,
+            total_files_to_move=total_actions,
+        )
+
         records = process_match(match.file_path, dest, mode, log_fn)
         for rec in records:
             action_counter[rec.status] += 1
 
-        progress_cb(phase="executing", files_moved=i + 1, total_files_to_move=total_matches)
+        files_acted = i + 1
+        progress_cb(
+            phase="executing",
+            current_file=match.file_path,
+            files_moved=files_acted,
+            total_files_to_move=total_actions,
+        )
+
+    log_fn(f"EXECUTE_SECONDS\t{monotonic() - execute_started_at:.3f}")
+    log_fn(f"TOTAL_SECONDS\t{monotonic() - started_at:.3f}")
 
     log_path_out = os.path.join(dest, "log.txt")
     return SearchMoveJobResult(

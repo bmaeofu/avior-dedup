@@ -16,26 +16,47 @@ const ignoredDirSuggestions = ref<string[]>([])
 const templates = ref<Template[]>([])
 const selectedTemplate = ref<string | null>(null)
 
+async function sleep(ms: number): Promise<void> {
+  await new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function fetchWithRetry(url: string, retries = 6, delayMs = 500): Promise<Response | null> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const resp = await fetch(url)
+      if (resp.ok) return resp
+      if (resp.status >= 400 && resp.status < 500) return resp
+    } catch {
+      // Backend may still be starting up; retry shortly.
+    }
+
+    if (attempt < retries) {
+      await sleep(delayMs)
+    }
+  }
+  return null
+}
+
 onMounted(async () => {
-  const [pathsRes, templatesRes, ignoredRes] = await Promise.allSettled([
-    fetch('/api/config/searchmove_paths'),
-    fetch('/api/config/searchmove_templates'),
-    fetch('/api/config/searchmove_ignored_dirs'),
+  const [pathsRes, templatesRes, ignoredRes] = await Promise.all([
+    fetchWithRetry('/api/config/searchmove_paths'),
+    fetchWithRetry('/api/config/searchmove_templates'),
+    fetchWithRetry('/api/config/searchmove_ignored_dirs'),
   ])
 
-  if (pathsRes.status === 'fulfilled' && pathsRes.value.ok) {
-    const data = await pathsRes.value.json()
+  if (pathsRes?.ok) {
+    const data = await pathsRes.json()
     sourceSuggestions.value = data.source_paths ?? []
     destSuggestions.value = data.dest_paths ?? []
   }
 
-  if (ignoredRes.status === 'fulfilled' && ignoredRes.value.ok) {
-    const ignoredFromConfig = await ignoredRes.value.json()
+  if (ignoredRes?.ok) {
+    const ignoredFromConfig = await ignoredRes.json()
     ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
   }
 
-  if (templatesRes.status === 'fulfilled' && templatesRes.value.ok) {
-    templates.value = await templatesRes.value.json()
+  if (templatesRes?.ok) {
+    templates.value = await templatesRes.json()
   }
 })
 

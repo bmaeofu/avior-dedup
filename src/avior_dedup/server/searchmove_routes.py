@@ -15,6 +15,7 @@ from dataclasses import dataclass
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 
+from avior_dedup.cli import get_numbered_log_file
 from avior_dedup.searchmove.models import ActivityMode
 from avior_dedup.searchmove.runner import run_search_move_job
 from avior_dedup.server.progress import JobCancelled, ProgressReporter
@@ -48,6 +49,13 @@ _jobs: dict[str, _SmJobEntry] = {}
 _executor = ThreadPoolExecutor(max_workers=4)
 
 
+def _get_searchmove_output_paths(dest: str, logname: str) -> tuple[str, str]:
+    """Choose non-conflicting output file paths for a Search & Move job."""
+    log_path = get_numbered_log_file(os.path.join(dest, logname))
+    output_path = get_numbered_log_file(os.path.join(dest, "results.txt"))
+    return log_path, output_path
+
+
 # ---------------------------------------------------------------------------
 # Job runner (runs in thread pool)
 # ---------------------------------------------------------------------------
@@ -69,18 +77,7 @@ def _run_searchmove_job(
         os.makedirs(dest, exist_ok=True)
         ensure_output_permissions(dest, is_dir=True)
 
-        log_path = os.path.join(dest, req.logname)
-        output_path = os.path.join(dest, "results.txt")
-
-        # Delete existing files first — they may have been created by a different
-        # user (e.g. Docker UID 99) and cannot be overwritten via SMB even if the
-        # current user has write permission on the directory.
-        for _p in (log_path, output_path):
-            try:
-                if os.path.exists(_p):
-                    os.unlink(_p)
-            except OSError:
-                pass
+        log_path, output_path = _get_searchmove_output_paths(dest, req.logname)
 
         ensure_output_permissions(log_path, is_dir=False)
         ensure_output_permissions(output_path, is_dir=False)
@@ -111,8 +108,6 @@ def _run_searchmove_job(
             output_path=output_path,
         )
 
-        log_handle.close()
-
         sm_result = SearchMoveResult(
             files_scanned=result.files_scanned,
             files_matched=result.files_matched,
@@ -133,6 +128,7 @@ def _run_searchmove_job(
             progress=reporter.snapshot.model_copy(),
             result=sm_result,
         )
+        log_handle.close()
 
     except JobCancelled:
         _jobs[job_id].status = JobStatus(
@@ -147,6 +143,9 @@ def _run_searchmove_job(
             progress=reporter.snapshot.model_copy(),
             error=str(exc),
         )
+    finally:
+        if "log_handle" in locals() and not log_handle.closed:
+            log_handle.close()
 
 
 # ---------------------------------------------------------------------------
@@ -224,7 +223,8 @@ async def ws_searchmove_progress(websocket: WebSocket, job_id: str) -> None:
                 pass
 
             now = time.monotonic()
-            if pending is not None and (now - last_sent) >= 0.1:
+            min_interval = 0.0 if (pending is not None and pending.phase == "executing") else 0.1
+            if pending is not None and (now - last_sent) >= min_interval:
                 await websocket.send_text(pending.model_dump_json())
                 last_sent = now
                 pending = None
