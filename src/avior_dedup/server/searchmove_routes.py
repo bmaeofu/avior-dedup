@@ -18,6 +18,7 @@ from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from avior_dedup.cli import get_numbered_log_file
 from avior_dedup.searchmove.models import ActivityMode
 from avior_dedup.searchmove.runner import run_search_move_job
+from avior_dedup.searchmove.mover import clear_directory_file_index_cache
 from avior_dedup.server.progress import JobCancelled, ProgressReporter
 from avior_dedup.permissions import ensure_output_permissions
 from avior_dedup.server.schemas import (
@@ -84,6 +85,23 @@ def _run_searchmove_job(
         log_handle = open(log_path, "w", encoding="utf-8")
 
         def log_fn(msg: str) -> None:
+            """Write log lines but skip lines that indicate an existing destination.
+
+            Per-user request, avoid listing siblings that were not actually moved
+            due to the destination already existing. Other log lines are kept.
+            """
+            try:
+                # If this looks like a per-file record with tab-separated fields,
+                # skip entries that report destination existence.
+                if "\t" in msg:
+                    parts = msg.split("\t")
+                    status = parts[-1].strip().lower()
+                    if "destination already exists" in status or status == "already exists":
+                        return
+            except Exception:
+                # Defensive: on any parse error, fall back to writing the line.
+                pass
+
             log_handle.write(msg + "\n")
 
         def progress_cb(**kw: object) -> None:
@@ -146,6 +164,12 @@ def _run_searchmove_job(
     finally:
         if "log_handle" in locals() and not log_handle.closed:
             log_handle.close()
+        # Invalidate directory file index cache to avoid stale entries across jobs.
+        try:
+            clear_directory_file_index_cache()
+        except Exception:
+            # Defensive: do not allow cache-clear errors to interfere with cleanup
+            pass
 
 
 # ---------------------------------------------------------------------------
