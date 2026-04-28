@@ -99,6 +99,16 @@ def _path_exists_in_directory_cache(path: str) -> bool:
     return filename.lower() in entries
 
 
+def clear_directory_file_index_cache() -> None:
+    """Invalidate the entire directory file index cache.
+
+    Called at job end to avoid stale cache entries across separate jobs
+    (useful when running in Docker/SMB environments where on-disk state
+    may change external to the process).
+    """
+    _DIRECTORY_FILE_INDEX_CACHE.clear()
+
+
 def find_related_files(path: str) -> list[str]:
     """Find all files sharing the same base stem in the same directory.
 
@@ -149,9 +159,20 @@ def execute_file_action(
         log_fn(f"{src}\t{dst}\ttest run")
         return MoveRecord(src=src, dst=dst, status="test run")
 
+    # If the directory-cache thinks the destination exists, double-check on-disk
+    # to avoid false positives from a stale cache (observed in Docker/SMB setups).
     if mode != ActivityMode.DELETE and _path_exists_in_directory_cache(dst):
-        log_fn(f"{src}\t{dst}\tDestination already exists")
-        return MoveRecord(src=src, dst=dst, status="already exists")
+        try:
+            if os.path.exists(dst):
+                log_fn(f"{src}\t{dst}\tDestination already exists")
+                return MoveRecord(src=src, dst=dst, status="already exists")
+            else:
+                # Cache was stale — remove the entry and proceed with the action.
+                _cache_remove_file(dst)
+        except OSError:
+            # If the stat fails for some reason, fall back to treating the
+            # destination as non-existent so we don't silently skip moves.
+            pass
 
     try:
         if mode == ActivityMode.COPY:
