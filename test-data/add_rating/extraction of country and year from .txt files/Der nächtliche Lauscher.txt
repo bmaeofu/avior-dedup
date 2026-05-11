@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=14.02.2014 22:38:32
+Channel=3sat HD (AC3,ger)
+
+[0]
+Id=17196
+Date=14.02.2014
+Time=22:35:00
+Duration=01:25:00
+Title=Der nächtliche Lauscher
+Info=(the night listener) USA 2006 
+Series=
+Description=Der New Yorker Radiomoderator Gabriel Noone hat ein ungewöhnliches Erfolgsrezept: In seiner Late-Night-Radiosendung "Noone at Night" liest er pointiert formulierte Texte, die alle auf seinen persönlichen Erfahrungen basieren. So erleben die Hörer auch hautnah mit, wie Gabriel die Liebesbeziehung zu seinem 20 Jahre jüngeren, aidskranken Liebhaber Jess literarisch aufbereitet. Da Gabriel dabei offensiv mit seiner Homosexualität umgeht, genießt seine Sendung in der Schwulenszene Kultstatus. Als Jess jedoch die Krankheit besiegt und auszieht, stürzt Gabriel in eine tiefe Krise. ...|Altersfreigabe: 16|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|PDC: 14.02. 22:35 (464291)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={EECEEC02-AF69-42C3-A8AD-47D68311A2D6}
+
+[Stats]
+Errors=0
+Size=6,88 GB (7392512688 bytes)
+Avr. Datarate=1,403 MB/s
+Device=TeVii DVB-S/S2 Receiver (3)
+

@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=20.09.2014 04:08:54
+Channel=3sat HD (AC3,ger)
+
+[0]
+Id=24003
+Date=20.09.2014
+Time=04:05:00
+Duration=02:15:00
+Title=Mein Sommer mit Sergej
+Info=(Kak ja prowjol etim letom) Drama / Psychothriller Russland 2010
+Series=
+Description=Eine russische Polarstation auf einer einsamen Insel im arktischen Meer: Der Hochschulabsolvent Pawel absolviert dort den Sommer über sein Praktikum. In der absoluten Abgeschiedenheit muss er Wetterdaten erfassen, allein mit dem älteren Meteorologen Sergej, der dem Jungen immer wieder klar macht, wer hier das Sagen hat. Bald wird ein Schiff eintreffen und die beiden abholen. Für Sergej geht damit ein mehrjähriger Aufenthalt zu Ende; endlich wird er zu seiner Frau und seinem Sohn aufs Festland zurückkehren. ...|Altersfreigabe: 6|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|PDC: 20.09. 04:05 (674053)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={E890FD08-5E50-4D7B-9937-3C6D22A0D4CD}
+
+[Stats]
+Errors=2
+Size=9,82 GB (10548293848 bytes)
+Avr. Datarate=1,347 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

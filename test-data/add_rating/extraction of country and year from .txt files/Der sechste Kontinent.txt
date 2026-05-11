@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=15.03.2014 02:29:57
+Channel=ZDF HD (AC3,ger)
+
+[0]
+Id=21715
+Date=15.03.2014
+Time=02:25:00
+Duration=01:30:00
+Title=Der sechste Kontinent
+Info=Fantasyfilm GB/1976
+Series=
+Description=Im viktorianischen England entdecken ein Wissenschaftler und sein junger Sponsor auf ihrer unfreiwilligen Reise mit einer Bohr-Rakete einen im Erdinneren verborgenen Staat und helfen versklavten Menschen, sich vom Terror prähistorischer Ungeheuer und gefährlicher Krieger zu befreien. |Phantastische Abenteuer, frei nach einem Roman des "Tarzan"-Autors Edgar Rice Burroughs. |Großbritannien, 1976|Altersfreigabe: 12|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|PDC: 15.03. 02:05 (497797)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={469DE4FD-8A2A-4026-A6BF-C4917DE30AE6}
+
+[Stats]
+Errors=0
+Size=8,26 GB (8873509948 bytes)
+Avr. Datarate=1,630 MB/s
+Device=TeVii DVB-S/S2 Receiver (3)
+

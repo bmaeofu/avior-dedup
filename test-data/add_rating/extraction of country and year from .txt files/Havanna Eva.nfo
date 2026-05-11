@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Habana Eva</title>
+    <originaltitle>Habana Eva</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10">
+            <value>6.700000</value>
+            <votes>6</votes>
+        </rating>
+        <rating name="imdb" max="10" default="true">
+            <value>6.100000</value>
+            <votes>365</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Sie würde gern Mode entwerfen und heiraten. Aber nix da! Eva näht mit ihren Telenovela-glotzenden Kolleginnen potthässliche Einheitsbrautkleider, und ihr Verlobter Angel werkelt an einem Anbau herum, der nie fertig wird. Doch dann begegnet die junge Frau dem feschen Jorge</plot>
+    <tagline />
+    <runtime>98</runtime>
+    <thumb aspect="poster" preview="http://image.tmdb.org/t/p/w500/A7AjlOtUBN9KtDHjt85y0YQoDiR.jpg">http://image.tmdb.org/t/p/original/A7AjlOtUBN9KtDHjt85y0YQoDiR.jpg</thumb>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <genre>Komödie</genre>
+    <uniqueid type="tmdb" default="true">55961</uniqueid>
+    <uniqueid type="imdb">tt1069246</uniqueid>
+    <genre>Lovestory</genre>
+    <country>Venezuela</country>
+    <country>Cuba</country>
+    <country>France</country>
+    <credits>Arturo Infante</credits>
+    <credits>Jorge Camacho</credits>
+    <director>Fina Torres</director>
+    <year>2010</year>
+    <status />
+    <code />
+    <aired />
+    <trailer />
+    <premiered>2010-05-28</premiered>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5901</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <language />
+                <channels>6</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Prakriti Maduro</name>
+        <role>Eva</role>
+        <order>0</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Yuliet Cruz</name>
+        <role>Teresa</role>
+        <order>1</order>
+        <thumb>http://image.tmdb.org/t/p/original/xSHRxnVdpWjUBX92UAuCuvxaWdN.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Juan Carlos García</name>
+        <role>Jorge</role>
+        <order>2</order>
+        <thumb>http://image.tmdb.org/t/p/original/w8lrh9onGSpZhCcotDRvGsWTwsy.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Carlos Enrique Almirante</name>
+        <role>Angel</role>
+        <order>3</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Elsa Camp</name>
+        <role>María</role>
+        <order>4</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Noel García</name>
+        <role>Esteban</role>
+        <order>5</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Aracelis Rodriguez</name>
+        <role>Ara</role>
+        <order>6</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Yaikenis Rojas</name>
+        <role>Lucía</role>
+        <order>7</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Herminia Sánchez</name>
+        <role>Dulce</role>
+        <order>8</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Larisa Vega Alamar</name>
+        <role>Raquel</role>
+        <order>9</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2014-07-08 04:46:08</dateadded>
+    <videostatus>shorter:00:06:38</videostatus>
+    <nfo_updated>2026-04-29</nfo_updated>
+</movie>

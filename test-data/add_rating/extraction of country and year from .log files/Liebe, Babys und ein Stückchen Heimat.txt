@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=01.02.2014 13:11:21
+Channel=ZDF HD (AC3,ger)
+
+[0]
+Id=20353
+Date=01.02.2014
+Time=13:10:00
+Duration=01:30:00
+Title=Liebe, Babys und ein Stückchen Heimat
+Info=Familienfilm D/2011
+Series=
+Description=Nach einem Skiurlaub finden Antonia und Thomas Hellmann vor ihrer Haustür ein Baby - von der Mutter fehlt jede Spur. Obwohl die beiden bereits einen Adoptivsohn aus Namibia haben, entscheiden sie sich, beim Jugendamt die Pflegschaft für Lucy zu beantragen. |Doch Antonia macht sich Sorgen um den Verbleib von Lucys Mutter. Auffällig oft hält sich die minderjährige Blumenverkäuferin Melanie in ihrer Nähe auf. (Erstsendung: 30.01.2011) |Deutschland, 2011|HD-Produktion|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|[DVB subtitles] [deu]|PDC: 01.02. 13:10 (37706)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={1E1F6C0B-CE6F-42EF-AD04-0A7C7F34BF0F}
+
+[Stats]
+Errors=0
+Size=8,17 GB (8775123720 bytes)
+Avr. Datarate=1,573 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

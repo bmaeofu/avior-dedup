@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Sehnsucht nach Afrika</title>
+    <originaltitle>La Victoire en chantant</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10" default="true">
+            <value>6.300000</value>
+            <votes>43</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Die französische Kolonie Äquatorialafrika im Jahre 1915: Der Student und Geograph Hubert Fresnoy hat nur Verachtung für seine Landsleute übrig, die sich in Fort Coulais einen ungemein ausschweifenden Lebensstil angeeignet haben. Ihr Verhalten steht in heftigem Kontrast zu demjenigen ihrer deutschen Nachbarn. Deren Kolonialherren haben ihnen nämlich die preußischen Tugenden ohne Unterlass eingehämmert – Disziplin ist hier das A und O. Bei der französischen Armee hingegen hat sich schon längst der Schlendrian eingeschlichen. Sergeant Bosselet beispielsweise interessiert sich mehr für Liebesspiele als die Ausbildung afrikanischer Soldaten. Doch als er davon erfährt, dass sich seine Nation im Krieg mit den Deutschen befindet, trommelt er seine schlecht ausgebildete Truppe zusammen, um dem Feind den Garaus zu machen …</plot>
+    <tagline>The picture that marches to a different drummer</tagline>
+    <runtime>85</runtime>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/bnAz04dRERLMxF7o1MuztPJVvoC.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/8G86Ow4Qcm7FEcHsJoR3pFIBCaj.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/cu8pSiZKzOY8mZLlB8hng9d5m8K.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/9jxFwgBMgINjU7QXnWlcMY9I4CO.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/jldqANKBNQyomhcBXLLIMsNzXtt.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/t81qhr6Aa80NTOOQzD7pibXFnzu.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/4j3kp6njazdsmIlUcbqnkTOdQBA.jpg</thumb>
+    <fanart>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/jldqANKBNQyomhcBXLLIMsNzXtt.jpg">https://image.tmdb.org/t/p/original/jldqANKBNQyomhcBXLLIMsNzXtt.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/t81qhr6Aa80NTOOQzD7pibXFnzu.jpg">https://image.tmdb.org/t/p/original/t81qhr6Aa80NTOOQzD7pibXFnzu.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/4j3kp6njazdsmIlUcbqnkTOdQBA.jpg">https://image.tmdb.org/t/p/original/4j3kp6njazdsmIlUcbqnkTOdQBA.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>42238</id>
+    <uniqueid type="imdb">tt0074972</uniqueid>
+    <uniqueid type="tmdb" default="true">42238</uniqueid>
+    <genre>Drama</genre>
+    <genre>Komödie</genre>
+    <genre>Kriegsfilm</genre>
+    <country>Cote D'Ivoire</country>
+    <country>France</country>
+    <country>Germany</country>
+    <country>Switzerland</country>
+    <tag>africa</tag>
+    <tag>colonialism</tag>
+    <tag>french colonialism</tag>
+    <tag>german colonialism</tag>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>Jean-Jacques Annaud</credits>
+    <credits>Georges Conchon</credits>
+    <director>Jean-Jacques Annaud</director>
+    <premiered>1976-09-22</premiered>
+    <year>1976</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Reggane Films</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5143</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Jean Carmet</name>
+        <role>Sergeant Bosselet</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/dKtbIjEH9FI8Oa55uI5n8BA5qGK.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jacques Dufilho</name>
+        <role>Paul Rechampot</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/7CK8OE5ww4AOdH61M1jVMZeimjE.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Catherine Rouvel</name>
+        <role>Marinette</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/wRnCplhtuZUiccmvFZPAfMRqUYX.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jacques Spiesser</name>
+        <role>Hubert Fresnoy</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/rDoMNSvz2BZ1KarcFCXI15xiMB3.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dora Doll</name>
+        <role>Maryvonne</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/l8S3Je1v9K8dWTl252e2Lm8AizX.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Maurice Barrier</name>
+        <role>Caprice</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/4k2LRo1qCPMmhrK3iqYRg6xAYcu.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Benjamin Memel Atchory</name>
+        <role>Assomption</role>
+        <order>6</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Peter Berling</name>
+        <role>Père Jean de la Croix</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/oAlkmJ99mC8KfARMiaSDm4kn9nj.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marius Beugre Boignan</name>
+        <role>Barthelmy</role>
+        <order>8</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Claude Legros</name>
+        <role>Jacques Rechampot</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/kwM2yQroxNKL7eFWEj6gReS0Thq.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Baye Macoumba Diop</name>
+        <role>Lamartine</role>
+        <order>10</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jacques Monnet</name>
+        <role>Père Simon</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/zI4eahXRsaju7MkbNUNGSGlNp8W.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Dieter Schidor</name>
+        <role>Kraft</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/lF1YvzJWyG6EA6gCiPk72mK6cwV.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Aboubacar Touré</name>
+        <role>Fidele</role>
+        <order>13</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Marc Zuber</name>
+        <role>Major Anglais</role>
+        <order>14</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Mamadou Koulibaly</name>
+        <role>Oscar</role>
+        <order>15</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Helmut Eiker</name>
+        <role />
+        <order>16</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Klaus Huebl</name>
+        <role>Haussmann</role>
+        <order>17</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Natou Koly</name>
+        <role>Charlotte</role>
+        <order>18</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Bertin Kouakou</name>
+        <role />
+        <order>19</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Tanoh Kouao</name>
+        <role>John</role>
+        <order>20</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jean-François Eyou N'Guessan</name>
+        <role>Marius</role>
+        <order>21</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-07-02 15:33:08</dateadded>
+    <plot_sim_score_date>2026-04-28</plot_sim_score_date>
+    <plot_sim_score>0.8000</plot_sim_score>
+    <videostatus>shorter:00:04:17</videostatus>
+    <nfostatus>Check nfo file (score=11.50 Threshold 12.0 plot_sim=0.8000)</nfostatus>
+    <nfo_updated>2026-04-29</nfo_updated>
+</movie>

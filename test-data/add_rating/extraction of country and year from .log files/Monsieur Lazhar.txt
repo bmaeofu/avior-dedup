@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=26.02.2014 23:00:11
+Channel=BR Süd HD (AC3,deu)
+
+[0]
+Id=11629
+Date=26.02.2014
+Time=23:00:00
+Duration=01:30:00
+Title=Monsieur Lazhar
+Info=FSK 12 Spielfilm Kanada, 2011 Deutsche Erstausstrahlung
+Series=
+Description=Nach dem tragischen Tod einer Lehrerin an einer Grundschule in Québéc bewirbt sich der aus Algerien stammende Bazhir Lazhar als Ersatzlehrer. Trotz Startschwierigkeiten gelingt es ihm bald, das Vertrauen der Kinder zu gewinnen und den Schülern beim Verarbeiten der Tragödie zu helfen. Während in der Klasse langsam wieder Ruhe einkehrt, weiß niemand an der Schule etwas von der schmerzlichen Vergangenheit des neuen Lehrers.|[16:9] [H.264] [HD]|[stereo] [deu]|[Dolby Digital 5.1] [deu]|[stereo] [deu]|[Teletext subtitles] [deu]|[DVB subtitles] [deu]|PDC: 26.02. 23:00 (857536)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={0D5DE7A8-9E06-466B-B50F-577F14FF3946}
+
+[Stats]
+Errors=0
+Size=3,19 GB (3424986444 bytes)
+Avr. Datarate=0,626 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

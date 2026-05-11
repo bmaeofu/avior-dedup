@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=28.04.2015 20:15:08
+Channel=zdf.kultur HD (AC3,ger)
+
+[0]
+Id=29022
+Date=28.04.2015
+Time=20:15:00
+Duration=01:35:00
+Title=Human Nature - Die Krone der Schöpfung
+Info=Komödie USA, Frankreich, Deutschland 2001
+Series=
+Description=Spielfilm |Die Natur hat sich einen grausamen Scherz mit der hübschen Lila erlaubt: Vom Scheitel bis zur Sohle ist sie mit dichtem Haarwuchs überzogen, der ihr ein normales Leben unmöglich macht. |Resigniert kehrt sie der Gesellschaft den Rücken und zieht sich in die Wildnis. Nachdem Lila mit einem Bestseller über ihre Erfahrungen berühmt geworden ist, kehrt sie in die Zivilisation zurück und verliebt sich in einen verklemmten Wissenschaftler. |Nathan trainiert Mäusen Tischmanieren an. ...|Altersfreigabe: 12|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|PDC: 28.04. 20:15 (926991)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={2FAB85C1-93E8-4924-80E8-DCDA516B0E82}
+
+[Stats]
+Errors=0
+Size=7,80 GB (8376853240 bytes)
+Avr. Datarate=1,447 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 2 (2)
+

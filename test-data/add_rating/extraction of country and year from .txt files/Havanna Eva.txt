@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=08.07.2014 00:42:43
+Channel=arte HD (AC3,deu)
+
+[0]
+Id=11297
+Date=08.07.2014
+Time=00:40:00
+Duration=01:45:00
+Title=Havanna Eva
+Info=Spielfilm Kuba / Venezuela / Frankreich 2009 (Habana Eva)
+Series=
+Description=Eva arbeitet als Schneiderin in einer Bekleidungsfabrik in Havanna und träumt von einer Karriere als Modedesignerin. Als eines Tages ein attraktiver Mann aus dem kapitalistischen Ausland in ihr Leben tritt, werden ihre Träume beflügelt. Turbulente Komödie mit überraschenden Wendungen von der "Caméra d'Or"-Preisträgerin Fina Torres.|Produziert in HD|[16:9] [H.264] [HD]|[stereo] [deu]|franz. oder Audiodeskription [mis]|[stereo] [fra]|[AC-3] [mul]|[DVB subtitles] [deu]|[DVB subtitles] [fra]|[DVB subtitles] [deu]|PDC: 08.07. 00:40 (276520)
+Charset=255
+Content=0
+MinimumAge=0
+TimerID={6C19B3E3-0E7E-4FBF-AD88-3F93016F15FD}
+
+[Stats]
+Errors=2
+Size=7,50 GB (8052199236 bytes)
+Avr. Datarate=1,297 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

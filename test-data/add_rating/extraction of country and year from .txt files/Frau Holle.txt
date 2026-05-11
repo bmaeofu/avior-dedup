@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=12.12.2023 03:23:56
+Channel=ZDF HD (AC3,deu)
+
+[0]
+Id=3324
+Date=12.12.2023
+Time=03:20:00
+Duration=01:35:00
+Title=Frau Holle
+Info=Frei nach dem Märchen der Brüder Grimm
+Description=Kinderfilm, BRD / Tschechoslowakei 1984|Wieder hat die böse Frau Hippe zugeschlagen und einen ganzen Wanderzirkus unter einer Schneelawine begraben. Nur der kleine Jakob überlebt. Frau Holle, die zugesehen hat, rettet den Jungen.||Frau Holle nimmt Jakob mit in ihre Zauberwelt über den Wolken. Dort weiht sie ihn in die Geheimnisse des Wettermachens ein. Jakob lernt schnell. Eines Tages erblickt er in Frau Holles Glaskugel die kleine Elisabeth auf der Erde und macht sich auf den Weg zu ihr.|Darsteller:|Frau Holle - Giulietta Masina|Frau Hippe - Valerie Kaplanová|Stiefmutter - Sona Valentová|Vater - Pavol Mikulik|Jakob - Tobias Hoesl|Elisabeth - Petra Vanciková|Regie: Juraj Jakubisko|Buch/Autor: Juraj Jakubisko||HD-Produktion||[16:9] [SUB]   [PDC 12.12. 03:00]
+Charset=255
+Content=80
+MinimumAge=0
+TimerID={F08C2024-C0DA-4E7A-9EF6-19CB159A9CAA}
+
+[Stats]
+Errors=0
+Size=9,02 GB (9685495860 bytes)
+Avr. Datarate=1,731 MB/s
+Device=Tvheadend:9983 20d48b009f 6
+

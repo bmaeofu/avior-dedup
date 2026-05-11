@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=15.09.2014 04:23:00
+Channel=3sat HD (AC3,ger)
+
+[0]
+Id=24329
+Date=15.09.2014
+Time=04:20:00
+Duration=01:35:00
+Title=Broadway Familie
+Info=USA 1992
+Series=
+Description=New York, Winter 1948: Die Mitglieder der Familie Jerome haben sich eigentlich nicht mehr viel zu sagen. Kates Tage sind von der tagtäglichen Hausarbeit ausgefüllt, ihr Mann Jack verbringt die meiste Zeit im Büro. Als Kate erfährt, dass Jack eine Affäre hat, soll er ausziehen. Um den großen Familien-Esstisch wird es immer leerer. Gesellschaft leistet Kate nur noch Großvater Ben, ein verbohrter Sozialist, der permanent einschläft. Auch die beiden erwachsenen Söhne Stan und Eugene gehen eigene Wege. Sie versuchen sich als Komödienschreiber durchzusetzen. ...|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|PDC: 15.09. 04:20 (510228)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={29FE06D7-496D-4546-BF1E-96D947D9F68B}
+
+[Stats]
+Errors=0
+Size=7,16 GB (7683623920 bytes)
+Avr. Datarate=1,363 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

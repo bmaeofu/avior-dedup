@@ -9,6 +9,7 @@ candidate_suffixes:
   - .mp2.log
   - .mpg.log
   - .mkv.log
+  - .plot.txt
   - .txt
   - .log
   - .mp2

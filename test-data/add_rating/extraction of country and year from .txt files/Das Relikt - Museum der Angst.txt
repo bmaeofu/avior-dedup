@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=05.08.2013 22:14:23
+Channel=ZDF HD (AC3,ger)
+
+[0]
+Id=14074
+Date=05.08.2013
+Time=22:15:00
+Duration=01:40:00
+Title=Das Relikt - Museum der Angst
+Info=Horrorfilm USA/1997
+Series=
+Description=Angst und Schrecken herrschen im Museum für Naturgeschichte in Chicago. Ein grauenvoller Mord überschattet die Vorbereitungen für eine große Ausstellung über Aberglaube, zu der sich alle Honoratioren der Stadt angesagt haben. |Aber der geheimnisvolle Killer treibt noch sein Unwesen im unüberschaubaren Labyrinth der zahllosen Säle und unterirdischen Gänge. Eine schlechte Zeit für eine große Party, findet der ermittelnde Detective D'Agosta. |USA, 1997|HD-Produktion|Altersfreigabe: 16|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 5.1] [deu]|[DVB subtitles] [deu]|PDC: 05.08. 22:15 (181647)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={80FE1356-D69B-4664-A171-735522C0D540}
+
+[Stats]
+Errors=0
+Size=9,15 GB (9822611780 bytes)
+Avr. Datarate=1,543 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 2 (2)
+
