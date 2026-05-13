@@ -122,7 +122,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
                 raise JobCancelled
             reporter.update(phase="planning", files_planned=current, total_files_to_move=total)
 
-        files_to_move, action_counter, size_counter = build_move_plan(
+        files_to_move, action_counter, size_counter, decision_counter = build_move_plan(
             groups=groups,
             target_root=target_root,
             error_target=error_target,
@@ -178,7 +178,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_episode_nos = req.remove_episode_nos
             ignored_directories = req.ignored_directories
 
-        sort_and_finalize_log(log_path, action_counter, _Args(), size_counter)
+        sort_and_finalize_log(log_path, action_counter, _Args(), size_counter, decision_counter)
 
         scanned = reporter.snapshot.files_scanned
         print(f"[avior-dedup] Job {job_id} done: files_scanned={scanned}, groups={len(groups)}, actions={dict(action_counter)}")
@@ -187,6 +187,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             groups_found=len(groups),
             action_counts=dict(action_counter),
             action_sizes=dict(size_counter),
+            decision_counts=dict(decision_counter),
             log_path=log_path,
         )
         _jobs[job_id].status = JobStatus(

@@ -27,16 +27,10 @@ onMounted(async () => {
       const data = await pathsRes.value.json()
       sourceSuggestions.value = data.source_paths ?? []
       targetSuggestions.value = data.target_paths ?? []
-      ignoredDirSuggestions.value = [
-        ...new Set([
-          ...(data.source_paths ?? []),
-          ...(data.target_paths ?? []),
-          ...(Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []),
-        ]),
-      ]
-    } else {
-      ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
     }
+
+    // Show only entries from ignored_dirs.yaml for the ignored-directories chooser
+    ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
   } catch {
     // suggestions are optional, ignore errors
   }

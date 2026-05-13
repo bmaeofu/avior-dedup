@@ -101,7 +101,7 @@ def main() -> None:
 
     selection_prios = [SelectionPriority(v) for v in args.selection_priorities]
 
-    files_to_move, action_counter, size_counter = build_move_plan(
+    files_to_move, action_counter, size_counter, decision_counter = build_move_plan(
         groups=groups,
         target_root=target_root,
         error_target=error_target,
@@ -118,4 +118,4 @@ def main() -> None:
     execute_move_plan(files_to_move, source_root, args.mode, action_counter, log_fn, size_counter=size_counter)
 
     log_handle.close()
-    sort_and_finalize_log(log_path, action_counter, args, size_counter)
+    sort_and_finalize_log(log_path, action_counter, args, size_counter, decision_counter)

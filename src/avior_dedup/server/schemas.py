@@ -50,6 +50,7 @@ class JobResult(BaseModel):
     groups_found: int
     action_counts: dict[str, int]
     action_sizes: dict[str, int] = {}
+    decision_counts: dict[str, int] = {}
     log_path: str | None
 
 

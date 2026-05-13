@@ -26,6 +26,7 @@ def write_summary(
     action_counter: Counter,
     args: argparse.Namespace,
     size_counter: Optional[Counter] = None,
+    decision_counter: Optional[Counter] = None,
 ) -> None:
     """Write execution summary to log file and stdout."""
     summary_lines = [
@@ -47,6 +48,7 @@ def write_summary(
         f"  Selection priorities:  {', '.join(p.value if hasattr(p, 'value') else str(p) for p in args.selection_priorities)}",
         f"  Semantic prefixes:     {', '.join(args.semantic_prefixes)}",
         f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}",
+        f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}",
     ]
 
     summary_lines.append("\nACTION STATISTICS:")
@@ -64,6 +66,12 @@ def write_summary(
     else:
         summary_lines.append("  No actions performed")
 
+    # Optional: include decision statistics (what priority decided between top two candidates)
+    if decision_counter:
+        summary_lines.append("\nDECISION STATISTICS:")
+        for key, cnt in sorted(decision_counter.items()):
+            summary_lines.append(f"  {key.replace('_', ' ').upper():.<40} {cnt:>6} groups")
+
     summary_lines.append(f"\nExecution date: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}")
     summary_lines.append("=" * 80)
 
@@ -73,7 +81,13 @@ def write_summary(
             log_handle.write(line + "\n")
 
 
-def sort_and_finalize_log(log_path: str, action_counter: Counter, args: argparse.Namespace, size_counter: Counter | None = None) -> None:
+def sort_and_finalize_log(
+    log_path: str,
+    action_counter: Counter,
+    args: argparse.Namespace,
+    size_counter: Counter | None = None,
+    decision_counter: Counter | None = None,
+) -> None:
     """Sort the log file by group name and action, then append summary."""
     if not log_path or not os.path.exists(log_path):
         return
@@ -94,4 +108,4 @@ def sort_and_finalize_log(log_path: str, action_counter: Counter, args: argparse
     with open(log_path, "w", encoding="utf-8") as f:
         for line in sorted_lines:
             f.write(line + "\n")
-        write_summary(f, action_counter, args, size_counter)
+        write_summary(f, action_counter, args, size_counter, decision_counter)

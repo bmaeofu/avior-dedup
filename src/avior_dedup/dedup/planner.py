@@ -160,13 +160,15 @@ def build_move_plan(
     max_duration_diff_longer: int = 600,
     max_duration_diff_shorter: int = 120,
     selection_priorities: list[SelectionPriority] | None = None,
-) -> tuple[dict[str, MoveAction], Counter, Counter]:
-    """Decide what to do with each file. Returns (files_to_move, action_counter, size_counter)."""
+) -> tuple[dict[str, MoveAction], Counter, Counter, Counter]:
+    """Decide what to do with each file. Returns (files_to_move, action_counter, size_counter, decision_counter)."""
     film_info_cache: dict[str, FileRecord] = {}
     files_to_move: dict[str, MoveAction] = {}
     already_logged: set[tuple[str, str]] = set()
     action_counter: Counter = Counter()
     size_counter: Counter = Counter()
+    # Count which priority decided the selection between top candidates
+    decision_counter: Counter = Counter()
     total_groups = len(groups)
 
     for group_idx, group in enumerate(groups):
@@ -198,6 +200,31 @@ def build_move_plan(
             selection_priorities=selection_priorities,
             max_errors_when_mc=max_errors_when_mc,
         )
+
+        # Determine which priority decided between winner and runner-up (if applicable)
+        try:
+            if len(valid_records) >= 2:
+                # compute sort keys for all valid records
+                keys = [(r, _sort_key(r, selection_priorities or DEFAULT_SELECTION_PRIORITIES, max_errors_when_mc, max_duration_diff_longer, max_duration_diff_shorter)) for r in valid_records]
+                # sort by key (lower is better)
+                keys_sorted = sorted(keys, key=lambda t: t[1])
+                winner, winner_key = keys_sorted[0]
+                runnerup, runner_key = keys_sorted[1]
+                # find first differing element in the tuple
+                for idx, (wk, rk) in enumerate(zip(winner_key, runner_key)):
+                    if wk != rk:
+                        # map priority index to name
+                        prio = (selection_priorities or DEFAULT_SELECTION_PRIORITIES)[idx]
+                        if prio == SelectionPriority.RESOLUTION:
+                            decision_counter['RESOLUTION'] += 1
+                        elif prio == SelectionPriority.RECORDING_DATE:
+                            decision_counter['NEWER_RECDATE'] += 1
+                        else:
+                            decision_counter[prio.value.upper()] += 1
+                        break
+        except Exception:
+            # non-fatal: don't fail planning if decision counting breaks
+            pass
 
         for r in records:
             src = r.file
@@ -254,7 +281,7 @@ def build_move_plan(
 
             files_to_move[src] = MoveAction(dst_root, action, group_name)
 
-    return files_to_move, action_counter, size_counter
+    return files_to_move, action_counter, size_counter, decision_counter
 
 
 def execute_move_plan(
