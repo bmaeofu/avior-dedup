@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=30.01.2021 23:30:38
+Channel=rbb Berlin HD (AC3,deu)
+
+[0]
+Id=3662
+Date=30.01.2021
+Time=23:30:00
+Duration=01:55:00
+Title=Der Mann, der zuviel wusste
+Info=Spielfilm USA 1956 (The Man Who Knew Too Much)
+Description=Der US-amerikanische Arzt Dr. Benjamin McKenna, seine Frau Josephine und ihr Sohn Hank machen Urlaub in Marokko. Auf der Busfahrt lernen sie den Franzosen Louis Bernard kennen, der ihnen für den weiteren Aufenthalt seine Gesellschaft anbietet. Am selben Abend noch erweitern sie ihren Bekanntenkreis durch das sympathische Ehepaar Drayton; die kommenden Urlaubstage scheinen vielversprechend. Als sie wenig später jedoch den Franzosen auf einer der Straßen Marrakeschs niedergestochen auffinden, bekommt die paradiesische Idylle einen bitteren Beigeschmack.|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [deu]|[Dolby Digital 2.0] [deu]|[Teletext subtitles] [deu]|[DVB subtitles] [deu]|PDC: 30.01. 23:30 (986590)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={7D3AC508-6123-405A-83BE-6E84C66820FC}
+
+[Stats]
+Errors=0
+Size=11,41 GB (12255682964 bytes)
+Avr. Datarate=1,694 MB/s
+Device=Digital Devices DVB-S2X Tuner 5 (5)
+

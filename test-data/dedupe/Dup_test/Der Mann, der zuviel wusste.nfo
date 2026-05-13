@@ -1,0 +1,699 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Der Mann, der zuviel wusste</title>
+    <originaltitle>The Man Who Knew Too Much</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10" default="true">
+            <value>7.400000</value>
+            <votes>1534</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Dr. McKenna fährt mit seiner Frau Jo und seinem Sohn Hank nach Marokko in den Urlaub. Doch schon bald wird das Familienidyll gestört: McKenna wird Zeuge einer Messerstecherei, bei der der Franzose Louis Bernard tödlich verletzt wird. Bernards letzte Worte werden dem hilfsbereiten Amerikaner zum Verhängnis. Die Killer fackeln nicht lange: Um McKennas Schweigen zu erzwingen, entführen sie seinen Sohn. Auf der Suche nach ihrem Kind geraten die Eltern in ein Netz von Intrigen, bei dem sie niemandem trauen können. Hinter dem Mord steckt ein internationales Komplott...</plot>
+    <tagline>Ein wenig Wissen kann eine tödliche Sache sein!</tagline>
+    <runtime>114</runtime>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/jhsOUCeVsBeKGjTjNwK1tUAXHmL.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/EirEABZPrzUWi2hmQSjETBo1Xn.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/d5vRgz3r7km4ic223x267s4am01.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/t7rRuI9qbc0pufCedu53IQAczRl.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/BMD0IbiXiAcnUtZvpc7OJ77dCz.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/q4ODyyZYRRE1GAPFqKrzW0CArRB.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-58837d16741ec.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-559d1f5b73fb9.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-559d1ef52a12b.jpg</thumb>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-582078e63f29e.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-5cabb80079dc4.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-5e5020ef63828.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/3rItk4TOhnAUdX4D0BbnmGaW6qL.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/cu132rehQasiTow1VPqhABhtZjB.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/8CroaTIa5oPAdAfFQxN2hdHGDK0.jpg</thumb>
+    <thumb spoof="" cache="" aspect="clearlogo" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-527fd6d6abaeb.png</thumb>
+    <thumb spoof="" cache="" aspect="clearlogo" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-60a751bd31c59.png</thumb>
+    <thumb spoof="" cache="" aspect="clearlogo" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-68efe2926eb08.png</thumb>
+    <thumb spoof="" cache="" aspect="clearlogo" preview="">https://image.tmdb.org/t/p/original/jusCxxRtNd6Q1xB5UsGVLe3vZdD.png</thumb>
+    <thumb spoof="" cache="" aspect="clearlogo" preview="">https://image.tmdb.org/t/p/original/cOmi09xlY5f2LaLHOZaT68JxdEz.png</thumb>
+    <thumb spoof="" cache="" aspect="keyart" preview="">https://image.tmdb.org/t/p/original/sg3dHcmuOnRJE5XZaMuhdmvm9pG.jpg</thumb>
+    <thumb spoof="" cache="" aspect="keyart" preview="">https://image.tmdb.org/t/p/original/sCuMVeciD9U4gT4Wo4gkxpnTFQz.jpg</thumb>
+    <thumb spoof="" cache="" aspect="keyart" preview="">https://image.tmdb.org/t/p/original/b1WBEw6TwZPyxSuJPap1oU5eQbc.jpg</thumb>
+    <thumb spoof="" cache="" aspect="keyart" preview="">https://image.tmdb.org/t/p/original/mD3dTgOFqObyBISHIXrlpRax7HC.jpg</thumb>
+    <thumb spoof="" cache="" aspect="clearart" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-653d7ee8a5ebb.png</thumb>
+    <thumb spoof="" cache="" aspect="banner" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-68df24b6c801b.jpg</thumb>
+    <thumb spoof="" cache="" aspect="discart" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-527d423ca0620.png</thumb>
+    <thumb spoof="" cache="" aspect="discart" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-50368b2338c9f.png</thumb>
+    <thumb spoof="" cache="" aspect="discart" preview="">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-5d401beabf5d7.png</thumb>
+    <fanart>
+        <thumb colors="" preview="https://assets.fanart.tv/preview/the-man-who-knew-too-much-6089af8e39806.jpg">https://assets.fanart.tv/fanart/the-man-who-knew-too-much-6089af8e39806.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/bXPKTWAuRO8Mu5rLCORFagX0YZ1.jpg">https://image.tmdb.org/t/p/original/bXPKTWAuRO8Mu5rLCORFagX0YZ1.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/8PnQPHZ06YRRiBbrJNIezeTXh7p.jpg">https://image.tmdb.org/t/p/original/8PnQPHZ06YRRiBbrJNIezeTXh7p.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/gpvTdLLzwBkH1DMQLqoPpCZ2uLo.jpg">https://image.tmdb.org/t/p/original/gpvTdLLzwBkH1DMQLqoPpCZ2uLo.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/9k3ZFi2rvF05txNVUvvYmNaeioA.jpg">https://image.tmdb.org/t/p/original/9k3ZFi2rvF05txNVUvvYmNaeioA.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/9BMfvt3oPFIxDz9s2XX0DhsWFFG.jpg">https://image.tmdb.org/t/p/original/9BMfvt3oPFIxDz9s2XX0DhsWFFG.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/hTCBiADkGaWFUTeiOIzstDSzSRT.jpg">https://image.tmdb.org/t/p/original/hTCBiADkGaWFUTeiOIzstDSzSRT.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/eA8tKtw5oLELEztRpkw6FjcIax7.jpg">https://image.tmdb.org/t/p/original/eA8tKtw5oLELEztRpkw6FjcIax7.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/wDCNw2te6SES85jMoRtpBmT9Enj.jpg">https://image.tmdb.org/t/p/original/wDCNw2te6SES85jMoRtpBmT9Enj.jpg</thumb>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/6aCbhNbeKTw5ztWbPFtaWLYHbIG.jpg">https://image.tmdb.org/t/p/original/6aCbhNbeKTw5ztWbPFtaWLYHbIG.jpg</thumb>
+    </fanart>
+    <mpaa>Rated 12</mpaa>
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>574</id>
+    <uniqueid type="imdb">tt0049470</uniqueid>
+    <uniqueid type="tmdb" default="true">574</uniqueid>
+    <genre>Thriller</genre>
+    <genre>Mystery</genre>
+    <country>United States of America</country>
+    <tag>remake</tag>
+    <tag>london, england</tag>
+    <tag>conspiracy</tag>
+    <tag>spy</tag>
+    <tag>espionage</tag>
+    <tag>bus</tag>
+    <tag>paranoia</tag>
+    <tag>british spy</tag>
+    <tag>assassination</tag>
+    <tag>whodunit</tag>
+    <tag>morocco</tag>
+    <tag>suspenseful</tag>
+    <tag>physician</tag>
+    <tag>scotland yard</tag>
+    <tag>american</tag>
+    <tag>political intrigue </tag>
+    <tag>frenchman</tag>
+    <tag>assassination attempt</tag>
+    <tag>cymbals</tag>
+    <tag>vistavision</tag>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <credits>John Michael Hayes</credits>
+    <director>Alfred Hitchcock</director>
+    <premiered>1956-05-16</premiered>
+    <year>1956</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Paramount Pictures</studio>
+    <trailer>plugin://plugin.video.youtube/play/?video_id=bEg8pomvl6o</trailer>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6899</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>James Stewart</name>
+        <role>Ben McKenna</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/jam9DRhOuKomlr0vUXTamPoxPdk.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Doris Day</name>
+        <role>Jo McKenna</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/jZ23zCJ5zB1RI4uM8eXbyllr01h.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Brenda De Banzie</name>
+        <role>Lucy Drayton</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/zG113jpcgT1z7R0n6b0bt9BQpLG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bernard Miles</name>
+        <role>Edward Drayton</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/wcg0mbHJEU7IXK5lihpMXEVy0jn.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ralph Truman</name>
+        <role>Buchanan</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/1mt0AckZ2jNmOGYROCUNdqnGNAO.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Daniel Gélin</name>
+        <role>Louis Bernard</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/original/7vhAfkofHS7yx4e338qn2SSsoJc.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Mogens Wieth</name>
+        <role>Ambassador</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/Me7DP25p2mi1UmO2SgYM31mZ34.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alan Mowbray</name>
+        <role>Val Parnell</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/tKkLxKHzZLhu675x7ehZ3gq2DVC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Hillary Brooke</name>
+        <role>Jan Peterson</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/original/2R5hSW5KO1yCkLHj5MVe5dXlSSb.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Christopher Olsen</name>
+        <role>Hank McKenna</role>
+        <order>9</order>
+        <thumb>https://image.tmdb.org/t/p/original/h9EqII3Z5PSN4C8CjrQSpzK5EL8.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Reggie Nalder</name>
+        <role>Rien</role>
+        <order>10</order>
+        <thumb>https://image.tmdb.org/t/p/original/qoBbcBYcH07KrnJ4p7CIe9BKuFM.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Richard Wattis</name>
+        <role>Assistant Manager</role>
+        <order>11</order>
+        <thumb>https://image.tmdb.org/t/p/original/9pTeYuFSEN85DACrS77vGZ1tm6D.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Noel Willman</name>
+        <role>Woburn</role>
+        <order>12</order>
+        <thumb>https://image.tmdb.org/t/p/original/4Dc4CgphN3BkCcK3AG6EX0nkrFg.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alix Talton</name>
+        <role>Helen Parnell</role>
+        <order>13</order>
+        <thumb>https://image.tmdb.org/t/p/original/AoATf0t42FwTjmUSxynCD3clDzP.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Yves Brainville</name>
+        <role>Police Inspector</role>
+        <order>14</order>
+        <thumb>https://image.tmdb.org/t/p/original/ntRB8WMCuIcB8YjOujTLyMlGcdS.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Carolyn Jones</name>
+        <role>Cindy Fontaine</role>
+        <order>15</order>
+        <thumb>https://image.tmdb.org/t/p/original/ylA0xqACyD6mXS2e9d5cuI9wKut.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bernard Herrmann</name>
+        <role>Conductor at Albert Hall (uncredited)</role>
+        <order>16</order>
+        <thumb>https://image.tmdb.org/t/p/original/vpIPFhUpHBqDrbgbnaQnDCYekDI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Patrick Aherne</name>
+        <role>Handyman (uncredited)</role>
+        <order>17</order>
+        <thumb>https://image.tmdb.org/t/p/original/5hqdaCcVmkVvNukkGXZnoFGLJIr.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Frank Albertson</name>
+        <role>Taxidermist (uncredited)</role>
+        <order>18</order>
+        <thumb>https://image.tmdb.org/t/p/original/sT9JZ8GgHgunZS4PWIDX6wMoIS7.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Frank Atkinson</name>
+        <role>Edgar (uncredited)</role>
+        <order>19</order>
+        <thumb>https://image.tmdb.org/t/p/original/tauKb1y2XiDlS1DlfBndgY3h7hG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>John Barrard</name>
+        <role>Taxidermist Holding Panther (uncredited)</role>
+        <order>20</order>
+        <thumb>https://image.tmdb.org/t/p/original/etMeedYzp2B2Gdfo9v3flIcggEs.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Mayne Lynton</name>
+        <role>Grey-Haired Taxidermist (uncredited)</role>
+        <order>21</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Clifford Buckton</name>
+        <role>Sir Kenneth Clarke (uncredited)</role>
+        <order>22</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Walter Bacon</name>
+        <role>Church Member (uncredited)</role>
+        <order>23</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Lovyss Bradley</name>
+        <role>Church Member (uncredited)</role>
+        <order>24</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BNTI4NWVkZDktNWUxZi00YWRkLWJlNGMtNTA0YTU2MDMzOWExXkEyXkFqcGdeQXVyMzI5NDcxNzI@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Nora Bush</name>
+        <role>Church Member (uncredited)</role>
+        <order>25</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Ann Kunde</name>
+        <role>Church Member (uncredited)</role>
+        <order>26</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jean Ransome</name>
+        <role>Church Member (uncredited)</role>
+        <order>27</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BODU1NzFhMDctYjM3MC00YjhkLWI2YzctZjI4ZDBlZWFiNTQ0XkEyXkFqcGdeQXVyMzI5NDcxNzI@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Albert Carrier</name>
+        <role>French Policeman (uncredited)</role>
+        <order>28</order>
+        <thumb>https://image.tmdb.org/t/p/original/9lKc60OmnQpVdtEl40wps1Z4GYP.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Louis Mercier</name>
+        <role>French Policeman (uncredited)</role>
+        <order>29</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BNmM1ZGJmZTMtZDU2Mi00YzNkLTlhMzctNGYwYjQ3OThlYzdhXkEyXkFqcGdeQXVyNTUyMTMyMDg@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Anthony Warde</name>
+        <role>French Policeman (uncredited)</role>
+        <order>30</order>
+        <thumb>https://image.tmdb.org/t/p/original/vwJd5IbKcEnDXr88E7XTRPs9gZ7.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Frank Baker</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>31</order>
+        <thumb>https://image.tmdb.org/t/p/original/i7TbpKA5ct94Q0Eddet3i51NZXC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Oliver Cross</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>32</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Sam Harris</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>33</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BNWM4OTUyMTgtMmNlNS00ZDk5LWI2YWMtNTg2YTI0ODRjYTZiXkEyXkFqcGdeQXVyOTA4NDY2Mw@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Jimmie Horan</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>34</order>
+        <thumb>https://image.tmdb.org/t/p/original/rIK6Fgl1gcnmlICf57blPaG3Y0Q.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Carl M. Leviness</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>35</order>
+        <thumb>https://image.tmdb.org/t/p/original/8SJQSmHZESdalItwsoarlnaohmK.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Lee Miller</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>36</order>
+        <thumb>https://image.tmdb.org/t/p/original/8r7IOeqrEDdWA3rwduM5Ct59A5F.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Arthur Tovey</name>
+        <role>Royal Albert Hall Attendee (uncredited)</role>
+        <order>37</order>
+        <thumb>https://image.tmdb.org/t/p/original/uMJFlEposvwfVxLV4ciTZGLz9wY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Harry Fine</name>
+        <role>Edington (uncredited)</role>
+        <order>38</order>
+        <thumb>https://image.tmdb.org/t/p/original/cDanQlGgFNXsDrrB5sZ5orG4Bak.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alex Frazer</name>
+        <role>Man in Box Office Lobby (uncredited)</role>
+        <order>39</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Wolf Frees</name>
+        <role>Prime Minister's Aide (uncredited)</role>
+        <order>40</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BZTdmYWQ0Y2ItMWQ5NS00ZDIxLTkwODYtNmVmNzEzOTc4ZTBjXkEyXkFqcGdeQXVyMDMxMjQwMw@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Richard Marner</name>
+        <role>Prime Minister's Aide (uncredited)</role>
+        <order>41</order>
+        <thumb>https://image.tmdb.org/t/p/original/r9g2sRTyYztWcG3UmFTJEcuVbXI.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Milton Frome</name>
+        <role>Embassy Back Entrance Guard (uncredited)</role>
+        <order>42</order>
+        <thumb>https://image.tmdb.org/t/p/original/yKw0I3H5Fip2WM2LYQ8zS9aA4eR.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Walter Gotell</name>
+        <role>Matthews, Scotland Yard Patrol Car (uncredited)</role>
+        <order>43</order>
+        <thumb>https://image.tmdb.org/t/p/original/3pz9faSRNXyXB74t9VaJlw8IR4Q.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Leo Gordon</name>
+        <role>Drayton's Chauffeur (uncredited)</role>
+        <order>44</order>
+        <thumb>https://image.tmdb.org/t/p/original/d87PfczbNFTbiu3qktqORlxnkMW.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alfred Hitchcock</name>
+        <role>Man in Marrakesh Marketplace (uncredited)</role>
+        <order>45</order>
+        <thumb>https://image.tmdb.org/t/p/original/108fiNM6poRieMg7RIqLJRxdAwG.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Gladys Holland</name>
+        <role>Bernard's Date at Restaurant (uncredited)</role>
+        <order>46</order>
+        <thumb>https://image.tmdb.org/t/p/original/jk5Spl1xHf1jxEIqJWuzWP5U59x.jpg</thumb>
+    </actor>
+    <actor>
+        <name>George Howe</name>
+        <role>Ambrose Chappell Sr. (uncredited)</role>
+        <order>47</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Richard Wordsworth</name>
+        <role>Ambrose Chappell Jr. (uncredited)</role>
+        <order>48</order>
+        <thumb>https://image.tmdb.org/t/p/original/ymq6SEtwzBBMeXTsOijFSM5JRvS.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Eumenio Blanco</name>
+        <role>Arab (uncredited)</role>
+        <order>49</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BYTU5MThkMGYtNDdkMS00NjMwLWJiNTAtODU5OTRkNmE5MWRmXkEyXkFqcGdeQXVyMzI5NDcxNzI@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Allen Jaffe</name>
+        <role>Arab (uncredited)</role>
+        <order>50</order>
+        <thumb>https://image.tmdb.org/t/p/original/8ECYyCyIRN6mwRMHXGAw8PU8NVC.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Lou Krugman</name>
+        <role>Marrakesh Headwaiter (uncredited)</role>
+        <order>51</order>
+        <thumb>https://image.tmdb.org/t/p/original/A0E6io5FCn52tVzDXy0zG4dST4U.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Harold Kasket</name>
+        <role>Stavis (uncredited)</role>
+        <order>52</order>
+        <thumb>https://image.tmdb.org/t/p/original/vh8z2nN0AH25JhujWuBG0aY7hvM.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Barry Keegan</name>
+        <role>Patterson (uncredited)</role>
+        <order>53</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BMWRhNDIwOGQtZjRhYS00YTA4LWEwMWQtYTNjYjg5NzcxZTE2XkEyXkFqcGdeQXVyMTI3NTkxNw@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Lloyd Lamble</name>
+        <role>General Manager of Albert Hall (uncredited)</role>
+        <order>54</order>
+        <thumb>https://image.tmdb.org/t/p/original/rgTHHgFKaClORSM1YCALeFSGDcT.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Lewis Martin</name>
+        <role>Detective (uncredited)</role>
+        <order>55</order>
+        <thumb>https://image.tmdb.org/t/p/original/8MFU3yn0afZRtext6sGBBjncikW.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ralph Neff</name>
+        <role>Drayton's Henchman (uncredited)</role>
+        <order>56</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>John O'Malley</name>
+        <role>Hotel Doorman (uncredited)</role>
+        <order>57</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Eric Snowden</name>
+        <role>Special Branch Officer (uncredited)</role>
+        <order>58</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Patrick Whyte</name>
+        <role>Special Branch Officer (uncredited)</role>
+        <order>59</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BMTliZGVkZGUtOWRlNy00YWMyLTgxYWYtNDk0ZTczZjZhMzQxXkEyXkFqcGdeQXVyMTQxMjk0Mg@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alma Taylor</name>
+        <role>Embassy Guest (uncredited)</role>
+        <order>60</order>
+        <thumb>https://image.tmdb.org/t/p/original/wEuazbrHqroiKXtvirZHMZxwv7Q.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Guy Verney</name>
+        <role>Embassy Footman (uncredited)</role>
+        <order>61</order>
+        <thumb>https://image.tmdb.org/t/p/original/gPfdz5acdpUH6REGL3aAo9nMgYu.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Peter Williams</name>
+        <role>Police Sergeant at Albert Hall (uncredited)</role>
+        <order>62</order>
+        <thumb>https://image.tmdb.org/t/p/original/rTJmPemUPuj7zVab9GpwqJzlLpd.jpg</thumb>
+    </actor>
+    <actor>
+        <name>John Marshall</name>
+        <role>Embassy Butler (uncredited)</role>
+        <order>63</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Alexis Bobrinskoy</name>
+        <role>Foreign Prime Minister (uncredited)</role>
+        <order>64</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Betty Baskcomb</name>
+        <role>Edna (uncredited)</role>
+        <order>65</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Hyma Beckley</name>
+        <role>Albert Hall Audience (uncredited)</role>
+        <order>66</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Paul Beradi</name>
+        <role>Embassy Guest (uncredited)</role>
+        <order>67</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Arline Bletcher</name>
+        <role>Church Member (uncredited)</role>
+        <order>68</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Janet Bruce</name>
+        <role>Woman in Box Office Queue (uncredited)</role>
+        <order>69</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Naida Buckingham</name>
+        <role>Albert Hall Audience (uncredited)</role>
+        <order>70</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Barbara Burke</name>
+        <role>Miss Benson (uncredited)</role>
+        <order>71</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Peter Camlin</name>
+        <role>Marrakesh Waiter (uncredited)</role>
+        <order>72</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Jimmy Charters</name>
+        <role>Albert Hall Audience (uncredited)</role>
+        <order>73</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Abdelhaq Chraibi</name>
+        <role>Muslim Husband On Bus (uncredited)</role>
+        <order>74</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Victor Harrington</name>
+        <role>Embassy Guest (uncredited)</role>
+        <order>75</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>George Hilsdon</name>
+        <role>Photographer at Airport (uncredited)</role>
+        <order>76</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Philip Johns</name>
+        <role>Embassy Chef (uncredited)</role>
+        <order>77</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Barbara Jones</name>
+        <role>Lady On Bus (uncredited)</role>
+        <order>78</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Anthony Lang</name>
+        <role>Singer in Choir (uncredited)</role>
+        <order>79</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Donald Lawton</name>
+        <role>Desk Clerk (uncredited)</role>
+        <order>80</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Marion Lessing</name>
+        <role>Church Member (uncredited)</role>
+        <order>81</order>
+        <thumb>https://image.tmdb.org/t/p/original/lXRTJke8ZhDqYrtLxMrjQy4JzTY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Enid Lindsey</name>
+        <role>Lady Clarke (uncredited)</role>
+        <order>82</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Janet Macfarlane</name>
+        <role>Albert Hall Audience (uncredited)</role>
+        <order>83</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Edward Manouk</name>
+        <role>Marrakesh Waiter (uncredited)</role>
+        <order>84</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Lola Morice</name>
+        <role>Singer in Choir (uncredited)</role>
+        <order>85</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Leslie Newport</name>
+        <role>Inspector at Albert Hall (uncredited)</role>
+        <order>86</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Elsa Palmer</name>
+        <role>Embassy Cook (uncredited)</role>
+        <order>87</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Liddell Peddieson</name>
+        <role>Taxidermist With Cap (uncredited)</role>
+        <order>88</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Pauline Pfarr</name>
+        <role>Ambassador's Wife (uncredited)</role>
+        <order>89</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Arthur Ridley</name>
+        <role>Albert Hall Ticket Collector (uncredited)</role>
+        <order>90</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Lucile Sewall</name>
+        <role>Church Member (uncredited)</role>
+        <order>91</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Mahin S. Shahrivar</name>
+        <role>Muslim Wife On Bus (uncredited)</role>
+        <order>92</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Guy Standeven</name>
+        <role>Albert Hall Audience (uncredited)</role>
+        <order>93</order>
+        <thumb>https://image.tmdb.org/t/p/original/66sDmA4KxiW6vMV1WgLIzwJhYUP.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Allen Zeidman</name>
+        <role>Assistant Manager (uncredited)</role>
+        <order>94</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2023-07-06 03:13:48</dateadded>
+    <nfo_updated>2026-05-01</nfo_updated>
+</movie>

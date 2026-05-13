@@ -16,6 +16,8 @@ def _rec(
     video_duration: float = 3600,
     rec_duration: int = 3600,
     mod_date: float = 1000.0,
+    rec_date: str | None = None,
+    resolution: int | None = None,
 ) -> FileRecord:
     """Helper to build a FileRecord with sensible defaults."""
     return FileRecord(
@@ -24,8 +26,10 @@ def _rec(
         error_count=error_count,
         mod_date=mod_date,
         multichannel=multichannel,
+        resolution=resolution,
         video_duration=video_duration,
         rec_duration=rec_duration,
+        rec_date=rec_date,
     )
 
 
@@ -148,6 +152,24 @@ class TestMcErrorThreshold:
 
 
 class TestPriorityOrder:
+    def test_resolution_priority_prefers_higher_resolution(self):
+        hd = _rec("hd.ts", resolution=1080)
+        sd = _rec("sd.ts", resolution=720)
+        best = select_best_film(
+            [sd, hd],
+            selection_priorities=[SelectionPriority.RESOLUTION],
+        )
+        assert best.file == "hd.ts"
+
+    def test_resolution_priority_uses_next_priority_when_equal(self):
+        a = _rec("a.ts", resolution=1080, error_count=5)
+        b = _rec("b.ts", resolution=1080, error_count=1)
+        best = select_best_film(
+            [a, b],
+            selection_priorities=[SelectionPriority.RESOLUTION, SelectionPriority.FEWER_ERRORS],
+        )
+        assert best.file == "b.ts"
+
     def test_fewer_errors_first_ignores_mc(self):
         """When FEWER_ERRORS is top priority, error count matters more than MC."""
         mc = _rec("mc.ts", multichannel=True, error_count=5)
@@ -210,12 +232,61 @@ class TestTiebreaker:
         """When all priority criteria are equal, the newest file wins."""
         old = _rec("old.ts", mod_date=1000.0)
         new = _rec("new.ts", mod_date=2000.0)
+        # With RECORDING_DATE priority, filesystem mod_date is used as fallback
         best = select_best_film(
             [old, new],
-            selection_priorities=[SelectionPriority.FEWER_ERRORS],
+            selection_priorities=[SelectionPriority.RECORDING_DATE],
         )
         assert best.file == "new.ts"
         print("  PASS: equal criteria -> newest file (mod_date=2000) wins")
+
+
+class TestRecordingDatePriority:
+    def test_prefers_newer_recording_date(self):
+        """When RECORDING_DATE is used, newer rec_date should win."""
+        older = _rec("oldrec.ts", rec_date="2010-01-01", mod_date=1000.0)
+        newer = _rec("newrec.ts", rec_date="2020-01-01", mod_date=2000.0)
+        best = select_best_film(
+            [older, newer],
+            selection_priorities=[SelectionPriority.RECORDING_DATE],
+        )
+        assert best.file == "newrec.ts"
+
+    def test_mod_date_fallback_when_rec_date_missing(self):
+        """If rec_date is missing for candidates, mod_date should be used as fallback when RECORDING_DATE is present."""
+        a = _rec("a.ts", rec_date=None, mod_date=3000.0)
+        b = _rec("b.ts", rec_date=None, mod_date=2000.0)
+        best = select_best_film(
+            [a, b],
+            selection_priorities=[SelectionPriority.RECORDING_DATE],
+        )
+        assert best.file == "a.ts"
+
+
+class TestClosestDurationThreshold:
+    def test_outside_threshold_is_penalized(self):
+        """A recording outside the allowed longer threshold should lose to an in-window recording."""
+        out = _rec("out.ts", video_duration=3700, rec_duration=3600)
+        inwin = _rec("in.ts", video_duration=3605, rec_duration=3600)
+        best = select_best_film(
+            [out, inwin],
+            selection_priorities=[SelectionPriority.CLOSEST_DURATION],
+            max_duration_diff_longer=50,
+            max_duration_diff_shorter=50,
+        )
+        assert best.file == "in.ts"
+
+    def test_within_thresholds_treated_equal_then_fewer_errors_applies(self):
+        """If both candidates are within thresholds, CLOSEST_DURATION does not discriminate and next priority wins."""
+        a = _rec("a.ts", video_duration=3610, rec_duration=3600, error_count=0)
+        b = _rec("b.ts", video_duration=3620, rec_duration=3600, error_count=5)
+        best = select_best_film(
+            [a, b],
+            selection_priorities=[SelectionPriority.CLOSEST_DURATION, SelectionPriority.FEWER_ERRORS],
+            max_duration_diff_longer=30,
+            max_duration_diff_shorter=30,
+        )
+        assert best.file == "a.ts"
 
 
 # ---------------------------------------------------------------------------

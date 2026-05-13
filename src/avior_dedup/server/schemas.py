@@ -22,7 +22,9 @@ class JobRequest(BaseModel):
     selection_priorities: list[SelectionPriority] = Field(
         default_factory=lambda: [
             SelectionPriority.MULTICHANNEL,
+            SelectionPriority.RESOLUTION,
             SelectionPriority.FEWER_ERRORS,
+            SelectionPriority.RECORDING_DATE,
             SelectionPriority.CLOSEST_DURATION,
         ]
     )

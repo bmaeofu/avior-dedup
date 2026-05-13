@@ -54,7 +54,7 @@ const form = reactive<JobRequest>({
   max_errors_when_mc: 3,
   max_duration_diff_longer: 600,
   max_duration_diff_shorter: 180,
-  selection_priorities: ['multichannel', 'fewer_errors', 'closest_duration'] as SelectionPriority[],
+  selection_priorities: ['multichannel', 'resolution', 'fewer_errors', 'recording_date', 'closest_duration'] as SelectionPriority[],
   semantic_prefixes: ['terra\\s*x\\s*-\\s*'],
   remove_episode_nos: false,
 })
@@ -76,8 +76,10 @@ const dupTypeItems = [
 
 const priorityLabels: Record<SelectionPriority, string> = {
   multichannel: 'Multichannel',
+  resolution: 'Resolution',
   fewer_errors: 'Fewer errors',
   closest_duration: 'Closest EPG duration',
+  recording_date: 'Recording date',
 }
 
 function movePriority(index: number, direction: -1 | 1) {

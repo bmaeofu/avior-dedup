@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Der Mann, der zuviel wusste</title>
+    <originaltitle>The Man Who Knew Too Much</originaltitle>
+    <ratings>
+        <rating name="default" max="10" default="true">
+            <value>7.500000</value>
+            <votes>39531</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Ein verzweifeltes Ehepaar folgt dem in Marokko entführten Sohn nach London, wo ein Mordkomplott geplant ist. Alles führt über die Royal Albert Hall in die Botschaft. Dort schmettert Doris Day verzweifelt das Gutenachtlied "Que sera sera" und die reuige Kidnapperin Brenda De Banzie fleht das Kind an, das Lied so laut zu pfeifen, wie es nur kann.</plot>
+    <tagline>A little knowledge can be a deadly thing!</tagline>
+    <runtime>115</runtime>
+    <thumb preview="http://cf2.imgobject.com/t/p/w500/niEwbMZ2lMyGsplrJIu1f9qotVf.jpg">http://cf2.imgobject.com/t/p/original/niEwbMZ2lMyGsplrJIu1f9qotVf.jpg</thumb>
+    <thumb preview="http://cf2.imgobject.com/t/p/w500/b7uspI95kAz2W35MObOBg1lk6gP.jpg">http://cf2.imgobject.com/t/p/original/b7uspI95kAz2W35MObOBg1lk6gP.jpg</thumb>
+    <thumb preview="http://cf2.imgobject.com/t/p/w500/yydkXsj0cLnuoP2lYMvQgomnX4q.jpg">http://cf2.imgobject.com/t/p/original/yydkXsj0cLnuoP2lYMvQgomnX4q.jpg</thumb>
+    <thumb preview="http://cf2.imgobject.com/t/p/w500/1AlgLQ7OoPggcboLqpfFWHWPWF1.jpg">http://cf2.imgobject.com/t/p/original/1AlgLQ7OoPggcboLqpfFWHWPWF1.jpg</thumb>
+    <thumb preview="http://cf2.imgobject.com/t/p/w500/mjON7C8CW7ZPRXwccZ20gjEUMVM.jpg">http://cf2.imgobject.com/t/p/original/mjON7C8CW7ZPRXwccZ20gjEUMVM.jpg</thumb>
+    <fanart>
+        <thumb preview="http://cf2.imgobject.com/t/p/w780/muaP2bMd34gwPIgaLprdd2mxYUo.jpg">http://cf2.imgobject.com/t/p/original/muaP2bMd34gwPIgaLprdd2mxYUo.jpg</thumb>
+        <thumb preview="http://cf2.imgobject.com/t/p/w780/knWNkI7OQR3u5ScsqdfFwQt6suw.jpg">http://cf2.imgobject.com/t/p/original/knWNkI7OQR3u5ScsqdfFwQt6suw.jpg</thumb>
+        <thumb preview="http://cf2.imgobject.com/t/p/w780/3B0pPiYwRynixWsFc8EDsmZYfKI.jpg">http://cf2.imgobject.com/t/p/original/3B0pPiYwRynixWsFc8EDsmZYfKI.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt0049470</id>
+    <uniqueid type="imdb" default="true">tt0049470</uniqueid>
+    <genre>Abenteuer</genre>
+    <genre>Crime</genre>
+    <genre>Drama</genre>
+    <genre>Mystery</genre>
+    <genre>Suspense</genre>
+    <genre>Thriller</genre>
+    <country>United States of America</country>
+    <credits>Charles Bennett</credits>
+    <credits>John Michael Hayes</credits>
+    <director>Alfred Hitchcock</director>
+    <director>Howard Joslin</director>
+    <year>1956</year>
+    <status />
+    <code />
+    <aired />
+    <trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=1CoKHtU0mGo</trailer>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>6900</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>aac</codec>
+                <language />
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>James Stewart</name>
+        <role>Dr. Ben McKenna</role>
+        <order>0</order>
+        <thumb>http://ia.media-imdb.com/images/M/MV5BMjIwNzMzODY0NV5BMl5BanBnXkFtZTcwMDk3NDQyOA@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Doris Day</name>
+        <role>Jo McKenna</role>
+        <order>1</order>
+        <thumb>http://image.tmdb.org/t/p/original/aG1ciaz25APNBYsslmRwmahQiVi.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Brenda De Banzie</name>
+        <role>Lucy Drayton</role>
+        <order>2</order>
+        <thumb>http://image.tmdb.org/t/p/original/5sqEWY8kyuD41Q5c5L3Dy5tOdeM.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Bernard Miles</name>
+        <role>Edward Drayton</role>
+        <order>3</order>
+        <thumb>http://ia.media-imdb.com/images/M/MV5BOTkxNzIxNjM3OF5BMl5BanBnXkFtZTcwMTM1NDYxOA@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Alan Mowbray</name>
+        <role>Val Parnell</role>
+        <order>4</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BMTQwMzMyMjc4Ml5BMl5BanBnXkFtZTcwODMwNTMxOA@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Hillary Brooke</name>
+        <role>Jan Peterson</role>
+        <order>5</order>
+        <thumb>http://image.tmdb.org/t/p/original/vsT0YQb3LSBH4nkUiWjx1ogSIXM.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Christopher Olsen</name>
+        <role>Hank McKenna</role>
+        <order>6</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BNDExZTY1ZjktNzZmNy00Nzk0LWIxNTgtMGY4OGU5YjQxODAzXkEyXkFqcGdeQXVyMTk2MzI2Ng@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Daniel Gélin</name>
+        <role>Louis Bernard</role>
+        <order>7</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BMTgwMjA5NjEzNl5BMl5BanBnXkFtZTcwNjA3MjI5Ng@@._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2011-04-06 05:16:07</dateadded>
+    <nfo_updated>2026-05-01</nfo_updated>
+</movie>

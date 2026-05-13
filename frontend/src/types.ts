@@ -1,4 +1,4 @@
-export type SelectionPriority = 'multichannel' | 'fewer_errors' | 'closest_duration'
+export type SelectionPriority = 'multichannel' | 'resolution' | 'fewer_errors' | 'closest_duration' | 'recording_date'
 
 export interface JobRequest {
   mode: 'm' | 'f'

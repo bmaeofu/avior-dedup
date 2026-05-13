@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 import unicodedata
+import datetime
 from typing import Callable, Optional, Tuple
 
 from avior_dedup import config
@@ -48,30 +49,120 @@ def count_errors(lines: list[str]) -> int:
     return error_count
 
 
-def is_multichannel_from_log(lines: list[str], max_seconds: int = 20) -> bool:
-    """Check if AC3 5.x multichannel audio appears within the first max_seconds of the recording log."""
-    time_re = re.compile(r"/\s*(\d+):(\d+):(\d+)")
+def _ac3_audio_state_from_line(line: str) -> Optional[bool]:
+    """Return AC3 channel state from a recording line: True=MC, False=stereo, None=not an AC3 audio-state line."""
+    lower = line.lower()
+    if "ac3" not in lower:
+        return None
+
+    # Ignore non-audio AC3 mentions (e.g. channel/program headers)
+    if "audio" not in lower and not re.search(r"\bac3\s+\d\s*/\s*\d\b", lower):
+        return None
+
+    if "stereo" in lower:
+        return False
+
+    # Common notation in VDR logs (e.g. "AC3 Audio 5.1")
+    if re.search(r"\b([5-9])\.[01]\b", lower):
+        return True
+
+    # Channel pair notation (e.g. "AC3 3/2" -> 5 channels, "AC3 2/0" -> stereo)
+    m = re.search(r"\bac3(?:\s+audio)?\s+(\d)\s*/\s*(\d)\b", lower)
+    if m:
+        front = int(m.group(1))
+        rear = int(m.group(2))
+        return (front + rear) > 2
+
+    if re.search(r"\b([12])\.[01]\b", lower):
+        return False
+
+    return None
+
+
+def _recording_elapsed_seconds_from_line(line: str, plain_start_seconds: int | None) -> Optional[int]:
+    """Extract seconds elapsed since recording start for a log line."""
+    slash_time_re = re.compile(r"/\s*(\d+):(\d+):(\d+)")
+    plain_time_re = re.compile(r"^\s*(\d+):(\d+):(\d+)\b")
+    m = slash_time_re.search(line)
+    if m:
+        h, mi, s = map(int, m.groups())
+        return h * 3600 + mi * 60 + s
+
+    m = plain_time_re.search(line)
+    if not m:
+        return None
+    h, mi, s = map(int, m.groups())
+    current_seconds = h * 3600 + mi * 60 + s
+    if plain_start_seconds is None:
+        return current_seconds
+    seconds = current_seconds - plain_start_seconds
+    if seconds < 0:
+        seconds += 86400
+    return seconds
+
+
+def _recording_start_window_lines(lines: list[str], max_seconds: int = 15) -> list[str]:
+    """Return lines in the first max_seconds after Start/Start Recording."""
+    plain_time_re = re.compile(r"^\s*(\d+):(\d+):(\d+)\b")
     recording_started = False
+    plain_start_seconds: int | None = None
+    window_lines: list[str] = []
 
     for line in lines:
         if not recording_started:
             if line.strip().endswith("Start") or "Start Recording" in line:
                 recording_started = True
+                m_start = plain_time_re.search(line)
+                if m_start:
+                    h, mi, s = map(int, m_start.groups())
+                    plain_start_seconds = h * 3600 + mi * 60 + s
             continue
 
-        m = time_re.search(line)
-        if not m:
+        seconds = _recording_elapsed_seconds_from_line(line, plain_start_seconds)
+        if seconds is None:
             continue
-
-        h, mi, s = map(int, m.groups())
-        seconds = h * 3600 + mi * 60 + s
         if seconds > max_seconds:
             break
+        window_lines.append(line)
 
-        if "AC3 Audio 5." in line:
-            return True
+    return window_lines
 
-    return False
+
+def is_multichannel_from_log(lines: list[str], max_seconds: int = 15) -> bool:
+    """Determine AC3 channel mode from the recording start window.
+
+    The decisive signal is the *last* AC3 audio state line found within the
+    first ``max_seconds`` after recording start.
+    """
+    last_audio_state: Optional[bool] = None
+    for line in _recording_start_window_lines(lines, max_seconds=max_seconds):
+        ac3_state = _ac3_audio_state_from_line(line)
+        if ac3_state is not None:
+            last_audio_state = ac3_state
+    return bool(last_audio_state)
+
+
+def _video_resolution_from_line(line: str) -> Optional[int]:
+    """Extract normalized vertical resolution from a video line (e.g. 1080, 720)."""
+    if "video" not in line.lower():
+        return None
+    m = re.search(r"\b(\d{3,5})x(\d{3,5})\b", line)
+    if not m:
+        return None
+    height = int(m.group(2))
+    if height == 1088:
+        return 1080
+    return height
+
+
+def get_recording_resolution_from_log(lines: list[str], max_seconds: int = 15) -> Optional[int]:
+    """Return the last detected video resolution in the recording start window."""
+    last_resolution: Optional[int] = None
+    for line in _recording_start_window_lines(lines, max_seconds=max_seconds):
+        res = _video_resolution_from_line(line)
+        if res is not None:
+            last_resolution = res
+    return last_resolution
 
 # -----------------------------
 # ffprobe
@@ -101,11 +192,17 @@ def get_media_duration_ffprobe(path: str) -> Optional[float]:
 # Log Parsing
 # -----------------------------
 def _truncate_log(content: str) -> str:
-    """Entfernt alles ab 'Removed Filler Data' (Format 2) bzw. 'Total Size' (Format 1)."""
-    for marker in ("Removed Filler Data", "Total Size"):
+    """Entfernt den Statistik-/Nachlaufteil, inkl. avior-go Zusatzdaten."""
+    cut_markers = ("Removed Filler Data", "Total Size", "avior-go info", "avior-go")
+    cut_idx = len(content)
+    found = False
+    for marker in cut_markers:
         idx = content.find(marker)
-        if idx != -1:
-            return content[:idx]
+        if idx != -1 and idx < cut_idx:
+            cut_idx = idx
+            found = True
+    if found:
+        return content[:cut_idx]
     return content
 
 
@@ -280,6 +377,8 @@ def get_film_error_count(
         error_count = None
         mod_date = None
         multichannel = None
+        resolution = None
+        rec_date = None
 
         if video_exists:
             main_log = os.path.join(film_dir, film_base + ".log")
@@ -289,15 +388,34 @@ def get_film_error_count(
                 try:
                     mod_date = os.path.getmtime(main_log)
                     content = read_text(main_log)
+                    if content is not None:
+                        content = _truncate_log(content)
                     lines = content.splitlines() if content is not None else []
                     if not lines:
                         raise ValueError("log file could not be read")
+
+                    # Parse recording date from first line (formats: dd.mm.yyyy or dd/mm/yyyy)
+                    first_line = lines[0]
+                    m = re.search(r"(\b\d{1,2}[./]\d{1,2}[./]\d{4}\b)", first_line)
+                    if m:
+                        date_str = m.group(1)
+                        sep = '.' if '.' in date_str else '/'
+                        d, mo, y = date_str.split(sep)
+                        try:
+                            dt = datetime.date(int(y), int(mo), int(d))
+                            rec_date = dt.isoformat()
+                        except ValueError:
+                            rec_date = None
+
                     error_count = count_errors(lines)
                     multichannel = is_multichannel_from_log(lines)
+                    resolution = get_recording_resolution_from_log(lines)
                 except (OSError, UnicodeDecodeError, ValueError):
                     error_count = None
                     mod_date = None
                     multichannel = None
+                    resolution = None
+                    rec_date = None
 
         results.append(FileRecord(
             file=file_path,
@@ -305,8 +423,10 @@ def get_film_error_count(
             error_count=error_count,
             mod_date=mod_date,
             multichannel=multichannel,
-            video_duration=video_duration, 
-            rec_duration=rec_duration
+            resolution=resolution,
+            video_duration=video_duration,
+            rec_duration=rec_duration,
+            rec_date=rec_date,
         ))
         if progress_cb is not None:
             progress_cb(file_path, idx + 1)

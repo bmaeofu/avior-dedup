@@ -14,9 +14,19 @@ Once it finds duplicates, it picks which copy to keep based on:
 
 - Whether there's actually a video file (or just orphaned metadata)
 - Multichannel audio (AC3 5.x) over stereo, when available
+- Video resolution from timer/recording lines (higher wins)
 - Encoding error count from `.log` files
 - Allowed duration delta window (`video_duration - rec_duration`) with separate limits for longer/shorter
-- Modification date as a tiebreaker
+- Recording date from `.log` files (preferred when configured)
+
+Selection behavior notes:
+
+- Default priority order: `multichannel`, `resolution`, `fewer_errors`, `recording_date`, `closest_duration`.
+- Multichannel detection uses the recording-start section of `.log` files: the last AC3 audio state within the first ~15 seconds after `Start`/`Start Recording` decides.
+- Resolution detection uses the recording-start section of `.log` files: the last video resolution in the first ~15 seconds decides (e.g. `1920x1080` and `1920x1088` are treated as `1080`).
+- Trailing `avior-go` metadata is excluded from log-based analysis.
+- `recording_date` prefers newer recordings when present; if a recording has no `rec_date`, the filesystem `mod_date` is used as a fallback only when `recording_date` is part of the active priority list.
+- `closest_duration` only penalizes candidates that fall outside the configured duration thresholds; recordings within the allowed window are treated as equal for that criterion.
 
 Everything that isn't the best copy gets moved out: normal duplicates to one directory, error-laden copies to another, orphaned metadata to a third. You can also run in dry-run mode to just see what it would do before committing.
 

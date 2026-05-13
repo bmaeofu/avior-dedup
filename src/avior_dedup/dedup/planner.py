@@ -4,6 +4,7 @@ import os
 import shutil
 from collections import Counter
 from typing import Callable
+import datetime
 
 from avior_dedup.dedup.models import (
     DEFAULT_SELECTION_PRIORITIES,
@@ -35,6 +36,8 @@ def _sort_key(
     r: FileRecord,
     priorities: list[SelectionPriority],
     max_errors_when_mc: int | None = None,
+    max_duration_diff_longer: int = 600,
+    max_duration_diff_shorter: int = 120,
 ) -> tuple:
     """Build a comparable sort key based on the priority list (lower = better).
 
@@ -51,15 +54,46 @@ def _sort_key(
                 if errors > max_errors_when_mc:
                     is_good_mc = False
             key.append(0 if is_good_mc else 1)
+        elif p == SelectionPriority.RESOLUTION:
+            # Higher resolution should be preferred.
+            key.append(-(r.resolution if r.resolution is not None else -10**9))
         elif p == SelectionPriority.FEWER_ERRORS:
             key.append(r.error_count if r.error_count is not None else 10**9)
         elif p == SelectionPriority.CLOSEST_DURATION:
+            # Only penalize recordings that deviate more than the configured
+            # duration thresholds. If within thresholds, treat as equal (0).
             if r.video_duration is not None and r.rec_duration is not None:
-                key.append(abs(r.video_duration - r.rec_duration))
+                diff = r.video_duration - r.rec_duration
+                if diff > max_duration_diff_longer:
+                    # amount exceeding the allowed longer threshold
+                    key.append(diff - max_duration_diff_longer)
+                elif diff < -max_duration_diff_shorter:
+                    # amount exceeding the allowed shorter threshold
+                    key.append((-diff) - max_duration_diff_shorter)
+                else:
+                    key.append(0)
             else:
                 key.append(10**9)
-    # Tiebreaker: newest file wins
-    key.append(-(r.mod_date or 0))
+        elif p == SelectionPriority.RECORDING_DATE:
+            # Prefer newer recordings. If rec_date is not available, fall back to
+            # filesystem mod_time. If neither is available use 0.
+            rec_ord = 0
+            if getattr(r, "rec_date", None):
+                try:
+                    rec_dt = datetime.date.fromisoformat(r.rec_date)
+                    rec_ord = rec_dt.toordinal()
+                except Exception:
+                    rec_ord = 0
+            elif r.mod_date:
+                try:
+                    rec_ord = datetime.date.fromtimestamp(r.mod_date).toordinal()
+                except Exception:
+                    rec_ord = 0
+
+            # newer should be better -> smaller sort key -> use negative ordinal
+            key.append(-rec_ord)
+    # No additional global tiebreaker — mod_date is only considered as fallback
+    # inside the RECORDING_DATE priority above.
     return tuple(key)
 
 
@@ -75,6 +109,8 @@ def select_best_film(
     At least one film is always kept, even if all candidates fall outside the
     duration window.
     """
+#    if any("der zuviel" in r.file for r in valid_records):
+#        print("debug") 
     if selection_priorities is None:
         selection_priorities = DEFAULT_SELECTION_PRIORITIES
 
@@ -91,7 +127,16 @@ def select_best_film(
     # Guarantee: always keep at least one — fall back to full list if nothing qualifies.
     pool = keep_candidates if keep_candidates else valid_records
 
-    return min(pool, key=lambda r: _sort_key(r, selection_priorities, max_errors_when_mc))
+    return min(
+        pool,
+        key=lambda r: _sort_key(
+            r,
+            selection_priorities,
+            max_errors_when_mc,
+            max_duration_diff_longer,
+            max_duration_diff_shorter,
+        ),
+    )
 
 
 def _get_file_size(path: str) -> int:
