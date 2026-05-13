@@ -1,5 +1,5 @@
-# Directories to ignore completely (case-insensitive)
 - .actors
-- "1080"
+- '1080'
 - bu_logs
 - tobecut
+- Mehrteiler

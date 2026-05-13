@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import shutil
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import Callable
 import datetime
 
@@ -160,15 +160,24 @@ def build_move_plan(
     max_duration_diff_longer: int = 600,
     max_duration_diff_shorter: int = 120,
     selection_priorities: list[SelectionPriority] | None = None,
-) -> tuple[dict[str, MoveAction], Counter, Counter, Counter]:
-    """Decide what to do with each file. Returns (files_to_move, action_counter, size_counter, decision_counter)."""
+) -> tuple[dict[str, MoveAction], Counter, Counter, dict[str, Counter], dict[str, Counter]]:
+    """Decide what to do with each file.
+
+    Returns (files_to_move, action_counter, size_counter, resolution_by_action, resolution_size_by_action).
+    """
     film_info_cache: dict[str, FileRecord] = {}
     files_to_move: dict[str, MoveAction] = {}
     already_logged: set[tuple[str, str]] = set()
     action_counter: Counter = Counter()
     size_counter: Counter = Counter()
-    # Count which priority decided the selection between top candidates
-    decision_counter: Counter = Counter()
+    # Per-action resolution counters for KEEP (since kept files are not in files_to_move)
+    resolution_by_action: dict[str, Counter] = defaultdict(Counter)
+    resolution_size_by_action: dict[str, Counter] = defaultdict(Counter)
+    # Cross-tab attribute matrix: attr -> Counter(attr->count) (KEEP entries only)
+    attr_matrix: dict[str, Counter] = defaultdict(Counter)
+    # Per-file attribute list for files that will be moved (counted later in execute)
+    attrs_by_file: dict[str, list[str]] = {}
+    
     total_groups = len(groups)
 
     for group_idx, group in enumerate(groups):
@@ -190,7 +199,7 @@ def build_move_plan(
         if not valid_records:
             for r in records:
                 group_name = get_group_name(r.file, duptype, file_to_groupkey)
-                files_to_move[r.file] = MoveAction(novideo_target, "NO_VIDEO", group_name)
+                files_to_move[r.file] = MoveAction(novideo_target, "NO_VIDEO", group_name, resolution=r.resolution)
             continue
 
         best_film = select_best_film(
@@ -201,30 +210,7 @@ def build_move_plan(
             max_errors_when_mc=max_errors_when_mc,
         )
 
-        # Determine which priority decided between winner and runner-up (if applicable)
-        try:
-            if len(valid_records) >= 2:
-                # compute sort keys for all valid records
-                keys = [(r, _sort_key(r, selection_priorities or DEFAULT_SELECTION_PRIORITIES, max_errors_when_mc, max_duration_diff_longer, max_duration_diff_shorter)) for r in valid_records]
-                # sort by key (lower is better)
-                keys_sorted = sorted(keys, key=lambda t: t[1])
-                winner, winner_key = keys_sorted[0]
-                runnerup, runner_key = keys_sorted[1]
-                # find first differing element in the tuple
-                for idx, (wk, rk) in enumerate(zip(winner_key, runner_key)):
-                    if wk != rk:
-                        # map priority index to name
-                        prio = (selection_priorities or DEFAULT_SELECTION_PRIORITIES)[idx]
-                        if prio == SelectionPriority.RESOLUTION:
-                            decision_counter['RESOLUTION'] += 1
-                        elif prio == SelectionPriority.RECORDING_DATE:
-                            decision_counter['NEWER_RECDATE'] += 1
-                        else:
-                            decision_counter[prio.value.upper()] += 1
-                        break
-        except Exception:
-            # non-fatal: don't fail planning if decision counting breaks
-            pass
+        
 
         for r in records:
             src = r.file
@@ -248,9 +234,36 @@ def build_move_plan(
 
                 key = (action, src)
                 if key not in already_logged:
+                    file_size = _get_file_size(src)
                     log_fn(f"{group_name}\t[{action}]\t{src}")
                     action_counter[action] += 1
-                    size_counter[action] += _get_file_size(src)
+                    size_counter[action] += file_size
+                    # record resolution counters for kept files
+                    res = r.resolution if getattr(r, "resolution", None) is not None else 0
+                    resolution_by_action[action][res] += 1
+                    resolution_size_by_action[action][res] += file_size
+                    # record attribute flags for this file
+                    attrs: list[str] = []
+                    if r.multichannel:
+                        attrs.append("MC")
+                    if r.error_count is not None and r.error_count > 0:
+                        attrs.append("ERRORS")
+                    if has_duration_values and is_too_long:
+                        attrs.append("LONGER")
+                    if has_duration_values and is_too_short:
+                        attrs.append("SHORTER")
+                    if r.resolution is not None:
+                        if r.resolution >= 1080:
+                            attrs.append("1080")
+                        elif r.resolution >= 720:
+                            attrs.append("720")
+                    # mark as KEEP so we get cross-counts with other attributes
+                    attrs.append("KEEP")
+                    # ensure attributes are unique to avoid double-counting
+                    attrs = list(dict.fromkeys(attrs))
+                    for a in attrs:
+                        for b in attrs:
+                            attr_matrix[a][b] += 1
                     already_logged.add(key)
                 continue
 
@@ -279,9 +292,28 @@ def build_move_plan(
                 dst_root = target_root
                 action = "DUPLICATE"
 
-            files_to_move[src] = MoveAction(dst_root, action, group_name)
+            files_to_move[src] = MoveAction(dst_root, action, group_name, resolution=r.resolution)
+            # Collect attributes for moved files to be counted in execute_move_plan
+            attrs_move: list[str] = []
+            if r.multichannel:
+                attrs_move.append("MC")
+            if r.error_count is not None and r.error_count > 0:
+                attrs_move.append("ERRORS")
+            if has_duration_values and is_too_long:
+                attrs_move.append("LONGER")
+            if has_duration_values and is_too_short:
+                attrs_move.append("SHORTER")
+            if r.resolution is not None:
+                if r.resolution >= 1080:
+                    attrs_move.append("1080")
+                elif r.resolution >= 720:
+                    attrs_move.append("720")
+            attrs_move.append("DUPLICATE")
+            # ensure attributes are unique before storing to avoid duplicates
+            attrs_move = list(dict.fromkeys(attrs_move))
+            attrs_by_file[src] = attrs_move
 
-    return files_to_move, action_counter, size_counter, decision_counter
+    return files_to_move, action_counter, size_counter, resolution_by_action, resolution_size_by_action, attr_matrix, attrs_by_file
 
 
 def execute_move_plan(
@@ -292,10 +324,17 @@ def execute_move_plan(
     log_fn: Callable[[str], None],
     progress_cb: Callable[[int, int], None] | None = None,
     size_counter: Counter | None = None,
-) -> None:
+    attrs_by_file: dict[str, list[str]] | None = None,
+) -> tuple[dict[str, Counter], dict[str, Counter], dict[str, Counter]]:
     """Execute or dry-run the move plan."""
     if size_counter is None:
         size_counter = Counter()
+    # Per-action resolution counters: action -> Counter(resolution->count)
+    from collections import defaultdict
+
+    resolution_by_action: dict[str, Counter] = defaultdict(Counter)
+    resolution_size_by_action: dict[str, Counter] = defaultdict(Counter)
+    attr_matrix: dict[str, Counter] = defaultdict(Counter)
     sorted_items = sorted(files_to_move.items())
     total = len(sorted_items)
     for idx, (file_path, move) in enumerate(sorted_items):
@@ -306,6 +345,35 @@ def execute_move_plan(
         log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}")
         action_counter[move.action] += 1
         size_counter[move.action] += file_size
+        # Track resolution distribution per action (use 0 for unknown)
+        res = move.resolution if getattr(move, "resolution", None) is not None else 0
+        resolution_by_action[move.action][res] += 1
+        resolution_size_by_action[move.action][res] += file_size
+        # attributes for moved file: prefer attrs_by_file from build, but ensure resolution/DUPLICATE tags present
+        attrs_move = []
+        if attrs_by_file and file_path in attrs_by_file:
+            attrs_move.extend(attrs_by_file[file_path])
+            # If move.resolution is not available, don't trust resolution tags coming
+            # from attrs_by_file (these can be sidecar/meta files). Remove them so
+            # resolution counts come only from `move.resolution`.
+            if getattr(move, "resolution", None) is None:
+                attrs_move = [a for a in attrs_move if a not in ("720", "1080")]
+        # normalize resolution tag: remove any existing resolution tags
+        # then append the correct tag from move.resolution (if available).
+        attrs_move = [a for a in attrs_move if a not in ("720", "1080")]
+        if move.resolution is not None:
+            if move.resolution >= 1080:
+                attrs_move.append("1080")
+            elif move.resolution >= 720:
+                attrs_move.append("720")
+        # ensure DUPLICATE tag
+        if "DUPLICATE" not in attrs_move and move.action.startswith("DUPLICATE"):
+            attrs_move.append("DUPLICATE")
+        # ensure uniqueness before counting to avoid accidental duplicates
+        attrs_move = list(dict.fromkeys(attrs_move))
+        for a in attrs_move:
+            for b in attrs_move:
+                attr_matrix[a][b] += 1
 
         if progress_cb is not None:
             progress_cb(idx + 1, total)
@@ -320,3 +388,4 @@ def execute_move_plan(
             else:
                 log_fn(f"{move.group_name}\t[SKIP_EXISTS]\t{dst}")
                 action_counter["SKIP_EXISTS"] += 1
+    return resolution_by_action, resolution_size_by_action, attr_matrix

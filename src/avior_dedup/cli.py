@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from collections import Counter
 
 from avior_dedup.dedup.models import SelectionPriority
 from avior_dedup.dedup.planner import build_move_plan, execute_move_plan
@@ -101,7 +102,7 @@ def main() -> None:
 
     selection_prios = [SelectionPriority(v) for v in args.selection_priorities]
 
-    files_to_move, action_counter, size_counter, decision_counter = build_move_plan(
+    files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file = build_move_plan(
         groups=groups,
         target_root=target_root,
         error_target=error_target,
@@ -115,7 +116,80 @@ def main() -> None:
         selection_priorities=selection_prios,
     )
 
-    execute_move_plan(files_to_move, source_root, args.mode, action_counter, log_fn, size_counter=size_counter)
+    resolution_by_action_move, resolution_size_by_action_move, attr_matrix_move = execute_move_plan(
+        files_to_move,
+        source_root,
+        args.mode,
+        action_counter,
+        log_fn,
+        size_counter=size_counter,
+        attrs_by_file=attrs_by_file,
+    )
+
+    # Write merge diagnostic: capture pre-merge counts for quick inspection
+    try:
+        merge_diag_path = get_numbered_log_file(os.path.join(target_root, args.logname + ".diag_merge.txt"))
+        with open(merge_diag_path, "w", encoding="utf-8") as md:
+            md.write("Pre-merge resolution_by_action_build DUPLICATE 720:\n")
+            dup_actions_build = [a for a in resolution_by_action_build.keys() if a.startswith("DUPLICATE")]
+            md.write(str({a: resolution_by_action_build[a].get(720, 0) for a in dup_actions_build}) + "\n")
+            md.write("Pre-merge attr_matrix_build 720->DUPLICATE:\n")
+            md.write(str(attr_matrix_build.get("720", Counter()).get("DUPLICATE", 0)) + "\n")
+            md.write("Move-phase resolution_by_action_move DUPLICATE 720:\n")
+            dup_actions_move = [a for a in resolution_by_action_move.keys() if a.startswith("DUPLICATE")]
+            md.write(str({a: resolution_by_action_move[a].get(720, 0) for a in dup_actions_move}) + "\n")
+            md.write("Move-phase attr_matrix_move 720->DUPLICATE:\n")
+            md.write(str(attr_matrix_move.get("720", Counter()).get("DUPLICATE", 0)) + "\n")
+        print(f"Wrote merge diagnostic: {merge_diag_path}")
+    except Exception:
+        pass
+
+    # Merge resolution counters from move-phase (duplicates) with build-phase (KEEP entries)
+    for action, ctr in resolution_by_action_move.items():
+        if action not in resolution_by_action_build:
+            resolution_by_action_build[action] = Counter()
+        resolution_by_action_build[action].update(ctr)
+    for action, sz in resolution_size_by_action_move.items():
+        if action not in resolution_size_by_action_build:
+            resolution_size_by_action_build[action] = Counter()
+        for res_val, v in sz.items():
+            resolution_size_by_action_build[action][res_val] += v
+    # Merge attribute matrices
+    for a, ctr in attr_matrix_move.items():
+        if a not in attr_matrix_build:
+            attr_matrix_build[a] = Counter()
+        attr_matrix_build[a].update(ctr)
 
     log_handle.close()
-    sort_and_finalize_log(log_path, action_counter, args, size_counter, decision_counter)
+    # Diagnostic: verify 720p DUPLICATE counts match between resolution counters and attribute matrix
+    try:
+        dup_actions = [a for a in resolution_by_action_build.keys() if a.startswith("DUPLICATE")]
+        sum_dup_720 = sum(resolution_by_action_build[a].get(720, 0) for a in dup_actions)
+        matrix_dup_720 = attr_matrix_build.get("720", Counter()).get("DUPLICATE", 0)
+        if sum_dup_720 != matrix_dup_720:
+            print(f"DIAGNOSTIC: mismatch DUPLICATE 720: actions_sum={sum_dup_720} matrix={matrix_dup_720}")
+            diag_path = get_numbered_log_file(os.path.join(target_root, args.logname + ".diag.txt"))
+            # Files that contributed to resolution counts (move.resolution == 720)
+            res_files = [fp for fp, mv in files_to_move.items() if mv.action.startswith("DUPLICATE") and getattr(mv, "resolution", None) == 720]
+            # Files that have attrs_by_file marking 720 & DUPLICATE
+            attrs_files = [fp for fp, attrs in (attrs_by_file or {}).items() if "720" in attrs and "DUPLICATE" in attrs]
+            only_in_attrs = sorted(set(attrs_files) - set(res_files))
+            only_in_resolution = sorted(set(res_files) - set(attrs_files))
+            with open(diag_path, "w", encoding="utf-8") as df:
+                df.write(f"Mismatch DUPLICATE 720: actions_sum={sum_dup_720} matrix={matrix_dup_720}\n")
+                df.write("\nFiles counted by resolution (move.resolution==720):\n")
+                for fp in sorted(res_files):
+                    df.write(fp + "\n")
+                df.write("\nFiles with attrs_by_file marking 720 & DUPLICATE:\n")
+                for fp in sorted(attrs_files):
+                    df.write(fp + "\n")
+                df.write("\nOnly in attrs_by_file (not in resolution list):\n")
+                for fp in only_in_attrs:
+                    df.write(fp + "\n")
+                df.write("\nOnly in resolution list (not in attrs_by_file):\n")
+                for fp in only_in_resolution:
+                    df.write(fp + "\n")
+            print(f"Wrote diagnostic file: {diag_path}")
+    except Exception:
+        pass
+    sort_and_finalize_log(log_path, action_counter, args, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build)

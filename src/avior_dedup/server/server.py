@@ -14,6 +14,7 @@ import yaml
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from collections import Counter
 
 from avior_dedup import config
 from avior_dedup.cli import get_numbered_log_file
@@ -122,7 +123,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
                 raise JobCancelled
             reporter.update(phase="planning", files_planned=current, total_files_to_move=total)
 
-        files_to_move, action_counter, size_counter, decision_counter = build_move_plan(
+        files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file = build_move_plan(
             groups=groups,
             target_root=target_root,
             error_target=error_target,
@@ -150,7 +151,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
                 raise JobCancelled
             reporter.update(phase="executing", files_moved=current, total_files_to_move=total)
 
-        execute_move_plan(
+        resolution_by_action_move, resolution_size_by_action_move, attr_matrix_move = execute_move_plan(
             files_to_move,
             source_root,
             req.mode,
@@ -158,7 +159,24 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             log_fn,
             progress_cb=exec_cb,
             size_counter=size_counter,
+            attrs_by_file=attrs_by_file,
         )
+
+        # Merge build-phase resolution counters (KEEP entries) with move-phase counters
+        for action, ctr in resolution_by_action_move.items():
+            if action not in resolution_by_action_build:
+                resolution_by_action_build[action] = Counter()
+            resolution_by_action_build[action].update(ctr)
+        for action, sz in resolution_size_by_action_move.items():
+            if action not in resolution_size_by_action_build:
+                resolution_size_by_action_build[action] = Counter()
+            for res_val, v in sz.items():
+                resolution_size_by_action_build[action][res_val] += v
+        # Merge attribute matrices
+        for a, ctr in attr_matrix_move.items():
+            if a not in attr_matrix_build:
+                attr_matrix_build[a] = Counter()
+            attr_matrix_build[a].update(ctr)
 
         log_handle.close()
 
@@ -178,7 +196,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_episode_nos = req.remove_episode_nos
             ignored_directories = req.ignored_directories
 
-        sort_and_finalize_log(log_path, action_counter, _Args(), size_counter, decision_counter)
+        sort_and_finalize_log(log_path, action_counter, _Args(), size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build)
 
         scanned = reporter.snapshot.files_scanned
         print(f"[avior-dedup] Job {job_id} done: files_scanned={scanned}, groups={len(groups)}, actions={dict(action_counter)}")
@@ -187,7 +205,6 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             groups_found=len(groups),
             action_counts=dict(action_counter),
             action_sizes=dict(size_counter),
-            decision_counts=dict(decision_counter),
             log_path=log_path,
         )
         _jobs[job_id].status = JobStatus(

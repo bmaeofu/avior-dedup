@@ -26,7 +26,9 @@ def write_summary(
     action_counter: Counter,
     args: argparse.Namespace,
     size_counter: Optional[Counter] = None,
-    decision_counter: Optional[Counter] = None,
+    resolution_by_action: Optional[dict[str, Counter]] = None,
+    resolution_size_by_action: Optional[dict[str, Counter]] = None,
+    attr_matrix: Optional[dict[str, Counter]] = None,
 ) -> None:
     """Write execution summary to log file and stdout."""
     summary_lines = [
@@ -56,7 +58,34 @@ def write_summary(
         total_files = sum(action_counter.values())
         total_size = sum(size_counter.values()) if size_counter else 0
         has_sizes = size_counter and total_size > 0
+        # Preferred display order for action statistics
+        preferred_order = [
+            "DUPLICATE",
+            "DUPLICATE_WITH_ERRORS",
+            "DUPLICATE_WITH_ERRORS_MC",
+            "DUPLICATE_WITH_LONGER_DURATION",
+            "DUPLICATE_WITH_SHORTER_DURATION",
+            "KEEP",
+            "KEEP_MC",
+            "KEEP_WITH_SHORTER_DURATION",
+            "KEEP_MC_WITH_ERRORS",
+            "KEEP_MC_WITH_SHORTER_DURATION",
+            "NO_VIDEO",
+        ]
+
+        # Print preferred items first in that order, then any remaining actions sorted
+        printed = set()
+        for action in preferred_order:
+            if action in action_counter:
+                count = action_counter[action]
+                pct = (count / total_files * 100) if total_files > 0 else 0
+                size_str = f"  [{_format_size(size_counter[action]):>10}]" if has_sizes else ""
+                summary_lines.append(f"  {action:.<40} {count:>6} files ({pct:>5.1f}%){size_str}")
+                printed.add(action)
+
         for action, count in sorted(action_counter.items()):
+            if action in printed:
+                continue
             pct = (count / total_files * 100) if total_files > 0 else 0
             size_str = f"  [{_format_size(size_counter[action]):>10}]" if has_sizes else ""
             summary_lines.append(f"  {action:.<40} {count:>6} files ({pct:>5.1f}%){size_str}")
@@ -66,11 +95,70 @@ def write_summary(
     else:
         summary_lines.append("  No actions performed")
 
-    # Optional: include decision statistics (what priority decided between top two candidates)
-    if decision_counter:
-        summary_lines.append("\nDECISION STATISTICS:")
-        for key, cnt in sorted(decision_counter.items()):
-            summary_lines.append(f"  {key.replace('_', ' ').upper():.<40} {cnt:>6} groups")
+    # Optional: include per-action resolution breakdown
+    if resolution_by_action:
+        summary_lines.append("\nRESOLUTION BY ACTION:")
+        # iterate actions in the same displayed order where possible
+        actions_order = [
+            "DUPLICATE",
+            "DUPLICATE_WITH_ERRORS",
+            "DUPLICATE_WITH_ERRORS_MC",
+            "DUPLICATE_WITH_LONGER_DURATION",
+            "DUPLICATE_WITH_SHORTER_DURATION",
+            "KEEP",
+            "KEEP_MC",
+            "KEEP_WITH_SHORTER_DURATION",
+            "KEEP_MC_WITH_ERRORS",
+            "KEEP_MC_WITH_SHORTER_DURATION",
+            "NO_VIDEO",
+        ]
+        # ensure we include any other actions too
+        remaining_actions = [a for a in sorted(resolution_by_action.keys()) if a not in actions_order]
+        full_actions = [a for a in actions_order if a in resolution_by_action] + remaining_actions
+
+        for action in full_actions:
+            res_counter = resolution_by_action.get(action, {})
+            if not res_counter:
+                continue
+            total_res_files = sum(res_counter.values())
+            size_counter_for_action = resolution_size_by_action.get(action) if resolution_size_by_action else None
+            has_res_sizes = size_counter_for_action and sum(size_counter_for_action.values()) > 0
+            summary_lines.append(f"  {action}:")
+            # sort resolutions numeric descending, put 0 (unknown) last
+            res_keys = sorted([k for k in res_counter.keys() if k != 0], reverse=True) + ([0] if 0 in res_counter else [])
+            for res in res_keys:
+                cnt = res_counter[res]
+                pct = (cnt / total_res_files * 100) if total_res_files > 0 else 0
+                size_str = (
+                    f"  [{_format_size(size_counter_for_action[res]):>10}]" if has_res_sizes and size_counter_for_action and res in size_counter_for_action else ""
+                )
+                label = f"{res}p" if res and res != 0 else "unknown"
+                summary_lines.append(f"    {label:<8} {cnt:>6} files ({pct:>5.1f}%){size_str}")
+
+    # Optional: print attribute cross-tab matrix (e.g., MC/ERRORS/LONGER/SHORTER/1080/720)
+    if attr_matrix:
+        summary_lines.append("\nATTRIBUTE MATRIX:")
+        # preferred attribute order
+        preferred = ["MC", "ERRORS", "LONGER", "SHORTER", "1080", "720"]
+        others = [a for a in sorted(attr_matrix.keys()) if a not in preferred]
+        attrs = [a for a in preferred if a in attr_matrix] + others
+        if attrs:
+            # compute dynamic column widths so headers and numbers align
+            # row label width should fit the longest attribute name
+            row_label_width = max(7, max(len(r) for r in attrs) + 1)
+            # compute per-column width based on header and largest value in that column
+            col_widths: list[int] = []
+            for col in attrs:
+                max_val_len = max(len(str(attr_matrix.get(row, {}).get(col, 0))) for row in attrs)
+                col_w = max(len(col), max_val_len) + 2
+                col_widths.append(col_w)
+            # header
+            header = " " * row_label_width + "".join(f"{a:>{w}}" for a, w in zip(attrs, col_widths))
+            summary_lines.append(header)
+            for row in attrs:
+                row_vals = [str(attr_matrix.get(row, {}).get(col, 0)) for col in attrs]
+                line = f"{row:<{row_label_width}}" + "".join(f"{v:>{w}}" for v, w in zip(row_vals, col_widths))
+                summary_lines.append(line)
 
     summary_lines.append(f"\nExecution date: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}")
     summary_lines.append("=" * 80)
@@ -86,7 +174,9 @@ def sort_and_finalize_log(
     action_counter: Counter,
     args: argparse.Namespace,
     size_counter: Counter | None = None,
-    decision_counter: Counter | None = None,
+    resolution_counter: Counter | None = None,
+    resolution_size_counter: Counter | None = None,
+    attr_matrix: dict[str, Counter] | None = None,
 ) -> None:
     """Sort the log file by group name and action, then append summary."""
     if not log_path or not os.path.exists(log_path):
@@ -108,4 +198,4 @@ def sort_and_finalize_log(
     with open(log_path, "w", encoding="utf-8") as f:
         for line in sorted_lines:
             f.write(line + "\n")
-        write_summary(f, action_counter, args, size_counter, decision_counter)
+        write_summary(f, action_counter, args, size_counter, resolution_counter, resolution_size_counter, attr_matrix)

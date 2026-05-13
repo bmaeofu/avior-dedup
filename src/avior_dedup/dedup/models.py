@@ -49,3 +49,4 @@ class MoveAction:
     dst_root: str
     action: str
     group_name: str
+    resolution: Optional[int] = None
