@@ -71,6 +71,21 @@ def main() -> None:
         action="store_true",
         help="Remove episode numbers like (1_2), (2) for semantic matching (skipped if certain keywords are present)",
     )
+    parser.add_argument(
+        "--remove-spaces",
+        action="store_true",
+        help="Also remove all spaces when computing semantic normalization (space-insensitive matching)",
+    )
+    parser.add_argument(
+        "--remove-non-episode-parens",
+        action="store_true",
+        help="Remove parenthetical expressions that are not episode numbers when computing semantic normalization",
+    )
+    parser.add_argument(
+        "--normalize-episode-nos",
+        action="store_true",
+        help="Normalize episode tokens like (1_5) or (S01_E05) to standard form (s01e05) instead of removing them",
+    )
 
     args = parser.parse_args()
 
@@ -94,7 +109,14 @@ def main() -> None:
         print(msg)
         log_handle.write(msg + "\n")
 
-    groups, file_to_groupkey = find_duplicates(source_root, args.duptype, args.remove_episode_nos, args.semantic_prefixes)
+    groups, file_to_groupkey = find_duplicates(
+        source_root,
+        args.duptype,
+        args.remove_episode_nos,
+        args.semantic_prefixes,
+        args.remove_spaces,
+        args.remove_non_episode_parens,
+    )
 
     print(f"\nDuplicate groups found: {len(groups)}")
     print(f"Duplicate type: {args.duptype}")

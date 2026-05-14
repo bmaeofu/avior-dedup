@@ -30,6 +30,8 @@ class JobRequest(BaseModel):
     )
     semantic_prefixes: list[str] = Field(default_factory=lambda: [r"terra\s*x\s*-\s*"])
     remove_episode_nos: bool = False
+    remove_spaces: bool = False
+    remove_non_episode_parens: bool = False
 
 
 class ProgressSnapshot(BaseModel):

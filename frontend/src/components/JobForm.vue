@@ -51,6 +51,8 @@ const form = reactive<JobRequest>({
   selection_priorities: ['multichannel', 'resolution', 'fewer_errors', 'recording_date', 'closest_duration'] as SelectionPriority[],
   semantic_prefixes: ['terra\\s*x\\s*-\\s*'],
   remove_episode_nos: false,
+  remove_spaces: false,
+  remove_non_episode_parens: false,
 })
 
 const canSubmit = computed(() => form.source.trim() !== '' && form.target.trim() !== '')
@@ -327,6 +329,23 @@ function submit() {
             hide-details
           />
         </v-col>
+        <v-col cols="12" md="4">
+          <v-checkbox
+            v-model="form.remove_spaces"
+            label="Ignore Spaces"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-checkbox
+            v-model="form.remove_non_episode_parens"
+            label="Remove non-episode parentheses"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+        
       </v-row>
       <v-row dense class="mt-1">
         <v-col cols="12">

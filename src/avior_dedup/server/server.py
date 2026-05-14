@@ -111,6 +111,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             req.duptype,
             req.remove_episode_nos,
             req.semantic_prefixes,
+            req.remove_spaces,
+            req.remove_non_episode_parens,
             req.ignored_directories,
             progress_cb=scan_cb,
         )
@@ -194,6 +196,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             selection_priorities = req.selection_priorities
             semantic_prefixes = req.semantic_prefixes
             remove_episode_nos = req.remove_episode_nos
+            remove_spaces = req.remove_spaces
+            remove_non_episode_parens = req.remove_non_episode_parens
             ignored_directories = req.ignored_directories
 
         sort_and_finalize_log(log_path, action_counter, _Args(), size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build)

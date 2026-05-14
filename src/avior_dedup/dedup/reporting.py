@@ -50,6 +50,8 @@ def write_summary(
         f"  Selection priorities:  {', '.join(p.value if hasattr(p, 'value') else str(p) for p in args.selection_priorities)}",
         f"  Semantic prefixes:     {', '.join(args.semantic_prefixes)}",
         f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}",
+        f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}",
+        f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}",
         f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}",
     ]
 

@@ -15,6 +15,8 @@ export interface JobRequest {
   selection_priorities: SelectionPriority[]
   semantic_prefixes: string[]
   remove_episode_nos: boolean
+  remove_spaces: boolean
+  remove_non_episode_parens: boolean
 }
 
 export interface ProgressSnapshot {

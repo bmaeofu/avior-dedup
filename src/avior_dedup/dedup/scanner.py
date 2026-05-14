@@ -439,6 +439,8 @@ def find_duplicates(
     duptype: str,
     remove_episode_nos: bool,
     semantic_prefixes: list[str],
+    remove_spaces: bool = False,
+    remove_non_episode_parens: bool = False,
     ignored_directories: list[str] | None = None,
     progress_cb: Callable[..., None] | None = None,
 ) -> tuple[list[list[str]], dict[str, dict[str, str]]]:
@@ -503,7 +505,13 @@ def find_duplicates(
         lower_name = _canonical_case_key(name)
         files_by_lower.setdefault(lower_name, []).append(full_path)
 
-        semantic_name = normalize_film_name(name, semantic_prefixes, remove_episode_nos)
+        semantic_name = normalize_film_name(
+            name,
+            semantic_prefixes,
+            remove_episode_nos,
+            remove_spaces,
+            remove_non_episode_parens,
+        )
         files_by_semantic.setdefault(semantic_name, []).append(full_path)
 
         file_to_groupkey[full_path] = GroupKeys(
