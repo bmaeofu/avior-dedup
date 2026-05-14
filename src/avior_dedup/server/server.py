@@ -58,6 +58,7 @@ app.include_router(searchmove_router)
 
 def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
     """Execute the full dedup pipeline, pushing progress via reporter."""
+    start_time = None
     try:
         apply_runtime_umask()
         # record job start time explicitly
