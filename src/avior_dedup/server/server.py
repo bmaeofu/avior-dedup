@@ -15,6 +15,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from collections import Counter
+from datetime import datetime
 
 from avior_dedup import config
 from avior_dedup.cli import get_numbered_log_file
@@ -59,6 +60,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
     """Execute the full dedup pipeline, pushing progress via reporter."""
     try:
         apply_runtime_umask()
+        # record job start time explicitly
+        start_time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
 
         source_root = os.path.abspath(req.source.strip())
         target_root = os.path.abspath(req.target.strip())
@@ -183,6 +186,9 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
         log_handle.close()
 
         # Build a minimal args-like object for sort_and_finalize_log
+        # capture job end time explicitly (useful when running inside containers)
+        exec_time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+
         class _Args:
             mode = req.mode
             source = source_root
@@ -198,6 +204,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_episode_nos = req.remove_episode_nos
             remove_spaces = req.remove_spaces
             remove_non_episode_parens = req.remove_non_episode_parens
+            execution_date = exec_time
+            start_time = start_time
             ignored_directories = req.ignored_directories
 
         sort_and_finalize_log(log_path, action_counter, _Args(), size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build)

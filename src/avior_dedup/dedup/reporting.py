@@ -162,7 +162,33 @@ def write_summary(
                 line = f"{row:<{row_label_width}}" + "".join(f"{v:>{w}}" for v, w in zip(row_vals, col_widths))
                 summary_lines.append(line)
 
-    summary_lines.append(f"\nExecution date: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}")
+    # Allow caller to provide an explicit execution date (e.g. job end time).
+    exec_date = getattr(args, "execution_date", None)
+    start_time = getattr(args, "start_time", None)
+    if not exec_date:
+        exec_date = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+
+    # If we have both start and end, compute duration
+    duration_str = None
+    if start_time:
+        try:
+            fmt = "%d.%m.%Y %H:%M:%S"
+            sd = datetime.strptime(start_time, fmt)
+            ed = datetime.strptime(exec_date, fmt)
+            delta = ed - sd
+            total = int(delta.total_seconds())
+            hrs = total // 3600
+            mins = (total % 3600) // 60
+            secs = total % 60
+            duration_str = f"{hrs:02d}:{mins:02d}:{secs:02d}"
+        except Exception:
+            duration_str = None
+
+    summary_lines.append("")
+    summary_lines.append(f"  Start time: {start_time or 'unknown'}")
+    summary_lines.append(f"  End time:   {exec_date}")
+    if duration_str:
+        summary_lines.append(f"  Duration:   {duration_str}")
     summary_lines.append("=" * 80)
 
     for line in summary_lines:

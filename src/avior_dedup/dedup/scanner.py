@@ -352,6 +352,7 @@ def get_video_length(path: str, use_epg: bool) -> Tuple[bool, str, Optional[floa
 def get_film_error_count(
     file_list: list[str],
     progress_cb: Callable[[str, int], None] | None = None,
+    log_fn: Callable[[str], None] | None = None,
 ) -> list[FileRecord]:
     """Analyze a list of file paths and return FileRecord for each, including error counts from logs."""
     video_suffixes = config.video_suffixes()
@@ -368,6 +369,10 @@ def get_film_error_count(
             if os.path.exists(video_filepath):
                 video_exists = True
                 break
+
+        if not video_exists and log_fn is not None:
+            tried = [os.path.join(film_dir, film_base + ext) for ext in video_suffixes]
+            log_fn(f"[DEBUG] No video found for base '{film_base}' in '{film_dir}'. Tried: {tried}")
 
         video_duration=None
         rec_duration=None

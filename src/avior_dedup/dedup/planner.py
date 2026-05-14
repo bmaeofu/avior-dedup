@@ -185,7 +185,7 @@ def build_move_plan(
         records: list[FileRecord] = []
         uncached = [f for f in group if f not in film_info_cache]
         if uncached:
-            for rec in get_film_error_count(uncached):
+            for rec in get_film_error_count(uncached, log_fn=log_fn):
                 film_info_cache[rec.file] = rec
         for f in group:
             records.append(film_info_cache[f])
