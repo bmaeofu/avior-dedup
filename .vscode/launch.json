@@ -15,6 +15,7 @@
                 "runlog.txt",
                 "--duptype",
                 "semantic",
+                "--remove-spaces",
                 "--remove-non-episode-parens",                
                 "--max-errors-when-mc",
                 "3",
