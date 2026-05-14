@@ -1,6 +1,11 @@
 .cortex/
 .direnv/
 
+# Media files
+*.ts
+*.mkv
+*.mp4
+
 # Frontend
 frontend/node_modules/
 frontend/dist/
