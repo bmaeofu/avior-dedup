@@ -206,10 +206,14 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_spaces = req.remove_spaces
             remove_non_episode_parens = req.remove_non_episode_parens
             execution_date = exec_time
-            start_time = start_time
+            # start_time will be attached after class creation to avoid NameError
             ignored_directories = req.ignored_directories
 
-        sort_and_finalize_log(log_path, action_counter, _Args(), size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build)
+        # attach start_time to the args-like object
+        _args = _Args()
+        setattr(_args, 'start_time', start_time)
+
+        sort_and_finalize_log(log_path, action_counter, _args, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build)
 
         scanned = reporter.snapshot.files_scanned
         print(f"[avior-dedup] Job {job_id} done: files_scanned={scanned}, groups={len(groups)}, actions={dict(action_counter)}")
