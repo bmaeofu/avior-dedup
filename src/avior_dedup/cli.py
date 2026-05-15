@@ -94,6 +94,23 @@ def main() -> None:
     error_target = os.path.abspath(args.error_target) if args.error_target else os.path.join(target_root, "errors")
     novideo_target = os.path.abspath(args.novideo_target) if args.novideo_target else os.path.join(target_root, "no_video")
 
+    # Print parsed PARAMETERS immediately so the CLI shows the exact selections
+    print("\nPARAMETERS:")
+    print(f"  Mode:                   {args.mode} ({'MOVE' if args.mode == 'm' else 'FIND ONLY'})")
+    print(f"  Source:                 {args.source}")
+    print(f"  Target:                {args.target}")
+    print(f"  Error target:          {args.error_target or 'default'}")
+    print(f"  Duplicate type:        {args.duptype}")
+    print(f"  Max errors (MC):       {args.max_errors_when_mc}")
+    print(f"  Max duration +diff:    {args.max_duration_diff_longer}")
+    print(f"  Max duration -diff:    {args.max_duration_diff_shorter}")
+    print(f"  Selection priorities:  {', '.join(p.value if hasattr(p, 'value') else str(p) for p in args.selection_priorities)}")
+    print(f"  Semantic prefixes:     {', '.join(args.semantic_prefixes)}")
+    print(f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}")
+    print(f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}")
+    print(f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}")
+    print(f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}")
+
     os.makedirs(target_root, exist_ok=True)
     os.makedirs(error_target, exist_ok=True)
     os.makedirs(novideo_target, exist_ok=True)
@@ -124,7 +141,7 @@ def main() -> None:
 
     selection_prios = [SelectionPriority(v) for v in args.selection_priorities]
 
-    files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file = build_move_plan(
+    files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file, errors_by_file = build_move_plan(
         groups=groups,
         target_root=target_root,
         error_target=error_target,
@@ -146,25 +163,10 @@ def main() -> None:
         log_fn,
         size_counter=size_counter,
         attrs_by_file=attrs_by_file,
+        errors_by_file=errors_by_file,
     )
 
-    # Write merge diagnostic: capture pre-merge counts for quick inspection
-    try:
-        merge_diag_path = get_numbered_log_file(os.path.join(target_root, args.logname + ".diag_merge.txt"))
-        with open(merge_diag_path, "w", encoding="utf-8") as md:
-            md.write("Pre-merge resolution_by_action_build DUPLICATE 720:\n")
-            dup_actions_build = [a for a in resolution_by_action_build.keys() if a.startswith("DUPLICATE")]
-            md.write(str({a: resolution_by_action_build[a].get(720, 0) for a in dup_actions_build}) + "\n")
-            md.write("Pre-merge attr_matrix_build 720->DUPLICATE:\n")
-            md.write(str(attr_matrix_build.get("720", Counter()).get("DUPLICATE", 0)) + "\n")
-            md.write("Move-phase resolution_by_action_move DUPLICATE 720:\n")
-            dup_actions_move = [a for a in resolution_by_action_move.keys() if a.startswith("DUPLICATE")]
-            md.write(str({a: resolution_by_action_move[a].get(720, 0) for a in dup_actions_move}) + "\n")
-            md.write("Move-phase attr_matrix_move 720->DUPLICATE:\n")
-            md.write(str(attr_matrix_move.get("720", Counter()).get("DUPLICATE", 0)) + "\n")
-        print(f"Wrote merge diagnostic: {merge_diag_path}")
-    except Exception:
-        pass
+    # Merge diagnostic generation disabled: diag_merge file no longer produced
 
     # Merge resolution counters from move-phase (duplicates) with build-phase (KEEP entries)
     for action, ctr in resolution_by_action_move.items():

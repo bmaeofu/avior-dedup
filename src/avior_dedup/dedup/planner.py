@@ -177,6 +177,7 @@ def build_move_plan(
     attr_matrix: dict[str, Counter] = defaultdict(Counter)
     # Per-file attribute list for files that will be moved (counted later in execute)
     attrs_by_file: dict[str, list[str]] = {}
+    errors_by_file: dict[str, int] = {}
     
     total_groups = len(groups)
 
@@ -235,7 +236,11 @@ def build_move_plan(
                 key = (action, src)
                 if key not in already_logged:
                     file_size = _get_file_size(src)
-                    log_fn(f"{group_name}\t[{action}]\t{src}")
+                    # Append error count for actions that have errors
+                    if r.error_count is not None and r.error_count > 0:
+                        log_fn(f"{group_name}\t[{action}]\t{src}\tERRORS:{r.error_count}")
+                    else:
+                        log_fn(f"{group_name}\t[{action}]\t{src}")
                     action_counter[action] += 1
                     size_counter[action] += file_size
                     # record resolution counters for kept files
@@ -312,8 +317,19 @@ def build_move_plan(
             # ensure attributes are unique before storing to avoid duplicates
             attrs_move = list(dict.fromkeys(attrs_move))
             attrs_by_file[src] = attrs_move
+            # record numeric error count for this file to be used during execute
+            errors_by_file[src] = r.error_count if r.error_count is not None else 0
 
-    return files_to_move, action_counter, size_counter, resolution_by_action, resolution_size_by_action, attr_matrix, attrs_by_file
+    return (
+        files_to_move,
+        action_counter,
+        size_counter,
+        resolution_by_action,
+        resolution_size_by_action,
+        attr_matrix,
+        attrs_by_file,
+        errors_by_file,
+    )
 
 
 def execute_move_plan(
@@ -325,6 +341,7 @@ def execute_move_plan(
     progress_cb: Callable[[int, int], None] | None = None,
     size_counter: Counter | None = None,
     attrs_by_file: dict[str, list[str]] | None = None,
+    errors_by_file: dict[str, int] | None = None,
 ) -> tuple[dict[str, Counter], dict[str, Counter], dict[str, Counter]]:
     """Execute or dry-run the move plan."""
     if size_counter is None:
@@ -342,7 +359,12 @@ def execute_move_plan(
         dst = os.path.join(move.dst_root, rel)
 
         file_size = _get_file_size(file_path)
-        log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}")
+        # Append error count for moves when available
+        err_count = errors_by_file.get(file_path, 0) if errors_by_file is not None else 0
+        if err_count and err_count > 0:
+            log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}\tERRORS:{err_count}")
+        else:
+            log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}")
         action_counter[move.action] += 1
         size_counter[move.action] += file_size
         # Track resolution distribution per action (use 0 for unknown)

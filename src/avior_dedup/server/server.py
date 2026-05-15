@@ -129,7 +129,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
                 raise JobCancelled
             reporter.update(phase="planning", files_planned=current, total_files_to_move=total)
 
-        files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file = build_move_plan(
+        files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file, errors_by_file = build_move_plan(
             groups=groups,
             target_root=target_root,
             error_target=error_target,
@@ -166,6 +166,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             progress_cb=exec_cb,
             size_counter=size_counter,
             attrs_by_file=attrs_by_file,
+            errors_by_file=errors_by_file,
         )
 
         # Merge build-phase resolution counters (KEEP entries) with move-phase counters

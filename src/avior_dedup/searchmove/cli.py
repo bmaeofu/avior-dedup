@@ -124,9 +124,11 @@ def main() -> None:
         log_handle.write(msg + "\n")
 
     last_dir: str | None = None
+    last_phase: str | None = None
 
     def progress_cb(**kw: object) -> None:
         nonlocal last_dir
+        nonlocal last_phase
         phase = kw.get("phase", "")
         if phase == "scanning":
             current_dir = kw.get("current_dir", "")
@@ -142,7 +144,15 @@ def main() -> None:
             moved = kw.get("files_moved", 0)
             total = kw.get("total_files_to_move", 0)
             if total:
+                # When entering the executing phase, ensure the previous
+                # searching line is terminated so leftover characters
+                # from a longer 'Searching:' line are not left behind.
+                if last_phase != "executing":
+                    print()
                 print(f"\rExecuting: {moved}/{total}", end="", flush=True)
+
+        # Track last seen phase so we can detect phase transitions
+        last_phase = phase
 
     try:
         result = run_search_move_job(
@@ -156,16 +166,20 @@ def main() -> None:
             progress_cb=progress_cb,
             log_fn=log_fn,
             output_path=args.output_file,
+            log_path=log_path,
         )
         # Append concise statistics to the log for quick inspection.
         try:
             log_handle.write("--- STATS ---\n")
+            log_handle.write(f"SCAN_SECONDS:\t{result.scan_seconds:.3f}\n")
+            log_handle.write(f"SEARCH_SECONDS:\t{result.search_seconds:.3f}\n")
+            log_handle.write(f"EXECUTE_SECONDS:\t{result.execute_seconds:.3f}\n")
+            log_handle.write(f"TOTAL_SECONDS:\t{result.total_seconds:.3f}\n")
             log_handle.write(f"Files_Scanned:\t{result.files_scanned}\n")
             log_handle.write(f"Files_Matched:\t{result.files_matched}\n")
             log_handle.write(f"Action_Counts:\t{result.action_counts}\n")
             for k, v in (result.action_counts or {}).items():
                 log_handle.write(f"Action_{k}:\t{v}\n")
-            log_handle.write(f"Log_Path:\t{log_path}\n")
             log_handle.write("--- END STATS ---\n")
         except Exception:
             pass
@@ -175,6 +189,22 @@ def main() -> None:
     print(f"\n\nDone. Files scanned: {result.files_scanned}, "
           f"Matches: {result.files_matched}, "
           f"Actions: {result.action_counts}")
+
+    # Also print the same STATS block to the terminal
+    try:
+        print("\n--- STATS ---")
+        print(f"SCAN_SECONDS:\t{result.scan_seconds:.3f}")
+        print(f"SEARCH_SECONDS:\t{result.search_seconds:.3f}")
+        print(f"EXECUTE_SECONDS:\t{result.execute_seconds:.3f}")
+        print(f"TOTAL_SECONDS:\t{result.total_seconds:.3f}")
+        print(f"Files_Scanned:\t{result.files_scanned}")
+        print(f"Files_Matched:\t{result.files_matched}")
+        print(f"Action_Counts:\t{result.action_counts}")
+        for k, v in (result.action_counts or {}).items():
+            print(f"Action_{k}:\t{v}")
+        print("--- END STATS ---")
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

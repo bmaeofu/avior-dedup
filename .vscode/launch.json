@@ -35,10 +35,12 @@
                 ".log",
                 "--search_strings",
                 "ERRORS:>0",
-            ]
+                "--output_file",
+                "\\\\UMS\\media\\transcoded\\check\\results.txt",
+              ]
         },
         {
-            "name": "avior-dedup: SearchMove - Test recursive",
+            "name": "avior-dedup: SearchMove - Test recursive FilmeHD1",
             "type": "debugpy",
             "request": "launch",
             "module": "avior_dedup.searchmove.cli",
@@ -91,7 +93,7 @@
             ]
         },
          {
-            "name": "avior-dedup: test Matrix",
+            "name": "avior-dedup: test FilmeHD_sonst",
             "type": "debugpy",
             "request": "launch",
             "module": "avior_dedup",
@@ -99,11 +101,12 @@
             "justMyCode": true,
             "args": [
                 "f",
-                "\\\\UMS\\media\\tv\\FilmeHD",
-                "\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch",
-                "runlog.txt",
+                "\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst",
+                "\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_sonst_semantic",
                 "--duptype",
                 "semantic",
+                "--remove-spaces",
+                "--remove-non-episode-parens",                
                 "--max-errors-when-mc",
                 "3",
                 "--max-duration-diff-longer",

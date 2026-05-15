@@ -143,6 +143,7 @@ def _run_searchmove_job(
             log_fn=log_fn,
             cancel_check=cancel_check,
             output_path=output_path,
+            log_path=log_path,
         )
 
         sm_result = SearchMoveResult(
@@ -162,13 +163,17 @@ def _run_searchmove_job(
         # Append a concise statistics summary to the log for quick inspection.
         try:
             log_handle.write("--- STATS ---\n")
+            log_handle.write(f"SCAN_SECONDS\t{result.scan_seconds:.3f}\n")
+            log_handle.write(f"SEARCH_SECONDS\t{result.search_seconds:.3f}\n")
+            log_handle.write(f"EXECUTE_SECONDS\t{result.execute_seconds:.3f}\n")
+            log_handle.write(f"TOTAL_SECONDS\t{result.total_seconds:.3f}\n")
             log_handle.write(f"Files_Scanned:\t{result.files_scanned}\n")
             log_handle.write(f"Files_Matched:\t{result.files_matched}\n")
             log_handle.write(f"Action_Counts:\t{result.action_counts}\n")
             # Also expand action counts into individual lines for easier grepping.
             for k, v in (result.action_counts or {}).items():
                 log_handle.write(f"Action_{k}:\t{v}\n")
-            log_handle.write(f"Log_Path:\t{log_path}\n")
+                # Do not include Log_Path in the STATS section
             log_handle.write("--- END STATS ---\n")
         except Exception:
             pass

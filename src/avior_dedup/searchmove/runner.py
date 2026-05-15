@@ -35,6 +35,7 @@ def run_search_move_job(
     log_fn: Callable[[str], None] | None = None,
     cancel_check: Callable[[], bool] | None = None,
     output_path: str | None = None,
+    log_path: str | None = None,
 ) -> SearchMoveJobResult:
     """Run the full search-move pipeline.
 
@@ -99,15 +100,50 @@ def run_search_move_job(
             out_handle.write(f"Preserve_Dirs:\t{preserve_dirs}\n")
             out_handle.write(f"Ignored_Directories:\t{','.join(ignored_directories or [])}\n")
             out_handle.write(f"Search_Expressions:\t{','.join(search_expressions or [])}\n")
+            # Include output and log paths for easier discovery
+            try:
+                out_handle.write(f"Output_File:\t{os.path.abspath(output_path)}\n")
+            except Exception:
+                out_handle.write(f"Output_File:\t{output_path}\n")
+            if log_path:
+                try:
+                    out_handle.write(f"Log_Path:\t{os.path.abspath(log_path)}\n")
+                except Exception:
+                    out_handle.write(f"Log_Path:\t{log_path}\n")
             out_handle.write("---\n")
         except Exception:
             # fail-safe: do not abort job due to logging problems
             pass
 
     log_fn(f"Datum: {started_dt.strftime('%y-%m-%d %H:%M:%S')}")
-
+    # Write job parameters to the main job log (searchmove_log.txt)
     try:
-        log_fn(f"SCAN_SECONDS\t{monotonic() - scan_started_at:.3f}")
+        log_fn(f"Source:\t{source}")
+        log_fn(f"Dest:\t{dest}")
+        log_fn(f"Mode:\t{mode.name if hasattr(mode, 'name') else str(mode)}")
+        log_fn(f"Extensions:\t{','.join(extensions or [])}")
+        log_fn(f"Recursive:\t{recursive}")
+        log_fn(f"Preserve_Dirs:\t{preserve_dirs}")
+        log_fn(f"Ignored_Directories:\t{','.join(ignored_directories or [])}")
+        log_fn(f"Search_Expressions:\t{','.join(search_expressions or [])}")
+        # Also write the output file path into the main job log header
+        if output_path:
+            try:
+                log_fn(f"Output_File:\t{os.path.abspath(output_path)}")
+            except Exception:
+                log_fn(f"Output_File:\t{output_path}")
+        if log_path:
+            try:
+                log_fn(f"Log_Path:\t{os.path.abspath(log_path)}")
+            except Exception:
+                log_fn(f"Log_Path:\t{log_path}")
+    except Exception:
+        # Defensive: do not fail job start because of logging
+        pass
+
+    # Record scan duration (time to collect files) and run the search loop
+    try:
+        scan_seconds = monotonic() - scan_started_at
 
         for i, file_path in enumerate(files_to_search):
             if cancel_check():
@@ -130,7 +166,16 @@ def run_search_move_job(
 
             if match is not None:
                 matches.append(match)
-                print(f"MATCH FOUND: {match.file_path}  -->  {match.matched_expression}  [Found: {match.found_values}]")
+                # Append match info to the current inline 'Searching:' status
+                # so the output looks like: "Searching: 2/353 MATCH FOUND: ..."
+                # Emit a complete status line including the updated scanned
+                # count so the match is visible even for the final file.
+                scanned = i + 1
+                print(
+                    f"\rSearching: {scanned}/{total} MATCH FOUND: {match.file_path}  -->  {match.matched_expression}  [Found: {match.found_values}]",
+                    end="\r\n",
+                    flush=True,
+                )
                 if out_handle:
                     out_handle.write(f"{match.file_path}\t{match.matched_expression}\t{match.found_values}\n")
 
@@ -144,7 +189,8 @@ def run_search_move_job(
     finally:
         # keep output file open until after execution phase so we can append final stats
         pass
-    log_fn(f"SEARCH_SECONDS\t{monotonic() - search_started_at:.3f}")
+    # Record search duration
+    search_seconds = monotonic() - search_started_at
 
     # Execute phase — move/copy/delete matched file sets
     action_counter: Counter[str] = Counter()
@@ -179,9 +225,9 @@ def run_search_move_job(
             total_files_to_move=total_actions,
         )
 
-    log_fn(f"EXECUTE_SECONDS\t{monotonic() - execute_started_at:.3f}")
+    # Record execute and total durations
+    execute_seconds = monotonic() - execute_started_at
     total_seconds = monotonic() - started_at
-    log_fn(f"TOTAL_SECONDS\t{total_seconds:.3f}")
 
     # Append summary statistics and timestamps to the results file if present
     if out_handle:
@@ -211,6 +257,10 @@ def run_search_move_job(
         action_counts=dict(action_counter),
         matches=matches,
         log_path=log_path_out,
+        scan_seconds=scan_seconds,
+        search_seconds=search_seconds,
+        execute_seconds=execute_seconds,
+        total_seconds=total_seconds,
     )
 
 

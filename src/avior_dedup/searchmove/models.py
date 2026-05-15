@@ -42,6 +42,11 @@ class SearchMoveJobResult:
     action_counts: dict[str, int] = field(default_factory=dict)
     matches: list[SearchMatch] = field(default_factory=list)
     log_path: str | None = None
+    # Timing information (seconds)
+    scan_seconds: float = 0.0
+    search_seconds: float = 0.0
+    execute_seconds: float = 0.0
+    total_seconds: float = 0.0
 
 
 # File suffixes considered part of the same media set.
