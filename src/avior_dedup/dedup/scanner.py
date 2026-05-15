@@ -36,16 +36,28 @@ def _format_seconds_hhmmss(seconds: float) -> str:
     return f"{hours:02d}:{minutes:02d}:{secs:02d}"
 
 def count_errors(lines: list[str]) -> int:
-    """Count encoding errors from log lines containing 'MB) Errors:'."""
+    """Count encoding errors from log lines.
+
+    Historically we looked for lines containing 'MB) Errors:', but some
+    log formats use 'Errors: N' (e.g. '02:18:00 Errors: 1 @5889,6 MB').
+    This function now recognizes both variants.
+    """
     error_count = 0
     for line in lines:
-        if "MB) Errors:" in line:
-            try:
+        try:
+            # Preferred pattern: 'Errors: <num>' anywhere in the line
+            m = re.search(r'Errors:\s*(\d+)', line)
+            if m:
+                error_count += int(m.group(1))
+                continue
+
+            # Backwards-compatible: '...MB) Errors: <num>'
+            if "MB) Errors:" in line:
                 parts = line.split("MB) Errors:")
                 if len(parts) > 1:
                     error_count += int(parts[1].strip().split()[0])
-            except ValueError:
-                continue
+        except ValueError:
+            continue
     return error_count
 
 

@@ -19,6 +19,10 @@ from functools import lru_cache
 from avior_dedup.searchmove.models import RELATED_SUFFIXES, STRIP_EXTENSIONS, SearchMatch
 from avior_dedup.searchmove.parser import parse_condition
 
+# reuse log-parsing helpers from dedup scanner
+from avior_dedup.dedup.scanner import count_errors, _truncate_log  # noqa: E402
+from avior_dedup.dedup.io_utils import read_text  # noqa: E402
+
 
 # ---------------------------------------------------------------------------
 # Generic helpers
@@ -124,6 +128,49 @@ def _match_metadata(path: str, term: str) -> str | None:
             return "exists" if has_sibling else None
         elif op == "!exists":
             return "!exists" if not has_sibling else None
+
+    # errors:<cond> -> parse numeric condition against encoding error count in associated .log
+    if term_lower.startswith("errors:"):
+        _, cond = term.split(":", 1)
+        cond = cond.strip()
+
+        # existence checks: errors:exists or errors:!exists
+        if cond.lower() in ("exists", "!exists"):
+            directory = os.path.dirname(path) or "."
+            filename = os.path.basename(path)
+            stem = _strip_to_stem(filename)
+            main_log = os.path.join(directory, stem + ".log")
+            alt_log = os.path.join(directory, stem + ".mkv.log")
+            if cond.lower() == "exists":
+                return "exists" if os.path.exists(main_log) or os.path.exists(alt_log) else None
+            else:
+                return "!exists" if not (os.path.exists(main_log) or os.path.exists(alt_log)) else None
+
+        # numeric condition: parse predicate
+        pred = parse_condition(cond)
+        if pred is None:
+            return None
+
+        # determine stem and candidate log files; prefer .log then .mkv.log
+        directory = os.path.dirname(path) or "."
+        filename = os.path.basename(path)
+        stem = _strip_to_stem(filename)
+        candidates = [os.path.join(directory, stem + ".log"), os.path.join(directory, stem + ".mkv.log")]
+
+        for c in candidates:
+            if os.path.exists(c):
+                content = read_text(c)
+                if content is None:
+                    continue
+                content = _truncate_log(content)
+                lines = content.splitlines() if content is not None else []
+                ec = count_errors(lines)
+                if pred(ec):
+                    return str(ec)
+                return None
+
+        # no log found -> no match (use errors:!exists explicitly to find missing logs)
+        return None
     
     return None
 
@@ -171,8 +218,8 @@ def search_text_file(
         if not term:
             return None
         
-        # Check if it's a metadata term
-        if term.lower().startswith(("fileext:", "sibling:")):
+        # Check if it's a metadata term (fileext, sibling, errors)
+        if term.lower().startswith(("fileext:", "sibling:", "errors:")):
             return _match_metadata(path, term)
         
         # Fall back to content-based matching. Read file only once per path.
@@ -332,8 +379,8 @@ def search_xml_file(
         nonlocal parsed_root, selected_rating, parse_attempted, parse_failed
         search_string = search_string.strip()
         
-        # Check if it's a metadata term
-        if search_string.lower().startswith(("fileext:", "sibling:")):
+        # Check if it's a metadata term (fileext, sibling, errors)
+        if search_string.lower().startswith(("fileext:", "sibling:", "errors:")):
             return _match_metadata(path, search_string)
         
         # Fall back to XML content matching. Parse XML only once per path.

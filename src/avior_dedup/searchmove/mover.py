@@ -256,6 +256,8 @@ def process_match(
     dest_dir: str,
     mode: ActivityMode,
     log_fn: Callable[[str], None],
+    source_root: str | None = None,
+    preserve_dirs: bool = False,
 ) -> list[MoveRecord]:
     """Move/copy/delete all files related to a matched file.
 
@@ -272,7 +274,20 @@ def process_match(
         return []
 
     if mode != ActivityMode.TEST:
-        dest_dir = _ensure_dest_dir(_resolve_case_insensitive(abs_dest))
+        # If preserving directory structure, compute a destination subdir
+        if preserve_dirs and source_root:
+            try:
+                rel = os.path.relpath(src_dir, start=os.path.abspath(source_root))
+            except Exception:
+                rel = None
+            # Only use rel if it's not navigating up (i.e., not starting with '..')
+            if rel and not rel.startswith(os.pardir):
+                target_dir = os.path.join(abs_dest, rel)
+            else:
+                target_dir = abs_dest
+            dest_dir = _ensure_dest_dir(_resolve_case_insensitive(target_dir))
+        else:
+            dest_dir = _ensure_dest_dir(_resolve_case_insensitive(abs_dest))
     else:
         dest_dir = abs_dest
 

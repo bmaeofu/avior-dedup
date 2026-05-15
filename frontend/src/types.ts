@@ -60,6 +60,7 @@ export interface SearchMoveRequest {
   extensions: string[]
   search_expressions: string[]
   recursive: boolean
+  preserve_dirs: boolean
   logname: string
 }
 

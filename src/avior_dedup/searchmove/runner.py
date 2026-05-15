@@ -30,6 +30,7 @@ def run_search_move_job(
     search_expressions: list[str],
     ignored_directories: list[str] | None = None,
     recursive: bool = False,
+    preserve_dirs: bool = False,
     progress_cb: Callable[..., None] | None = None,
     log_fn: Callable[[str], None] | None = None,
     cancel_check: Callable[[], bool] | None = None,
@@ -63,6 +64,7 @@ def run_search_move_job(
     dest = _resolve_case_insensitive(dest)
     os.makedirs(dest, exist_ok=True)
     started_at = monotonic()
+    started_dt = datetime.now()
 
     # Collect files to search
     scan_started_at = monotonic()
@@ -82,14 +84,27 @@ def run_search_move_job(
     total = len(files_to_search)
     progress_cb(phase="searching", files_scanned=0, dirs_total=total, groups_found=0)
 
-    # Open output file for writing match results
+    # Open output file for writing match results and header with parameters
     out_handle = None
     if output_path:
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         out_handle = open(output_path, "a", encoding="utf-8")
-        out_handle.write(f"Datum: {datetime.now().strftime('%y-%m-%d %H:%M:%S')}\n")
+        try:
+            out_handle.write(f"Job_Start:\t{started_dt.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            out_handle.write(f"Source:\t{source}\n")
+            out_handle.write(f"Dest:\t{dest}\n")
+            out_handle.write(f"Mode:\t{mode.name if hasattr(mode, 'name') else str(mode)}\n")
+            out_handle.write(f"Extensions:\t{','.join(extensions or [])}\n")
+            out_handle.write(f"Recursive:\t{recursive}\n")
+            out_handle.write(f"Preserve_Dirs:\t{preserve_dirs}\n")
+            out_handle.write(f"Ignored_Directories:\t{','.join(ignored_directories or [])}\n")
+            out_handle.write(f"Search_Expressions:\t{','.join(search_expressions or [])}\n")
+            out_handle.write("---\n")
+        except Exception:
+            # fail-safe: do not abort job due to logging problems
+            pass
 
-    log_fn(f"Datum: {datetime.now().strftime('%y-%m-%d %H:%M:%S')}")
+    log_fn(f"Datum: {started_dt.strftime('%y-%m-%d %H:%M:%S')}")
 
     try:
         log_fn(f"SCAN_SECONDS\t{monotonic() - scan_started_at:.3f}")
@@ -127,8 +142,8 @@ def run_search_move_job(
                 groups_found=len(matches),
             )
     finally:
-        if out_handle:
-            out_handle.close()
+        # keep output file open until after execution phase so we can append final stats
+        pass
     log_fn(f"SEARCH_SECONDS\t{monotonic() - search_started_at:.3f}")
 
     # Execute phase — move/copy/delete matched file sets
@@ -150,7 +165,9 @@ def run_search_move_job(
             total_files_to_move=total_actions,
         )
 
-        records = process_match(match.file_path, dest, mode, log_fn)
+        # Pass preserve_dirs and source to mover so destination structure
+        # can mirror the source when requested.
+        records = process_match(match.file_path, dest, mode, log_fn, source, preserve_dirs)
         for rec in records:
             action_counter[rec.status] += 1
 
@@ -163,7 +180,29 @@ def run_search_move_job(
         )
 
     log_fn(f"EXECUTE_SECONDS\t{monotonic() - execute_started_at:.3f}")
-    log_fn(f"TOTAL_SECONDS\t{monotonic() - started_at:.3f}")
+    total_seconds = monotonic() - started_at
+    log_fn(f"TOTAL_SECONDS\t{total_seconds:.3f}")
+
+    # Append summary statistics and timestamps to the results file if present
+    if out_handle:
+        try:
+            ended_dt = datetime.now()
+            out_handle.write("--- JOB SUMMARY ---\n")
+            out_handle.write(f"Job_End:\t{ended_dt.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            out_handle.write(f"Duration_Seconds:\t{total_seconds:.3f}\n")
+            out_handle.write(f"Files_Scanned:\t{total}\n")
+            out_handle.write(f"Files_Matched:\t{len(matches)}\n")
+            out_handle.write(f"Action_Counts:\t{dict(action_counter)}\n")
+            for k, v in dict(action_counter).items():
+                out_handle.write(f"Action_{k}:\t{v}\n")
+            out_handle.write("--- END JOB SUMMARY ---\n")
+        except Exception:
+            pass
+        finally:
+            try:
+                out_handle.close()
+            except Exception:
+                pass
 
     log_path_out = os.path.join(dest, "log.txt")
     return SearchMoveJobResult(

@@ -8,6 +8,8 @@ from __future__ import annotations
 import argparse
 import os
 
+from avior_dedup.cli import get_numbered_log_file
+from avior_dedup.permissions import ensure_output_permissions
 from avior_dedup.searchmove.models import ActivityMode
 from avior_dedup.searchmove.runner import run_search_move_job
 
@@ -74,9 +76,19 @@ def main() -> None:
         help="File to write match results to (default: result.txt)",
     )
     parser.add_argument(
+        "--logname",
+        default="searchmove_log.txt",
+        help="Log file name to write job log into destination (numbered if exists)",
+    )
+    parser.add_argument(
         "--recursive", "-r",
         action="store_true",
         help="Search subdirectories recursively",
+    )
+    parser.add_argument(
+        "--preserve-dirs",
+        action="store_true",
+        help="When used with --recursive, recreate source directory structure under the destination",
     )
 
     args = parser.parse_args()
@@ -87,18 +99,40 @@ def main() -> None:
 
     # Open a log file in the destination
     os.makedirs(dest, exist_ok=True)
-    log_path = os.path.join(dest, "log.txt")
+    ensure_output_permissions(dest, is_dir=True)
+    log_path = get_numbered_log_file(os.path.join(dest, args.logname))
+    # ensure permissions and create
+    ensure_output_permissions(log_path, is_dir=False)
     log_handle = open(log_path, "a", encoding="utf-8")
+
+    # Write header with job parameters for debugging/auditability.
+    try:
+        log_handle.write(f"Timestamp:\t{time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        log_handle.write(f"Source:\t{source}\n")
+        log_handle.write(f"Dest:\t{dest}\n")
+        log_handle.write(f"Mode:\t{args.mode}\n")
+        log_handle.write(f"Extensions:\t{','.join(args.extensions or [])}\n")
+        log_handle.write(f"Recursive:\t{bool(args.recursive)}\n")
+        log_handle.write(f"Preserve_Dirs:\t{getattr(args, 'preserve_dirs', False)}\n")
+        log_handle.write(f"Search_Expressions:\t{','.join(args.search_strings or [])}\n")
+        log_handle.write(f"Output_File:\t{args.output_file}\n")
+        log_handle.write("---\n")
+    except Exception:
+        pass
 
     def log_fn(msg: str) -> None:
         log_handle.write(msg + "\n")
 
+    last_dir: str | None = None
+
     def progress_cb(**kw: object) -> None:
+        nonlocal last_dir
         phase = kw.get("phase", "")
         if phase == "scanning":
             current_dir = kw.get("current_dir", "")
-            if current_dir:
+            if current_dir and current_dir != last_dir:
                 print(f"Entering directory: {current_dir}")
+                last_dir = current_dir
         elif phase == "searching":
             scanned = kw.get("files_scanned", 0)
             total = kw.get("dirs_total", 0)
@@ -118,10 +152,23 @@ def main() -> None:
             extensions=args.extensions or [],
             search_expressions=args.search_strings or [],
             recursive=args.recursive,
+            preserve_dirs=getattr(args, "preserve_dirs", False),
             progress_cb=progress_cb,
             log_fn=log_fn,
             output_path=args.output_file,
         )
+        # Append concise statistics to the log for quick inspection.
+        try:
+            log_handle.write("--- STATS ---\n")
+            log_handle.write(f"Files_Scanned:\t{result.files_scanned}\n")
+            log_handle.write(f"Files_Matched:\t{result.files_matched}\n")
+            log_handle.write(f"Action_Counts:\t{result.action_counts}\n")
+            for k, v in (result.action_counts or {}).items():
+                log_handle.write(f"Action_{k}:\t{v}\n")
+            log_handle.write(f"Log_Path:\t{log_path}\n")
+            log_handle.write("--- END STATS ---\n")
+        except Exception:
+            pass
     finally:
         log_handle.close()
 

@@ -152,3 +152,8 @@
   name: No year recognized in movie md
   search_expressions:
   - 'txt_year: none'
+- extensions:
+  - .log
+  name: Recording Errors
+  search_expressions:
+  - ERRORS:>1

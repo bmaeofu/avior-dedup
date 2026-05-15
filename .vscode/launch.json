@@ -2,6 +2,63 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "avior-dedup: SearchMove ERRORS test",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup.searchmove.cli",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "test",
+                "C:\\repos\\avior-dedup\\test-data\\search-and-move\\Errors",
+                "\\\\UMS\\media\\transcoded\\check",
+                "--extensions",
+                ".log",
+                "--search_strings",
+                "ERRORS:>0",
+                "--output_file",
+                "\\\\UMS\\media\\transcoded\\check\\results.txt"
+            ]
+        },
+        {
+            "name": "avior-dedup: SearchMove - Test FilmeHD_sonst\\rescraped",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup.searchmove.cli",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "test",
+                "\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst\\rescraped",
+                "\\\\UMS\\media\\transcoded\\check",
+                "--extensions",
+                ".log",
+                "--search_strings",
+                "ERRORS:>0",
+            ]
+        },
+        {
+            "name": "avior-dedup: SearchMove - Test recursive",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup.searchmove.cli",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "test",
+                "\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD1",
+                "\\\\UMS\\media\\transcoded\\check",
+                "--extensions",
+                ".log",
+                "--search_strings",
+                "ERRORS:>0",
+                "--output_file",
+                "\\\\UMS\\media\\transcoded\\check\\results.txt",
+                "--recursive",
+                "--preserve-dirs"
+            ]
+        },
+        {
             "name": "avior-dedup: test",
             "type": "debugpy",
             "request": "launch",
@@ -184,6 +241,7 @@
             "runtimeArgs": ["dev"],
             "console": "integratedTerminal"
         }
+        ,
     ],
     "compounds": [
         {

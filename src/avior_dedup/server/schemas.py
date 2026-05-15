@@ -67,6 +67,7 @@ class SearchMoveRequest(BaseModel):
     extensions: list[str] = Field(default_factory=lambda: [".nfo"])
     search_expressions: list[str]
     recursive: bool = False
+    preserve_dirs: bool = False
     logname: str = "searchmove_log.txt"
 
 

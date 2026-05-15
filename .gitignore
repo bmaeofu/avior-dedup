@@ -1,6 +1,9 @@
 .cortex/
 .direnv/
 
+# result log files
+result.txt
+
 # Media files
 *.ts
 *.mkv

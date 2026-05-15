@@ -75,6 +75,7 @@ const dest = ref('')
 const extensions = ref(['.nfo'])
 const ignoredDirectories = ref<string[]>([])
 const recursive = ref(false)
+const preserve_dirs = ref(false)
 const logname = ref('searchmove_log.txt')
 
 // Search expression builder
@@ -115,6 +116,7 @@ function submit() {
     extensions: extensions.value,
     search_expressions: expressions,
     recursive: recursive.value,
+      preserve_dirs: preserve_dirs.value,
     logname: logname.value,
   })
 }
@@ -210,6 +212,15 @@ function submit() {
           <v-checkbox
             v-model="recursive"
             label="Recursive search"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-checkbox
+            v-model="preserve_dirs"
+            :disabled="!recursive"
+            label="Preserve source directory structure under destination"
             density="compact"
             hide-details
           />

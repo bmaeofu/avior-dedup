@@ -84,6 +84,24 @@ def _run_searchmove_job(
         ensure_output_permissions(output_path, is_dir=False)
         log_handle = open(log_path, "w", encoding="utf-8")
 
+        # Write header with all job parameters for easier debugging and audit.
+        try:
+            log_handle.write(f"Job ID:\t{job_id}\n")
+            log_handle.write(f"Timestamp:\t{time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            log_handle.write(f"Source:\t{source}\n")
+            log_handle.write(f"Dest:\t{dest}\n")
+            log_handle.write(f"Mode:\t{req.mode}\n")
+            log_handle.write(f"Extensions:\t{','.join(req.extensions or [])}\n")
+            log_handle.write(f"Recursive:\t{req.recursive}\n")
+            log_handle.write(f"Preserve_Dirs:\t{getattr(req, 'preserve_dirs', False)}\n")
+            log_handle.write(f"Ignored_Directories:\t{','.join(req.ignored_directories or [])}\n")
+            log_handle.write(f"Search_Expressions:\t{','.join(req.search_expressions or [])}\n")
+            log_handle.write(f"Output_File:\t{output_path}\n")
+            log_handle.write("---\n")
+        except Exception:
+            # Defensive: do not fail job start because of logging
+            pass
+
         def log_fn(msg: str) -> None:
             """Write log lines but skip lines that indicate an existing destination.
 
@@ -120,6 +138,7 @@ def _run_searchmove_job(
             extensions=req.extensions,
             search_expressions=req.search_expressions,
             recursive=req.recursive,
+            preserve_dirs=getattr(req, 'preserve_dirs', False),
             progress_cb=progress_cb,
             log_fn=log_fn,
             cancel_check=cancel_check,
@@ -140,6 +159,19 @@ def _run_searchmove_job(
             ],
             log_path=log_path,
         )
+        # Append a concise statistics summary to the log for quick inspection.
+        try:
+            log_handle.write("--- STATS ---\n")
+            log_handle.write(f"Files_Scanned:\t{result.files_scanned}\n")
+            log_handle.write(f"Files_Matched:\t{result.files_matched}\n")
+            log_handle.write(f"Action_Counts:\t{result.action_counts}\n")
+            # Also expand action counts into individual lines for easier grepping.
+            for k, v in (result.action_counts or {}).items():
+                log_handle.write(f"Action_{k}:\t{v}\n")
+            log_handle.write(f"Log_Path:\t{log_path}\n")
+            log_handle.write("--- END STATS ---\n")
+        except Exception:
+            pass
         _jobs[job_id].status = JobStatus(
             job_id=job_id,
             state="completed",

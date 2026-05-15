@@ -9,6 +9,7 @@ dest_paths:
 - //UMS/media/tv/SerienHD
 - //UMS/media/tv/MusikvideosHD/Neu
 - //UMS/media/moved
+- //UMS/media/transcoded/check
 source_paths:
 - //UMS/media/transcoded/check_nfo
 - //UMS/media/transcoded/HD720
@@ -26,3 +27,4 @@ source_paths:
 - //UMS/media/tv/FilmeHD/FilmeHD1
 - //UMS/media/tv/FilmeHD/FilmeHD2
 - //UMS/media/tv/FilmeHD/FilmeHD3
+- //UMS/media/transcoded/.obsolete/Duplicates/FilmeHD_semantic_noepisode_normalization_duplicates
