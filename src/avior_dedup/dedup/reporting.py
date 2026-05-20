@@ -99,9 +99,9 @@ def write_summary(
     else:
         summary_lines.append("  No actions performed")
 
-    # Optional: include per-action resolution breakdown
+    # Optional: include per-action resolution breakdown (counts only real video files)
     if resolution_by_action:
-        summary_lines.append("\nRESOLUTION BY ACTION:")
+        summary_lines.append("\nRESOLUTION BY ACTION (video files only):")
         # iterate actions in the same displayed order where possible
         actions_order = [
             "DUPLICATE",
@@ -139,9 +139,9 @@ def write_summary(
                 label = f"{res}p" if res and res != 0 else "unknown"
                 summary_lines.append(f"    {label:<8} {cnt:>6} files ({pct:>5.1f}%){size_str}")
 
-    # Optional: print attribute cross-tab matrix (e.g., MC/ERRORS/LONGER/SHORTER/1080/720)
+    # Optional: print attribute cross-tab matrix (counts only real video files)
     if attr_matrix:
-        summary_lines.append("\nATTRIBUTE MATRIX:")
+        summary_lines.append("\nATTRIBUTE MATRIX (video files only):")
         # preferred attribute order
         preferred = ["MC", "ERRORS", "LONGER", "SHORTER", "1080", "720"]
         others = [a for a in sorted(attr_matrix.keys()) if a not in preferred]
@@ -189,7 +189,7 @@ def write_summary(
     # Optional: include a compact list of selected attribute combinations (top combos)
     if selected_combos:
         summary_lines.append("")
-        summary_lines.append("SELECTED ATTRIBUTE COMBINATIONS SUMMARY:")
+        summary_lines.append("SELECTED ATTRIBUTE COMBINATIONS SUMMARY (video files only):")
         for combo, total, keep_cnt, dup_cnt in selected_combos:
             res, audio, length, err_bucket = combo
             summary_lines.append(f"('{res}', '{audio}', '{length}', '{err_bucket}'): total={total}  KEEP={keep_cnt}  DUPLICATE={dup_cnt}")

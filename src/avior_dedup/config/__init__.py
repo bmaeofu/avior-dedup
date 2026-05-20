@@ -87,6 +87,7 @@ def config_files() -> dict[str, str]:
     return {
         "ignored_files": "ignored_files.yaml",
         "ignored_dirs": "ignored_dirs.yaml",
+        "semantic_prefixes": "semantic_prefixes.yaml",
         "suffixes": "suffixes.yaml",
         "episode_keywords": "episode_keywords.yaml",
         "path_suggestions": "path_suggestions.yaml",
@@ -94,3 +95,10 @@ def config_files() -> dict[str, str]:
         "searchmove_templates": "searchmove_templates.yaml",
         "searchmove_ignored_dirs": "searchmove_ignored_dirs.yaml",
     }
+
+
+def semantic_prefixes() -> list[str]:
+    """Return configured semantic prefix regex patterns."""
+    data = _load_yaml("semantic_prefixes.yaml")
+    # Expecting a YAML list
+    return list(data) if data else []

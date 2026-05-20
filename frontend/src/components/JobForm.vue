@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed, ref, onMounted } from 'vue'
 import type { JobRequest, SelectionPriority } from '../types'
-import ListEditor from './ListEditor.vue'
+// ListEditor not used anymore for semantic prefixes (selection-only)
 
 const emit = defineEmits<{
   start: [request: JobRequest]
@@ -10,12 +10,14 @@ const emit = defineEmits<{
 const sourceSuggestions = ref<string[]>([])
 const targetSuggestions = ref<string[]>([])
 const ignoredDirSuggestions = ref<string[]>([])
+const semanticPrefixSuggestions = ref<string[]>([])
 
 onMounted(async () => {
   try {
-    const [pathsRes, ignoredRes] = await Promise.allSettled([
+    const [pathsRes, ignoredRes, semRes] = await Promise.allSettled([
       fetch('/api/config/path_suggestions'),
       fetch('/api/config/ignored_dirs'),
+      fetch('/api/config/semantic_prefixes'),
     ])
 
     const ignoredFromConfig =
@@ -31,6 +33,9 @@ onMounted(async () => {
 
     // Show only entries from ignored_dirs.yaml for the ignored-directories chooser
     ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
+    // Semantic prefix suggestions (admin-configurable)
+    semanticPrefixSuggestions.value =
+      semRes.status === 'fulfilled' && semRes.value.ok ? await semRes.value.json() : []
   } catch {
     // suggestions are optional, ignore errors
   }
@@ -49,7 +54,7 @@ const form = reactive<JobRequest>({
   max_duration_diff_longer: 600,
   max_duration_diff_shorter: 180,
   selection_priorities: ['multichannel', 'resolution', 'fewer_errors', 'recording_date', 'closest_duration'] as SelectionPriority[],
-  semantic_prefixes: ['terra\\s*x\\s*-\\s*'],
+  semantic_prefixes: [],
   remove_episode_nos: false,
   remove_spaces: false,
   remove_non_episode_parens: false,
@@ -61,7 +66,6 @@ const modeItems = [
   { title: 'Find Only', value: 'f' },
   { title: 'Move', value: 'm' },
 ]
-
 const dupTypeItems = [
   { title: 'Case-insensitive', value: 'case' },
   { title: 'Exact name', value: 'exact' },
@@ -140,17 +144,20 @@ function submit() {
             persistent-hint
           />
         </v-col>
+        <!-- Scan settings moved below -->
       </v-row>
 
       <v-divider class="my-4" />
 
       <!-- Scan settings -->
       <div class="text-subtitle-2 text-medium-emphasis mb-2">Scan settings</div>
-      <v-row dense align="center">
+      <v-row dense>
         <v-col cols="12" md="4">
           <v-select
             v-model="form.duptype"
             :items="dupTypeItems"
+            item-title="title"
+            item-value="value"
             label="Duplicate type"
             density="compact"
             variant="outlined"
@@ -345,13 +352,21 @@ function submit() {
             hide-details
           />
         </v-col>
-        
       </v-row>
+
       <v-row dense class="mt-1">
         <v-col cols="12">
-          <ListEditor
+          <v-combobox
             v-model="form.semantic_prefixes"
-            label="Semantic prefixes (regex patterns to strip)"
+            :items="semanticPrefixSuggestions"
+            label="Semantic prefixes (configured)"
+            hint="Select configured patterns from config → Semantic Prefixes"
+            density="compact"
+            variant="outlined"
+            multiple
+            chips
+            clearable
+            hide-details
           />
         </v-col>
       </v-row>

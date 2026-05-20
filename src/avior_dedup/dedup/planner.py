@@ -462,10 +462,57 @@ def execute_move_plan(
             dst_dir = os.path.dirname(dst)
             os.makedirs(dst_dir, exist_ok=True)
             ensure_output_permissions(dst_dir, is_dir=True)
-            if not os.path.exists(dst):
-                shutil.move(file_path, dst)
-                ensure_output_permissions(dst, is_dir=False)
-            else:
-                log_fn(f"{move.group_name}\t[SKIP_EXISTS]\t{dst}")
-                action_counter["SKIP_EXISTS"] += 1
+            try:
+                # Diagnostic existence check before attempting move — helps
+                # determine whether WinError 2 is caused by missing source.
+                exists = os.path.exists(file_path)
+                log_fn(f"{move.group_name}\t[CHECK_EXISTS]\t{file_path}\texists={exists}")
+
+                src_to_move = file_path
+                # If source doesn't exist, attempt a case-insensitive resolution
+                # in the parent directory (handles Windows/Samba case mismatches).
+                if not exists:
+                    parent = os.path.dirname(file_path) or os.path.sep
+                    base = os.path.basename(file_path)
+                    try:
+                        for entry in os.listdir(parent):
+                            if entry.lower() == base.lower():
+                                candidate = os.path.join(parent, entry)
+                                log_fn(f"{move.group_name}\t[CHECK_RESOLVE]\t{file_path}\tresolved_to={candidate}")
+                                src_to_move = candidate
+                                exists = True
+                                break
+                    except Exception as e:
+                        log_fn(f"{move.group_name}\t[CHECK_RESOLVE_FAIL]\t{file_path}\t{e}")
+
+                if not os.path.exists(dst):
+                    try:
+                        if not os.path.exists(src_to_move):
+                            # Source still missing — log and continue
+                            log_fn(f"{move.group_name}\t[ERROR_MOVE]\t{src_to_move}\t{dst}\t[WinError 2] The system cannot find the file specified")
+                            action_counter["ERROR_MOVE"] += 1
+                        else:
+                            # If resolution changed, adjust size counters to reflect actual file
+                            actual_size = _get_file_size(src_to_move)
+                            if actual_size != file_size:
+                                delta = actual_size - file_size
+                                size_counter[move.action] += delta
+                                # also adjust resolution_size_by_action if applicable
+                                if str(src_to_move).lower().endswith(".mkv"):
+                                    res = move.resolution if getattr(move, "resolution", None) is not None else 0
+                                    resolution_size_by_action[move.action][res] += delta
+
+                            shutil.move(src_to_move, dst)
+                            ensure_output_permissions(dst, is_dir=False)
+                    except OSError as e:
+                        # OS errors (permissions, etc.) — log and continue
+                        log_fn(f"{move.group_name}\t[ERROR_MOVE]\t{src_to_move}\t{dst}\t{e}")
+                        action_counter["ERROR_MOVE"] += 1
+                else:
+                    log_fn(f"{move.group_name}\t[SKIP_EXISTS]\t{dst}")
+                    action_counter["SKIP_EXISTS"] += 1
+            except Exception as e:
+                # Catch-all to prevent aborting the run; log and continue
+                log_fn(f"{move.group_name}\t[ERROR_MOVE]\t{file_path}\t{dst}\t{e}")
+                action_counter["ERROR_MOVE"] += 1
     return resolution_by_action, resolution_size_by_action, attr_matrix
