@@ -29,6 +29,7 @@ def write_summary(
     resolution_by_action: Optional[dict[str, Counter]] = None,
     resolution_size_by_action: Optional[dict[str, Counter]] = None,
     attr_matrix: Optional[dict[str, Counter]] = None,
+    selected_combos: Optional[list[tuple]] = None,
 ) -> None:
     """Write execution summary to log file and stdout."""
     summary_lines = [
@@ -41,6 +42,7 @@ def write_summary(
         f"  Mode:                   {args.mode} ({'MOVE' if args.mode == 'm' else 'FIND ONLY'})",
         f"  Source:                 {args.source}",
         f"  Target:                {args.target}",
+        f"  Log file:               {getattr(args, 'logname', 'unknown')}",
         f"  Error target:          {args.error_target or 'default'}",
         f"  No-video target:       {args.novideo_target or 'default'}",
         f"  Duplicate type:        {args.duptype}",
@@ -184,6 +186,14 @@ def write_summary(
         except Exception:
             duration_str = None
 
+    # Optional: include a compact list of selected attribute combinations (top combos)
+    if selected_combos:
+        summary_lines.append("")
+        summary_lines.append("SELECTED ATTRIBUTE COMBINATIONS SUMMARY:")
+        for combo, total, keep_cnt, dup_cnt in selected_combos:
+            res, audio, length, err_bucket = combo
+            summary_lines.append(f"('{res}', '{audio}', '{length}', '{err_bucket}'): total={total}  KEEP={keep_cnt}  DUPLICATE={dup_cnt}")
+
     summary_lines.append("")
     summary_lines.append(f"  Start time: {start_time or 'unknown'}")
     summary_lines.append(f"  End time:   {exec_date}")
@@ -226,4 +236,225 @@ def sort_and_finalize_log(
     with open(log_path, "w", encoding="utf-8") as f:
         for line in sorted_lines:
             f.write(line + "\n")
-        write_summary(f, action_counter, args, size_counter, resolution_counter, resolution_size_counter, attr_matrix)
+        # Compute selected attribute combinations from sorted_lines
+        from collections import Counter, defaultdict
+
+        def _normalize_resolution(s: str) -> str:
+            s = (s or "").lower()
+            if "1080" in s:
+                return "1080"
+            if "720" in s:
+                return "720"
+            return "unknown"
+
+        def _normalize_audio(s: str) -> str:
+            s = (s or "").lower()
+            if "mc" in s or "5.1" in s or "5/1" in s:
+                return "MC"
+            if "stereo" in s or "2/0" in s:
+                return "Stereo"
+            return "unknown"
+
+        def _normalize_length(s: str) -> str:
+            s = (s or "").lower()
+            if "longer" in s:
+                return "longer"
+            if "shorter" in s:
+                return "shorter"
+            if "ok" in s:
+                return "ok"
+            return "ok"
+
+        combo_counter: Counter[tuple] = Counter()
+        combo_keep: defaultdict = defaultdict(int)
+        combo_dup: defaultdict = defaultdict(int)
+
+        for line in sorted_lines:
+            if not line.strip() or line.startswith("[DEBUG]"):
+                continue
+            parts = line.split("\t")
+            # expect last 4 columns: resolution, audio, length, errors
+            if len(parts) < 4:
+                continue
+            # Only count statistics for real video source files (.mkv)
+            src_path = parts[2] if len(parts) > 2 else ""
+            if not src_path.lower().endswith(".mkv"):
+                continue
+            res_raw = parts[-4]
+            audio_raw = parts[-3]
+            length_raw = parts[-2]
+            errors_raw = parts[-1]
+
+            res = _normalize_resolution(res_raw)
+            audio = _normalize_audio(audio_raw)
+            length = _normalize_length(length_raw)
+            try:
+                errors = int(errors_raw) if errors_raw.strip() else 0
+            except Exception:
+                errors = 0
+            err_bucket = "0" if errors == 0 else ">0"
+
+            combo = (res, audio, length, err_bucket)
+            combo_counter[combo] += 1
+
+            # determine keep vs duplicate by looking at action token (second column)
+            action_token = parts[1] if len(parts) > 1 else ""
+            if "KEEP" in action_token:
+                combo_keep[combo] += 1
+            elif "DUPLICATE" in action_token:
+                combo_dup[combo] += 1
+
+        # select top 7 combos by total count
+        top = combo_counter.most_common(7)
+        selected_combos = []
+        for combo, total in top:
+            selected_combos.append((combo, total, combo_keep.get(combo, 0), combo_dup.get(combo, 0)))
+
+        # Keep ACTION STATISTICS as provided (file-based). Build filtered structures
+        # for RESOLUTION BY ACTION, ATTRIBUTE MATRIX and SELECTED COMBOS that count only .mkv files.
+        video_resolution_by_action: dict[str, Counter] = {}
+        video_resolution_size_by_action: dict[str, Counter] = {}
+        video_attr_matrix: dict[str, Counter] = {}
+
+        def _res_key_numeric(s: str) -> int:
+            s = (s or "").lower()
+            if "1080" in s:
+                return 1080
+            if "720" in s:
+                return 720
+            return 0
+
+        from collections import defaultdict
+
+        # Track observed resolutions per action to filter size map later
+        observed_res_for_action: dict[str, set] = defaultdict(set)
+
+        for line in sorted_lines:
+            if not line.strip() or line.startswith("[DEBUG]"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 4:
+                continue
+            src_path = parts[2] if len(parts) > 2 else ""
+            if not src_path.lower().endswith(".mkv"):
+                continue
+            action_token = parts[1] if len(parts) > 1 else ""
+            res_raw = parts[-4]
+            audio_raw = parts[-3]
+            length_raw = parts[-2]
+            errors_raw = parts[-1]
+
+            res_num = _res_key_numeric(res_raw)
+            # update resolution by action
+            video_resolution_by_action.setdefault(action_token, Counter())[res_num] += 1
+            observed_res_for_action[action_token].add(res_num)
+
+            # build attribute list for this file and update attribute cross-tab
+            attrs = []
+            # audio
+            a = (audio_raw or "").lower()
+            if "mc" in a or "5.1" in a or "5/1" in a:
+                attrs.append("MC")
+            elif "stereo" in a or "2/0" in a:
+                attrs.append("Stereo")
+            else:
+                attrs.append("unknown")
+            # errors / ok
+            try:
+                errors = int(errors_raw) if errors_raw.strip() else 0
+            except Exception:
+                errors = 0
+            if errors > 0:
+                attrs.append("ERRORS")
+            else:
+                attrs.append("OK")
+            # length
+            l = (length_raw or "").lower()
+            if "longer" in l:
+                attrs.append("LONGER")
+            elif "shorter" in l:
+                attrs.append("SHORTER")
+            else:
+                attrs.append("OK")
+            # resolution flag
+            if res_num == 1080:
+                attrs.append("1080")
+            elif res_num == 720:
+                attrs.append("720")
+            else:
+                attrs.append("unknown")
+            # action flag
+            if "KEEP" in action_token:
+                attrs.append("KEEP")
+            elif "DUPLICATE" in action_token:
+                attrs.append("DUPLICATE")
+
+            # update matrix: for each pair of attrs increment row->col
+            for row in attrs:
+                video_attr_matrix.setdefault(row, Counter())
+                for col in attrs:
+                    video_attr_matrix[row][col] += 1
+
+        # Filter resolution_size_counter to only include observed resolutions for each action
+        if resolution_size_counter:
+            for action, res_map in resolution_size_counter.items():
+                obs = observed_res_for_action.get(action, set())
+                if not obs:
+                    continue
+                # keep only resolutions we saw in .mkv lines
+                filtered = {res: size for res, size in res_map.items() if res in obs}
+                if filtered:
+                    video_resolution_size_by_action[action] = Counter(filtered)
+
+        # Write summary: pass original action_counter (file-based), but filtered resolution and attr matrices
+        write_summary(f, action_counter, args, size_counter, video_resolution_by_action or None, video_resolution_size_by_action or None, video_attr_matrix or None, selected_combos)
+
+        # --- Generate Keep.txt: list all KEEP .mkv video files with full path and attributes
+        keep_entries = []
+        for idx, line in enumerate(sorted_lines, start=1):
+            if not line.strip() or line.startswith("[DEBUG]"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 4:
+                continue
+            action_token = parts[1] if len(parts) > 1 else ""
+            src_path = parts[2] if len(parts) > 2 else ""
+            if "KEEP" not in action_token:
+                continue
+            if not src_path.lower().endswith(".mkv"):
+                continue
+            # last 4 columns expected: resolution, audio, length, errors
+            res = parts[-4] if len(parts) >= 4 else "unknown"
+            audio = parts[-3] if len(parts) >= 3 else "unknown"
+            length_flag = parts[-2] if len(parts) >= 2 else "ok"
+            errors_raw = parts[-1] if parts else "0"
+            try:
+                errors = int(errors_raw) if errors_raw.strip() else 0
+            except Exception:
+                errors = 0
+            keep_entries.append((idx, src_path, res, audio, length_flag, errors))
+
+        # sort by audio format (lexicographically) then by error count (ascending)
+        keep_entries.sort(key=lambda e: (str(e[3]).lower(), e[5]))
+
+        # write Keep file next to log_path using the same numbering as the dedup log
+        try:
+            import re
+
+            log_base = os.path.basename(log_path)
+            m = re.match(r"(?i)dedup_log_(.+)$", log_base)
+            if m:
+                suffix = m.group(1)
+                keep_name = f"keep_{suffix}"
+            else:
+                keep_name = "keep.txt"
+
+            keep_path = os.path.join(os.path.dirname(log_path), keep_name)
+            with open(keep_path, "w", encoding="utf-8") as kf:
+                kf.write("# Keep report generated by avior-dedup\n")
+                kf.write("# format: index\tfull_path\tresolution\taudio\tlength\terrors\n")
+                for idx, path, res, audio, length_flag, errors in keep_entries:
+                    kf.write(f"{idx}\t{path}\t{res}\t{audio}\t{length_flag}\t{errors}\n")
+        except Exception:
+            # never fail the finalizer if keep file cannot be written
+            pass

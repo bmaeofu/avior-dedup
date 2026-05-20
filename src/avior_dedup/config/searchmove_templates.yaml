@@ -9,6 +9,11 @@
   search_expressions:
   - sibling:.nfo:!exists
 - extensions:
+  - .mkv
+  name: MKV without TXT file
+  search_expressions:
+  - sibling:.txt:!exists
+- extensions:
   - .nfo
   name: High rated (>5.4) with valid NFO
   search_expressions:

@@ -195,6 +195,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             mode = req.mode
             source = source_root
             target = target_root
+            # expose the actual log path so reporting shows it
+            logname = log_path
             error_target = req.error_target
             novideo_target = req.novideo_target
             duptype = req.duptype

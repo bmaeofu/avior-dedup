@@ -113,7 +113,7 @@ def _recording_elapsed_seconds_from_line(line: str, plain_start_seconds: int | N
     return seconds
 
 
-def _recording_start_window_lines(lines: list[str], max_seconds: int = 15) -> list[str]:
+def _recording_start_window_lines(lines: list[str], max_seconds: int = 25) -> list[str]:
     """Return lines in the first max_seconds after Start/Start Recording."""
     plain_time_re = re.compile(r"^\s*(\d+):(\d+):(\d+)\b")
     recording_started = False
@@ -140,7 +140,31 @@ def _recording_start_window_lines(lines: list[str], max_seconds: int = 15) -> li
     return window_lines
 
 
-def is_multichannel_from_log(lines: list[str], max_seconds: int = 15) -> bool:
+def _recording_lines(lines: list[str]) -> list[str]:
+    """Return all lines from the first recording Start until the corresponding Stop.
+
+    This extracts the full recording block (used for video resolution detection),
+    not just the initial start window.
+    """
+    plain_time_re = re.compile(r"^\s*(\d+):(\d+):(\d+)\b")
+    recording_started = False
+    block_lines: list[str] = []
+
+    for line in lines:
+        if not recording_started:
+            if line.strip().endswith("Start") or "Start Recording" in line:
+                recording_started = True
+                block_lines.append(line)
+            continue
+
+        block_lines.append(line)
+        if line.strip().endswith("Stop") or re.search(r"\bStop\b", line):
+            break
+
+    return block_lines
+
+
+def is_multichannel_from_log(lines: list[str], max_seconds: int = 25) -> bool:
     """Determine AC3 channel mode from the recording start window.
 
     The decisive signal is the *last* AC3 audio state line found within the
@@ -168,9 +192,15 @@ def _video_resolution_from_line(line: str) -> Optional[int]:
 
 
 def get_recording_resolution_from_log(lines: list[str], max_seconds: int = 15) -> Optional[int]:
-    """Return the last detected video resolution in the recording start window."""
+    """Return the last detected video resolution from the full recording block.
+
+    Video resolution detection uses the entire recording block (from Start to
+    Stop) rather than the short start window. The start window remains the
+    authoritative source for audio/multichannel detection.
+    """
+    recording_block = _recording_lines(lines)
     last_resolution: Optional[int] = None
-    for line in _recording_start_window_lines(lines, max_seconds=max_seconds):
+    for line in recording_block:
         res = _video_resolution_from_line(line)
         if res is not None:
             last_resolution = res

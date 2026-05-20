@@ -236,11 +236,37 @@ def build_move_plan(
                 key = (action, src)
                 if key not in already_logged:
                     file_size = _get_file_size(src)
-                    # Append error count for actions that have errors
-                    if r.error_count is not None and r.error_count > 0:
-                        log_fn(f"{group_name}\t[{action}]\t{src}\tERRORS:{r.error_count}")
+                    # Build appended attribute columns: resolution, audio, length_flag, errors
+                    if getattr(r, "resolution", None) is not None:
+                        if r.resolution >= 1080:
+                            res_str = "1080"
+                        elif r.resolution >= 720:
+                            res_str = "720"
+                        else:
+                            res_str = "unknown"
                     else:
-                        log_fn(f"{group_name}\t[{action}]\t{src}")
+                        res_str = "unknown"
+
+                    if getattr(r, "multichannel", None) is True:
+                        audio_str = "MC"
+                    elif getattr(r, "multichannel", None) is False:
+                        audio_str = "Stereo"
+                    else:
+                        audio_str = "unknown"
+
+                    length_flag = ""
+                    if has_duration_values:
+                        if is_too_long:
+                            length_flag = "longer"
+                        elif is_too_short:
+                            length_flag = "shorter"
+                        else:
+                            length_flag = "ok"
+
+                    err_count = r.error_count if r.error_count is not None else 0
+
+                    # For KEEP lines include an empty found_path column so columns align with DUPLICATE lines
+                    log_fn(f"{group_name}\t[{action}]\t{src}\t\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
                     action_counter[action] += 1
                     size_counter[action] += file_size
                     # record resolution counters for kept files
@@ -308,6 +334,9 @@ def build_move_plan(
                 attrs_move.append("LONGER")
             if has_duration_values and is_too_short:
                 attrs_move.append("SHORTER")
+            # mark presence of duration values and OK state for files within bounds
+            if has_duration_values and not is_too_long and not is_too_short:
+                attrs_move.append("OK")
             if r.resolution is not None:
                 if r.resolution >= 1080:
                     attrs_move.append("1080")
@@ -361,16 +390,43 @@ def execute_move_plan(
         file_size = _get_file_size(file_path)
         # Append error count for moves when available
         err_count = errors_by_file.get(file_path, 0) if errors_by_file is not None else 0
-        if err_count and err_count > 0:
-            log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}\tERRORS:{err_count}")
+        # Build appended attribute columns for moved files: resolution, audio, length_flag, errors
+        # Start with attrs coming from attrs_by_file (if provided)
+        attrs_move = []
+        if attrs_by_file and file_path in attrs_by_file:
+            attrs_move.extend(attrs_by_file[file_path])
+        # Normalize resolution
+        if getattr(move, "resolution", None) is not None:
+            if move.resolution >= 1080:
+                res_str = "1080"
+            elif move.resolution >= 720:
+                res_str = "720"
+            else:
+                res_str = "unknown"
         else:
-            log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}")
+            res_str = "unknown"
+
+        audio_str = "MC" if "MC" in attrs_move else ("Stereo" if "MC" not in attrs_move and attrs_move else "unknown")
+
+        length_flag = ""
+        if "LONGER" in attrs_move:
+            length_flag = "longer"
+        elif "SHORTER" in attrs_move:
+            length_flag = "shorter"
+        elif "OK" in attrs_move:
+            length_flag = "ok"
+
+        # err_count is numeric
+        # Log with destination and appended attributes
+        log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
         action_counter[move.action] += 1
         size_counter[move.action] += file_size
-        # Track resolution distribution per action (use 0 for unknown)
-        res = move.resolution if getattr(move, "resolution", None) is not None else 0
-        resolution_by_action[move.action][res] += 1
-        resolution_size_by_action[move.action][res] += file_size
+        # Only count resolution and attributes for actual video files (e.g., .mkv)
+        if str(file_path).lower().endswith(".mkv"):
+            # Track resolution distribution per action (use 0 for unknown)
+            res = move.resolution if getattr(move, "resolution", None) is not None else 0
+            resolution_by_action[move.action][res] += 1
+            resolution_size_by_action[move.action][res] += file_size
         # attributes for moved file: prefer attrs_by_file from build, but ensure resolution/DUPLICATE tags present
         attrs_move = []
         if attrs_by_file and file_path in attrs_by_file:
@@ -393,9 +449,11 @@ def execute_move_plan(
             attrs_move.append("DUPLICATE")
         # ensure uniqueness before counting to avoid accidental duplicates
         attrs_move = list(dict.fromkeys(attrs_move))
-        for a in attrs_move:
-            for b in attrs_move:
-                attr_matrix[a][b] += 1
+        # Only include attribute counts for actual video files
+        if str(file_path).lower().endswith(".mkv"):
+            for a in attrs_move:
+                for b in attrs_move:
+                    attr_matrix[a][b] += 1
 
         if progress_cb is not None:
             progress_cb(idx + 1, total)

@@ -9,10 +9,10 @@ source_paths:
 - //UMS/media/transcoded/.obsolete/.obsolete.old
 - //UMS/media/Bereinigte Duplikate/DokHD
 target_paths:
-- //UMS/media/tv/found_duplicates/FilmeHD_semantisch
-- //UMS/media/tv/found_duplicates/DokHD_semantisch
-- //UMS/media/tv/found_duplicates/KrimiHD_semantisch
-- //UMS/media/tv/found_duplicates/SerienHD_semantisch
+- //UMS/media/tv/found_duplicates/FilmeHD_semantic
+- //UMS/media/tv/found_duplicates/DokHD_semantic
+- //UMS/media/tv/found_duplicates/KrimiHD_semantic
+- //UMS/media/tv/found_duplicates/SerienHD_semantic
 - //UMS/media/tv/found_duplicates/FilmeHD_case
 - //UMS/media/tv/found_duplicates/MusikvideosHD
 - //UMS/media/tv/found_duplicates/Unterhaltung, Kabarret & Comedy

@@ -31,7 +31,7 @@ def main() -> None:
     parser.add_argument("mode", choices=["m", "f"], help="m = move, f = find only")
     parser.add_argument("source", help="source directory")
     parser.add_argument("target", help="target directory")
-    parser.add_argument("logname", help="log file name")
+    parser.add_argument("logname", nargs="?", default="dedup_log_cli.txt", help="log file name (default: dedup_log_cli.txt)")
     parser.add_argument(
         "--duptype",
         choices=["case", "exact", "semantic", "both", "all"],
@@ -185,6 +185,8 @@ def main() -> None:
         attr_matrix_build[a].update(ctr)
 
     log_handle.close()
+    # Expose the actual log path for reporting so the SUMMARY shows the real file
+    args.logname = log_path
     # Diagnostic: verify 720p DUPLICATE counts match between resolution counters and attribute matrix
     try:
         dup_actions = [a for a in resolution_by_action_build.keys() if a.startswith("DUPLICATE")]
