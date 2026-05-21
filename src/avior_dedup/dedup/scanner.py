@@ -5,6 +5,7 @@ import re
 import subprocess
 import unicodedata
 import datetime
+import time
 import logging
 from typing import Callable, Optional, Tuple
 
@@ -354,18 +355,20 @@ def get_epg_duration(path: str, content: str) -> Optional[int]:
     return None
 
 
-def get_video_length(path: str, content: str | None, use_epg: bool) -> Tuple[bool, str, Optional[float], Optional[int]]:
+def get_video_length(path: Optional[str], content: str | None, use_epg: bool) -> Tuple[bool, str, Optional[float], Optional[int]]:
     """Get video duration and recording duration from ffprobe and log files.
 
     Prefer parsing the provided `content` (already truncated) once and reuse
     that for both EPG and real-time parsing to avoid multiple file reads.
     If `content` is None, attempt to read candidate log files before parsing.
     """
-    video_duration = get_media_duration_ffprobe(path)
+    video_duration = None
+    if path:
+        video_duration = get_media_duration_ffprobe(path)
 
-    if video_duration is None:
-        return False, "ffprobe failed", None, None
-
+    # Continue even if ffprobe fails (or path was None): attempt to extract
+    # recording duration from logs or EPG data. Returning a None
+    # `video_duration` is acceptable so callers can still obtain `rec_duration`.
     rec_duration = None
 
     # Ensure we have truncated content to parse; try to read log files if not provided
@@ -380,12 +383,17 @@ def get_video_length(path: str, content: str | None, use_epg: bool) -> Tuple[boo
                 break
     else:
         cont = content
-        
+
     if cont is not None:
-        if use_epg:
-            rec_duration = get_epg_duration(path, cont)
+        if path is None:
+            # No video file available — prefer real-time parsing, then EPG.
+            rec_duration = get_real_rec_time_from_log(cont) or get_epg_duration(path or "", cont)
         else:
-            rec_duration = get_real_rec_time_from_log(cont)
+            # Video file present (or path given): respect use_epg ordering
+            if use_epg:
+                rec_duration = get_epg_duration(path, cont) or get_real_rec_time_from_log(cont)
+            else:
+                rec_duration = get_real_rec_time_from_log(cont) or get_epg_duration(path, cont)
 
     if rec_duration is None:
         return False, "no reference duration", video_duration, None
@@ -404,6 +412,7 @@ def get_video_md(
     dir_files_cache: dict[str, set[str]] = {}
 
     for idx, file_path in enumerate(file_list):
+        t_start = time.perf_counter()
         film_dir = os.path.dirname(file_path)
         film_base, _ = match_suffix(os.path.basename(file_path))
 
@@ -436,47 +445,55 @@ def get_video_md(
         resolution = None
         rec_date = None
 
-        if video_exists:
-            # Determine main_log using cached directory listing when possible
-            main_log = None
-            if (film_base + ".log") in files_in_dir:
-                main_log = os.path.join(film_dir, film_base + ".log")
-            elif (film_base + "mkv.log") in files_in_dir:
-                main_log = os.path.join(film_dir, film_base + "mkv.log")
-            if main_log and os.path.exists(main_log):
-                try:
-                    mod_date = os.path.getmtime(main_log)
-                    content = read_text(main_log)
-                    if content is not None:
-                        content = _truncate_log(content)
-                    lines = content.splitlines() if content is not None else []
-                    if not lines:
-                        raise ValueError("log file could not be read")
+        # Always attempt to locate and parse a matching log file (if present),
+        # even when no video file exists for this stem. This ensures .log-only
+        # input paths receive the metadata extracted from their logs.
+        main_log = None
+        for cand_name in (film_base + ".log", film_base + "mkv.log"):
+            if cand_name in files_in_dir:
+                p = os.path.join(film_dir, cand_name)
+                if os.path.exists(p):
+                    main_log = p
+                    break
 
-                    # Parse recording date from first line (formats: dd.mm.yyyy or dd/mm/yyyy)
-                    first_line = lines[0]
-                    m = re.search(r"(\b\d{1,2}[./]\d{1,2}[./]\d{4}\b)", first_line)
-                    if m:
-                        date_str = m.group(1)
-                        sep = '.' if '.' in date_str else '/'
-                        d, mo, y = date_str.split(sep)
-                        try:
-                            dt = datetime.date(int(y), int(mo), int(d))
-                            rec_date = dt.isoformat()
-                        except ValueError:
-                            rec_date = None
+        if main_log and os.path.exists(main_log):
+            try:
+                mod_date = os.path.getmtime(main_log)
+                content = read_text(main_log)
+                if content is not None:
+                    content = _truncate_log(content)
+                lines = content.splitlines() if content is not None else []
+                if not lines:
+                    raise ValueError("log file could not be read")
 
-                    error_count = count_errors(lines)
-                    multichannel = is_multichannel_from_log(lines)
-                    resolution = get_recording_resolution_from_log(lines)
-                    ok, msg, video_duration, rec_duration = get_video_length(video_filepath, content=content, use_epg=True)
+                # Parse recording date from first line (formats: dd.mm.yyyy or dd/mm/yyyy)
+                first_line = lines[0]
+                m = re.search(r"(\b\d{1,2}[./]\d{1,2}[./]\d{4}\b)", first_line)
+                if m:
+                    date_str = m.group(1)
+                    sep = '.' if '.' in date_str else '/'
+                    d, mo, y = date_str.split(sep)
+                    try:
+                        dt = datetime.date(int(y), int(mo), int(d))
+                        rec_date = dt.isoformat()
+                    except ValueError:
+                        rec_date = None
 
-                except (OSError, UnicodeDecodeError, ValueError):
-                    error_count = None
-                    mod_date = None
-                    multichannel = None
-                    resolution = None
-                    rec_date = None
+                error_count = count_errors(lines)
+                multichannel = is_multichannel_from_log(lines)
+                resolution = get_recording_resolution_from_log(lines)
+
+                # Unified call: allow video_filepath to be None. The function will
+                # skip ffprobe when path is None and will attempt real-time and
+                # EPG parsing according to availability.
+                ok, msg, video_duration, rec_duration = get_video_length(video_filepath, content=content, use_epg=True)
+
+            except (OSError, UnicodeDecodeError, ValueError):
+                error_count = None
+                mod_date = None
+                multichannel = None
+                resolution = None
+                rec_date = None
 
         results.append(FileRecord(
             file=file_path,
@@ -489,6 +506,12 @@ def get_video_md(
             rec_duration=rec_duration,
             rec_date=rec_date,
         ))
+        t_end = time.perf_counter()
+        if log_fn is not None:
+            try:
+                log_fn(f"TIMING get_video_md {file_path} {t_end - t_start:.3f}s")
+            except Exception:
+                pass
         if progress_cb is not None:
             progress_cb(file_path, idx + 1)
 

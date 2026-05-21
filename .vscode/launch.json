@@ -121,16 +121,16 @@
             "args": ["f", "\\\\UMS\\media\\tv\\FilmeHD","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--max-errors-when-mc", "3"]
         },
         {
-            "name": "avior-dedup: DokHD case",
+            "name": "avior-dedup: DokHD semantic",
             "type": "debugpy",
             "request": "launch",
             "module": "avior_dedup",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["f", "\\\\UMS\\media\\tv\\DokHD","\\\\UMS\\media\\tv\\found_duplicates\\DokHD_case", "duplicate_case_files_found.txt",  "--duptype", "case", "--max-errors-when-mc", "3"]
+            "args": ["f", "\\\\UMS\\media\\tv\\DokHD","\\\\UMS\\media\\tv\\found_duplicates\\DokHD_semantic", "C:\\repos\\avior-dedup\\tmp_out\\dedup_log.txt", "--ignored-directories", ".actors", "bu_logs", "--duptype", "semantic", "--semantic-prefixes", "^erlebnis\\s+erde\\s*-?\\s*","--remove-spaces", "--max-errors-when-mc", "3"]
         },
         {
-            "name": "avior-dedup: DokHD semantic",
+            "name": "avior-dedup: DokHD semantic 2",
             "type": "debugpy",
             "request": "launch",
             "module": "avior_dedup",

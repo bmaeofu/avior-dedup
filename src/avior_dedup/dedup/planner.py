@@ -309,6 +309,10 @@ def build_move_plan(
         groups = expanded_groups
         total_groups = len(groups)
     t_expand = time.perf_counter() - t_expand_start
+    try:
+        log_fn(f"TIMING expand: {t_expand:.3f}s")
+    except Exception:
+        pass
 
     # Precompute basename/stem/dir for all files in the (possibly expanded) groups
     all_files = [f for g in groups for f in g]
@@ -345,6 +349,10 @@ def build_move_plan(
             pass
         t_fetch = time.perf_counter() - t_fetch_start
         film_info_accumulator += t_fetch
+        try:
+            log_fn(f"TIMING prefetch: {t_fetch:.3f}s for {len(global_uncached)} files")
+        except Exception:
+            pass
 
     # Build a stem -> representative FileRecord map from the probed files
     # so we can apply full metadata to unprobed siblings sharing the same stem.
@@ -582,6 +590,10 @@ def build_move_plan(
             errors_by_file[src] = r.error_count if r.error_count is not None else 0
 
     t_total = time.perf_counter() - t_build_start
+    try:
+        log_fn(f"TIMING probes_total: {film_info_accumulator:.3f}s build_total: {t_total:.3f}s")
+    except Exception:
+        pass
     return (
         files_to_move,
         action_counter,
