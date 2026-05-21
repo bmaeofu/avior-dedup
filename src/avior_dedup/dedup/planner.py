@@ -5,6 +5,7 @@ import shutil
 from collections import Counter, defaultdict
 from typing import Callable
 import datetime
+import time
 
 from avior_dedup.dedup.models import (
     DEFAULT_SELECTION_PRIORITIES,
@@ -198,6 +199,9 @@ def build_move_plan(
     # (scanner now groups by .log stems), expand each log-file entry into the
     # full set of sibling files that share the same stem in the same
     # directory according to configured `candidate_suffixes`.
+    t_build_start = time.perf_counter()
+    film_info_accumulator = 0.0
+    t_expand_start = time.perf_counter()
     expanded_groups: list[list[str]] = []
     suffixes = config.candidate_suffixes()
     # Cache directory listings to avoid repeated os.path.exists calls
@@ -223,6 +227,11 @@ def build_move_plan(
     if expanded_groups:
         groups = expanded_groups
         total_groups = len(groups)
+    t_expand = time.perf_counter() - t_expand_start
+    try:
+        log_fn(f"TIMING expansion: {t_expand:.3f}s, groups_after={total_groups}")
+    except Exception:
+        pass
 
     # Precompute basename/stem/dir for all files in the (possibly expanded) groups
     all_files = [f for g in groups for f in g]
@@ -235,11 +244,59 @@ def build_move_plan(
         records: list[FileRecord] = []
         uncached = [f for f in group if f not in film_info_cache]
         if uncached:
-            # Collect film info for uncached files. We intentionally do NOT
-            # emit per-file progress updates here; instead we report progress
-            # at group boundaries so the UI shows "groups processed / total".
-            for rec in get_film_error_count(uncached, log_fn=log_fn):
+            # Only probe one representative per video-set (prefer video file,
+            # then plain .log, then any .log, else first uncached). This avoids
+            # repeated ffprobe/log parsing for sidecar files.
+            rep = None
+            video_exts = {e.lower() for e in config.video_suffixes()}
+            # prefer an uncached video file
+            for f in uncached:
+                suf = match_suffix(os.path.basename(f))[1] or ""
+                if suf.lower() in video_exts:
+                    rep = f
+                    break
+            # prefer plain .log (not .mkv.log) if no video
+            if rep is None:
+                for f in uncached:
+                    bn = os.path.basename(f).lower()
+                    if bn.endswith('.log') and not bn.endswith('.mkv.log'):
+                        rep = f
+                        break
+            # fallback: any .log
+            if rep is None:
+                for f in uncached:
+                    if os.path.basename(f).lower().endswith('.log'):
+                        rep = f
+                        break
+            # last resort: first uncached
+            if rep is None:
+                rep = uncached[0]
+
+            t_fetch_start = time.perf_counter()
+            reps = [rep]
+            for rec in get_film_error_count(reps, log_fn=log_fn):
+                # store the record for the representative path
                 film_info_cache[rec.file] = rec
+                # clone the record for all other files in the same group
+                for sibling in group:
+                    if sibling not in film_info_cache:
+                        film_info_cache[sibling] = FileRecord(
+                            file=sibling,
+                            video_exists=rec.video_exists,
+                            error_count=rec.error_count,
+                            mod_date=rec.mod_date,
+                            multichannel=rec.multichannel,
+                            resolution=rec.resolution,
+                            video_duration=rec.video_duration,
+                            rec_duration=rec.rec_duration,
+                            rec_date=rec.rec_date,
+                        )
+            t_fetch = time.perf_counter() - t_fetch_start
+            film_info_accumulator += t_fetch
+            try:
+                log_fn(f"TIMING get_film_error_count: {t_fetch:.3f}s for rep={os.path.basename(rep)} (expanded to {len(group)} files)")
+            except Exception:
+                pass
         for f in group:
             records.append(film_info_cache[f])
 
@@ -407,6 +464,11 @@ def build_move_plan(
             # record numeric error count for this file to be used during execute
             errors_by_file[src] = r.error_count if r.error_count is not None else 0
 
+    t_total = time.perf_counter() - t_build_start
+    try:
+        log_fn(f"TIMING build_move_plan total: {t_total:.3f}s (film_info={film_info_accumulator:.3f}s)")
+    except Exception:
+        pass
     return (
         files_to_move,
         action_counter,
