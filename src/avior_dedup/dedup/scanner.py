@@ -172,10 +172,20 @@ def is_multichannel_from_log(lines: list[str], max_seconds: int = 25) -> bool:
     first ``max_seconds`` after recording start.
     """
     last_audio_state: Optional[bool] = None
-    for line in _recording_start_window_lines(lines, max_seconds=max_seconds):
+    window_lines = _recording_start_window_lines(lines, max_seconds=max_seconds)
+    for line in window_lines:
         ac3_state = _ac3_audio_state_from_line(line)
         if ac3_state is not None:
             last_audio_state = ac3_state
+
+    # Fallback: if no start-window lines found (some logs lack Start/Stop),
+    # search the entire log for the last AC3 audio-state line and use that.
+    if last_audio_state is None:
+        for line in lines:
+            ac3_state = _ac3_audio_state_from_line(line)
+            if ac3_state is not None:
+                last_audio_state = ac3_state
+
     return bool(last_audio_state)
 
 
@@ -368,7 +378,9 @@ def get_video_length(path: str, content: str | None, use_epg: bool) -> Tuple[boo
             if txt:
                 cont = _truncate_log(txt)
                 break
-
+    else:
+        cont = content
+        
     if cont is not None:
         if use_epg:
             rec_duration = get_epg_duration(path, cont)

@@ -1,0 +1,64 @@
+TIMING build_move_plan total: 0.088s (film_info=0.087s)
+TIMING expansion: 0.000s, groups_after=1
+TIMING get_video_md: 0.087s for 2 files
+der mann, der zuviel wusste-fanart.jpg	[KEEP]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-fanart.jpg		720	Stereo	ok	0
+der mann, der zuviel wusste-poster.jpg	[KEEP]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-poster.jpg		720	Stereo	ok	0
+der mann, der zuviel wusste.log	[KEEP]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.log		720	Stereo	ok	0
+der mann, der zuviel wusste.mkv	[KEEP]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.mkv		720	Stereo	ok	0
+der mann, der zuviel wusste.nfo	[KEEP]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.nfo		720	Stereo	ok	0
+der mann, der zuviel wusste.txt	[KEEP]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.txt		720	Stereo	ok	0
+der mann, der zuviel wußte.log	[DUPLICATE_WITH_ERRORS_MC]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.log	c:\repos\avior-dedup\tmp_out\errors\Der Mann, der zuviel wußte.log	720	MC	ok	3
+der mann, der zuviel wußte.mkv	[DUPLICATE_WITH_ERRORS_MC]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.mkv	c:\repos\avior-dedup\tmp_out\errors\Der Mann, der zuviel wußte.mkv	720	MC	ok	3
+der mann, der zuviel wußte.nfo	[DUPLICATE_WITH_ERRORS_MC]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.nfo	c:\repos\avior-dedup\tmp_out\errors\Der Mann, der zuviel wußte.nfo	720	MC	ok	3
+
+================================================================================
+SUMMARY
+================================================================================
+
+PARAMETERS:
+  Mode:                   f (FIND ONLY)
+  Source:                 test-data/dedupe/Dup_test
+  Target:                tmp_out
+  Log file:               c:\repos\avior-dedup\tmp_out\dedup_timings.txt
+  Error target:          default
+  No-video target:       default
+  Duplicate type:        case
+  Max errors (MC):       0
+  Max duration +diff:    600
+  Max duration -diff:    180
+  Selection priorities:  multichannel, resolution, fewer_errors, recording_date, closest_duration
+  Semantic prefixes:     
+  Remove episode nos:    no
+  Remove spaces:         no
+  Remove non-episode parentheses: no
+  Ignored directories:   none
+
+ACTION STATISTICS:
+  DUPLICATE_WITH_ERRORS_MC................      3 files ( 33.3%)  [   1.05 GB]
+  KEEP....................................      6 files ( 66.7%)  [   1.17 GB]
+  ----------------------------------------------------------------------
+  TOTAL...................................      9 files  [   2.22 GB]
+
+RESOLUTION BY ACTION (video files only):
+  [DUPLICATE_WITH_ERRORS_MC]:
+    720p          1 files (100.0%)
+  [KEEP]:
+    720p          1 files (100.0%)
+
+ATTRIBUTE MATRIX (video files only):
+            MC  ERRORS  720  DUPLICATE  KEEP  OK  Stereo
+MC           1       1    1          1     0   1       0
+ERRORS       1       1    1          1     0   1       0
+720          1       1    2          1     1   3       1
+DUPLICATE    1       1    1          1     0   1       0
+KEEP         0       0    1          0     1   2       1
+OK           1       1    3          1     2   5       2
+Stereo       0       0    1          0     1   2       1
+
+SELECTED ATTRIBUTE COMBINATIONS SUMMARY (video files only):
+('720', 'Stereo', 'ok', '0'): total=1  KEEP=1  DUPLICATE=0
+('720', 'MC', 'ok', '>0'): total=1  KEEP=0  DUPLICATE=1
+
+  Start time: unknown
+  End time:   21.05.2026 17:31:54
+================================================================================

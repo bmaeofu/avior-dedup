@@ -15,6 +15,7 @@ from avior_dedup.dedup.models import (
     SelectionPriority,
 )
 from avior_dedup.dedup.scanner import get_video_md
+from avior_dedup.dedup.io_utils import read_text
 from avior_dedup import config
 from avior_dedup.dedup.suffix import match_suffix
 from avior_dedup.permissions import ensure_output_permissions
@@ -202,6 +203,10 @@ def build_move_plan(
     t_build_start = time.perf_counter()
     film_info_accumulator = 0.0
     t_expand_start = time.perf_counter()
+    # Capture the original files passed in via `groups` (before expansion).
+    # The caller may pass only a few files (e.g. .log stems); we want to
+    # prefetch metadata only for those files, not for every expanded sibling.
+    input_files = [f for g in groups for f in g]
     expanded_groups: list[list[str]] = []
     suffixes = config.candidate_suffixes()
     # Cache directory listings to avoid repeated os.path.exists calls
@@ -239,66 +244,105 @@ def build_move_plan(
     stem_map: dict[str, str] = {f: match_suffix(basename_map[f])[0] for f in all_files}
     dir_map: dict[str, str] = {f: os.path.dirname(f) for f in all_files}
 
+    # Determine which stems actually contain a video file in the (possibly
+    # expanded) groups. We only prefetch metadata for input files whose
+    # stem appears in a group that contains a video file — otherwise the
+    # group will be classified as NO_VIDEO and full metadata isn't needed.
+    video_stems = set()
+    for f in all_files:
+        try:
+            if str(f).lower().endswith(".mkv"):
+                video_stems.add(match_suffix(os.path.basename(f))[0])
+        except Exception:
+            pass
+
+    # Fetch metadata once for the originally passed-in files whose stems
+    # correspond to groups containing video files.
+    global_uncached = [f for f in input_files if match_suffix(os.path.basename(f))[0] in video_stems and f not in film_info_cache]
+    if global_uncached:
+        t_fetch_start = time.perf_counter()
+        try:
+            for rec in get_video_md(global_uncached, log_fn=log_fn):
+                film_info_cache[rec.file] = rec
+        except Exception:
+            # Keep going even if metadata probing fails for some files
+            pass
+        t_fetch = time.perf_counter() - t_fetch_start
+        film_info_accumulator += t_fetch
+        try:
+            log_fn(f"TIMING get_video_md: {t_fetch:.3f}s for {len(global_uncached)} files")
+        except Exception:
+            pass
+
+    # Build a stem -> representative FileRecord map from the probed files
+    # so we can apply full metadata to unprobed siblings sharing the same stem.
+    stem_prefetched: dict[str, FileRecord] = {}
+    try:
+        for rec in list(film_info_cache.values()):
+            stem = match_suffix(os.path.basename(rec.file))[0]
+            # Prefer entries that actually have useful media metadata
+            if rec.video_exists and (rec.resolution is not None or rec.video_duration is not None or rec.multichannel is not None):
+                if stem not in stem_prefetched:
+                    stem_prefetched[stem] = rec
+    except Exception:
+        stem_prefetched = {}
+    # Build a map of the originally prefetched paths -> FileRecord so we can
+    # directly lookup by the exact paths that were passed into build_move_plan.
+    prefetch_by_path: dict[str, FileRecord] = {rec.file: rec for rec in film_info_cache.values() if rec.file in input_files}
+
     for group_idx, group in enumerate(groups):
         # Build FileRecords for this group (with caching)
         records: list[FileRecord] = []
-        uncached = [f for f in group if f not in film_info_cache]
-        if uncached:
-            # Only probe one representative per video-set (prefer video file,
-            # then plain .log, then any .log, else first uncached). This avoids
-            # repeated ffprobe/log parsing for sidecar files.
-            rep = None
-            video_exts = {e.lower() for e in config.video_suffixes()}
-            # prefer an uncached video file
-            for f in uncached:
-                suf = match_suffix(os.path.basename(f))[1] or ""
-                if suf.lower() in video_exts:
-                    rep = f
-                    break
-            # prefer plain .log (not .mkv.log) if no video
-            if rep is None:
-                for f in uncached:
-                    bn = os.path.basename(f).lower()
-                    if bn.endswith('.log') and not bn.endswith('.mkv.log'):
-                        rep = f
-                        break
-            # fallback: any .log
-            if rep is None:
-                for f in uncached:
-                    if os.path.basename(f).lower().endswith('.log'):
-                        rep = f
-                        break
-            # last resort: first uncached
-            if rep is None:
-                rep = uncached[0]
-
-            t_fetch_start = time.perf_counter()
-            reps = [rep]
-            for rec in get_video_md(reps, log_fn=log_fn):
-                # store the record for the representative path
-                film_info_cache[rec.file] = rec
-                # clone the record for all other files in the same group
-                for sibling in group:
-                    if sibling not in film_info_cache:
-                        film_info_cache[sibling] = FileRecord(
-                            file=sibling,
-                            video_exists=rec.video_exists,
-                            error_count=rec.error_count,
-                            mod_date=rec.mod_date,
-                            multichannel=rec.multichannel,
-                            resolution=rec.resolution,
-                            video_duration=rec.video_duration,
-                            rec_duration=rec.rec_duration,
-                            rec_date=rec.rec_date,
-                        )
-            t_fetch = time.perf_counter() - t_fetch_start
-            film_info_accumulator += t_fetch
-            try:
-                log_fn(f"TIMING get_video_md: {t_fetch:.3f}s for rep={os.path.basename(rep)} (expanded to {len(group)} files)")
-            except Exception:
-                pass
+        # At this point `film_info_cache` already contains metadata for all
+        # uncached paths (fetched once above). Build `records` from the cache.
         for f in group:
-            records.append(film_info_cache[f])
+            # Use cached metadata when available. If the (expanded) sibling
+            # wasn't part of the original input set, create a lightweight
+            # placeholder FileRecord so planning can continue without probing.
+            rec = film_info_cache.get(f)
+            if rec is None:
+                # First try direct lookup by expected .log path (same dir, stem + '.log')
+                stem = stem_map.get(f, match_suffix(os.path.basename(f))[0])
+                dirpath = dir_map.get(f, os.path.dirname(f))
+                candidates: list[str] = []
+                try:
+                    candidates.append(os.path.join(dirpath, stem + ".log"))
+                except Exception:
+                    pass
+                # Also consider any originally prefetched input files that share the same stem
+                for p in input_files:
+                    if match_suffix(os.path.basename(p))[0] == stem:
+                        candidates.append(p)
+
+                rep: FileRecord | None = None
+                for cand in candidates:
+                    rep = prefetch_by_path.get(cand) or film_info_cache.get(cand)
+                    if rep is not None:
+                        break
+
+                if rep is not None:
+                    rec = FileRecord(
+                        file=f,
+                        video_exists=rep.video_exists,
+                        error_count=rep.error_count,
+                        mod_date=rep.mod_date,
+                        multichannel=rep.multichannel,
+                        resolution=rep.resolution,
+                        video_duration=rep.video_duration,
+                        rec_duration=rep.rec_duration,
+                        rec_date=rep.rec_date,
+                    )
+                else:
+                    exists = os.path.exists(f)
+                    mod_date = None
+                    try:
+                        if exists:
+                            mod_date = os.path.getmtime(f)
+                    except Exception:
+                        mod_date = None
+                    rec = FileRecord(file=f, video_exists=exists, mod_date=mod_date)
+                film_info_cache[f] = rec
+            records.append(rec)
 
         valid_records = [r for r in records if r.video_exists]
 
