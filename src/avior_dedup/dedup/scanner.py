@@ -5,6 +5,7 @@ import re
 import subprocess
 import unicodedata
 import datetime
+import logging
 from typing import Callable, Optional, Tuple
 
 from avior_dedup import config
@@ -412,9 +413,12 @@ def get_film_error_count(
                 video_exists = True
                 break
 
-        if not video_exists and log_fn is not None:
+        if not video_exists:
+            # Do not write this informational debug message into the dedup log file.
+            # The message is retained here but commented out so it can be re-enabled
+            # by developers if needed for debugging.
             tried = [os.path.join(film_dir, film_base + ext) for ext in video_suffixes]
-            log_fn(f"[DEBUG] No video found for base '{film_base}' in '{film_dir}'. Tried: {tried}")
+            # logging.debug("No video found for base '%s' in '%s'. Tried: %s", film_base, film_dir, tried)
 
         video_duration=None
         rec_duration=None

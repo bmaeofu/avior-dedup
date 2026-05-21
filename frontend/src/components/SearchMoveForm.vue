@@ -141,6 +141,7 @@ function submit() {
             variant="outlined"
             prepend-inner-icon="mdi-folder"
             hide-details
+            autocomplete="off"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -152,6 +153,7 @@ function submit() {
             variant="outlined"
             prepend-inner-icon="mdi-folder-move"
             hide-details
+            autocomplete="off"
           />
         </v-col>
         <v-col cols="12">
@@ -167,6 +169,7 @@ function submit() {
             chips
             closable-chips
             clearable
+            autocomplete="off"
           />
         </v-col>
       </v-row>

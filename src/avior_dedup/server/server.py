@@ -127,7 +127,15 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
         def plan_cb(current: int, total: int) -> None:
             if reporter.cancelled:
                 raise JobCancelled
-            reporter.update(phase="planning", files_planned=current, total_files_to_move=total)
+            # Ensure groups_found reflects the actual total number of planning
+            # steps (build_move_plan may expand groups), so the frontend can
+            # compute planning progress as files_planned / groups_found.
+            reporter.update(
+                phase="planning",
+                files_planned=current,
+                total_files_to_move=total,
+                groups_found=total,
+            )
 
         files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file, errors_by_file = build_move_plan(
             groups=groups,

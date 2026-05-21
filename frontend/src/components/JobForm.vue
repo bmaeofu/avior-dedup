@@ -114,6 +114,7 @@ function submit() {
             variant="outlined"
             prepend-inner-icon="mdi-folder"
             hide-details
+            autocomplete="off"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -125,6 +126,7 @@ function submit() {
             variant="outlined"
             prepend-inner-icon="mdi-folder-move"
             hide-details
+            autocomplete="off"
           />
         </v-col>
         <v-col cols="12">
@@ -142,6 +144,7 @@ function submit() {
             clearable
             hint="Per-job ignore list; accepts full paths or simple directory names"
             persistent-hint
+            autocomplete="off"
           />
         </v-col>
         <!-- Scan settings moved below -->
@@ -367,6 +370,7 @@ function submit() {
             chips
             clearable
             hide-details
+            autocomplete="off"
           />
         </v-col>
       </v-row>
