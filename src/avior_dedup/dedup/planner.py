@@ -224,21 +224,21 @@ def build_move_plan(
         groups = expanded_groups
         total_groups = len(groups)
 
+    # Precompute basename/stem/dir for all files in the (possibly expanded) groups
+    all_files = [f for g in groups for f in g]
+    basename_map: dict[str, str] = {f: os.path.basename(f) for f in all_files}
+    stem_map: dict[str, str] = {f: match_suffix(basename_map[f])[0] for f in all_files}
+    dir_map: dict[str, str] = {f: os.path.dirname(f) for f in all_files}
+
     for group_idx, group in enumerate(groups):
         # Build FileRecords for this group (with caching)
         records: list[FileRecord] = []
         uncached = [f for f in group if f not in film_info_cache]
         if uncached:
-            # Provide a small progress callback to get_film_error_count so we can
-            # update the overall planning progress per-file rather than per-group.
-            def _inc_progress(file_path: str, idx: int) -> None:
-                nonlocal files_processed
-                files_processed += 1
-                # Throttle UI updates to reduce overhead while keeping progress responsive
-                if progress_cb is not None and (files_processed % progress_interval == 0 or files_processed == total_files_to_plan):
-                    progress_cb(files_processed, total_files_to_plan)
-
-            for rec in get_film_error_count(uncached, progress_cb=_inc_progress, log_fn=log_fn):
+            # Collect film info for uncached files. We intentionally do NOT
+            # emit per-file progress updates here; instead we report progress
+            # at group boundaries so the UI shows "groups processed / total".
+            for rec in get_film_error_count(uncached, log_fn=log_fn):
                 film_info_cache[rec.file] = rec
         for f in group:
             records.append(film_info_cache[f])
@@ -248,12 +248,8 @@ def build_move_plan(
         # Also update progress at group boundary in case some groups had no
         # uncached files (ensures steady progress even when cached entries are used).
         if progress_cb is not None:
-            # If we haven't yet reported any files for this group, advance by one
-            # to reflect group completion. Otherwise progress is already advanced
-            # by per-file callbacks above.
-            if files_processed < (group_idx + 1):
-                files_processed = group_idx + 1
-                progress_cb(files_processed, total_files_to_plan)
+            # Report planning progress as groups processed / total groups.
+            progress_cb(group_idx + 1, total_groups)
 
         # Case: no video exists for any file in the group
         if not valid_records:
@@ -273,8 +269,8 @@ def build_move_plan(
             src = r.file
             group_name = get_group_name(src, duptype, file_to_groupkey)
             # Decide KEEP for the whole stem chosen by select_best_film.
-            best_stem = match_suffix(os.path.basename(best_film.file))[0]
-            src_stem = match_suffix(os.path.basename(src))[0]
+            best_stem = stem_map.get(best_film.file, match_suffix(os.path.basename(best_film.file))[0])
+            src_stem = stem_map.get(src, match_suffix(os.path.basename(src))[0])
 
             if src_stem == best_stem:
                 # Use attributes from the best_film as representative for the whole set
