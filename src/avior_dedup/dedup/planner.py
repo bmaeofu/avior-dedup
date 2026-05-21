@@ -182,6 +182,17 @@ def build_move_plan(
     errors_by_file: dict[str, int] = {}
     
     total_groups = len(groups)
+    # For finer-grained planning progress, count total files to be processed
+    # (after potential expansion) and report progress per file.
+    total_files_to_plan = sum(len(g) for g in groups)
+    files_processed = 0
+    # Limit progress updates to a configurable number of steps to avoid UI/request overhead.
+    # Controlled by environment variable `AVIOR_DEDUP_PROGRESS_UPDATES` (default 20).
+    try:
+        target_updates = int(os.getenv("AVIOR_DEDUP_PROGRESS_UPDATES", "100"))
+    except Exception:
+        target_updates = 100
+    progress_interval = max(1, total_files_to_plan // max(1, target_updates))
 
     # Expand groups: if caller supplied groups consisting of .log files only
     # (scanner now groups by .log stems), expand each log-file entry into the
@@ -189,15 +200,23 @@ def build_move_plan(
     # directory according to configured `candidate_suffixes`.
     expanded_groups: list[list[str]] = []
     suffixes = config.candidate_suffixes()
+    # Cache directory listings to avoid repeated os.path.exists calls
+    dir_listing_cache: dict[str, set[str]] = {}
     for group in groups:
         collected: set[str] = set()
         for f in group:
             stem, _ = match_suffix(os.path.basename(f))
             dirpath = os.path.dirname(f)
+            if dirpath not in dir_listing_cache:
+                try:
+                    dir_listing_cache[dirpath] = set(os.listdir(dirpath))
+                except OSError:
+                    dir_listing_cache[dirpath] = set()
+            files_in_dir = dir_listing_cache[dirpath]
             for suf in suffixes:
-                candidate = os.path.join(dirpath, stem + suf)
-                if os.path.exists(candidate):
-                    collected.add(candidate)
+                candidate_name = stem + suf
+                if candidate_name in files_in_dir:
+                    collected.add(os.path.join(dirpath, candidate_name))
         if collected:
             expanded_groups.append(sorted(collected))
     # Use expanded groups if expansion produced anything, otherwise keep original
@@ -210,15 +229,31 @@ def build_move_plan(
         records: list[FileRecord] = []
         uncached = [f for f in group if f not in film_info_cache]
         if uncached:
-            for rec in get_film_error_count(uncached, log_fn=log_fn):
+            # Provide a small progress callback to get_film_error_count so we can
+            # update the overall planning progress per-file rather than per-group.
+            def _inc_progress(file_path: str, idx: int) -> None:
+                nonlocal files_processed
+                files_processed += 1
+                # Throttle UI updates to reduce overhead while keeping progress responsive
+                if progress_cb is not None and (files_processed % progress_interval == 0 or files_processed == total_files_to_plan):
+                    progress_cb(files_processed, total_files_to_plan)
+
+            for rec in get_film_error_count(uncached, progress_cb=_inc_progress, log_fn=log_fn):
                 film_info_cache[rec.file] = rec
         for f in group:
             records.append(film_info_cache[f])
 
         valid_records = [r for r in records if r.video_exists]
 
+        # Also update progress at group boundary in case some groups had no
+        # uncached files (ensures steady progress even when cached entries are used).
         if progress_cb is not None:
-            progress_cb(group_idx + 1, total_groups)
+            # If we haven't yet reported any files for this group, advance by one
+            # to reflect group completion. Otherwise progress is already advanced
+            # by per-file callbacks above.
+            if files_processed < (group_idx + 1):
+                files_processed = group_idx + 1
+                progress_cb(files_processed, total_files_to_plan)
 
         # Case: no video exists for any file in the group
         if not valid_records:

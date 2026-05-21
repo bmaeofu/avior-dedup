@@ -400,23 +400,31 @@ def get_film_error_count(
     """Analyze a list of file paths and return FileRecord for each, including error counts from logs."""
     video_suffixes = config.video_suffixes()
     results: list[FileRecord] = []
+    # cache directory listings to reduce IO
+    dir_files_cache: dict[str, set[str]] = {}
 
     for idx, file_path in enumerate(file_list):
         film_dir = os.path.dirname(file_path)
         film_base, _ = match_suffix(os.path.basename(file_path))
 
-        # Check if a video file exists for this base name
-        video_exists = False
-        for ext in video_suffixes:
-            video_filepath = os.path.join(film_dir, film_base + ext)
-            if os.path.exists(video_filepath):
-                video_exists = True
-                break
+        if film_dir not in dir_files_cache:
+            try:
+                dir_files_cache[film_dir] = set(os.listdir(film_dir))
+            except OSError:
+                dir_files_cache[film_dir] = set()
+        files_in_dir = dir_files_cache[film_dir]
+
+        # Check if a video file exists for this base name using cached listing
+        video_exists = any((film_base + ext) in files_in_dir for ext in video_suffixes)
+        video_filepath = None
+        if video_exists:
+            for ext in video_suffixes:
+                candidate = film_base + ext
+                if candidate in files_in_dir:
+                    video_filepath = os.path.join(film_dir, candidate)
+                    break
 
         if not video_exists:
-            # Do not write this informational debug message into the dedup log file.
-            # The message is retained here but commented out so it can be re-enabled
-            # by developers if needed for debugging.
             tried = [os.path.join(film_dir, film_base + ext) for ext in video_suffixes]
             # logging.debug("No video found for base '%s' in '%s'. Tried: %s", film_base, film_dir, tried)
 
@@ -432,10 +440,13 @@ def get_film_error_count(
         rec_date = None
 
         if video_exists:
-            main_log = os.path.join(film_dir, film_base + ".log")
-            if not os.path.exists(main_log):
+            # Determine main_log using cached directory listing when possible
+            main_log = None
+            if (film_base + ".log") in files_in_dir:
+                main_log = os.path.join(film_dir, film_base + ".log")
+            elif (film_base + "mkv.log") in files_in_dir:
                 main_log = os.path.join(film_dir, film_base + "mkv.log")
-            if os.path.exists(main_log):
+            if main_log and os.path.exists(main_log):
                 try:
                     mod_date = os.path.getmtime(main_log)
                     content = read_text(main_log)
