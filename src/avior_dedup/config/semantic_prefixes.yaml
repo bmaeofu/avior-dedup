@@ -1,4 +1,6 @@
-- terra\s*x\s*-\s*
-- ^erlebnis\\s+erde\\s*-?\\s*
-- ^abenteuer\\s+wildnis\\s*-?\\s*
-- ^heiter\\s+bis\\s+t[oö]dlich*
+- 'terra\s*x\s*-\s*'
+- '^erlebnis\s+erde\s*-?\s*'
+- '^abenteuer\s+wildnis\s*-?\s*'
+- '^heiter\s+bis\s+t[oö]dlich*'
+- '\s+logmatchmodule.*(?=\.)'
+- '\s+errorreplacemodule.*(?=\.)'

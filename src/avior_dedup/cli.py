@@ -63,7 +63,7 @@ def main() -> None:
     parser.add_argument(
         "--semantic-prefixes",
         nargs="+",
-        default=[r"terra\s*x\s*-\s*"],
+        default=None,
         help="List of regex prefixes to strip for semantic duplicate detection",
     )
     parser.add_argument(
@@ -89,6 +89,11 @@ def main() -> None:
 
     args = parser.parse_args()
 
+    # If no semantic prefixes were provided, normalize to an empty list so
+    # downstream code can always iterate over it.
+    if args.semantic_prefixes is None:
+        args.semantic_prefixes = []
+
     source_root = os.path.abspath(args.source)
     target_root = os.path.abspath(args.target)
     error_target = os.path.abspath(args.error_target) if args.error_target else os.path.join(target_root, "errors")
@@ -105,7 +110,7 @@ def main() -> None:
     print(f"  Max duration +diff:    {args.max_duration_diff_longer}")
     print(f"  Max duration -diff:    {args.max_duration_diff_shorter}")
     print(f"  Selection priorities:  {', '.join(p.value if hasattr(p, 'value') else str(p) for p in args.selection_priorities)}")
-    print(f"  Semantic prefixes:     {', '.join(args.semantic_prefixes)}")
+    print(f"  Semantic prefixes:     {', '.join(args.semantic_prefixes) if args.semantic_prefixes else 'none'}")
     print(f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}")
     print(f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}")
     print(f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}")
@@ -130,7 +135,7 @@ def main() -> None:
         source_root,
         args.duptype,
         args.remove_episode_nos,
-        args.semantic_prefixes,
+        args.semantic_prefixes or [],
         args.remove_spaces,
         args.remove_non_episode_parens,
     )

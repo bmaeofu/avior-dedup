@@ -506,9 +506,10 @@ def find_duplicates(
 
     ignored_files_lower = {_canonical_case_key(x) for x in config.ignored_files()}
 
-    files_by_lower: dict[str, list[str]] = {}
-    files_by_exact: dict[str, list[str]] = {}
-    files_by_semantic: dict[str, list[str]] = {}
+    # Map stem (base name without known suffix) -> list of files with that stem
+    stems_to_files: dict[str, list[str]] = {}
+    # Stems for which we found a log-like file (defines a video set)
+    stems_with_log: set[str] = set()
     file_to_groupkey: dict[str, GroupKeys] = {}
     files_scanned = 0
 
@@ -547,22 +548,25 @@ def find_duplicates(
         full_path = os.path.join(dir_path, name)
         files_scanned += 1
 
-        files_by_exact.setdefault(name, []).append(full_path)
+        # Determine canonical stem and matched suffix using the suffix matcher
+        stem, suf = match_suffix(name)
+        stems_to_files.setdefault(stem, []).append(full_path)
 
-        lower_name = _canonical_case_key(name)
-        files_by_lower.setdefault(lower_name, []).append(full_path)
+        # If the matched suffix is a log variant, mark this stem as a defined video-set
+        if suf and suf.lower().endswith(".log"):
+            stems_with_log.add(stem)
 
+        # Build group keys based on the stem so the whole set is identified by the stem
+        lower_name = _canonical_case_key(stem)
         semantic_name = normalize_film_name(
-            name,
+            stem,
             semantic_prefixes,
             remove_episode_nos,
             remove_spaces,
             remove_non_episode_parens,
         )
-        files_by_semantic.setdefault(semantic_name, []).append(full_path)
-
         file_to_groupkey[full_path] = GroupKeys(
-            exact=name,
+            exact=stem,
             lower=lower_name,
             semantic=semantic_name,
         )
@@ -615,17 +619,81 @@ def find_duplicates(
         print(f"[avior-dedup] Completed: {top_dir_path} ({files_scanned} files total so far)")
 
     groups: list[list[str]] = []
-    if duptype in ("case", "both", "all"):
-        for paths in files_by_lower.values():
-            if len(paths) > 1:
-                groups.append(paths)
-    if duptype in ("exact", "both", "all"):
-        for paths in files_by_exact.values():
-            if len(paths) > 1:
-                groups.append(paths)
-    if duptype in ("semantic", "all"):
-        for paths in files_by_semantic.values():
-            if len(paths) > 1:
-                groups.append(paths)
+
+    # If both '<stem>.log' and '<stem>.<something>.log' (e.g. '.mkv.log') exist,
+    # prefer the plain '<stem>.log' and remove the other log-variants from the
+    # stem->files mapping so they are not considered as separate log entries.
+    for stem, fps in list(stems_to_files.items()):
+        log_variants = [fp for fp in fps if match_suffix(os.path.basename(fp))[1] and match_suffix(os.path.basename(fp))[1].lower().endswith('.log')]
+        # if a plain '.log' exists, drop other '.<ext>.log' variants
+        plain_log = None
+        for lp in log_variants:
+            if os.path.basename(lp).lower().endswith('.log') and not os.path.basename(lp).lower().endswith('.mkv.log') and not os.path.basename(lp).lower().endswith('.mp4.log') and not os.path.basename(lp).lower().endswith('.ts.log'):
+                plain_log = lp
+                break
+        if plain_log:
+            new_fps = [fp for fp in fps if not (match_suffix(os.path.basename(fp))[1] and match_suffix(os.path.basename(fp))[1].lower().endswith('.log') and fp != plain_log)]
+            stems_to_files[stem] = new_fps
+
+    # Build groups based on stems that have a log file. Stems represent full
+    # video-sets; group together stems that match under the requested duptype,
+    # then expand those stems into the actual file paths that belong to each set.
+    # Prepare mappings: key -> list[stem]
+    if stems_with_log:
+        lower_to_stems: dict[str, list[str]] = {}
+        exact_to_stems: dict[str, list[str]] = {}
+        semantic_to_stems: dict[str, list[str]] = {}
+
+        for stem in stems_with_log:
+            lower = _canonical_case_key(stem)
+            lower_to_stems.setdefault(lower, []).append(stem)
+
+            exact_to_stems.setdefault(stem, []).append(stem)
+
+            sem = normalize_film_name(
+                stem,
+                semantic_prefixes,
+                remove_episode_nos,
+                remove_spaces,
+                remove_non_episode_parens,
+            )
+            semantic_to_stems.setdefault(sem, []).append(stem)
+
+        if duptype in ("case", "both", "all"):
+            for stems in lower_to_stems.values():
+                if len(stems) > 1:
+                    # expand stems into .log file paths only
+                    group_paths: list[str] = []
+                    for s in stems:
+                        for fp in stems_to_files.get(s, []):
+                            suf = match_suffix(os.path.basename(fp))[1]
+                            if suf and suf.lower().endswith('.log'):
+                                group_paths.append(fp)
+                    if len(group_paths) > 1:
+                        groups.append(group_paths)
+
+        if duptype in ("exact", "both", "all"):
+            for stems in exact_to_stems.values():
+                if len(stems) > 1:
+                    group_paths = []
+                    for s in stems:
+                        for fp in stems_to_files.get(s, []):
+                            suf = match_suffix(os.path.basename(fp))[1]
+                            if suf and suf.lower().endswith('.log'):
+                                group_paths.append(fp)
+                    if len(group_paths) > 1:
+                        groups.append(group_paths)
+
+        if duptype in ("semantic", "all"):
+            for stems in semantic_to_stems.values():
+                if len(stems) > 1:
+                    group_paths = []
+                    for s in stems:
+                        for fp in stems_to_files.get(s, []):
+                            suf = match_suffix(os.path.basename(fp))[1]
+                            if suf and suf.lower().endswith('.log'):
+                                group_paths.append(fp)
+                    if len(group_paths) > 1:
+                        groups.append(group_paths)
 
     return groups, file_to_groupkey

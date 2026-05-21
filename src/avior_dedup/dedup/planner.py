@@ -14,6 +14,8 @@ from avior_dedup.dedup.models import (
     SelectionPriority,
 )
 from avior_dedup.dedup.scanner import get_film_error_count
+from avior_dedup import config
+from avior_dedup.dedup.suffix import match_suffix
 from avior_dedup.permissions import ensure_output_permissions
 
 
@@ -181,6 +183,28 @@ def build_move_plan(
     
     total_groups = len(groups)
 
+    # Expand groups: if caller supplied groups consisting of .log files only
+    # (scanner now groups by .log stems), expand each log-file entry into the
+    # full set of sibling files that share the same stem in the same
+    # directory according to configured `candidate_suffixes`.
+    expanded_groups: list[list[str]] = []
+    suffixes = config.candidate_suffixes()
+    for group in groups:
+        collected: set[str] = set()
+        for f in group:
+            stem, _ = match_suffix(os.path.basename(f))
+            dirpath = os.path.dirname(f)
+            for suf in suffixes:
+                candidate = os.path.join(dirpath, stem + suf)
+                if os.path.exists(candidate):
+                    collected.add(candidate)
+        if collected:
+            expanded_groups.append(sorted(collected))
+    # Use expanded groups if expansion produced anything, otherwise keep original
+    if expanded_groups:
+        groups = expanded_groups
+        total_groups = len(groups)
+
     for group_idx, group in enumerate(groups):
         # Build FileRecords for this group (with caching)
         records: list[FileRecord] = []
@@ -210,19 +234,21 @@ def build_move_plan(
             selection_priorities=selection_priorities,
             max_errors_when_mc=max_errors_when_mc,
         )
-
-        
-
         for r in records:
             src = r.file
             group_name = get_group_name(src, duptype, file_to_groupkey)
+            # Decide KEEP for the whole stem chosen by select_best_film.
+            best_stem = match_suffix(os.path.basename(best_film.file))[0]
+            src_stem = match_suffix(os.path.basename(src))[0]
 
-            if src == best_film.file:
-                base_action = "KEEP_MC" if r.multichannel else "KEEP"
-                has_errors = r.error_count is not None and r.error_count > 0
-                has_duration_values = r.video_duration is not None and r.rec_duration is not None
-                is_too_long = has_duration_values and (r.video_duration - r.rec_duration) > max_duration_diff_longer
-                is_too_short = has_duration_values and (r.video_duration - r.rec_duration) < -max_duration_diff_shorter
+            if src_stem == best_stem:
+                # Use attributes from the best_film as representative for the whole set
+                rep = best_film
+                base_action = "KEEP_MC" if getattr(rep, "multichannel", False) else "KEEP"
+                has_errors = getattr(rep, "error_count", None) is not None and getattr(rep, "error_count", 0) > 0
+                has_duration_values = getattr(rep, "video_duration", None) is not None and getattr(rep, "rec_duration", None) is not None
+                is_too_long = has_duration_values and (rep.video_duration - rep.rec_duration) > max_duration_diff_longer
+                is_too_short = has_duration_values and (rep.video_duration - rep.rec_duration) < -max_duration_diff_shorter
 
                 if is_too_long:
                     action = f"{base_action}_WITH_LONGER_DURATION"
@@ -236,20 +262,21 @@ def build_move_plan(
                 key = (action, src)
                 if key not in already_logged:
                     file_size = _get_file_size(src)
-                    # Build appended attribute columns: resolution, audio, length_flag, errors
-                    if getattr(r, "resolution", None) is not None:
-                        if r.resolution >= 1080:
+
+                    # Representative resolution/audio/length/errors come from rep
+                    if getattr(rep, "resolution", None) is not None:
+                        if rep.resolution >= 1080:
                             res_str = "1080"
-                        elif r.resolution >= 720:
+                        elif rep.resolution >= 720:
                             res_str = "720"
                         else:
                             res_str = "unknown"
                     else:
                         res_str = "unknown"
 
-                    if getattr(r, "multichannel", None) is True:
+                    if getattr(rep, "multichannel", None) is True:
                         audio_str = "MC"
-                    elif getattr(r, "multichannel", None) is False:
+                    elif getattr(rep, "multichannel", None) is False:
                         audio_str = "Stereo"
                     else:
                         audio_str = "unknown"
@@ -263,30 +290,30 @@ def build_move_plan(
                         else:
                             length_flag = "ok"
 
-                    err_count = r.error_count if r.error_count is not None else 0
+                    err_count = rep.error_count if getattr(rep, "error_count", None) is not None else 0
 
                     # For KEEP lines include an empty found_path column so columns align with DUPLICATE lines
                     log_fn(f"{group_name}\t[{action}]\t{src}\t\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
                     action_counter[action] += 1
                     size_counter[action] += file_size
                     # record resolution counters for kept files
-                    res = r.resolution if getattr(r, "resolution", None) is not None else 0
+                    res = rep.resolution if getattr(rep, "resolution", None) is not None else 0
                     resolution_by_action[action][res] += 1
                     resolution_size_by_action[action][res] += file_size
                     # record attribute flags for this file
                     attrs: list[str] = []
-                    if r.multichannel:
+                    if rep.multichannel:
                         attrs.append("MC")
-                    if r.error_count is not None and r.error_count > 0:
+                    if rep.error_count is not None and rep.error_count > 0:
                         attrs.append("ERRORS")
                     if has_duration_values and is_too_long:
                         attrs.append("LONGER")
                     if has_duration_values and is_too_short:
                         attrs.append("SHORTER")
-                    if r.resolution is not None:
-                        if r.resolution >= 1080:
+                    if rep.resolution is not None:
+                        if rep.resolution >= 1080:
                             attrs.append("1080")
-                        elif r.resolution >= 720:
+                        elif rep.resolution >= 720:
                             attrs.append("720")
                     # mark as KEEP so we get cross-counts with other attributes
                     attrs.append("KEEP")
@@ -466,7 +493,6 @@ def execute_move_plan(
                 # Diagnostic existence check before attempting move — helps
                 # determine whether WinError 2 is caused by missing source.
                 exists = os.path.exists(file_path)
-                log_fn(f"{move.group_name}\t[CHECK_EXISTS]\t{file_path}\texists={exists}")
 
                 src_to_move = file_path
                 # If source doesn't exist, attempt a case-insensitive resolution
