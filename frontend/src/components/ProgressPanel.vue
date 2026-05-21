@@ -114,8 +114,8 @@ const scanLabel = computed(() => {
           <div class="text-h6">{{ progress.groups_found.toLocaleString() }}</div>
         </v-col>
         <v-col cols="6" md="3">
-          <div class="text-caption text-medium-emphasis">Files planned</div>
-          <div class="text-h6">{{ progress.files_planned.toLocaleString() }}</div>
+          <div class="text-caption text-medium-emphasis">Groups planned</div>
+          <div class="text-h6">{{ progress.files_planned.toLocaleString() }} / {{ progress.groups_found.toLocaleString() }}</div>
         </v-col>
         <v-col cols="6" md="3">
           <div class="text-caption text-medium-emphasis">Files moved</div>
