@@ -249,22 +249,8 @@ def _truncate_log(content: str) -> str:
     return content
 
 
-def get_real_rec_time_from_log(path: str) -> Optional[int]:
-    base = os.path.splitext(path)[0]
-    candidates = [base + ".log", base + ".mkv.log"]
-
-    content = None
-    for c in candidates:
-        content = read_text(c)
-        if content:
-            break
-
-    if not content:
-        return None
-
-    content = _truncate_log(content)
-
-
+def get_real_rec_time_from_log(content: str) -> Optional[int]:
+    
     # 1. Format 2 Stop-Zeile  z. B. "23:34:11 / 01:33:27 (~ ...) Stop"
     #    Zweite Gruppe ist die laufende Aufnahmedauer → direkt verwenden
     stop_match = re.findall(
@@ -288,7 +274,7 @@ def get_real_rec_time_from_log(path: str) -> Optional[int]:
 
     return None
 
-def get_epg_duration(path: str) -> Optional[int]:
+def get_epg_duration(path: str, content: str) -> Optional[int]:
     base = os.path.splitext(path)[0]
 
     txt_file = base + ".txt"
@@ -298,19 +284,6 @@ def get_epg_duration(path: str) -> Optional[int]:
             m = re.search(r'Duration\s*=\s*(\d{1,2}:\d{2}:\d{2})', txt)
             if m:
                 return _hms_to_seconds(m.group(1))
-
-    candidates = [base + ".log", base + ".mkv.log"]
-
-    content = None
-    for c in candidates:
-        content = read_text(c)
-        if content:
-            break
-
-    if not content:
-        return None
-
-    content = _truncate_log(content)
 
     r"""
     Beispiel Format 1:
@@ -371,28 +344,43 @@ def get_epg_duration(path: str) -> Optional[int]:
     return None
 
 
-def get_video_length(path: str, use_epg: bool) -> Tuple[bool, str, Optional[float], Optional[int]]:
-    """Get video duration and recording duration from ffprobe and log files."""
+def get_video_length(path: str, content: str | None, use_epg: bool) -> Tuple[bool, str, Optional[float], Optional[int]]:
+    """Get video duration and recording duration from ffprobe and log files.
+
+    Prefer parsing the provided `content` (already truncated) once and reuse
+    that for both EPG and real-time parsing to avoid multiple file reads.
+    If `content` is None, attempt to read candidate log files before parsing.
+    """
     video_duration = get_media_duration_ffprobe(path)
 
     if video_duration is None:
         return False, "ffprobe failed", None, None
 
-    if use_epg:
-        rec_duration = get_epg_duration(path)
-    else:
-        rec_duration = get_real_rec_time_from_log(path)
+    rec_duration = None
 
-    # Fallback: try the other method if primary returned nothing
-    if rec_duration is None:
-        rec_duration = get_real_rec_time_from_log(path) if use_epg else get_epg_duration(path)
+    # Ensure we have truncated content to parse; try to read log files if not provided
+    cont = None
+    if not content:
+        base = os.path.splitext(path)[0]
+        candidates = [base + ".log", base + ".mkv.log"]
+        for c in candidates:
+            txt = read_text(c)
+            if txt:
+                cont = _truncate_log(txt)
+                break
+
+    if cont is not None:
+        if use_epg:
+            rec_duration = get_epg_duration(path, cont)
+        else:
+            rec_duration = get_real_rec_time_from_log(cont)
 
     if rec_duration is None:
         return False, "no reference duration", video_duration, None
 
     return True, "valid results", video_duration, rec_duration
 
-def get_film_error_count(
+def get_video_md(
     file_list: list[str],
     progress_cb: Callable[[str, int], None] | None = None,
     log_fn: Callable[[str], None] | None = None,
@@ -430,9 +418,6 @@ def get_film_error_count(
 
         video_duration=None
         rec_duration=None
-        if video_exists:
-            ok, msg, video_duration, rec_duration = get_video_length(video_filepath, use_epg=True)
-
         error_count = None
         mod_date = None
         multichannel = None
@@ -472,6 +457,8 @@ def get_film_error_count(
                     error_count = count_errors(lines)
                     multichannel = is_multichannel_from_log(lines)
                     resolution = get_recording_resolution_from_log(lines)
+                    ok, msg, video_duration, rec_duration = get_video_length(video_filepath, content=content, use_epg=True)
+
                 except (OSError, UnicodeDecodeError, ValueError):
                     error_count = None
                     mod_date = None

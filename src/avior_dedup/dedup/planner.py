@@ -14,7 +14,7 @@ from avior_dedup.dedup.models import (
     MoveAction,
     SelectionPriority,
 )
-from avior_dedup.dedup.scanner import get_film_error_count
+from avior_dedup.dedup.scanner import get_video_md
 from avior_dedup import config
 from avior_dedup.dedup.suffix import match_suffix
 from avior_dedup.permissions import ensure_output_permissions
@@ -274,7 +274,7 @@ def build_move_plan(
 
             t_fetch_start = time.perf_counter()
             reps = [rep]
-            for rec in get_film_error_count(reps, log_fn=log_fn):
+            for rec in get_video_md(reps, log_fn=log_fn):
                 # store the record for the representative path
                 film_info_cache[rec.file] = rec
                 # clone the record for all other files in the same group
@@ -294,7 +294,7 @@ def build_move_plan(
             t_fetch = time.perf_counter() - t_fetch_start
             film_info_accumulator += t_fetch
             try:
-                log_fn(f"TIMING get_film_error_count: {t_fetch:.3f}s for rep={os.path.basename(rep)} (expanded to {len(group)} files)")
+                log_fn(f"TIMING get_video_md: {t_fetch:.3f}s for rep={os.path.basename(rep)} (expanded to {len(group)} files)")
             except Exception:
                 pass
         for f in group:

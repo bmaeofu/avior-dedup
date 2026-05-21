@@ -1,0 +1,61 @@
+TIMING build_move_plan total: 0.048s (film_info=0.045s)
+TIMING expansion: 0.000s, groups_after=1
+TIMING get_video_md: 0.045s for rep=Der Mann, der zuviel wusste.mkv (expanded to 9 files)
+der mann, der zuviel wusste-fanart.jpg	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-fanart.jpg		720	Stereo		0
+der mann, der zuviel wusste-poster.jpg	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-poster.jpg		720	Stereo		0
+der mann, der zuviel wusste.log	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.log		720	Stereo		0
+der mann, der zuviel wusste.mkv	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.mkv		720	Stereo		0
+der mann, der zuviel wusste.nfo	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.nfo		720	Stereo		0
+der mann, der zuviel wusste.txt	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.txt		720	Stereo		0
+der mann, der zuviel wußte.log	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.log	C:\repos\avior-dedup\tmp_out\Der Mann, der zuviel wußte.log	720	Stereo		0
+der mann, der zuviel wußte.mkv	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.mkv	C:\repos\avior-dedup\tmp_out\Der Mann, der zuviel wußte.mkv	720	Stereo		0
+der mann, der zuviel wußte.nfo	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.nfo	C:\repos\avior-dedup\tmp_out\Der Mann, der zuviel wußte.nfo	720	Stereo		0
+
+================================================================================
+SUMMARY
+================================================================================
+
+PARAMETERS:
+  Mode:                   f (FIND ONLY)
+  Source:                 test-data/dedupe/Dup_test
+  Target:                tmp_out
+  Log file:               C:\repos\avior-dedup\tmp_out\dedup_profile_run3.txt
+  Error target:          default
+  No-video target:       default
+  Duplicate type:        case
+  Max errors (MC):       0
+  Max duration +diff:    600
+  Max duration -diff:    180
+  Selection priorities:  multichannel, resolution, fewer_errors, recording_date, closest_duration
+  Semantic prefixes:     
+  Remove episode nos:    no
+  Remove spaces:         no
+  Remove non-episode parentheses: no
+  Ignored directories:   none
+
+ACTION STATISTICS:
+  DUPLICATE...............................      3 files ( 33.3%)  [   1.05 GB]
+  KEEP....................................      6 files ( 66.7%)  [   1.17 GB]
+  ----------------------------------------------------------------------
+  TOTAL...................................      9 files  [   2.22 GB]
+
+RESOLUTION BY ACTION (video files only):
+  [DUPLICATE]:
+    720p          1 files (100.0%)
+  [KEEP]:
+    720p          1 files (100.0%)
+
+ATTRIBUTE MATRIX (video files only):
+            720  DUPLICATE  KEEP  OK  Stereo
+720           2          1     1   4       2
+DUPLICATE     1          1     0   2       1
+KEEP          1          0     1   2       1
+OK            4          2     2   8       4
+Stereo        2          1     1   4       2
+
+SELECTED ATTRIBUTE COMBINATIONS SUMMARY (video files only):
+('720', 'Stereo', 'ok', '0'): total=2  KEEP=1  DUPLICATE=1
+
+  Start time: unknown
+  End time:   21.05.2026 14:30:32
+================================================================================
