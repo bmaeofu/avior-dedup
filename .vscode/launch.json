@@ -73,6 +73,7 @@
                 "\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch",
                 "--duptype",
                 "semantic",
+                "--remove-spaces",
                 "--max-errors-when-mc",
                 "3",
                 "--max-duration-diff-longer",

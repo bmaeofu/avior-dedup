@@ -143,6 +143,82 @@ def select_best_film(
     )
 
 
+def determine_keep_reason(
+    best: FileRecord,
+    others: list[FileRecord],
+    selection_priorities: list[SelectionPriority],
+    max_errors_when_mc: int | None = None,
+) -> str:
+    """Return a short reason string why `best` was selected over `others`.
+
+    Reasons follow selection priorities: 'multichannel', 'higher_resolution',
+    'fewer_errors', 'newer', 'closest_duration'. If none applies, return
+    'selected'.
+    """
+    try:
+        # MULTICHANNEL
+        if SelectionPriority.MULTICHANNEL in selection_priorities:
+            if best.multichannel:
+                for o in others:
+                    if not o.multichannel:
+                        # If best has acceptable errors when MC is considered
+                        if max_errors_when_mc is None or (best.error_count or 0) <= max_errors_when_mc:
+                            return "multichannel"
+
+        # RESOLUTION
+        if SelectionPriority.RESOLUTION in selection_priorities:
+            try:
+                best_res = best.resolution or 0
+                if any((o.resolution or 0) < best_res for o in others):
+                    return "higher_resolution"
+            except Exception:
+                pass
+
+        # FEWER_ERRORS
+        if SelectionPriority.FEWER_ERRORS in selection_priorities:
+            try:
+                best_err = best.error_count if best.error_count is not None else 10**9
+                if any(((o.error_count if o.error_count is not None else 10**9) > best_err) for o in others):
+                    return "fewer_errors"
+            except Exception:
+                pass
+
+        # RECORDING_DATE
+        if SelectionPriority.RECORDING_DATE in selection_priorities:
+            try:
+                if getattr(best, "rec_date", None):
+                    for o in others:
+                        if not getattr(o, "rec_date", None):
+                            return "newer"
+                        try:
+                            if datetime.date.fromisoformat(best.rec_date) > datetime.date.fromisoformat(o.rec_date):
+                                return "newer"
+                        except Exception:
+                            continue
+            except Exception:
+                pass
+
+        # CLOSEST_DURATION
+        if SelectionPriority.CLOSEST_DURATION in selection_priorities:
+            try:
+                def penalty(r: FileRecord) -> float:
+                    if r.video_duration is not None and r.rec_duration is not None:
+                        diff = r.video_duration - r.rec_duration
+                        if diff > 0:
+                            return diff
+                        return -diff
+                    return 10**9
+
+                best_pen = penalty(best)
+                if any(penalty(o) > best_pen for o in others):
+                    return "closest_duration"
+            except Exception:
+                pass
+    except Exception:
+        pass
+    return "selected"
+
+
 def _get_file_size(path: str) -> int:
     """Return the file size in bytes, or 0 if the file cannot be accessed."""
     try:
@@ -233,10 +309,6 @@ def build_move_plan(
         groups = expanded_groups
         total_groups = len(groups)
     t_expand = time.perf_counter() - t_expand_start
-    try:
-        log_fn(f"TIMING expansion: {t_expand:.3f}s, groups_after={total_groups}")
-    except Exception:
-        pass
 
     # Precompute basename/stem/dir for all files in the (possibly expanded) groups
     all_files = [f for g in groups for f in g]
@@ -258,7 +330,11 @@ def build_move_plan(
 
     # Fetch metadata once for the originally passed-in files whose stems
     # correspond to groups containing video files.
-    global_uncached = [f for f in input_files if match_suffix(os.path.basename(f))[0] in video_stems and f not in film_info_cache]
+    # Probe metadata for all originally provided input files that are not cached.
+    # Previously we limited probing to stems that contained video files; that
+    # skipped probing .log inputs. The user requires that get_video_md be used
+    # for all input paths (no placeholders), so probe them unconditionally.
+    global_uncached = [f for f in dict.fromkeys(input_files) if f not in film_info_cache]
     if global_uncached:
         t_fetch_start = time.perf_counter()
         try:
@@ -269,10 +345,6 @@ def build_move_plan(
             pass
         t_fetch = time.perf_counter() - t_fetch_start
         film_info_accumulator += t_fetch
-        try:
-            log_fn(f"TIMING get_video_md: {t_fetch:.3f}s for {len(global_uncached)} files")
-        except Exception:
-            pass
 
     # Build a stem -> representative FileRecord map from the probed files
     # so we can apply full metadata to unprobed siblings sharing the same stem.
@@ -424,8 +496,9 @@ def build_move_plan(
 
                     err_count = rep.error_count if getattr(rep, "error_count", None) is not None else 0
 
-                    # For KEEP lines include an empty found_path column so columns align with DUPLICATE lines
-                    log_fn(f"{group_name}\t[{action}]\t{src}\t\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
+                    # For KEEP lines include a reason in the found_path column
+                    reason = determine_keep_reason(rep, [r for r in valid_records if r.file != rep.file], selection_priorities or DEFAULT_SELECTION_PRIORITIES, max_errors_when_mc)
+                    log_fn(f"{group_name}\t[{action}]\t{src}\t{reason}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
                     action_counter[action] += 1
                     size_counter[action] += file_size
                     # record resolution counters for kept files
@@ -509,10 +582,6 @@ def build_move_plan(
             errors_by_file[src] = r.error_count if r.error_count is not None else 0
 
     t_total = time.perf_counter() - t_build_start
-    try:
-        log_fn(f"TIMING build_move_plan total: {t_total:.3f}s (film_info={film_info_accumulator:.3f}s)")
-    except Exception:
-        pass
     return (
         files_to_move,
         action_counter,
