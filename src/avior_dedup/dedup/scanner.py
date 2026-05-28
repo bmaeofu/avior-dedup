@@ -416,7 +416,6 @@ def get_video_md(
     file_list: list[str],
     progress_cb: Callable[[str, int], None] | None = None,
     log_fn: Callable[[str], None] | None = None,
-    probe_video_duration: bool = True,
 ) -> list[FileRecord]:
     """Analyze a list of file paths and return FileRecord for each, including error counts from logs."""
     video_suffixes = config.video_suffixes()
@@ -497,14 +496,9 @@ def get_video_md(
                 resolution = get_recording_resolution_from_log(lines)
 
                 # Unified call: allow video_filepath to be None. The function will
-                # skip ffprobe when path is None or when probing is disabled and
-                # will attempt real-time and EPG parsing according to availability.
-                if probe_video_duration and video_filepath:
-                    ok, msg, video_duration, rec_duration = get_video_length(video_filepath, content=content, use_epg=True)
-                else:
-                    # Skip ffprobe: only attempt to extract rec_duration from logs/EPG
-                    ok, msg, _video_duration_skip, rec_duration = get_video_length(None, content=content, use_epg=True)
-                    video_duration = None
+                # skip ffprobe when path is None and will attempt real-time and
+                # EPG parsing according to availability.
+                ok, msg, video_duration, rec_duration = get_video_length(video_filepath, content=content, use_epg=True)
 
             except (OSError, UnicodeDecodeError, ValueError):
                 error_count = None
