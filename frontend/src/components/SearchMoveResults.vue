@@ -78,6 +78,7 @@ const matchHeaders = [
         class="mt-3"
       >
         Log: {{ result.log_path }}
+        <div v-if="result.timing_path" class="mt-2">Timing: <code>{{ result.timing_path }}</code></div>
       </v-alert>
     </v-card-text>
 

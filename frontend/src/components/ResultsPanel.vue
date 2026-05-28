@@ -123,6 +123,7 @@ const totalSize = computed(() =>
         class="mt-4"
       >
         Log file: <code>{{ result.log_path }}</code>
+        <div v-if="result.timing_path" class="mt-2">Timing: <code>{{ result.timing_path }}</code></div>
       </v-alert>
     </v-card-text>
 

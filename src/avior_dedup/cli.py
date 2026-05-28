@@ -140,15 +140,24 @@ def main() -> None:
     ensure_output_permissions(log_path, is_dir=False)
 
     # Create a corresponding timing log next to the main log with the
-    # same numbering. If the main log name contains 'dedup_log' replace it
-    # with 'dedup_timing' to preserve the numbering pattern; otherwise
-    # prefix with 'dedup_timing_'.
+    # same numbering as the dedup log and keep files. If the numbered
+    # dedup log follows the pattern 'dedup_log_<suffix>' we create
+    # 'dedup_timing_<suffix>' so numbering matches exactly.
+    import re
+
     orig_name = os.path.basename(log_path)
-    if "dedup_log" in orig_name:
+    m = re.match(r"(?i)dedup_log_(.+)$", orig_name)
+    if m:
+        suffix = m.group(1)
+        timing_name = f"dedup_timing_{suffix}"
+    elif "dedup_log" in orig_name:
+        # fallback: simple replacement preserves relative structure
         timing_name = orig_name.replace("dedup_log", "dedup_timing")
     else:
+        # no dedup_log in name — prefix with dedup_timing_ to make relationship clear
         base, ext = os.path.splitext(orig_name)
         timing_name = f"dedup_timing_{base}{ext}"
+
     timing_path = os.path.join(os.path.dirname(log_path), timing_name)
     timing_handle = open(timing_path, "w", encoding="utf-8")
     ensure_output_permissions(timing_path, is_dir=False)

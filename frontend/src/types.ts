@@ -38,6 +38,7 @@ export interface JobResult {
   action_counts: Record<string, number>
   action_sizes: Record<string, number>
   log_path: string | null
+  timing_path: string | null
 }
 
 export interface JobStatus {
@@ -76,6 +77,7 @@ export interface SearchMoveResult {
   action_counts: Record<string, number>
   matches: SearchMoveMatchEntry[]
   log_path: string | null
+  timing_path: string | null
 }
 
 export interface SearchMoveJobStatus {
