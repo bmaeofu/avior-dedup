@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+import functools
 import unicodedata
 import datetime
 import time
@@ -222,16 +223,24 @@ def get_recording_resolution_from_log(lines: list[str], max_seconds: int = 15) -
 # ffprobe
 # -----------------------------
 
-def get_media_duration_ffprobe(path: str) -> Optional[float]:
+@functools.lru_cache(maxsize=1024)
+def get_media_duration_ffprobe(path: str, timeout: int = 10) -> Optional[float]:
+    """Run ffprobe to get media duration. Uses a timeout and an LRU cache to
+    avoid repeated slow probes on networked filesystems. Returns None on
+    failure or timeout.
+    """
     try:
         cmd = [
             "ffprobe",
-            "-v", "error",
-            "-show_entries", "format=duration",
-            "-of", "default=noprint_wrappers=1:nokey=1",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
             path,
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
         duration_str = (result.stdout or "").strip()
 
         if not duration_str:
@@ -239,6 +248,9 @@ def get_media_duration_ffprobe(path: str) -> Optional[float]:
 
         return float(duration_str)
 
+    except subprocess.TimeoutExpired:
+        # ffprobe hung / was too slow — bail out and let callers fall back
+        return None
     except Exception:
         return None
 

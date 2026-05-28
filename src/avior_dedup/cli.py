@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from datetime import datetime
 from collections import Counter
 
 from avior_dedup.dedup.models import SelectionPriority
@@ -93,6 +94,12 @@ def main() -> None:
     )
 
     args = parser.parse_args()
+
+    # Record run start time so final SUMMARY shows a meaningful Start time
+    try:
+        args.start_time = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+    except Exception:
+        args.start_time = None
 
     # If no semantic prefixes were provided, normalize to an empty list so
     # downstream code can always iterate over it.
