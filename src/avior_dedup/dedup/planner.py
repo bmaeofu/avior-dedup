@@ -342,7 +342,10 @@ def build_move_plan(
     if global_uncached:
         t_fetch_start = time.perf_counter()
         try:
-            for rec in get_video_md(global_uncached, log_fn=log_fn):
+            # Initial prefetch WITHOUT running ffprobe: parse logs and collect
+            # rec_duration, resolution, multichannel, error counts etc. This
+            # avoids expensive ffprobe calls unless later needed for selection.
+            for rec in get_video_md(global_uncached, log_fn=log_fn, probe_video_duration=False):
                 film_info_cache[rec.file] = rec
         except Exception:
             # Keep going even if metadata probing fails for some files
@@ -439,13 +442,59 @@ def build_move_plan(
                 files_to_move[r.file] = MoveAction(novideo_target, "NO_VIDEO", group_name, resolution=r.resolution)
             continue
 
-        best_film = select_best_film(
-            valid_records,
-            max_duration_diff_longer=max_duration_diff_longer,
-            max_duration_diff_shorter=max_duration_diff_shorter,
-            selection_priorities=selection_priorities,
-            max_errors_when_mc=max_errors_when_mc,
-        )
+        # Determine whether we can decide the best film without calling ffprobe
+        sel_prios = selection_priorities or DEFAULT_SELECTION_PRIORITIES
+        # Find first priority that needs video duration (currently CLOSEST_DURATION)
+        try:
+            idx_video = next(i for i, p in enumerate(sel_prios) if p == SelectionPriority.CLOSEST_DURATION)
+        except StopIteration:
+            idx_video = None
+
+        best_film = None
+        if idx_video is None:
+            # No duration-dependent priorities -> select directly
+            best_film = select_best_film(
+                valid_records,
+                max_duration_diff_longer=max_duration_diff_longer,
+                max_duration_diff_shorter=max_duration_diff_shorter,
+                selection_priorities=sel_prios,
+                max_errors_when_mc=max_errors_when_mc,
+            )
+        else:
+            # Preselect using priorities up to (but excluding) the duration-dependent one
+            pre_prios = sel_prios[:idx_video]
+            # Compute partial sort keys
+            key_map: dict[tuple, list[FileRecord]] = {}
+            for r in valid_records:
+                k = _sort_key(r, pre_prios, max_errors_when_mc, max_duration_diff_longer, max_duration_diff_shorter)
+                key_map.setdefault(k, []).append(r)
+
+            # Find best key and tied candidates
+            best_key = min(key_map.keys())
+            tied = key_map[best_key]
+
+            if len(tied) == 1:
+                best_film = tied[0]
+            else:
+                # Need ffprobe only for tied candidates lacking video_duration
+                to_probe = [r.file for r in tied if r.video_exists and r.video_duration is None]
+                if to_probe:
+                    try:
+                        probed = get_video_md(to_probe, log_fn=log_fn, probe_video_duration=True)
+                        for rec in probed:
+                            # update cache with probed results
+                            film_info_cache[rec.file] = rec
+                    except Exception:
+                        pass
+                # Rebuild valid_records from possibly-updated cache
+                # (records list already contains objects from film_info_cache)
+                best_film = select_best_film(
+                    valid_records,
+                    max_duration_diff_longer=max_duration_diff_longer,
+                    max_duration_diff_shorter=max_duration_diff_shorter,
+                    selection_priorities=sel_prios,
+                    max_errors_when_mc=max_errors_when_mc,
+                )
         for r in records:
             src = r.file
             group_name = get_group_name(src, duptype, file_to_groupkey)
