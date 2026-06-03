@@ -6,6 +6,7 @@ import os
 import shutil
 from collections.abc import Callable
 from functools import lru_cache
+from avior_dedup.permissions import copy_dir_permissions
 
 from avior_dedup.searchmove.models import (
     ActivityMode,
@@ -251,6 +252,8 @@ def _ensure_dest_dir(path: str) -> str:
     return path
 
 
+
+
 def process_match(
     matched_path: str,
     dest_dir: str,
@@ -286,6 +289,11 @@ def process_match(
             else:
                 target_dir = abs_dest
             dest_dir = _ensure_dest_dir(_resolve_case_insensitive(target_dir))
+            # Ensure destination directory permissions mirror the source
+            try:
+                copy_dir_permissions(src_dir, dest_dir)
+            except Exception:
+                pass
         else:
             dest_dir = _ensure_dest_dir(_resolve_case_insensitive(abs_dest))
     else:

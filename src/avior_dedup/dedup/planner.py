@@ -707,6 +707,16 @@ def execute_move_plan(
             dst_dir = os.path.dirname(dst)
             os.makedirs(dst_dir, exist_ok=True)
             ensure_output_permissions(dst_dir, is_dir=True)
+            # Attempt to copy permissions from the source directory to the
+            # newly created destination directory so mirrored structure keeps
+            # the same POSIX mode/ownership when possible.
+            try:
+                from avior_dedup.permissions import copy_dir_permissions
+
+                src_dir_perm = os.path.dirname(src_to_move)
+                copy_dir_permissions(src_dir_perm, dst_dir)
+            except Exception:
+                pass
             try:
                 # Diagnostic existence check before attempting move — helps
                 # determine whether WinError 2 is caused by missing source.

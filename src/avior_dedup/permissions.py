@@ -72,3 +72,28 @@ def ensure_output_permissions(path: str, is_dir: bool) -> None:
     except (OSError, AttributeError):
         # Typical on non-root containers; do not fail the job.
         return
+
+
+def copy_dir_permissions(src: str, dst: str) -> None:
+    """Copy POSIX permissions and ownership from src to dst (best-effort).
+
+    No-op on non-POSIX platforms. Errors are swallowed.
+    """
+    if os.name != "posix":
+        return
+    try:
+        st = os.stat(src)
+        mode = st.st_mode & 0o777
+        uid = getattr(st, "st_uid", -1)
+        gid = getattr(st, "st_gid", -1)
+        try:
+            os.chmod(dst, mode)
+        except OSError:
+            pass
+        if uid != -1 or gid != -1:
+            try:
+                os.chown(dst, uid, gid)  # type: ignore[arg-type]
+            except OSError:
+                pass
+    except Exception:
+        return
