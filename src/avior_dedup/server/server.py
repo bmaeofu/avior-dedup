@@ -94,18 +94,12 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
         log_handle = open(log_path, "w", encoding="utf-8")
         ensure_output_permissions(log_path, is_dir=False)
 
-        # Create a corresponding timing log next to the main log with the
-        # same numbering pattern as the CLI does so filenames align.
+        # Create a corresponding timing log next to the main log. Name it
+        # `timing_{logbasename_no_ext}{ext}` so the relation to the main
+        # log file is explicit (e.g. `timing_dedup_log.txt`).
         orig_name = os.path.basename(log_path)
-        m = re.match(r"(?i)dedup_log_(.+)$", orig_name)
-        if m:
-            suffix = m.group(1)
-            timing_name = f"dedup_timing_{suffix}"
-        elif "dedup_log" in orig_name:
-            timing_name = orig_name.replace("dedup_log", "dedup_timing")
-        else:
-            base, ext = os.path.splitext(orig_name)
-            timing_name = f"dedup_timing_{base}{ext}"
+        base, ext = os.path.splitext(orig_name)
+        timing_name = f"timing_{base}{ext}"
 
         timing_path = os.path.join(os.path.dirname(log_path), timing_name)
         timing_handle = open(timing_path, "w", encoding="utf-8")

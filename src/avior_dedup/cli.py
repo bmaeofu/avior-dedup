@@ -163,17 +163,10 @@ def main() -> None:
     import re
 
     orig_name = os.path.basename(log_path)
-    m = re.match(r"(?i)dedup_log_(.+)$", orig_name)
-    if m:
-        suffix = m.group(1)
-        timing_name = f"dedup_timing_{suffix}"
-    elif "dedup_log" in orig_name:
-        # fallback: simple replacement preserves relative structure
-        timing_name = orig_name.replace("dedup_log", "dedup_timing")
-    else:
-        # no dedup_log in name — prefix with dedup_timing_ to make relationship clear
-        base, ext = os.path.splitext(orig_name)
-        timing_name = f"dedup_timing_{base}{ext}"
+    base, ext = os.path.splitext(orig_name)
+    # Name timing files as `timing_{logbasename_no_ext}{ext}` so the
+    # timing file clearly relates to the original log file.
+    timing_name = f"timing_{base}{ext}"
 
     timing_path = os.path.join(os.path.dirname(log_path), timing_name)
     timing_handle = open(timing_path, "w", encoding="utf-8")

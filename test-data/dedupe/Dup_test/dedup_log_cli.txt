@@ -1,30 +1,80 @@
-dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.nfo	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.nfo	720	Stereo	ok	0
-dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.txt	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.txt	720	Stereo	ok	0
-dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.mkv	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.mkv	720	Stereo	ok	0
-dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-poster.jpg	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste-poster.jpg	720	Stereo	ok	0
-dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.log	720	Stereo	ok	0
+            MC  ERRORS  720  DUPLICATE  KEEP  OK  Stereo
+    720p          1 files (100.0%)
+    720p          2 files (100.0%)
+  ----------------------------------------------------------------------
+  DUPLICATE...............................      9 files ( 32.1%)  [   1.72 GB]
+  DUPLICATE_WITH_ERRORS...................      9 files ( 32.1%)  [   2.04 GB]
+  Duplicate type:        semantic
+  Duration:   00:00:00
+  End time:   03.06.2026 19:15:05
+  Error target:          default
+  Ignored directories:   none
+  KEEP....................................      6 files ( 21.4%)  [   1.18 GB]
+  KEEP_MC_WITH_ERRORS.....................      3 files ( 10.7%)  [   1.05 GB]
+  Log file:               \\UMS\media\tv\found_duplicates\FilmeHD_semantisch\dedup_log_cli.txt
+  Max duration +diff:    600
+  Max duration -diff:    180
+  Max errors (MC):       3
+  Mode:                   f (FIND ONLY)
+  NO_VIDEO................................      1 files (  3.6%)  [    2.6 KB]
+  No-video target:       default
+  Remove episode nos:    yes
+  Remove non-episode parentheses: no
+  Remove spaces:         yes
+  Selection priorities:  multichannel, resolution, fewer_errors, recording_date, closest_duration
+  Semantic prefixes:     
+  Source:                 C:\repos\avior-dedup\test-data\dedupe\Dup_test
+  Start time: 03.06.2026 19:15:05
+  TOTAL...................................     28 files  [   5.99 GB]
+  Target:                \\UMS\media\tv\found_duplicates\FilmeHD_semantisch
+  [DUPLICATE]:
+  [DUPLICATE_WITH_ERRORS]:
+  [KEEP]:
+  [KEEP_MC_WITH_ERRORS]:
+('720', 'MC', 'ok', '>0'): total=1  KEEP=1  DUPLICATE=0
+('720', 'Stereo', 'ok', '0'): total=4  KEEP=2  DUPLICATE=2
+('720', 'Stereo', 'ok', '>0'): total=2  KEEP=0  DUPLICATE=2
+720          1       3    7          4     3  11       6
+================================================================================
+ACTION STATISTICS:
+ATTRIBUTE MATRIX (video files only):
+DUPLICATE    0       2    4          4     0   6       4
+ERRORS       1       3    3          2     1   3       2
+KEEP         1       1    3          0     3   5       2
+MC           1       1    1          0     1   1       0
+OK           1       3   11          6     5  19      10
+PARAMETERS:
+RESOLUTION BY ACTION (video files only):
+SELECTED ATTRIBUTE COMBINATIONS SUMMARY (video files only):
+SUMMARY
+Stereo       0       2    6          4     2  10       6
 dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-fanart.jpg	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste-fanart.jpg	720	Stereo	ok	0
-dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.mkv.log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte.mkv.log	720	Stereo	ok	3
+dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.log	720	Stereo	ok	0
+dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-poster.jpg	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste-poster.jpg	720	Stereo	ok	0
+dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.nfo	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.nfo	720	Stereo	ok	0
+dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.mkv	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.mkv	720	Stereo	ok	0
+dermannderzuvielwusste	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.txt	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.txt	720	Stereo	ok	0
 dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte-poster.jpg	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte-poster.jpg	720	Stereo	ok	3
-dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte-fanart.jpg	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte-fanart.jpg	720	Stereo	ok	3
-dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.nfo	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte.nfo	720	Stereo	ok	3
+dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.mkv.log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte.mkv.log	720	Stereo	ok	3
 dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.mkv	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte.mkv	720	Stereo	ok	3
 dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte.log	720	Stereo	ok	3
+dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.nfo	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte.nfo	720	Stereo	ok	3
+dermannderzuvielwusste	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte-fanart.jpg	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\Der Mann der zuviel wußte-fanart.jpg	720	Stereo	ok	3
 dermannderzuvielwusste	[KEEP_MC_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.mkv	multichannel	720	MC	ok	3
-dermannderzuvielwusste	[KEEP_MC_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.nfo	multichannel	720	MC	ok	3
 dermannderzuvielwusste	[KEEP_MC_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.log	multichannel	720	MC	ok	3
+dermannderzuvielwusste	[KEEP_MC_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.nfo	multichannel	720	MC	ok	3
 dermannderzuvielwusste	[NO_VIDEO]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zu viel wußte.log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\no_video\Der Mann, der zu viel wußte.log	720	Stereo		0
 negernegerschornsteinfeger1_2	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (1_2).mkv	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\1\Neger, Neger, Schornsteinfeger (1_2).mkv	720	Stereo	ok	2
 negernegerschornsteinfeger1_2	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (1_2).log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\1\Neger, Neger, Schornsteinfeger (1_2).log	720	Stereo	ok	2
 negernegerschornsteinfeger1_2	[DUPLICATE_WITH_ERRORS]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (1_2).txt	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\errors\1\Neger, Neger, Schornsteinfeger (1_2).txt	720	Stereo	ok	2
-negernegerschornsteinfeger1_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (1_2).log	fewer_errors	720	Stereo	ok	0
 negernegerschornsteinfeger1_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (1_2).txt	fewer_errors	720	Stereo	ok	0
+negernegerschornsteinfeger1_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (1_2).log	fewer_errors	720	Stereo	ok	0
 negernegerschornsteinfeger1_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (1_2).mkv	fewer_errors	720	Stereo	ok	0
 negernegerschornsteinfeger2_2	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (2_2).log	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Neger, Neger, Schornsteinfeger (2_2).log	720	Stereo	ok	0
 negernegerschornsteinfeger2_2	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (2_2).mkv	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Neger, Neger, Schornsteinfeger (2_2).mkv	720	Stereo	ok	0
 negernegerschornsteinfeger2_2	[DUPLICATE]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\Neger, Neger, Schornsteinfeger (2_2).txt	\\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Neger, Neger, Schornsteinfeger (2_2).txt	720	Stereo	ok	0
-negernegerschornsteinfeger2_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (2_2).log	newer	720	Stereo	ok	0
 negernegerschornsteinfeger2_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (2_2).txt	newer	720	Stereo	ok	0
+negernegerschornsteinfeger2_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (2_2).log	newer	720	Stereo	ok	0
 negernegerschornsteinfeger2_2	[KEEP]	C:\repos\avior-dedup\test-data\dedupe\Dup_test\1\Neger, Neger, Schornsteinfeger (2_2).mkv	newer	720	Stereo	ok	0
 
 ================================================================================
@@ -33,16 +83,16 @@ SUMMARY
 
 PARAMETERS:
   Mode:                   f (FIND ONLY)
-  Source:                 C:\repos\avior-dedup\test-data\dedupe\Dup_test
-  Target:                \\UMS\media\tv\found_duplicates\FilmeHD_semantisch
-  Log file:               \\UMS\media\tv\found_duplicates\FilmeHD_semantisch\dedup_log_cli.txt
+  Source:                 test-data/dedupe/Dup_test
+  Target:                \UMS\media\tv\found_duplicates\FilmeHD_semantisch
+  Log file:               test-data/dedupe/Dup_test/dedup_log_cli.txt
   Error target:          default
   No-video target:       default
   Duplicate type:        semantic
   Max errors (MC):       3
   Max duration +diff:    600
   Max duration -diff:    180
-  Selection priorities:  multichannel, resolution, fewer_errors, recording_date, closest_duration
+  Selection priorities:  
   Semantic prefixes:     
   Remove episode nos:    yes
   Remove spaces:         yes
@@ -50,13 +100,7 @@ PARAMETERS:
   Ignored directories:   none
 
 ACTION STATISTICS:
-  DUPLICATE...............................      9 files ( 32.1%)  [   1.72 GB]
-  DUPLICATE_WITH_ERRORS...................      9 files ( 32.1%)  [   2.04 GB]
-  KEEP....................................      6 files ( 21.4%)  [   1.18 GB]
-  KEEP_MC_WITH_ERRORS.....................      3 files ( 10.7%)  [   1.05 GB]
-  NO_VIDEO................................      1 files (  3.6%)  [    2.6 KB]
-  ----------------------------------------------------------------------
-  TOTAL...................................     28 files  [   5.99 GB]
+  No actions performed
 
 RESOLUTION BY ACTION (video files only):
   [DUPLICATE]:
@@ -83,7 +127,6 @@ SELECTED ATTRIBUTE COMBINATIONS SUMMARY (video files only):
 ('720', 'Stereo', 'ok', '>0'): total=2  KEEP=0  DUPLICATE=2
 ('720', 'MC', 'ok', '>0'): total=1  KEEP=1  DUPLICATE=0
 
-  Start time: 03.06.2026 19:15:05
-  End time:   03.06.2026 19:15:05
-  Duration:   00:00:00
+  Start time: unknown
+  End time:   03.06.2026 20:01:33
 ================================================================================

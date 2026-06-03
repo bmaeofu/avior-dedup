@@ -313,12 +313,29 @@ def build_move_plan(
         log_fn(f"TIMING expand: {t_expand:.3f}s")
     except Exception:
         pass
+    # Merge groups that share the same logical group name (e.g. same
+    # semantic key). Scanner can produce separate groups that nevertheless
+    # map to the same group name; merge them so planning selects exactly one
+    # video-set per logical group.
+    merged_groups: dict[str, set[str]] = {}
+    for group in groups:
+        for f in group:
+            try:
+                gname = get_group_name(f, duptype, file_to_groupkey)
+            except Exception:
+                gname = os.path.basename(f)
+            merged_groups.setdefault(gname, set()).add(f)
+    groups = [sorted(v) for v in merged_groups.values()]
+    total_groups = len(groups)
 
-    # Precompute basename/stem/dir for all files in the (possibly expanded) groups
+    # Precompute basename/stem/dir for all files in the (possibly expanded and merged) groups
     all_files = [f for g in groups for f in g]
     basename_map: dict[str, str] = {f: os.path.basename(f) for f in all_files}
     stem_map: dict[str, str] = {f: match_suffix(basename_map[f])[0] for f in all_files}
     dir_map: dict[str, str] = {f: os.path.dirname(f) for f in all_files}
+
+    # (No per-group keep tracking here; groups have been merged so planner
+    # will naturally select at most one representative per logical group.)
 
     # Determine which stems actually contain a video file in the (possibly
     # expanded) groups. We only prefetch metadata for input files whose
@@ -457,9 +474,9 @@ def build_move_plan(
             best_dir = os.path.dirname(best_film.file)
             src_dir = dir_map.get(src, os.path.dirname(src))
 
-            # KEEP only the exact selected representative file. All other
-            # files (including siblings in the same directory) are treated
-            # as DUPLICATE per user preference.
+            # KEEP only the exact selected representative file and its siblings
+            # in the same directory. Files in other directories with the same
+            # stem are treated as DUPLICATE.
             if src_stem == best_stem and src_dir == best_dir:
                 # Use attributes from the best_film as representative for the whole set
                 rep = best_film
