@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=08.03.2020 15:30:30
+Channel=3sat HD (AC3,ger)
+
+[0]
+Id=11868
+Date=08.03.2020
+Time=15:30:00
+Duration=01:29:00
+Title="Neger, Neger, Schornsteinfeger" (1/2)
+Info=Fernsehfilm, Deutschland 2006
+Description=Deutschland 2006|Hamburg 1935. Der neunjährige Hans-Jürgen Massaquoi ist das einzige dunkelhäutige Schulkind im Arbeiterbezirk Barmbek. Seine frühe Kindheit verbrachte er in der Villa seines Großvaters.||Momolu Massaquoi ist ein liberianischer Konsul, der in seine Heimat zurückkehren musste. Seinen Vater hat Hans-Jürgen nie gesehen, nur eine Klarinette ist ihm als Andenken geblieben.|Darsteller:|Bertha Baetz - Veronica Ferres|Hans-Jürgen, 14 - 19 Jahre - Thando Walbaum|Franz Wahl - Götz Schubert|Wilhelm Mahnke - Jürgen Tarrach|Polizist Reesen - Charly Hübner|Hans-Jürgen, 9-10 Jahre - Steve-Marvin Dwumah|Regie: Jörg Grünler|Buch/Autor: Beate Langmaack, Hans-Jürgen Massaquoi||Altersfreigabe: 6|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|[DVB subtitles] [deu]|PDC: 08.03. 15:30 (269278)
+Charset=255
+Content=32
+MinimumAge=0
+TimerID={69918023-BF8B-4796-B3EF-169D40978998}
+
+[Stats]
+Errors=0
+Size=8,11 GB (8703334416 bytes)
+Avr. Datarate=1,553 MB/s
+Device=Tvheadend:9983 20d48b009f 3
+
+ 

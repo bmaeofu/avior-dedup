@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=23.06.2013 14:45:11
+Channel=3sat HD (AC3,ger)
+
+[0]
+Id=9123
+Date=23.06.2013
+Time=14:45:00
+Duration=01:30:00
+Title="Neger, Neger, Schornsteinfeger" (1/2)
+Info=
+Series=
+Description=Hamburg, 1935: Der neunjährige Hans-Jürgen Massaquoi ist das einzige dunkelhäutige Schulkind im Arbeiterbezirk Barmbek. Auf der Straße wird er verspottet: "Neger, Neger, Schornsteinfeger". Seine alleinstehende Mutter Bertha lernt im Krankenhaus den Personalchef Franz Wahl kennen, der ihr neuer Freund wird und Hans-Jürgen wie einen Sohn behandelt. Doch Franz wird Nationalsozialist. Während er in einen inneren Konflikt gerät, gibt es für Bertha keinen Zweifel, zu wem sie gehört: zu ihrem Sohn. Eisern zu Hans-Jürgen halten auch seine zwei Freunde Klaus und Fiete ...|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|[stereo] [mul]|[DVB subtitles] [deu]|PDC: 23.06. 14:45 (766893)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={824BCBBB-EB84-4167-A45A-51D8C76FF7C3}
+
+[Stats]
+Errors=2
+Size=7,79 GB (8362286812 bytes)
+Avr. Datarate=1,487 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 2 (2)
+

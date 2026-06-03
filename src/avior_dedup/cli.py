@@ -28,7 +28,14 @@ def get_numbered_log_file(path: str) -> str:
 def main() -> None:
     apply_runtime_umask()
 
-    parser = argparse.ArgumentParser(description="Duplicate film files finder/mover")
+    class ArgParseError(Exception):
+        pass
+
+    class NoExitArgumentParser(argparse.ArgumentParser):
+        def error(self, message: str) -> None:  # raise instead of exiting
+            raise ArgParseError(message)
+
+    parser = NoExitArgumentParser(description="Duplicate film files finder/mover")
     parser.add_argument("mode", choices=["m", "f"], help="m = move, f = find only")
     parser.add_argument("source", help="source directory")
     parser.add_argument("target", help="target directory")
@@ -83,6 +90,11 @@ def main() -> None:
         help="Remove parenthetical expressions that are not episode numbers when computing semantic normalization",
     )
     parser.add_argument(
+        "--replace-underscores",
+        action="store_true",
+        help="Replace underscores with spaces before semantic normalization (useful for filenames with _ separators)",
+    )
+    parser.add_argument(
         "--ignored-directories",
         nargs="+",
         help="List of directories to ignore for this run (full paths or directory names)",
@@ -93,7 +105,12 @@ def main() -> None:
         help="Normalize episode tokens like (1_5) or (S01_E05) to standard form (s01e05) instead of removing them",
     )
 
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
+    except ArgParseError as e:
+        print("Argument parsing failed:", e)
+        parser.print_usage()
+        raise SystemExit(2)
 
     # Record run start time so final SUMMARY shows a meaningful Start time
     try:
@@ -182,6 +199,7 @@ def main() -> None:
         args.semantic_prefixes or [],
         args.remove_spaces,
         args.remove_non_episode_parens,
+        args.replace_underscores,
         args.ignored_directories,
     )
 

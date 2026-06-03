@@ -74,6 +74,34 @@
                 "--duptype",
                 "semantic",
                 "--remove-spaces",
+                "--remove-episode-nos",                
+                "--max-errors-when-mc",
+                "3",
+                "--max-duration-diff-longer",
+                "600",
+                "--max-duration-diff-shorter",
+                "180",
+                "--selection-priorities",
+                "multichannel",
+                "resolution",
+                "fewer_errors",
+                "recording_date",
+                "closest_duration",
+            ]
+        },
+        {
+            "name": "avior-dedup: test exact",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "f",
+                "C:\\repos\\avior-dedup\\test-data\\dedupe\\Dup_test",
+                "\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_exact",
+                "--duptype",
+                "exact",
                 "--max-errors-when-mc",
                 "3",
                 "--max-duration-diff-longer",
@@ -118,7 +146,7 @@
             "module": "avior_dedup",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["f", "\\\\UMS\\media\\tv\\FilmeHD","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantisch", "duplicate_case_files_found.txt",  "--duptype", "semantic", "--max-errors-when-mc", "3"]
+            "args": ["f", "\\\\UMS\\media\\tv\\FilmeHD\\Mehrteiler","\\\\UMS\\media\\tv\\found_duplicates\\FilmeHD_semantic", "--replace-underscores", "--remove-spaces", "--ignored-directories", ".actors", "bu_logs", "--duptype", "all", "--remove-episode-nos", "--max-errors-when-mc", "3"]
         },
         {
             "name": "avior-dedup: DokHD semantic",

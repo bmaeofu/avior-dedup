@@ -1,0 +1,21 @@
+TIMING expand: 0.000s
+TIMING get_video_md c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.log 0.040s
+TIMING get_video_md c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.log 0.035s
+TIMING get_video_md c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.log 0.041s
+TIMING prefetch: 0.117s for 3 files
+der mann der zuviel wusste	[KEEP_MC_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.log	multichannel	720	MC	ok	3
+TIMING probes_total: 0.117s build_total: 0.118s
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte-fanart.jpg	default\Der Mann der zuviel wußte-fanart.jpg	720	Stereo	ok	3
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte-poster.jpg	default\Der Mann der zuviel wußte-poster.jpg	720	Stereo	ok	3
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.log	default\Der Mann der zuviel wußte.log	720	Stereo	ok	3
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.mkv	default\Der Mann der zuviel wußte.mkv	720	Stereo	ok	3
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.mkv.log	default\Der Mann der zuviel wußte.mkv.log	720	Stereo	ok	3
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann der zuviel wußte.nfo	default\Der Mann der zuviel wußte.nfo	720	Stereo	ok	3
+der mann der zuviel wusste	[DUPLICATE]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-fanart.jpg	\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste-fanart.jpg	720	Stereo	ok	0
+der mann der zuviel wusste	[DUPLICATE]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste-poster.jpg	\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste-poster.jpg	720	Stereo	ok	0
+der mann der zuviel wusste	[DUPLICATE]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.log	\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.log	720	Stereo	ok	0
+der mann der zuviel wusste	[DUPLICATE]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.mkv	\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.mkv	720	Stereo	ok	0
+der mann der zuviel wusste	[DUPLICATE]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.nfo	\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.nfo	720	Stereo	ok	0
+der mann der zuviel wusste	[DUPLICATE]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wusste.txt	\UMS\media\tv\found_duplicates\FilmeHD_semantisch\Der Mann, der zuviel wusste.txt	720	Stereo	ok	0
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS_MC]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.mkv	default\Der Mann, der zuviel wußte.mkv	720	MC	ok	3
+der mann der zuviel wusste	[DUPLICATE_WITH_ERRORS_MC]	c:\repos\avior-dedup\test-data\dedupe\Dup_test\Der Mann, der zuviel wußte.nfo	default\Der Mann, der zuviel wußte.nfo	720	MC	ok	3

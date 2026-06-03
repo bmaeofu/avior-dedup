@@ -449,11 +449,18 @@ def build_move_plan(
         for r in records:
             src = r.file
             group_name = get_group_name(src, duptype, file_to_groupkey)
-            # Decide KEEP for the whole stem chosen by select_best_film.
+            # Decide KEEP only for files that are in the same directory as
+            # the selected representative (`best_film`). Files with the same
+            # stem but in other directories are considered duplicates.
             best_stem = stem_map.get(best_film.file, match_suffix(os.path.basename(best_film.file))[0])
             src_stem = stem_map.get(src, match_suffix(os.path.basename(src))[0])
+            best_dir = os.path.dirname(best_film.file)
+            src_dir = dir_map.get(src, os.path.dirname(src))
 
-            if src_stem == best_stem:
+            # KEEP only the exact selected representative file. All other
+            # files (including siblings in the same directory) are treated
+            # as DUPLICATE per user preference.
+            if src_stem == best_stem and src_dir == best_dir:
                 # Use attributes from the best_film as representative for the whole set
                 rep = best_film
                 base_action = "KEEP_MC" if getattr(rep, "multichannel", False) else "KEEP"

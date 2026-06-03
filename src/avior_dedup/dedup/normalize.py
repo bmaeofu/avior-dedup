@@ -13,10 +13,26 @@ def normalize_film_name(
     remove_episode_nos: bool,
     remove_spaces: bool = False,
     remove_non_episode_parens: bool = False,
+    replace_underscores: bool = False,
 ) -> str:
     """Normalize a film filename for semantic duplicate detection."""
     # Normalize Unicode representation first and use casefold for robust case-insensitive matching.
     base = unicodedata.normalize("NFKC", name).casefold().strip()
+    # Optionally replace underscores with spaces before further normalization.
+    # Do NOT replace underscores that appear inside episode-like parentheses
+    # such as "(2_2)" or "(S01_E05)" which represent episode tokens.
+    if replace_underscores:
+        # Pattern: either an episode-like parenthetical (capture group 1)
+        # or a run of underscores. We preserve the parenthetical unchanged
+        # and replace underscores with a single space.
+        pat = re.compile(r"(\(\s*[sS]?\d{1,2}(?:[ _\-]?[eE]?\d{1,2}|[ _\-]\d{1,2})?\s*\))|_+", flags=re.IGNORECASE)
+
+        def _repl(m: re.Match) -> str:
+            if m.group(1):
+                return m.group(1)
+            return " "
+
+        base = pat.sub(_repl, base)
     candidate_suffixes = config.candidate_suffixes()
 
     matched_suffix = ""
@@ -48,12 +64,15 @@ def normalize_film_name(
             if kw in base:
                 apply_regex = False
                 break
-
     if apply_regex and rest:
-        for kw in config.episode_keep_keywords():
-            if kw in rest:
-                apply_regex = False
-                break
+        # If the 'rest' contains a 4-digit year, do not remove episode numbers.
+        if re.search(r"\b\d{4}\b", rest):
+            apply_regex = False
+        else:
+            for kw in config.episode_keep_keywords():
+                if kw in rest:
+                    apply_regex = False
+                    break
 
     if apply_regex and len(parts) > 2:
         for kw in config.episode_keep_keywords_years():

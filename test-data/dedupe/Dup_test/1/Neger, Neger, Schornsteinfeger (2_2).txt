@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=08.03.2020 17:00:01
+Channel=3sat HD (AC3,ger)
+
+[0]
+Id=11869
+Date=08.03.2020
+Time=16:59:00
+Duration=01:30:00
+Title="Neger, Neger, Schornsteinfeger" (2/2)
+Info=Fernsehfilm, Deutschland 2006
+Description=Deutschland 2006|Hamburg 1936: Obwohl Hans-Jürgen ein guter Schüler ist, wird ihm der Zugang zum Gymnasium verwehrt. Berthas Beziehung zu Franz ist belastet, weil sich Franz nicht zu Hans-Jürgen bekennt.||Schließlich trennt sich Bertha von ihm. Gekränkt sorgt Franz für ihre Entlassung. Auf der Suche nach Vorbildern stößt Hans-Jürgen auf den schwarzen Boxer Joe Louis. Im Boxen findet er Zuflucht und Bestätigung. Aber auch hier wird er diskriminiert.|Darsteller:|Bertha Baetz - Veronica Ferres|Hans-Jürgen 14 - 19 Jahre - Thando Wahlbaum|Franz Wahl - Götz Schubert|Wilhelm Mahnke - Jürgen Tarrach|Polizist Reesen - Charly Hübner|Hans-Jürgen 9-10 Jahre - Steve-Marvin Dwumah|Regie: Jörg Grünler|Buch/Autor: Hans-Jürgen Massaquoi, Beate Langmaack||Altersfreigabe: 6|[16:9] [H.264] [HD]|[stereo] [deu]|[stereo] [mul]|[stereo] [mis]|[Dolby Digital 2.0] [deu]|[DVB subtitles] [deu]|PDC: 08.03. 17:00 (269376)
+Charset=255
+Content=32
+MinimumAge=0
+TimerID={A3AD7366-4342-4DA0-81FC-6A41B1EE511D}
+
+[Stats]
+Errors=0
+Size=7,79 GB (8360728292 bytes)
+Avr. Datarate=1,488 MB/s
+Device=Tvheadend:9983 20d48b009f 3
+
+ 

@@ -32,6 +32,7 @@ class JobRequest(BaseModel):
     remove_episode_nos: bool = False
     remove_spaces: bool = False
     remove_non_episode_parens: bool = False
+    replace_underscores: bool = False
 
 
 class ProgressSnapshot(BaseModel):

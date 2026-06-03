@@ -82,6 +82,8 @@ episode_keep_keywords:
   - caveman
   - nach einem roman
   - ist sie für beifall noch zu jung
+  - familienkomödie,
+  - über das meer für ihr land und ihre familie
 
 # Year-based keywords that prevent episode number stripping (for multi-part entries)
 episode_keep_keywords_years:

@@ -442,12 +442,22 @@ def sort_and_finalize_log(
             import re
 
             log_base = os.path.basename(log_path)
-            m = re.match(r"(?i)dedup_log_(.+)$", log_base)
+            base_no_ext, _ext = os.path.splitext(log_base)
+            m = re.match(r"(?i)dedup_log_(.+)$", base_no_ext)
             if m:
                 suffix = m.group(1)
-                keep_name = f"keep_{suffix}"
+                keep_name = f"keep_{suffix}.txt"
             else:
-                keep_name = "keep.txt"
+                # If the basename ends with an underscore+number (e.g.
+                # duplicate_case_files_found_002), extract that numeric
+                # suffix so the keep file becomes `keep_002` as expected.
+                m2 = re.search(r"_(\d+)$", base_no_ext)
+                if m2:
+                    suffix = m2.group(1)
+                    keep_name = f"keep_{suffix}.txt"
+                else:
+                    # Fall back to keeping a related name without extension
+                    keep_name = f"keep_{base_no_ext}.txt"
 
             keep_path = os.path.join(os.path.dirname(log_path), keep_name)
             with open(keep_path, "w", encoding="utf-8") as kf:
