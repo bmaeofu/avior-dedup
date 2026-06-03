@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Vater werden ist nicht schwer</title>
+    <originaltitle>Vater werden ist nicht schwer</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10">
+            <value>8.000000</value>
+            <votes>1</votes>
+        </rating>
+        <rating name="imdb" max="10" default="true">
+            <value>6.500000</value>
+            <votes>13</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Eigentlich hat der Oberstudienrat Frank Fauster allen Grund, zufrieden zu sein: Er hat einen verantwortungsvollen Job als Gymnasialdirektor, ein hübsches Haus mit Garten, eine verständnisvolle Frau und einen aufgeweckten Sohn. Dennoch wird er von den ersten Symptomen einer Midlifecrisis geplagt. Seine Ehe mit Elisabeth ist eingefahren, und mit seinem Sohn Noah versteht er sich nicht allzu gut.</plot>
+    <tagline>Makes room for your broadest grins and your longest laughs!</tagline>
+    <runtime>86</runtime>
+    <thumb aspect="poster" preview="http://image.tmdb.org/t/p/w500/aht2KPTdY6bIwRyNEqo9FmFaDUI.jpg">http://image.tmdb.org/t/p/original/aht2KPTdY6bIwRyNEqo9FmFaDUI.jpg</thumb>
+    <thumb aspect="poster" preview="http://image.tmdb.org/t/p/w500/dx0Qago3iRDvFNKrw5Leinnb2Lw.jpg">http://image.tmdb.org/t/p/original/dx0Qago3iRDvFNKrw5Leinnb2Lw.jpg</thumb>
+    <thumb aspect="poster" preview="http://image.tmdb.org/t/p/w500/pFG7cMDUMkUPkcfQAPF9AD4mGcr.jpg">http://image.tmdb.org/t/p/original/pFG7cMDUMkUPkcfQAPF9AD4mGcr.jpg</thumb>
+    <fanart>
+        <thumb preview="http://image.tmdb.org/t/p/w780/zCxG6EGLGzAS4216lgerzKO3tRP.jpg">http://image.tmdb.org/t/p/original/zCxG6EGLGzAS4216lgerzKO3tRP.jpg</thumb>
+        <thumb preview="http://image.tmdb.org/t/p/w780/qrMBcFEnQmIttwYxVvpu7MwlApb.jpg">http://image.tmdb.org/t/p/original/qrMBcFEnQmIttwYxVvpu7MwlApb.jpg</thumb>
+        <thumb preview="http://image.tmdb.org/t/p/w780/d97w9BxvOMICQFOviwlvSEZbqaP.jpg">http://image.tmdb.org/t/p/original/d97w9BxvOMICQFOviwlvSEZbqaP.jpg</thumb>
+        <thumb preview="http://image.tmdb.org/t/p/w780/sf1i0zf3otkBuvNCtIG6yv0KuBI.jpg">http://image.tmdb.org/t/p/original/sf1i0zf3otkBuvNCtIG6yv0KuBI.jpg</thumb>
+        <thumb preview="http://image.tmdb.org/t/p/w780/bpycX8sHxAUalDOYhdtcZCJRAzS.jpg">http://image.tmdb.org/t/p/original/bpycX8sHxAUalDOYhdtcZCJRAzS.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <genre>Komödie</genre>
+    <uniqueid type="tmdb" default="true">280845</uniqueid>
+    <uniqueid type="imdb">tt0405433</uniqueid>
+    <genre>Drama</genre>
+    <genre>Familie</genre>
+    <director>René Heisig</director>
+    <year>2004</year>
+    <status />
+    <code />
+    <aired />
+    <trailer />
+    <premiered>2004-06-18</premiered>
+    <country>Germany</country>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5167</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <language>ger</language>
+                <channels>2</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Heinz Baumann</name>
+        <role>Gustav Tobel</role>
+        <order>0</order>
+        <thumb>http://image.tmdb.org/t/p/original/s2DSvlzUdw3uogn12lQcwnLwPHq.jpg</thumb>
+    </actor>
+    <actor>
+        <name>August Zirner</name>
+        <role>Frank Fauster</role>
+        <order>1</order>
+        <thumb>http://image.tmdb.org/t/p/original/nKjYT4C9KFLFAt45db9FTw6shLm.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Eva Kryll</name>
+        <role>Elisabeth Fauster</role>
+        <order>2</order>
+        <thumb>http://image.tmdb.org/t/p/original/8zOuAIOBy55xJmhUI5UQp38C8Vi.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Florian Stetter</name>
+        <role>Noah Fauster</role>
+        <order>3</order>
+        <thumb>http://image.tmdb.org/t/p/original/uXYm7mO5ttTRYxvhKdoFXeYSvzx.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marion Mathoi</name>
+        <role>Maria</role>
+        <order>4</order>
+        <thumb>http://image.tmdb.org/t/p/original/5JjUf4oTU7wZTZ4gxjTFUKdGMOu.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Luise Deschauer</name>
+        <role>Schwester Walburga</role>
+        <order>5</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Johanna Bittenbinder</name>
+        <role>Sekretärin Altenheim</role>
+        <order>6</order>
+        <thumb>http://image.tmdb.org/t/p/original/imF35BUhDtoWLWYskW6qi7PcTMH.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Stefan Merki</name>
+        <role>Bestatter</role>
+        <order>7</order>
+        <thumb>http://image.tmdb.org/t/p/original/wJ6I7hjuQxFFsiVkXDpWsNflNXw.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2014-09-09 02:20:44</dateadded>
+    <videostatus>shorter:00:03:53</videostatus>
+    <nfo_updated>2026-05-07</nfo_updated>
+</movie>

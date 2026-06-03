@@ -57,6 +57,7 @@ const form = reactive<JobRequest>({
   semantic_prefixes: [],
   remove_episode_nos: false,
   remove_spaces: false,
+  replace_underscores: false,
   remove_non_episode_parens: false,
 })
 
@@ -331,7 +332,7 @@ function submit() {
       <!-- Semantic matching -->
       <div class="text-subtitle-2 text-medium-emphasis mb-2">Semantic matching</div>
       <v-row dense>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <v-checkbox
             v-model="form.remove_episode_nos"
             label="Remove episode numbers"
@@ -339,7 +340,7 @@ function submit() {
             hide-details
           />
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <v-checkbox
             v-model="form.remove_spaces"
             label="Ignore Spaces"
@@ -347,10 +348,18 @@ function submit() {
             hide-details
           />
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <v-checkbox
             v-model="form.remove_non_episode_parens"
             label="Remove non-episode parentheses"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-checkbox
+            v-model="form.replace_underscores"
+            label="Replace underscores with spaces"
             density="compact"
             hide-details
           />

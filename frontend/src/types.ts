@@ -16,6 +16,7 @@ export interface JobRequest {
   semantic_prefixes: string[]
   remove_episode_nos: boolean
   remove_spaces: boolean
+  replace_underscores: boolean
   remove_non_episode_parens: boolean
 }
 

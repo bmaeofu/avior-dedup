@@ -1,0 +1,27 @@
+[General]
+Version=1.1
+
+[Media]
+Created=21.06.2013 13:30:54
+Channel=BR Süd HD (AC3,deu)
+
+[0]
+Id=1267
+Date=21.06.2013
+Time=13:30:00
+Duration=01:30:00
+Title=Vater werden ist nicht schwer...
+Info=Familienfilm Deutschland, 2005
+Series=
+Description=Kurz vor seinem 50. Geburtstag bekommt der Oberstudienrat Frank Fauster eine höchst überraschende Nachricht. Sein Vater, den er nie kennen gelernt hat, möchte ihn wenigstens einmal sehen, bevor er stirbt. Auf Grund einer Verwechslung holt Frank jedoch nicht seinen Vater aus dem Seniorenheim zu sich nach Hause, sondern den Landstreicher Gustav. Und der denkt gar nicht daran, den Irrtum aufzuklären. Es dauert nicht lange, bis der gewitzte Gustav den eingefahrenen Alltag der Familie gehörig durcheinander wirbelt.|[16:9] [H.264] [HD]|[stereo] [deu]|[Dolby Digital 2.0] [deu]|[stereo] [deu]|[Teletext subtitles] [deu]|[DVB subtitles] [deu]|PDC: 21.06. 13:30 (701278)
+Charset=255
+Content=16
+MinimumAge=0
+TimerID={3FB3637D-1480-4ADD-B920-29C4870D4659}
+
+[Stats]
+Errors=0
+Size=7,91 GB (8488404732 bytes)
+Avr. Datarate=1,566 MB/s
+Device=Digital Devices DVB-S/S2 Tuner 1 (1)
+

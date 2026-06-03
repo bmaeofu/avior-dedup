@@ -1,0 +1,23 @@
+Datum: 2026-05-16 15:54:50 Deep Model: llama3:8b-instruct-q4_K_S
+#####
+NFO:
+Eigentlich hat der Oberstudienrat Frank Fauster allen Grund, zufrieden zu sein: Er hat einen verantwortungsvollen Job als Gymnasialdirektor, ein hübsches Haus mit Garten, eine verständnisvolle Frau und einen aufgeweckten Sohn. Dennoch wird er von den ersten Symptomen einer Midlifecrisis geplagt. Seine Ehe mit Elisabeth ist eingefahren, und mit seinem Sohn Noah versteht er sich nicht allzu gut.
+______
+
+TXT:
+kurz vor seinem 50. geburtstag bekommt der oberstudienrat frank fauster eine höchst überraschende nachricht. sein vater, den er nie kennengelernt hat, möchte ihn wenigstens einmal sehen, bevor er stirbt. aufgrund einer verwechslung holt frank jedoch nicht seinen vater aus dem seniorenheim zu sich nach hause, sondern den landstreicher gustav. und der denkt gar nicht daran, den irrtum aufzuklären. es dauert nicht lange, bis der gewitzte gustav den eingefahrenen alltag der familie gehörig durcheinander gewirbelt hat.||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:16.0000
+txt_year: 2005
+nfo_year: 2004
+year_diff: 1.0
+file_type: txt
+recognized_meta_line: Fernsehfilm Deutschland 2005
+meta_line_present: True
+meta_line_contains_year: True
+recognized_txt_countries_canonical:germany

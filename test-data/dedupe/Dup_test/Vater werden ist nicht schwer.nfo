@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Vater werden ist nicht schwer</title>
+    <originaltitle>Vater werden ist nicht schwer</originaltitle>
+    <ratings>
+        <rating name="themoviedb" max="10">
+            <value>0.000000</value>
+            <votes>0</votes>
+        </rating>
+        <rating name="imdb" max="10" default="true">
+            <value>6.500000</value>
+            <votes>13</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline />
+    <plot>Eigentlich hat der Oberstudienrat Frank Fauster allen Grund, zufrieden zu sein: Er hat einen verantwortungsvollen Job als Gymnasialdirektor, ein hübsches Haus mit Garten, eine verständnisvolle Frau und einen aufgeweckten Sohn. Dennoch wird er von den ersten Symptomen einer Midlifecrisis geplagt. Seine Ehe mit Elisabeth ist eingefahren, und mit seinem Sohn Noah versteht er sich nicht allzu gut.</plot>
+    <tagline />
+    <runtime>86</runtime>
+    <thumb spoof="" cache="" aspect="poster" preview="">https://image.tmdb.org/t/p/original/2X4tO5o3lpnfvSZjMuFerxgZ7CW.jpg</thumb>
+    <thumb spoof="" cache="" aspect="landscape" preview="">https://image.tmdb.org/t/p/original/7AjmrdmjCFUlDfxVJvnIph6gUrZ.jpg</thumb>
+    <thumb spoof="" cache="" aspect="keyart" preview="">https://image.tmdb.org/t/p/original/1JcIrngNX3hs3YmIZ0g3driUZic.jpg</thumb>
+    <fanart>
+        <thumb colors="" preview="https://image.tmdb.org/t/p/w780/7AjmrdmjCFUlDfxVJvnIph6gUrZ.jpg">https://image.tmdb.org/t/p/original/7AjmrdmjCFUlDfxVJvnIph6gUrZ.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>280845</id>
+    <uniqueid type="imdb">tt0405433</uniqueid>
+    <uniqueid type="tmdb" default="true">280845</uniqueid>
+    <genre>TV-Film</genre>
+    <genre>Komödie</genre>
+    <genre>Familie</genre>
+    <country>Germany</country>
+    <videoassettitle>Standard Edition</videoassettitle>
+    <videoassetid>40400</videoassetid>
+    <videoassettype>0</videoassettype>
+    <hasvideoversions>false</hasvideoversions>
+    <hasvideoextras>false</hasvideoextras>
+    <isdefaultvideoversion>true</isdefaultvideoversion>
+    <director>René Heisig</director>
+    <premiered>2004-06-18</premiered>
+    <year>2004</year>
+    <status />
+    <code />
+    <aired />
+    <studio>ARD</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>av1</codec>
+                <aspect>1.777780</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5167</durationinseconds>
+                <stereomode />
+                <hdrtype />
+            </video>
+            <audio>
+                <codec>opus</codec>
+                <language>deu</language>
+                <channels>2</channels>
+            </audio>
+            <subtitle>
+                <language />
+            </subtitle>
+            <subtitle>
+                <language />
+            </subtitle>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Heinz Baumann</name>
+        <role>Gustav Tobel</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/original/s2DSvlzUdw3uogn12lQcwnLwPHq.jpg</thumb>
+    </actor>
+    <actor>
+        <name>August Zirner</name>
+        <role>Frank Fauster</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/nKjYT4C9KFLFAt45db9FTw6shLm.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Eva Kryll</name>
+        <role>Elisabeth Fauster</role>
+        <order>2</order>
+        <thumb>https://image.tmdb.org/t/p/original/8zOuAIOBy55xJmhUI5UQp38C8Vi.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Florian Stetter</name>
+        <role>Noah Fauster</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/original/uXYm7mO5ttTRYxvhKdoFXeYSvzx.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Marion Mathoi</name>
+        <role>Maria</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/original/5JjUf4oTU7wZTZ4gxjTFUKdGMOu.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Luise Deschauer</name>
+        <role>Schwester Walburga</role>
+        <order>5</order>
+        <thumb>http://image.tmdb.org/t/p/original/kqtkMtLJXTjW0VM4a5M91Sv9SHO.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Johanna Bittenbinder</name>
+        <role>Sekretärin Altenheim</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/original/imF35BUhDtoWLWYskW6qi7PcTMH.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Stefan Merki</name>
+        <role>Bestatter</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/original/wJ6I7hjuQxFFsiVkXDpWsNflNXw.jpg</thumb>
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2024-05-10 12:23:46</dateadded>
+    <nfo_updated>2026-05-16</nfo_updated>
+</movie>

@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=09.05.2024 05:50:33
+Channel=MDR Sachsen HD (AC3,deu)
+
+[0]
+Id=12466
+Date=09.05.2024
+Time=05:50:00
+Duration=01:30:00
+Title=Vater werden ist nicht schwer
+Info=Fernsehfilm Deutschland 2005
+Description=Kurz vor seinem 50. Geburtstag bekommt der Oberstudienrat Frank Fauster eine höchst überraschende Nachricht. Sein Vater, den er nie kennengelernt hat, möchte ihn wenigstens einmal sehen, bevor er stirbt. Aufgrund einer Verwechslung holt Frank jedoch nicht seinen Vater aus dem Seniorenheim zu sich nach Hause, sondern den Landstreicher Gustav. Und der denkt gar nicht daran, den Irrtum aufzuklären. Es dauert nicht lange, bis der gewitzte Gustav den eingefahrenen Alltag der Familie gehörig durcheinander gewirbelt hat.||[16:9] [SUB] [6+]   [PDC 09.05. 05:50]
+Charset=255
+Content=16
+MinimumAge=6
+TimerID={188199DA-2F05-4A05-819A-D95ACF3477F7}
+
+[Stats]
+Errors=0
+Size=6,27 GB (6733884016 bytes)
+Avr. Datarate=1,243 MB/s
+Device=Tvheadend:9983 20d48b009f 5
+

@@ -46,7 +46,11 @@ def normalize_film_name(
             stem = base[:-len(suf)]
             break
     else:
-        stem, ext = os.path.splitext(base)
+        # Do not fallback to os.path.splitext here. We only want to strip
+        # suffixes that are declared in the candidate suffix list; names
+        # without a known candidate suffix should be treated as-is.
+        stem = base
+        ext = ''
 
     # Strip semantic prefixes
     for pattern in semantic_prefixes:
