@@ -59,7 +59,10 @@ specs = spec_str.split("@")           # weitere @ trennen die Spezifikationen
 # jede spec: selector[:cond] via partition(":")
 ```
 
-Dadurch überleben `@`-Zeichen im `cond`-Teil (z. B. `@name:*@*`).
+Limitation: `@` ist immer Spezifikations-Trenner und darf daher **nicht**
+innerhalb eines Bedingungswerts vorkommen (z. B. `@name:*@*` würde als zwei
+Spezifikationen geparst → kein Match, kein Crash). Für NFO-Attributwerte
+(`themoviedb`, `imdb`, `true`, Zahlen) irrelevant.
 
 Ungültige Terme matchen **nie** und werfen **keine** Exception:
 - leerer `path` (`@name:x`)
