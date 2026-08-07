@@ -144,9 +144,12 @@ def test_empty_cond_is_existence(nfo_path):
         "rating@",                   # empty spec
         "rating@:themoviedb",        # empty selector
         "rating@name:themoviedb@",   # trailing @ -> empty spec
-        "rating[0@name:themoviedb",  # malformed XPath (unbalanced [)
-        "rating]@name:themoviedb",   # malformed XPath (unbalanced ])
-        "rating[0@name:themoviedb@default:true",  # malformed XPath, multi-spec
+        # The malformed XPath cases below pin every arm of the findall
+        # guard in _xml_attr_match (SyntaxError, TypeError, KeyError).
+        "rating[0@name:themoviedb",  # TypeError arm (unbalanced [)
+        "rating]@name:themoviedb",   # KeyError arm (unbalanced ])
+        "rating[]@name:themoviedb",  # SyntaxError arm (empty predicate)
+        "rating[0@name:themoviedb@default:true",  # TypeError arm, multi-spec
     ],
 )
 def test_malformed_terms_no_crash_no_match(nfo_path, expr):

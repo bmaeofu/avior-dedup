@@ -343,6 +343,9 @@ def _match_value(text: str | None, cond: str) -> str | None:
     Returns the matched value or ``None``. Existence of the *container*
     (attribute present, child element present, tag node set) is decided by
     the callers; this only compares text content.
+
+    A bare ``*`` wildcard also matches empty text (``'' in ''`` is true),
+    consistent with the legacy ``tag:*`` behavior.
     """
     txt = (text or "").strip()
 
