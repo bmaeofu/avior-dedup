@@ -431,10 +431,14 @@ def _xml_attr_match(root: ET.Element, search_string: str) -> str | None:
     if not specs or any(not s for s in specs):
         return None
 
-    if "/" in path:
-        nodes = root.findall(path)
-    else:
-        nodes = root.findall(".//" + path)
+    try:
+        if "/" in path:
+            nodes = root.findall(path)
+        else:
+            nodes = root.findall(".//" + path)
+    except (SyntaxError, TypeError, KeyError):
+        # Malformed XPath in an @ term never raises; treat as no match.
+        return None
 
     for node in nodes:
         values: list[str] = []
@@ -488,8 +492,10 @@ def search_xml_file(
         if parse_failed or parsed_root is None:
             return None
 
-        # Attribute matching: path@selector:cond[@selector:cond...]
-        if "@" in search_string:
+        # Attribute matching: path@selector:cond[@selector:cond...].
+        # Route only when @ appears before the first colon so legacy
+        # ``tag:value`` terms whose VALUE contains @ keep exact matching.
+        if "@" in search_string.split(":", 1)[0]:
             return _xml_attr_match(parsed_root, search_string)
 
         try:

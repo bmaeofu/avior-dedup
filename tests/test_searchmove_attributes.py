@@ -144,11 +144,27 @@ def test_empty_cond_is_existence(nfo_path):
         "rating@",                   # empty spec
         "rating@:themoviedb",        # empty selector
         "rating@name:themoviedb@",   # trailing @ -> empty spec
+        "rating[0@name:themoviedb",  # malformed XPath (unbalanced [)
+        "rating]@name:themoviedb",   # malformed XPath (unbalanced ])
+        "rating[0@name:themoviedb@default:true",  # malformed XPath, multi-spec
     ],
 )
 def test_malformed_terms_no_crash_no_match(nfo_path, expr):
     m = _match(nfo_path, expr)
     assert m is None
+
+
+def test_legacy_tag_value_with_at_in_value(tmp_path: Path):
+    """@ inside a tag:value term's VALUE must not route to attribute matching."""
+    p = tmp_path / "legacy at.nfo"
+    p.write_text(
+        "<?xml version='1.0' encoding='utf-8'?>\n"
+        "<movie><title>user@host</title></movie>\n",
+        encoding="utf-8",
+    )
+    m = search_xml_file(str(p), parse_search_expression(["title:user@host"]))
+    assert m is not None
+    assert "user@host" in m.found_values
 
 
 def test_text_search_treats_at_literally(tmp_path: Path):
