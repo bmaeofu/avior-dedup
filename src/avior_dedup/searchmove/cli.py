@@ -68,6 +68,8 @@ def main() -> None:
             '  Wildcards: genre:*Action*\n'
             '  Existence: nfostatus:exists / nfostatus:!exists\n'
             '  Ranges: rating:>4<6, rating:4-6\n'
+            '  XML attributes: rating@name:themoviedb\n'
+            '  Scoped value: ratings/rating@name:themoviedb@value:>5.4\n'
         ),
     )
     parser.add_argument(

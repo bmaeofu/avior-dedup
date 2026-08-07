@@ -162,3 +162,13 @@
   name: Recording Errors
   search_expressions:
   - ERRORS:>1
+- extensions:
+  - .nfo
+  name: Has themoviedb rating
+  search_expressions:
+  - rating@name:themoviedb
+- extensions:
+  - .nfo
+  name: themoviedb rating above 5.4
+  search_expressions:
+  - ratings/rating@name:themoviedb@value:>5.4

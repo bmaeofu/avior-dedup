@@ -268,7 +268,7 @@ function submit() {
           variant="outlined"
           rows="3"
           hide-details
-          placeholder="sibling:.nfo:exists&fileext:.mkv&#10;rating:>5.4&nfostatus:!exists"
+          placeholder="sibling:.nfo:exists&fileext:.mkv&#10;rating:>5.4&nfostatus:!exists&#10;rating@name:themoviedb"
         />
       </template>
       <template v-else>
