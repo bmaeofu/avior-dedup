@@ -316,52 +316,143 @@ def _xml_tag_match(
 
     tag_nodes = root.findall(tag)
 
-    # Numeric comparison for generic tags (e.g. plot_sim_score:>0.9)
-    pred = parse_condition(attrib)
-    if pred:
-        for node in tag_nodes:
-            txt = (node.text or "").strip()
-            if not txt:
-                continue
-            try:
-                value = float(txt)
-            except ValueError:
-                continue
-            if pred(value):
-                return txt
-        return None
-
-    # Existence checks
+    # Node-level existence checks
     if attrib == "exists":
         return "exists" if tag_nodes else None
     if attrib == "!exists":
         return "!exists" if not tag_nodes else None
 
+    # Empty condition matches a node with empty text (e.g. "nfostatus:")
+    if not attrib:
+        for node in tag_nodes:
+            if not (node.text or "").strip():
+                return ""
+        return None
+
+    # Value comparison chain (numeric, wildcard, exact)
+    for node in tag_nodes:
+        matched = _match_value(node.text, attrib)
+        if matched is not None:
+            return matched
+    return None
+
+
+def _match_value(text: str | None, cond: str) -> str | None:
+    """Apply the value comparison chain (numeric, wildcard, exact) to text.
+
+    Returns the matched value or ``None``. Existence of the *container*
+    (attribute present, child element present, tag node set) is decided by
+    the callers; this only compares text content.
+    """
+    txt = (text or "").strip()
+
+    # Numeric comparison (e.g. >5.4, 4-6, ==7)
+    pred = parse_condition(cond)
+    if pred:
+        if not txt:
+            return None
+        try:
+            value = float(txt)
+        except ValueError:
+            return None
+        return txt if pred(value) else None
+
     # Wildcard matching
-    has_wildcard_start = attrib.startswith("*")
-    has_wildcard_end = attrib.endswith("*")
-
+    has_wildcard_start = cond.startswith("*")
+    has_wildcard_end = cond.endswith("*")
     if has_wildcard_start or has_wildcard_end:
-        search_term = attrib.strip("*")
-        for node in tag_nodes:
-            txt = (node.text or "").strip()
-            txt_lower = txt.lower()
-            if has_wildcard_start and has_wildcard_end:
-                if search_term in txt_lower:
-                    return txt
-            elif has_wildcard_start:
-                if txt_lower.endswith(search_term):
-                    return txt
-            elif has_wildcard_end:
-                if txt_lower.startswith(search_term):
-                    return txt
-    else:
-        # Exact match (case-insensitive)
-        for node in tag_nodes:
-            txt = (node.text or "").strip()
-            if txt.lower() == attrib:
-                return txt
+        search_term = cond.strip("*")
+        txt_lower = txt.lower()
+        if has_wildcard_start and has_wildcard_end:
+            return txt if search_term in txt_lower else None
+        if has_wildcard_start:
+            return txt if txt_lower.endswith(search_term) else None
+        return txt if txt_lower.startswith(search_term) else None
 
+    # Exact match (case-insensitive)
+    return txt if txt.lower() == cond else None
+
+
+def _match_attr_or_child(node: ET.Element, selector: str, cond: str) -> str | None:
+    """Evaluate one ``selector:cond`` spec against a single element.
+
+    ``selector`` resolves to an XML attribute first (case-insensitive), then
+    to a child element (case-insensitive). Existence semantics operate on the
+    *presence* of the attribute/element, not on value non-emptiness.
+    """
+    # Attribute lookup (case-insensitive)
+    attr_value = None
+    for key, value in node.attrib.items():
+        if key.lower() == selector:
+            attr_value = value
+            break
+
+    if attr_value is not None:
+        if not cond or cond == "exists":
+            return "exists"
+        if cond == "!exists":
+            return None
+        return _match_value(attr_value, cond)
+
+    # Child element lookup (case-insensitive)
+    child = None
+    for cand in node:
+        if (cand.tag or "").lower() == selector:
+            child = cand
+            break
+
+    if child is not None:
+        if not cond or cond == "exists":
+            return "exists"
+        if cond == "!exists":
+            return None
+        return _match_value(child.text, cond)
+
+    # Selector absent: only !exists matches
+    if cond == "!exists":
+        return "!exists"
+    return None
+
+
+def _xml_attr_match(root: ET.Element, search_string: str) -> str | None:
+    """Match a ``path@selector:cond[@selector:cond...]`` expression.
+
+    ``path`` resolves via ``findall``; bare paths (no ``/``) search the whole
+    tree recursively (``.//path``) so nested elements like
+    ``<ratings><rating>`` match without knowing the path. Every
+    ``@selector:cond`` spec must be satisfied by the *same* element.
+    """
+    path, spec_str = search_string.split("@", 1)
+    path = path.strip()
+    if not path:
+        return None
+
+    specs = [s.strip() for s in spec_str.split("@")]
+    if not specs or any(not s for s in specs):
+        return None
+
+    if "/" in path:
+        nodes = root.findall(path)
+    else:
+        nodes = root.findall(".//" + path)
+
+    for node in nodes:
+        values: list[str] = []
+        ok = True
+        for spec in specs:
+            selector, _, cond = spec.partition(":")
+            selector = selector.strip().lower()
+            if not selector:
+                ok = False
+                break
+            cond = cond.strip().lower()
+            value = _match_attr_or_child(node, selector, cond)
+            if value is None:
+                ok = False
+                break
+            values.append(value)
+        if ok:
+            return " | ".join(values)
     return None
 
 
@@ -396,7 +487,11 @@ def search_xml_file(
 
         if parse_failed or parsed_root is None:
             return None
-        
+
+        # Attribute matching: path@selector:cond[@selector:cond...]
+        if "@" in search_string:
+            return _xml_attr_match(parsed_root, search_string)
+
         try:
             tag, attrib = search_string.split(":", 1)
         except ValueError:
