@@ -1,0 +1,424 @@
+=== COMMITS ===
+3b11242 fix(searchmove): guard malformed @ paths and restore legacy @-value terms
+2c1251f feat(searchmove): XML attribute matching in search expressions
+
+=== STAT ===
+ src/avior_dedup/searchmove/searcher.py | 179 ++++++++++++++++++++++++++-------
+ tests/test_searchmove_attributes.py    | 175 ++++++++++++++++++++++++++++++++
+ 2 files changed, 315 insertions(+), 39 deletions(-)
+
+=== DIFF (-U10) ===
+diff --git a/src/avior_dedup/searchmove/searcher.py b/src/avior_dedup/searchmove/searcher.py
+index 438c1fe..0131a6c 100644
+--- a/src/avior_dedup/searchmove/searcher.py
++++ b/src/avior_dedup/searchmove/searcher.py
+@@ -309,66 +309,161 @@ def _xml_tag_match(
+     """
+     # Rating has its own dedicated selection logic
+     if tag == "rating":
+         pred = parse_condition(attrib)
+         if pred and selected_rating is not None and pred(selected_rating):
+             return str(selected_rating)
+         return None
+ 
+     tag_nodes = root.findall(tag)
+ 
+-    # Numeric comparison for generic tags (e.g. plot_sim_score:>0.9)
+-    pred = parse_condition(attrib)
+-    if pred:
+-        for node in tag_nodes:
+-            txt = (node.text or "").strip()
+-            if not txt:
+-                continue
+-            try:
+-                value = float(txt)
+-            except ValueError:
+-                continue
+-            if pred(value):
+-                return txt
+-        return None
+-
+-    # Existence checks
++    # Node-level existence checks
+     if attrib == "exists":
+         return "exists" if tag_nodes else None
+     if attrib == "!exists":
+         return "!exists" if not tag_nodes else None
+ 
+-    # Wildcard matching
+-    has_wildcard_start = attrib.startswith("*")
+-    has_wildcard_end = attrib.endswith("*")
++    # Empty condition matches a node with empty text (e.g. "nfostatus:")
++    if not attrib:
++        for node in tag_nodes:
++            if not (node.text or "").strip():
++                return ""
++        return None
++
++    # Value comparison chain (numeric, wildcard, exact)
++    for node in tag_nodes:
++        matched = _match_value(node.text, attrib)
++        if matched is not None:
++            return matched
++    return None
++
++
++def _match_value(text: str | None, cond: str) -> str | None:
++    """Apply the value comparison chain (numeric, wildcard, exact) to text.
++
++    Returns the matched value or ``None``. Existence of the *container*
++    (attribute present, child element present, tag node set) is decided by
++    the callers; this only compares text content.
++    """
++    txt = (text or "").strip()
++
++    # Numeric comparison (e.g. >5.4, 4-6, ==7)
++    pred = parse_condition(cond)
++    if pred:
++        if not txt:
++            return None
++        try:
++            value = float(txt)
++        except ValueError:
++            return None
++        return txt if pred(value) else None
+ 
++    # Wildcard matching
++    has_wildcard_start = cond.startswith("*")
++    has_wildcard_end = cond.endswith("*")
+     if has_wildcard_start or has_wildcard_end:
+-        search_term = attrib.strip("*")
+-        for node in tag_nodes:
+-            txt = (node.text or "").strip()
+-            txt_lower = txt.lower()
+-            if has_wildcard_start and has_wildcard_end:
+-                if search_term in txt_lower:
+-                    return txt
+-            elif has_wildcard_start:
+-                if txt_lower.endswith(search_term):
+-                    return txt
+-            elif has_wildcard_end:
+-                if txt_lower.startswith(search_term):
+-                    return txt
+-    else:
+-        # Exact match (case-insensitive)
+-        for node in tag_nodes:
+-            txt = (node.text or "").strip()
+-            if txt.lower() == attrib:
+-                return txt
++        search_term = cond.strip("*")
++        txt_lower = txt.lower()
++        if has_wildcard_start and has_wildcard_end:
++            return txt if search_term in txt_lower else None
++        if has_wildcard_start:
++            return txt if txt_lower.endswith(search_term) else None
++        return txt if txt_lower.startswith(search_term) else None
++
++    # Exact match (case-insensitive)
++    return txt if txt.lower() == cond else None
++
+ 
++def _match_attr_or_child(node: ET.Element, selector: str, cond: str) -> str | None:
++    """Evaluate one ``selector:cond`` spec against a single element.
++
++    ``selector`` resolves to an XML attribute first (case-insensitive), then
++    to a child element (case-insensitive). Existence semantics operate on the
++    *presence* of the attribute/element, not on value non-emptiness.
++    """
++    # Attribute lookup (case-insensitive)
++    attr_value = None
++    for key, value in node.attrib.items():
++        if key.lower() == selector:
++            attr_value = value
++            break
++
++    if attr_value is not None:
++        if not cond or cond == "exists":
++            return "exists"
++        if cond == "!exists":
++            return None
++        return _match_value(attr_value, cond)
++
++    # Child element lookup (case-insensitive)
++    child = None
++    for cand in node:
++        if (cand.tag or "").lower() == selector:
++            child = cand
++            break
++
++    if child is not None:
++        if not cond or cond == "exists":
++            return "exists"
++        if cond == "!exists":
++            return None
++        return _match_value(child.text, cond)
++
++    # Selector absent: only !exists matches
++    if cond == "!exists":
++        return "!exists"
++    return None
++
++
++def _xml_attr_match(root: ET.Element, search_string: str) -> str | None:
++    """Match a ``path@selector:cond[@selector:cond...]`` expression.
++
++    ``path`` resolves via ``findall``; bare paths (no ``/``) search the whole
++    tree recursively (``.//path``) so nested elements like
++    ``<ratings><rating>`` match without knowing the path. Every
++    ``@selector:cond`` spec must be satisfied by the *same* element.
++    """
++    path, spec_str = search_string.split("@", 1)
++    path = path.strip()
++    if not path:
++        return None
++
++    specs = [s.strip() for s in spec_str.split("@")]
++    if not specs or any(not s for s in specs):
++        return None
++
++    try:
++        if "/" in path:
++            nodes = root.findall(path)
++        else:
++            nodes = root.findall(".//" + path)
++    except (SyntaxError, TypeError, KeyError):
++        # Malformed XPath in an @ term never raises; treat as no match.
++        return None
++
++    for node in nodes:
++        values: list[str] = []
++        ok = True
++        for spec in specs:
++            selector, _, cond = spec.partition(":")
++            selector = selector.strip().lower()
++            if not selector:
++                ok = False
++                break
++            cond = cond.strip().lower()
++            value = _match_attr_or_child(node, selector, cond)
++            if value is None:
++                ok = False
++                break
++            values.append(value)
++        if ok:
++            return " | ".join(values)
+     return None
+ 
+ 
+ def search_xml_file(
+     path: str,
+     search_groups: list[list[list[str]]],
+ ) -> SearchMatch | None:
+     """Search an XML/NFO file for matching tag:value expressions or metadata terms."""
+     parsed_root: ET.Element | None = None
+     selected_rating: float | None = None
+@@ -389,21 +484,27 @@ def search_xml_file(
+             try:
+                 tree = ET.parse(path)  # noqa: S314
+                 parsed_root = tree.getroot()
+                 selected_rating = _select_rating(parsed_root)
+             except (ET.ParseError, IOError):
+                 parse_failed = True
+                 return None
+ 
+         if parse_failed or parsed_root is None:
+             return None
+-        
++
++        # Attribute matching: path@selector:cond[@selector:cond...].
++        # Route only when @ appears before the first colon so legacy
++        # ``tag:value`` terms whose VALUE contains @ keep exact matching.
++        if "@" in search_string.split(":", 1)[0]:
++            return _xml_attr_match(parsed_root, search_string)
++
+         try:
+             tag, attrib = search_string.split(":", 1)
+         except ValueError:
+             return None
+         return _xml_tag_match(parsed_root, tag.strip().lower(), attrib.strip().lower(), selected_rating)
+ 
+     result = match_and_or(search_groups, _xml_match)
+     if result is None:
+         return None
+ 
+diff --git a/tests/test_searchmove_attributes.py b/tests/test_searchmove_attributes.py
+new file mode 100644
+index 0000000..24f71aa
+--- /dev/null
++++ b/tests/test_searchmove_attributes.py
+@@ -0,0 +1,175 @@
++"""Tests for XML attribute matching in search expressions (``path@selector:cond``).
++
++Covers the ``@`` syntax added for NFO attribute matching:
++  - exact / wildcard / exists / !exists / numeric conditions
++  - attribute vs. child-element selector resolution
++  - recursive search for bare tag paths, path-based search for nested paths
++  - malformed terms never raise and never match
++"""
++
++from __future__ import annotations
++
++from pathlib import Path
++
++import pytest
++
++from avior_dedup.searchmove.parser import parse_search_expression
++from avior_dedup.searchmove.searcher import search_text_file, search_xml_file
++
++_NFO = """<?xml version='1.0' encoding='utf-8'?>
++<movie>
++    <title>Wild Christmas</title>
++    <originaltitle>Reindeer Games</originaltitle>
++    <ratings>
++        <rating name="themoviedb" max="10">
++            <value>5.705000</value>
++            <votes>719</votes>
++        </rating>
++        <rating name="imdb" max="10" default="true">
++            <value>5.800000</value>
++            <votes>43965</votes>
++        </rating>
++    </ratings>
++    <userrating>0</userrating>
++    <top250>0</top250>
++</movie>
++"""
++
++
++@pytest.fixture(scope="module")
++def nfo_path(tmp_path_factory) -> str:
++    """Fixture NFO with nested <ratings><rating name=...> elements."""
++    p = tmp_path_factory.mktemp("attr") / "Wild Christmas.nfo"
++    p.write_text(_NFO, encoding="utf-8")
++    return str(p)
++
++
++def _match(nfo_path: str, expr: str):
++    return search_xml_file(nfo_path, parse_search_expression([expr]))
++
++
++def test_exact_attribute_match_recursive(nfo_path):
++    """Bare tag paths search the whole tree (rating is nested under ratings)."""
++    m = _match(nfo_path, "rating@name:themoviedb")
++    assert m is not None
++    assert "themoviedb" in m.found_values
++
++
++def test_exact_attribute_match_nested_path(nfo_path):
++    m = _match(nfo_path, "ratings/rating@name:themoviedb")
++    assert m is not None
++
++
++def test_exact_attribute_match_explicit_recursive_path(nfo_path):
++    m = _match(nfo_path, ".//rating@name:themoviedb")
++    assert m is not None
++
++
++def test_attribute_no_match_for_wrong_value(nfo_path):
++    assert _match(nfo_path, "rating@name:tmdb") is None
++
++
++def test_attribute_wildcard(nfo_path):
++    m = _match(nfo_path, "rating@name:*imdb*")
++    assert m is not None
++
++
++def test_attribute_exists_bare(nfo_path):
++    m = _match(nfo_path, "rating@name")
++    assert m is not None
++    assert "exists" in m.found_values
++
++
++def test_attribute_exists_explicit(nfo_path):
++    m = _match(nfo_path, "rating@name:exists")
++    assert m is not None
++
++
++def test_attribute_absent_existence_no_match(nfo_path):
++    """Both ratings have <votes> children, so !exists cannot match."""
++    assert _match(nfo_path, "rating@votes:!exists") is None
++
++
++def test_attribute_absent_existence_match(nfo_path):
++    """None of the ratings has a 'lang' attribute."""
++    m = _match(nfo_path, "rating@lang:!exists")
++    assert m is not None
++    assert "!exists" in m.found_values
++
++
++def test_numeric_condition_on_attribute(nfo_path):
++    m = _match(nfo_path, "rating@max:10")
++    assert m is not None
++
++
++def test_numeric_condition_on_child_scoped(nfo_path):
++    m = _match(nfo_path, "ratings/rating@name:themoviedb@value:>5.4")
++    assert m is not None
++    assert "5.705000" in m.found_values
++
++
++def test_numeric_condition_on_child_scoped_negative(nfo_path):
++    assert _match(nfo_path, "ratings/rating@name:themoviedb@value:>6") is None
++
++
++def test_multiple_specs_same_element(nfo_path):
++    m = _match(nfo_path, "ratings/rating@name:themoviedb@max:10")
++    assert m is not None
++
++
++def test_multiple_specs_cross_element_no_match(nfo_path):
++    """name:themoviedb and default:true live on DIFFERENT rating elements."""
++    assert _match(nfo_path, "ratings/rating@name:themoviedb@default:true") is None
++
++
++def test_case_insensitive_selector_and_value(nfo_path):
++    m = _match(nfo_path, "rating@Name:THEMOVIEDB")
++    assert m is not None
++
++
++def test_combine_with_existing_syntax(nfo_path):
++    m = _match(nfo_path, "rating@name:themoviedb&rating:>0")
++    assert m is not None
++
++
++def test_empty_cond_is_existence(nfo_path):
++    m = _match(nfo_path, "rating@name:")
++    assert m is not None
++
++
++@pytest.mark.parametrize(
++    "expr",
++    [
++        "@name:themoviedb",          # empty path
++        "rating@",                   # empty spec
++        "rating@:themoviedb",        # empty selector
++        "rating@name:themoviedb@",   # trailing @ -> empty spec
++        "rating[0@name:themoviedb",  # malformed XPath (unbalanced [)
++        "rating]@name:themoviedb",   # malformed XPath (unbalanced ])
++        "rating[0@name:themoviedb@default:true",  # malformed XPath, multi-spec
++    ],
++)
++def test_malformed_terms_no_crash_no_match(nfo_path, expr):
++    m = _match(nfo_path, expr)
++    assert m is None
++
++
++def test_legacy_tag_value_with_at_in_value(tmp_path: Path):
++    """@ inside a tag:value term's VALUE must not route to attribute matching."""
++    p = tmp_path / "legacy at.nfo"
++    p.write_text(
++        "<?xml version='1.0' encoding='utf-8'?>\n"
++        "<movie><title>user@host</title></movie>\n",
++        encoding="utf-8",
++    )
++    m = search_xml_file(str(p), parse_search_expression(["title:user@host"]))
++    assert m is not None
++    assert "user@host" in m.found_values
++
++
++def test_text_search_treats_at_literally(tmp_path: Path):
++    """Plain-text search must NOT route @ terms through XML attribute logic."""
++    txt = tmp_path / "notes.txt"
++    txt.write_text("contact: dev@example.com\n", encoding="utf-8")
++    m = search_text_file(str(txt), parse_search_expression(["dev@example.com"]))
++    assert m is not None

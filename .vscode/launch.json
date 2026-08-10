@@ -21,6 +21,25 @@
             ]
         },
         {
+            "name": "avior-dedup: SearchMove - recycle AC3 Audio 5.1",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "avior_dedup.searchmove.cli",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "test",
+                "\\\\UMS\\recording_pool\\.Recycle.Bin\\tobedeleted",
+                "\\\\UMS\\media\\transcoded\\check",
+                "--extensions",
+                ".log",
+                "--search_strings",
+                "AC3 Audio 5.1",
+                "--output_file",
+                "\\\\UMS\\media\\transcoded\\check\\results.txt",
+              ]
+        },
+        {
             "name": "avior-dedup: SearchMove - Test FilmeHD_sonst\\rescraped",
             "type": "debugpy",
             "request": "launch",

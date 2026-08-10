@@ -13,34 +13,82 @@
             "justMyCode": true,
             //"args": ["\\\\UMS\\media\\transcoded\\zerorated"],
             //"args": ["\\\\UMS\\media\\transcoded\\HD720"],
+            // create-missing-nfo (exklusiver Modus): erzeugt nur fehlende .nfo aus .mkv
+            // LLM-Plotvergleich wird nur genutzt, wenn --use-plot-similarity gesetzt ist
+            // und der Kandidaten-Score unter --low-score-threshold liegt.
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--create-missing-nfo", "--use-plot-similarity", "--low-score-threshold", "12"],
+            //"args": ["\\\\UMS\\media\\transcoded\\HD720", "--create-missing-nfo", "--create-missing-nfo-skip-series", "--use-plot-similarity", "--low-score-threshold", "12"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--create-missing-nfo", "--create-missing-nfo-skip-series", "--use-plot-similarity", "--low-score-threshold", "12"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--print-recognized-meta-data", "--print-change-reason", "--use-plot-similarity", "--write-plot-comparison-data", "--low-score-threshold", "12"]
+            //"args": ["\\\\UMS\\media\\transcoded\\zerorated", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-change-reason", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\zerorated", "--create-missing-nfo", "--use-plot-similarity", "--low-score-threshold", "12"],
+            //"args": ["\\\\UMS\\media\\transcoded\\zerorated", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--create-missing-nfo"],
             //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10", "--all-nfo-ok", "--remove-ratings"],
             //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "90", "--all-nfo-ok", "--print-score"],
             //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10"],
             //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10", "--print-score"],
-            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
-            "args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "0", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--recursive", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--max-days-plot", "30", "--max-tokens-deep", "500", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--recursive", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
             //"args": ["C:\\avior-go\\Python\\Add_rating_from imdb_themoviedb\\Test", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
             //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--all-nfo-ok"],
             //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--all-nfo-ok"],
-            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo\\HD2", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
-            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
-            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--enable-rescraping", "--use-plot-similarity", "--write-plot-comparison-data"],
-            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo\\HD7",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--enable-rescraping", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--low-score-threshold", "17", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-change-reason", "--enable-rescraping", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\check_nfo",  "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--print-change-reason", "--use-plot-similarity", "--write-plot-comparison-data"],
             //"args": ["\\\\UMS\\media\\transcoded\\HD720",  "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
+            //"args": ["\\\\UMS\\media\\transcoded\\zerorated",  "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
             //"args": ["\\\\UMS\\media\\transcoded\\nfo_ok", "--max-days", "0", "--nfostatus-reset", "--print-score"],
             //"args": ["\\\\UMS\\media\\transcoded\\nfo_ok", "--max-days", "0", "--nfostatus-reset", "--print-score"],
             //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--nfostatus-reset", "--print-score"],
             //"args": ["\\\\UMS\\media\\tv\\ToBeScraped", "--max-days", "0", "--all_nfo_ok"],
             //"args": ["\\\\UMS\\media\\transcoded\\Lowrated", "--max-days", "90"],
+            //"args": ["\\\\UMS\\media\\transcoded\\Highrated", "--max-days", "0", "--max-days-plot", "0", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--use-plot-similarity", "--write-plot-comparison-data"],
             //"args": ["\\\\UMS\\media\\transcoded\\Highrated", "--max-days", "0", "--nfostatus-reset"],
             //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst\\tobecut", "--max-days", "90"],
-            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD2", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
-            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD1", "--max-days", "0","--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
-            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD7", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_semantic_noepisode_normalization_duplicates", "--recursive", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD", "--recursive", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD", "--recursive"   , "--max-days", "30", "--max-days-plot", "30", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD3", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD2", "--max-days", "30", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            "args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD7", "--max-days", "0","--max-days-plot", "60", "--nfostatus-reset", "--print-score", "--print-recognized-meta-data", "--print-change-reason", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD7", "--max-days", "30", "--max-days-plot", "60", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
             //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst", "--max-days", "0", "--max-days-plot", "30", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
+            //"args": ["\\\\UMS\\media\\tv\\FilmeHD\\FilmeHD_sonst", "--recursive" , "--max-days", "0", "--max-days-plot", "0", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data", "--remove-orphan-md"],
             //"args": ["\\\\UMS\\media\\transcoded\\check_nfo", "--max-days", "0", "--max-days-plot", "10", "--nfostatus-reset", "--print-score", "--use-plot-similarity", "--write-plot-comparison-data"],
             //"args": ["\\\\UMS\\recording_pool\\tbd", "-e", ".log", "-s", "no encode - recording too short: r:-1m" "-o", "Lost_Data_Rec.txt"],
             //"args": ["\\\\UMS\\recording_pool\\recording", "-e", ".log", "-s", "no encode - recording too short: r:-1m" "-o", "Lost_Data_Rec.txt"]
         },
+        /*
+        {
+            "name": "Python: scraper (REFERENCE - all defaults)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scraper",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                ".",                       // source_dir (default: aktuelles Verzeichnis)
+                "rating_output.txt",       // output_file (default)
+                //"--recursive",            // Unterverzeichnisse scannen (default: false)
+                //"--skip-series",          // Episoden überspringen (default: false)
+                //"--plot-min-words", "10", // Mindest-Wortzahl für Plot (default: 10)
+                //"--low-score-threshold", "12.0", // Score-Schwelle (default: 12.0)
+                //"--year-diff-threshold", "3",    // Jahr-Abweichung (default: 3)
+                //"--use-plot-similarity",         // LLM-Plotvergleich (default: false)
+                //"--write-plot-comparison-data",  // .plot.txt schreiben (default: false)
+                //"--llm-candidate-min-score", "3.0", // Min. Score für LLM (default: 3.0)
+                //"--max-tokens-deep", "1500",     // Token-Budget (default: 1500)
+                //"--nfo-template", "/pfad/zu/nfo_template.nfo", // Eigenes Template
+            ]
+         },
+        */
     ]
 }

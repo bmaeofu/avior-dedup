@@ -1,0 +1,89 @@
+=== COMMITS ===
+07de077 feat(searchmove): document @ attribute syntax (CLI help, templates, UI placeholder)
+
+=== STAT ===
+ frontend/src/components/SearchMoveForm.vue       |  2 +-
+ src/avior_dedup/config/searchmove_templates.yaml | 10 ++++++++++
+ src/avior_dedup/searchmove/cli.py                |  2 ++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
+
+=== DIFF (-U10) ===
+diff --git a/frontend/src/components/SearchMoveForm.vue b/frontend/src/components/SearchMoveForm.vue
+index dc67c14..9a296bf 100644
+--- a/frontend/src/components/SearchMoveForm.vue
++++ b/frontend/src/components/SearchMoveForm.vue
+@@ -261,21 +261,21 @@ function submit() {
+       </div>
+ 
+       <template v-if="rawMode">
+         <v-textarea
+           v-model="rawExpressions"
+           label="One expression per line (& = AND, | = OR)"
+           density="compact"
+           variant="outlined"
+           rows="3"
+           hide-details
+-          placeholder="sibling:.nfo:exists&fileext:.mkv&#10;rating:>5.4&nfostatus:!exists"
++          placeholder="sibling:.nfo:exists&fileext:.mkv&#10;rating:>5.4&nfostatus:!exists&#10;rating@name:themoviedb"
+         />
+       </template>
+       <template v-else>
+         <v-row v-for="(_expr, i) in expressionGroups" :key="i" dense class="mb-1">
+           <v-col>
+             <v-text-field
+               v-model="expressionGroups[i]"
+               :label="`Expression ${i + 1}`"
+               density="compact"
+               variant="outlined"
+diff --git a/src/avior_dedup/config/searchmove_templates.yaml b/src/avior_dedup/config/searchmove_templates.yaml
+index 2ff1b4f..0b0dc52 100644
+--- a/src/avior_dedup/config/searchmove_templates.yaml
++++ b/src/avior_dedup/config/searchmove_templates.yaml
+@@ -155,10 +155,20 @@
+ - extensions:
+   - .txt
+   name: No year recognized in movie md
+   search_expressions:
+   - 'txt_year: none'
+ - extensions:
+   - .log
+   name: Recording Errors
+   search_expressions:
+   - ERRORS:>1
++- extensions:
++  - .nfo
++  name: Has themoviedb rating
++  search_expressions:
++  - rating@name:themoviedb
++- extensions:
++  - .nfo
++  name: themoviedb rating above 5.4
++  search_expressions:
++  - ratings/rating@name:themoviedb@value:>5.4
+diff --git a/src/avior_dedup/searchmove/cli.py b/src/avior_dedup/searchmove/cli.py
+index 0124d13..748ec32 100644
+--- a/src/avior_dedup/searchmove/cli.py
++++ b/src/avior_dedup/searchmove/cli.py
+@@ -61,20 +61,22 @@ def main() -> None:
+         "--search_strings", "-s",
+         nargs="+",
+         help=(
+             "Search expressions with boolean logic.\n"
+             "  &  AND  |  OR\n"
+             '  Text: "action&thriller|comedy"\n'
+             '  XML:  "genre:Action&rating:>7"\n'
+             '  Wildcards: genre:*Action*\n'
+             '  Existence: nfostatus:exists / nfostatus:!exists\n'
+             '  Ranges: rating:>4<6, rating:4-6\n'
++            '  XML attributes: rating@name:themoviedb\n'
++            '  Scoped value: ratings/rating@name:themoviedb@value:>5.4\n'
+         ),
+     )
+     parser.add_argument(
+         "--output_file", "-o",
+         default="result.txt",
+         help="File to write match results to (default: result.txt)",
+     )
+     parser.add_argument(
+         "--logname",
+         default="searchmove_log.txt",
