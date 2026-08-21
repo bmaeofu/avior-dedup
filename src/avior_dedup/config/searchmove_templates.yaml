@@ -107,6 +107,35 @@
   - Krimi
   - Kriminalfilm
 - extensions:
+  - .txt
+  name: Alle Genres
+  search_expressions:
+  - spielfilm
+  - animationsfilm
+  - experimentalfilm
+  - kurzfilm
+  - drama
+  - komödie
+  - actionfilm
+  - thriller
+  - horrorfilm
+  - science-fiction
+  - fantasyfilm
+  - liebesfilm
+  - kriminalfilm
+  - abenteuerfilm
+  - western
+  - historienfilm
+  - kriegsfilm
+  - musikfilm
+  - musical
+  - biografie
+  - mystery
+  - psychothriller
+  - heimatfilm
+  - katastrophenfilm
+  - fernsehfilm
+- extensions:
   - .log
   name: AC3 5.1 surround audio
   search_expressions:
