@@ -16,6 +16,10 @@ const tabs = [
 
 <template>
   <v-card>
+    <v-card-item>
+      <v-card-title class="text-none">Dedup Settings</v-card-title>
+    </v-card-item>
+    <v-divider />
     <v-tabs v-model="tab" color="primary">
       <v-tab
         v-for="t in tabs"

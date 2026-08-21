@@ -53,7 +53,7 @@ onMounted(() => {
   <v-app>
     <v-app-bar density="compact" elevation="2">
       <v-app-bar-nav-icon @click="rail = !rail" />
-      <v-app-bar-title>Avior Dedup</v-app-bar-title>
+      <v-app-bar-title>Avior-tools</v-app-bar-title>
       <v-spacer />
       <span class="text-caption text-medium-emphasis mr-2">{{ gitHash }}</span>
       <v-btn

@@ -8,6 +8,10 @@ const tab = ref('templates')
 
 <template>
   <v-card>
+    <v-card-item>
+      <v-card-title class="text-none">Search & Move Settings</v-card-title>
+    </v-card-item>
+    <v-divider />
     <v-tabs v-model="tab" color="primary">
       <v-tab value="templates" prepend-icon="mdi-file-document-multiple" class="text-none">
         Templates
