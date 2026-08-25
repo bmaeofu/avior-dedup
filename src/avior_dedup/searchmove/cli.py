@@ -74,8 +74,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--output_file", "-o",
-        default="result.txt",
-        help="File to write match results to (default: result.txt)",
+        default="/config/searchmove/logs/result.txt",
+        help="File to write match results to (default: /config/searchmove/logs/result.txt)",
     )
     parser.add_argument(
         "--logname",
