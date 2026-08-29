@@ -1,0 +1,23 @@
+Datum: 2026-08-06 19:54:55 Deep Model: llama3:8b-instruct-q5_K_M Used Instance: mmdg
+#####
+NFO:
+Die Ingenieurin Rosalie führt ein Leben ohne Stillstand. Alt fühlt sie sich längst nicht, höchstens reif. Als Rosalie nach einem Schwächeanfall bei einem Solarprojekt in Afrika nach Deutschland zurückkehrt, soll das nur das eine Verschnaufpause sein. Als sie bei ihrer spießigen Schwester Margret mit einem riesigen Container aufkreuzt, zeigt sich diese von dem Überraschungsbesuch wenig begeistert. Die pensionierte Lehrerin durchschaut auf Anhieb, dass Rosalie bei ihr nicht ganz freiwillig unterschlüpft. Die Weitgereiste ist nämlich pleite! Da erscheint es wie ein Wunder, dass sich in einem Loch in der Zimmerwand Geldscheine anfinden. Auf der anderen Seite liegt das Zimmer der hochbegabten Abiturientin Karla, die mit ihrem Vater Harald in Margrets Haus zur Miete wohnt. Nach einem misslungenen Kennenlernen freundet sich Rosalie mit der Teenagerin an, die im Rollstuhl sitzt, und setzt es sich in den Kopf, Karla aus ihrer behüteten Isolation zu holen, auch gegen deren Willen.
+______
+
+TXT:
+eine ebenso freche wie berührende geschichte erzählt "karla, rosalie und das loch in der wand" mit jutta speidel und paula hartmann. die beiden hauptdarstellerinnen spielen zwei völlig unterschiedliche frauen, die auf ungewöhnliche weise ziemlich beste freundinnen werden. die weltenbummlerin rosalie und die junge rollstuhlfahrerin karla lernen miteinander, in eine neue lebensphase einzutreten: während die eine ihre angst vor dem ankommen überwinden muss, beginnt die andere, an aufbruch zu denken.||
+#####
+
+End of Plot
+
+similarity_score:
+explanation:Plot similarity comparison not executed
+Score:24.0000
+txt_year: 2021
+nfo_year: 2022
+year_diff: 1.0
+file_type: txt
+recognized_meta_line: Fernsehfilm Deutschland 2021
+meta_line_present: True
+meta_line_contains_year: True
+recognized_txt_countries_canonical:germany

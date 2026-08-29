@@ -1,0 +1,29 @@
+Datum: 2026-08-29 00:05:29 Deep Model: llama3:8b-instruct-q5_K_M Used Instance: ollama_instance
+#####
+NFO:
+Die Ingenieurin Rosalie führt ein Leben ohne Stillstand. Alt fühlt sie sich längst nicht, höchstens reif. Als Rosalie nach einem Schwächeanfall bei einem Solarprojekt in Afrika nach Deutschland zurückkehrt, soll das nur das eine Verschnaufpause sein. Als sie bei ihrer spießigen Schwester Margret mit einem riesigen Container aufkreuzt, zeigt sich diese von dem Überraschungsbesuch wenig begeistert. Die pensionierte Lehrerin durchschaut auf Anhieb, dass Rosalie bei ihr nicht ganz freiwillig unterschlüpft. Die Weitgereiste ist nämlich pleite! Da erscheint es wie ein Wunder, dass sich in einem Loch in der Zimmerwand Geldscheine anfinden. Auf der anderen Seite liegt das Zimmer der hochbegabten Abiturientin Karla, die mit ihrem Vater Harald in Margrets Haus zur Miete wohnt. Nach einem misslungenen Kennenlernen freundet sich Rosalie mit der Teenagerin an, die im Rollstuhl sitzt, und setzt es sich in den Kopf, Karla aus ihrer behüteten Isolation zu holen, auch gegen deren Willen.
+______
+
+TXT:
+die rastlose ingenieurin rosalie kehrt nach einem schwächeanfall aus afrika nach deutschland zurück und quartiert sich bei ihrer schwester margret ein, die schnell durchschaut, dass rosalie pleite ist und nicht ganz freiwillig bei ihr einzieht. dann stößt rosalie in einem loch in der wand auf geldscheine! auf der anderen seite wohnt die im rollstuhl sitzende karla mit ihrem vater. rosalie freundet sich mit ihr an und will sie aus ihrer behüteten isolation holen - ob sie will oder nicht!||
+#####
+
+End of Plot
+
+similarity_score:0.9000
+explanation:Deep model used: llama3:8b-instruct-q5_K_M
+Deep model tokens_passed: 100
+Deep model explanation: 
+Deep model finish reason: stop
+Deep model tokens_used: 657
+Time deepcompare: 0.435s
+
+Score:17.5000
+txt_year: 2020
+nfo_year: 2022
+year_diff: 2.0
+file_type: txt
+recognized_meta_line: Fernsehfilm Deutschland 2020
+meta_line_present: True
+meta_line_contains_year: True
+recognized_txt_countries_canonical:germany

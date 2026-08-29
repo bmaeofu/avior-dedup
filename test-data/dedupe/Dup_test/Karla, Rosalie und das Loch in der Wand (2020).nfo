@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+  <title>Karla, Rosalie und das Loch in der Wand</title>
+  <originaltitle>Karla, Rosalie und das Loch in der Wand</originaltitle>
+  <ratings>
+    <rating name="themoviedb" max="10" default="true">
+      <value>5.500000</value>
+      <votes>2</votes>
+    </rating>
+  </ratings>
+  <userrating />
+  <top250 />
+  <outline />
+  <plot>Die Ingenieurin Rosalie führt ein Leben ohne Stillstand. Alt fühlt sie sich längst nicht, höchstens reif. Als Rosalie nach einem Schwächeanfall bei einem Solarprojekt in Afrika nach Deutschland zurückkehrt, soll das nur das eine Verschnaufpause sein. Als sie bei ihrer spießigen Schwester Margret mit einem riesigen Container aufkreuzt, zeigt sich diese von dem Überraschungsbesuch wenig begeistert. Die pensionierte Lehrerin durchschaut auf Anhieb, dass Rosalie bei ihr nicht ganz freiwillig unterschlüpft. Die Weitgereiste ist nämlich pleite! Da erscheint es wie ein Wunder, dass sich in einem Loch in der Zimmerwand Geldscheine anfinden. Auf der anderen Seite liegt das Zimmer der hochbegabten Abiturientin Karla, die mit ihrem Vater Harald in Margrets Haus zur Miete wohnt. Nach einem misslungenen Kennenlernen freundet sich Rosalie mit der Teenagerin an, die im Rollstuhl sitzt, und setzt es sich in den Kopf, Karla aus ihrer behüteten Isolation zu holen, auch gegen deren Willen.</plot>
+  <tagline />
+  <runtime>89</runtime>
+  <thumb />
+  <mpaa />
+  <playcount />
+  <lastplayed />
+  <id />
+  <uniqueid type="tmdb" default="true">927132</uniqueid>
+  <uniqueid type="imdb">tt16606760</uniqueid>
+  <premiered>2022-01-14</premiered>
+  <year>2022</year>
+  <genre>Komödie</genre>
+  <genre>Drama</genre>
+  <genre>Familie</genre>
+  <genre>TV-Film</genre>
+  <country>Germany</country>
+  <director>Hanno Olderdissen</director>
+  <status />
+  <code />
+  <aired />
+  <studio>Anna Wendt Filmproduktion</studio>
+  <trailer />
+  <fileinfo />
+  <actor>
+    <name>Jutta Speidel</name>
+    <role>Rosalie</role>
+    <order>0</order>
+    <thumb>http://image.tmdb.org/t/p/original/7VSgjBUuztaRHhq7hivnnsQE3t9.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Ruth Reinecke</name>
+    <role>Margret</role>
+    <order>1</order>
+    <thumb>http://image.tmdb.org/t/p/original/qzdhWzLuY8FiMRJZNVzM7O9o3RW.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Paula Hartmann</name>
+    <role>Karla</role>
+    <order>2</order>
+    <thumb>http://image.tmdb.org/t/p/original/yxvvrOKgMRx3MwojMfrwumEBnaJ.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Aurel Manthei</name>
+    <role>Harald</role>
+    <order>3</order>
+    <thumb>http://image.tmdb.org/t/p/original/ufVHZOtz1H6XgawSApesezsLJAT.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Zoran Pingel</name>
+    <role>Raif</role>
+    <order>4</order>
+    <thumb>http://image.tmdb.org/t/p/original/yXpRaDLjhqZ2G0JueWzt3ObBKlY.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Tom Gronau</name>
+    <role>Jonas</role>
+    <order>5</order>
+    <thumb>http://image.tmdb.org/t/p/original/6nJeUtjvXiUqqyrK9HxT5AXe0E3.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Tina Engel</name>
+    <role>Annamaria</role>
+    <order>6</order>
+    <thumb>http://image.tmdb.org/t/p/original/mOrL4pigcw8el3vhMTngi2FH2mD.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Peggy Lukac</name>
+    <role>Judith</role>
+    <order>7</order>
+    <thumb>http://image.tmdb.org/t/p/original/ejfbSXlgrNfxeeonOrLHpin3nqY.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Ilona Schulz</name>
+    <role>Mimi</role>
+    <order>8</order>
+    <thumb>http://image.tmdb.org/t/p/original/zln23RNGTn4svwWNzapxVJL6bgD.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Evgenij Verenin</name>
+    <role>Vladimir</role>
+    <order>9</order>
+  </actor>
+  <actor>
+    <name>Michael Krabbe</name>
+    <role>Herr Rohwein</role>
+    <order>10</order>
+    <thumb>http://image.tmdb.org/t/p/original/knKXfjFFZkHhc935bvOJMtZmptO.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Veronika Hertlein</name>
+    <role>Emma</role>
+    <order>11</order>
+  </actor>
+  <actor>
+    <name>Helge Gutbrod</name>
+    <role>Arne</role>
+    <order>12</order>
+  </actor>
+  <actor>
+    <name>Zoé Friedrich</name>
+    <role>Aurelie</role>
+    <order>13</order>
+  </actor>
+  <actor>
+    <name>Sarah Schmidt</name>
+    <role>Studentin Miriam</role>
+    <order>14</order>
+  </actor>
+  <resume />
+  <dateadded />
+  <plot_sim_score>0.9000</plot_sim_score>
+  <plot_sim_score_date>2026-08-29</plot_sim_score_date>
+  <nfo_updated>2026-08-29</nfo_updated>
+  <nfo_score>17.50</nfo_score>
+  <nfo_score_type>plot</nfo_score_type>
+  <nfo_score_plot_comp>0.9000</nfo_score_plot_comp>
+  <year_diff>2</year_diff>
+</movie>

@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='utf-8'?>
+<movie>
+    <title>Karla, Rosalie und das Loch in der Wand</title>
+    <originaltitle>Karla, Rosalie und das Loch in der Wand</originaltitle>
+    <ratings>
+        <rating name="imdb" max="10" default="true">
+            <value>5.100000</value>
+            <votes>14</votes>
+        </rating>
+        <rating name="themoviedb" max="10">
+            <value>5.500000</value>
+            <votes>2</votes>
+        </rating>
+    </ratings>
+    <userrating>0</userrating>
+    <top250>0</top250>
+    <outline>Die Ingenieurin Rosalie führt ein Leben ohne Stillstand. Alt fühlt sie sich längst nicht, höchstens reif. Als Rosalie nach einem Schwächeanfall bei einem Solarprojekt in Afrika nach Deutschland zurückkehrt, soll das nur das eine Verschnaufpause sein. Als sie bei ihrer spießigen Schwester Margret mit einem riesigen Container aufkreuzt, zeigt sich diese von dem Überraschungsbesuch wenig begeistert. Die pensionierte Lehrerin durchschaut auf Anhieb, dass Rosalie bei ihr nicht ganz freiwillig unterschlüpft. Die Weitgereiste ist nämlich pleite! Da erscheint es wie ein Wunder, dass sich in einem Loch in der Zimmerwand Geldscheine anfinden. Auf der anderen Seite liegt das Zimmer der hochbegabten Abiturientin Karla, die mit ihrem Vater Harald in Margrets Haus zur Miete wohnt. Nach einem misslungenen Kennenlernen freundet sich Rosalie mit der Teenagerin an, die im Rollstuhl sitzt, und setzt es sich in den Kopf, Karla aus ihrer behüteten Isolation zu holen, auch gegen deren Willen.</outline>
+    <plot>Die Ingenieurin Rosalie führt ein Leben ohne Stillstand. Alt fühlt sie sich längst nicht, höchstens reif. Als Rosalie nach einem Schwächeanfall bei einem Solarprojekt in Afrika nach Deutschland zurückkehrt, soll das nur das eine Verschnaufpause sein. Als sie bei ihrer spießigen Schwester Margret mit einem riesigen Container aufkreuzt, zeigt sich diese von dem Überraschungsbesuch wenig begeistert. Die pensionierte Lehrerin durchschaut auf Anhieb, dass Rosalie bei ihr nicht ganz freiwillig unterschlüpft. Die Weitgereiste ist nämlich pleite! Da erscheint es wie ein Wunder, dass sich in einem Loch in der Zimmerwand Geldscheine anfinden. Auf der anderen Seite liegt das Zimmer der hochbegabten Abiturientin Karla, die mit ihrem Vater Harald in Margrets Haus zur Miete wohnt. Nach einem misslungenen Kennenlernen freundet sich Rosalie mit der Teenagerin an, die im Rollstuhl sitzt, und setzt es sich in den Kopf, Karla aus ihrer behüteten Isolation zu holen, auch gegen deren Willen.</plot>
+    <tagline />
+    <runtime>88</runtime>
+    <thumb aspect="poster">https://image.tmdb.org/t/p/original/tflwhuL1ycP5PjAWwZdXXuzLZLM.jpg</thumb>
+    <fanart>
+        <thumb>https://image.tmdb.org/t/p/original/dX6hIzikoYKZ7hdDeK76yldPVmH.jpg</thumb>
+    </fanart>
+    <mpaa />
+    <playcount>0</playcount>
+    <lastplayed />
+    <id>tt16606760</id>
+    <uniqueid type="imdb" default="true">tt16606760</uniqueid>
+    <uniqueid type="tmdb">927132</uniqueid>
+    <genre>Komödie</genre>
+    <genre>Drama</genre>
+    <genre>Familie</genre>
+    <genre>Fernsehfilm</genre>
+    <country>Deutschland</country>
+    <tag>business woman</tag>
+    <tag>money</tag>
+    <tag>wheelchair</tag>
+    <tag>woman in wheelchair</tag>
+    <tag>disabled person</tag>
+    <tag>handicapped person</tag>
+    <credits>Nadine Gottmann</credits>
+    <director>Hanno Olderdissen</director>
+    <premiered>2022-01-14</premiered>
+    <year>2022</year>
+    <status />
+    <code />
+    <aired />
+    <studio>Anna Wendt Filmproduktion</studio>
+    <studio>ARD</studio>
+    <studio>Degeto Film</studio>
+    <studio>Das Erste (ARD)</studio>
+    <studio>ARD</studio>
+    <trailer />
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>hevc</codec>
+                <aspect>1.780000</aspect>
+                <width>1280</width>
+                <height>720</height>
+                <durationinseconds>5306</durationinseconds>
+                <stereomode />
+            </video>
+            <audio>
+                <codec>ac3</codec>
+                <language>deu</language>
+                <channels>6</channels>
+            </audio>
+        </streamdetails>
+    </fileinfo>
+    <actor>
+        <name>Jutta Speidel</name>
+        <role>Rosalie</role>
+        <order>0</order>
+        <thumb>https://image.tmdb.org/t/p/h632/7VSgjBUuztaRHhq7hivnnsQE3t9.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ruth Reinecke</name>
+        <role>Margret</role>
+        <order>1</order>
+        <thumb>https://image.tmdb.org/t/p/original/qzdhWzLuY8FiMRJZNVzM7O9o3RW.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Paula Hartmann</name>
+        <role>Karla</role>
+        <order>2</order>
+        <thumb>https://m.media-amazon.com/images/M/MV5BM2ZlMGY2YmYtNjdhYy00ZTVlLWE4MTktOTNmMWJlOGEwZjcwXkEyXkFqcGdeQXVyMTAwMzUyMzUy._V1_SX1024_SY1024_.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Aurel Manthei</name>
+        <role>Harald</role>
+        <order>3</order>
+        <thumb>https://image.tmdb.org/t/p/h632/ufVHZOtz1H6XgawSApesezsLJAT.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Zoran Pingel</name>
+        <role>Raif</role>
+        <order>4</order>
+        <thumb>https://image.tmdb.org/t/p/h632/yXpRaDLjhqZ2G0JueWzt3ObBKlY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Tom Gronau</name>
+        <role>Jonas</role>
+        <order>5</order>
+        <thumb>https://image.tmdb.org/t/p/h632/6nJeUtjvXiUqqyrK9HxT5AXe0E3.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Tina Engel</name>
+        <role>Annamaria</role>
+        <order>6</order>
+        <thumb>https://image.tmdb.org/t/p/h632/mOrL4pigcw8el3vhMTngi2FH2mD.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Peggy Lukac</name>
+        <role>Judith</role>
+        <order>7</order>
+        <thumb>https://image.tmdb.org/t/p/h632/ejfbSXlgrNfxeeonOrLHpin3nqY.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Ilona Schulz</name>
+        <role>Mimi</role>
+        <order>8</order>
+        <thumb>https://image.tmdb.org/t/p/h632/zln23RNGTn4svwWNzapxVJL6bgD.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Evgenij Verenin</name>
+        <role>Vladimir</role>
+        <order>9</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Michael Krabbe</name>
+        <role>Herr Rohwein</role>
+        <order>10</order>
+        <thumb>https://image.tmdb.org/t/p/h632/knKXfjFFZkHhc935bvOJMtZmptO.jpg</thumb>
+    </actor>
+    <actor>
+        <name>Veronika Hertlein</name>
+        <role>Emma</role>
+        <order>11</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Helge Gutbrod</name>
+        <role>Arne</role>
+        <order>12</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Zoé Friedrich</name>
+        <role>Aurelie</role>
+        <order>13</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Sarah Schmidt</name>
+        <role>Studentin Miriam</role>
+        <order>14</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Matthias Wackrow</name>
+        <role>Polizist</role>
+        <order>15</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Milan Schirbel</name>
+        <role>Till</role>
+        <order>16</order>
+        <thumb />
+    </actor>
+    <actor>
+        <name>Amer El-Erwadi</name>
+        <role>Sam</role>
+        <order>17</order>
+        <thumb />
+    </actor>
+    <resume>
+        <position>0.000000</position>
+        <total>0.000000</total>
+    </resume>
+    <dateadded>2022-04-01 18:38:00</dateadded>
+    <nfo_updated>2026-06-06</nfo_updated>
+</movie>

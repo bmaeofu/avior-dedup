@@ -1,0 +1,26 @@
+[General]
+Version=1.1
+
+[Media]
+Created=24.08.2026 12:29:37
+Channel=MDR Sachsen HD (AC3,deu)
+
+[0]
+Id=56562
+Date=24.08.2026
+Time=12:30:00
+Duration=01:28:00
+Title=Karla, Rosalie und das Loch in der Wand
+Info=Fernsehfilm Deutschland 2020
+Description=Die rastlose Ingenieurin Rosalie kehrt nach einem Schwächeanfall aus Afrika nach Deutschland zurück und quartiert sich bei ihrer Schwester Margret ein, die schnell durchschaut, dass Rosalie pleite ist und nicht ganz freiwillig bei ihr einzieht. Dann stößt Rosalie in einem Loch in der Wand auf Geldscheine! Auf der anderen Seite wohnt die im Rollstuhl sitzende Karla mit ihrem Vater. Rosalie freundet sich mit ihr an und will sie aus ihrer behüteten Isolation holen - ob sie will oder nicht!||[16:9] [SUB] [AD] [6+]   [PDC 24.08. 12:30]
+Charset=255
+Content=16
+MinimumAge=6
+TimerID={38BE75DD-4D86-4804-B009-F0F7C2B15E5A}
+
+[Stats]
+Errors=0
+Size=4,57 GB (4907299140 bytes)
+Avr. Datarate=0,882 MB/s
+Device=Tvheadend:9983 20d48b009f 5
+
