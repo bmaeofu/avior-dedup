@@ -59,6 +59,7 @@ const form = reactive<JobRequest>({
   remove_spaces: false,
   replace_underscores: false,
   remove_non_episode_parens: false,
+  require_year_match: false,
 })
 
 const canSubmit = computed(() => form.source.trim() !== '' && form.target.trim() !== '')
@@ -361,6 +362,17 @@ function submit() {
           <v-checkbox
             v-model="form.replace_underscores"
             label="Replace underscores with spaces"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+      </v-row>
+
+      <v-row dense class="mt-1">
+        <v-col cols="12" md="3">
+          <v-checkbox
+            v-model="form.require_year_match"
+            label="Require identical nfo year"
             density="compact"
             hide-details
           />

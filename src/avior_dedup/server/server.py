@@ -137,6 +137,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             req.remove_spaces,
             req.remove_non_episode_parens,
             req.replace_underscores,
+            req.require_year_match,
             req.ignored_directories,
             progress_cb=scan_cb,
         )

@@ -576,6 +576,7 @@ def find_duplicates(
     remove_spaces: bool = False,
     remove_non_episode_parens: bool = False,
     replace_underscores: bool = False,
+    require_year_match: bool = False,
     ignored_directories: list[str] | None = None,
     progress_cb: Callable[..., None] | None = None,
 ) -> tuple[list[list[str]], dict[str, dict[str, str]]]:
@@ -775,36 +776,60 @@ def find_duplicates(
 
     # Semantic grouping remains stem-based and uses normalized stems
     if stems_with_log and duptype in ("semantic", "all"):
-        # Group log files by (normalized stem, nfo_year). Per the nfo_year
-        # rule, two recordings are duplicates only if BOTH have an nfo_year
-        # and they are identical; files without an nfo_year are excluded from
-        # duplicate groups.
-        _year_cache: dict[str, int | None] = {}
-        key_to_paths: dict[tuple[str, int], list[str]] = {}
-        for stem in stems_with_log:
-            sem = normalize_film_name(
-                stem,
-                semantic_prefixes,
-                remove_episode_nos,
-                remove_spaces,
-                remove_non_episode_parens,
-                replace_underscores,
-            )
-            for fp in stems_to_files.get(stem, []):
-                suf = match_suffix(os.path.basename(fp))[1]
-                if not (suf and suf.lower().endswith('.log')):
-                    continue
-                nfo_path = os.path.join(os.path.dirname(fp), stem + ".nfo")
-                if nfo_path not in _year_cache:
-                    _year_cache[nfo_path] = _year_from_nfo(nfo_path)
-                year = _year_cache[nfo_path]
-                if year is None:
-                    continue  # no nfo_year -> not a duplicate candidate
-                key_to_paths.setdefault((sem, year), []).append(fp)
+        if require_year_match:
+            # Strict: group log files by (normalized stem, nfo_year). Two
+            # recordings are duplicates only if BOTH have an nfo_year and they
+            # are identical; files without an nfo_year are excluded.
+            _year_cache: dict[str, int | None] = {}
+            key_to_paths: dict[tuple[str, int], list[str]] = {}
+            for stem in stems_with_log:
+                sem = normalize_film_name(
+                    stem,
+                    semantic_prefixes,
+                    remove_episode_nos,
+                    remove_spaces,
+                    remove_non_episode_parens,
+                    replace_underscores,
+                )
+                for fp in stems_to_files.get(stem, []):
+                    suf = match_suffix(os.path.basename(fp))[1]
+                    if not (suf and suf.lower().endswith('.log')):
+                        continue
+                    nfo_path = os.path.join(os.path.dirname(fp), stem + ".nfo")
+                    if nfo_path not in _year_cache:
+                        _year_cache[nfo_path] = _year_from_nfo(nfo_path)
+                    year = _year_cache[nfo_path]
+                    if year is None:
+                        continue  # no nfo_year -> not a duplicate candidate
+                    key_to_paths.setdefault((sem, year), []).append(fp)
 
-        for paths in key_to_paths.values():
-            if len(paths) > 1:
-                groups.append(sorted(paths))
+            for paths in key_to_paths.values():
+                if len(paths) > 1:
+                    groups.append(sorted(paths))
+        else:
+            # Default: group by normalized stem only (no nfo_year requirement).
+            semantic_to_stems: dict[str, list[str]] = {}
+            for stem in stems_with_log:
+                sem = normalize_film_name(
+                    stem,
+                    semantic_prefixes,
+                    remove_episode_nos,
+                    remove_spaces,
+                    remove_non_episode_parens,
+                    replace_underscores,
+                )
+                semantic_to_stems.setdefault(sem, []).append(stem)
+
+            for stems in semantic_to_stems.values():
+                if len(stems) > 1:
+                    group_paths = []
+                    for s in stems:
+                        for fp in stems_to_files.get(s, []):
+                            suf = match_suffix(os.path.basename(fp))[1]
+                            if suf and suf.lower().endswith('.log'):
+                                group_paths.append(fp)
+                    if len(group_paths) > 1:
+                        groups.append(group_paths)
 
     # Deduplicate groups (same set of file paths may have been added above
     # through different grouping heuristics). Normalize each group to a

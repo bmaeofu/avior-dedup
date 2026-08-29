@@ -26,6 +26,7 @@ def _groups(path: Path) -> list:
         remove_episode_nos=False,
         remove_non_episode_parens=True,
         semantic_prefixes=[],
+        require_year_match=True,
     )
     return groups
 
