@@ -53,7 +53,7 @@ const form = reactive<JobRequest>({
   max_errors_when_mc: 3,
   max_duration_diff_longer: 600,
   max_duration_diff_shorter: 180,
-  selection_priorities: ['multichannel', 'resolution', 'fewer_errors', 'recording_date', 'closest_duration'] as SelectionPriority[],
+  selection_priorities: ['multichannel', 'resolution', 'fewer_errors', 'recording_date', 'closest_duration', 'year_match'] as SelectionPriority[],
   semantic_prefixes: [],
   remove_episode_nos: false,
   remove_spaces: false,
@@ -81,6 +81,7 @@ const priorityLabels: Record<SelectionPriority, string> = {
   fewer_errors: 'Fewer errors',
   closest_duration: 'Closest EPG duration',
   recording_date: 'Recording date',
+  year_match: 'Year match',
 }
 
 function movePriority(index: number, direction: -1 | 1) {
