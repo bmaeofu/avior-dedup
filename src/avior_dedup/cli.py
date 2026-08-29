@@ -148,6 +148,7 @@ def main() -> None:
     print(f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}")
     print(f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}")
     print(f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}")
+    print(f"  Require identical nfo year:      {'yes' if getattr(args, 'require_year_match', False) else 'no'}")
     print(f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}")
 
     os.makedirs(target_root, exist_ok=True)
