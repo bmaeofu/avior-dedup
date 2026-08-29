@@ -39,12 +39,28 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -r
 
 WORKDIR /app
 
-# Install the Python package and the shared metadata library (movie_metadata).
-# movie_nfo_lib must be present in the build context (sibling repo next to this one).
+# git wird für pip install git+https:// benötigt (fehlt in Debian-slim-Basis).
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+
+# Zentrale Library movie_metadata aus ihrem PRIVATEN Git-Repo installieren.
+# Komodo reicht einen GitHub-Token als Build-Arg GIT_TOKEN durch (nur zur
+# Build-Zeit, landet nicht im finalen Image). Der Token wird URL-encoded in
+# die pip-git-URL eingebettet, damit Sonderzeichen nicht brechen.
+ARG MOVIE_NFO_LIB_REF=v1.0.9
+ARG GIT_TOKEN
+RUN if [ -z "$GIT_TOKEN" ]; then \
+      echo "FEHLER: Build-Arg GIT_TOKEN ist leer. In Komodo Stack-Environment setzen."; \
+      exit 1; \
+    fi \
+ && TOKEN_URLENC=$(printf '%s' "$GIT_TOKEN" | sed 's/@/%40/g; s/:/%3A/g; s/\//%2F/g') \
+ && git ls-remote "https://x-access-token:${TOKEN_URLENC}@github.com/bmaeofu/movie_nfo_lib" >/dev/null \
+ && echo "Klon-Zugriff auf movie_nfo_lib OK" \
+ && pip install --no-cache-dir --progress-bar off "movie-metadata @ git+https://x-access-token:${TOKEN_URLENC}@github.com/bmaeofu/movie_nfo_lib@${MOVIE_NFO_LIB_REF}" \
+ && unset TOKEN_URLENC
+
 COPY pyproject.toml ./
 COPY src/ ./src/
-COPY movie_nfo_lib/ /app/movie_nfo_lib/
-RUN pip install --no-cache-dir . /app/movie_nfo_lib
+RUN pip install --no-cache-dir .
 
 # Copy built frontend
 COPY --from=frontend-build /app/frontend/dist /app/frontend-dist
