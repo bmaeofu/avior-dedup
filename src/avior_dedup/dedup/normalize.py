@@ -123,7 +123,11 @@ def normalize_film_name(
     if remove_non_episode_parens:
         def _is_episode_token(tok: str) -> bool:
             tok = tok.strip()
-            # matches: numeric-only tokens (years, single numbers) and numeric pairs like 1_5, 01-05, 1 5
+            # A standalone 4-digit number is a release year (e.g. (2020)), not
+            # an episode token — so remove_non_episode_parens removes it.
+            if re.fullmatch(r"\d{4}", tok):
+                return False
+            # matches: numeric-only tokens (episode numbers) and numeric pairs like 1_5, 01-05, 1 5
             if re.fullmatch(r"\d+(?:[ _\-]\d+)?", tok):
                 return True
             # matches: S01E05, S01_E05, S01 E05, s1e5, s01-e05
