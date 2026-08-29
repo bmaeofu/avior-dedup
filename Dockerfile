@@ -39,10 +39,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -r
 
 WORKDIR /app
 
-# Install the Python package
+# Install the Python package and the shared metadata library (movie_metadata).
+# movie_nfo_lib must be present in the build context (sibling repo next to this one).
 COPY pyproject.toml ./
 COPY src/ ./src/
-RUN pip install --no-cache-dir .
+COPY movie_nfo_lib/ /app/movie_nfo_lib/
+RUN pip install --no-cache-dir . /app/movie_nfo_lib
 
 # Copy built frontend
 COPY --from=frontend-build /app/frontend/dist /app/frontend-dist

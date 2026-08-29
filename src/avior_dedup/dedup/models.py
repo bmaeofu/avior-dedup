@@ -12,6 +12,7 @@ class SelectionPriority(str, Enum):
     FEWER_ERRORS = "fewer_errors"
     RECORDING_DATE = "recording_date"
     CLOSEST_DURATION = "closest_duration"
+    YEAR_MATCH = "year_match"
 
 
 DEFAULT_SELECTION_PRIORITIES = [
@@ -20,6 +21,7 @@ DEFAULT_SELECTION_PRIORITIES = [
     SelectionPriority.FEWER_ERRORS,
     SelectionPriority.RECORDING_DATE,
     SelectionPriority.CLOSEST_DURATION,
+    SelectionPriority.YEAR_MATCH,
 ]
 
 
@@ -42,6 +44,8 @@ class FileRecord:
     video_duration: Optional[float] = None
     rec_duration: Optional[int] = None
     rec_date: Optional[str] = None
+    nfo_year: Optional[int] = None
+    txt_year: Optional[int] = None
 
 
 @dataclass

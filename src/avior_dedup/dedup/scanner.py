@@ -412,6 +412,33 @@ def get_video_length(path: Optional[str], content: str | None, use_epg: bool) ->
 
     return True, "valid results", video_duration, rec_duration
 
+def _year_from_nfo(nfo_path: str) -> Optional[int]:
+    """Return the ``<year>`` value from an NFO file, or None."""
+    import xml.etree.ElementTree as ET
+    try:
+        root = ET.parse(nfo_path).getroot()
+        txt = (root.findtext(".//year") or "").strip()
+        return int(txt) if txt.isdigit() else None
+    except (OSError, ET.ParseError, ValueError):
+        return None
+
+
+def _year_from_txt(base: str) -> Optional[int]:
+    """Return the release year extracted from the EPG .txt metadata (library).
+
+    ``base`` is the stem path without extension; ``movie_metadata`` locates
+    the sibling ``.txt`` (falling back to ``.log``) and extracts the year.
+    """
+    try:
+        from movie_metadata.metadata import extract_txt_metadata
+        md = extract_txt_metadata(base)
+        if md and md.get("year"):
+            return int(md["year"])
+    except Exception:
+        pass
+    return None
+
+
 def get_video_md(
     file_list: list[str],
     progress_cb: Callable[[str, int], None] | None = None,
@@ -456,6 +483,15 @@ def get_video_md(
         multichannel = None
         resolution = None
         rec_date = None
+        nfo_year = None
+        txt_year = None
+
+        # Extract release year from sibling metadata: <year> from the .nfo and
+        # the year parsed from the EPG .txt (via the shared movie_metadata lib).
+        if (film_base + ".nfo") in files_in_dir:
+            nfo_year = _year_from_nfo(os.path.join(film_dir, film_base + ".nfo"))
+        if (film_base + ".txt") in files_in_dir:
+            txt_year = _year_from_txt(os.path.join(film_dir, film_base))
 
         # Always attempt to locate and parse a matching log file (if present),
         # even when no video file exists for this stem. This ensures .log-only
@@ -517,6 +553,8 @@ def get_video_md(
             video_duration=video_duration,
             rec_duration=rec_duration,
             rec_date=rec_date,
+            nfo_year=nfo_year,
+            txt_year=txt_year,
         ))
         t_end = time.perf_counter()
         if log_fn is not None:

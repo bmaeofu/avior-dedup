@@ -96,6 +96,9 @@ def _sort_key(
 
             # newer should be better -> smaller sort key -> use negative ordinal
             key.append(-rec_ord)
+        elif p == SelectionPriority.YEAR_MATCH:
+            # Prefer records where the .nfo year matches the .txt year.
+            key.append(0 if _year_matches(r) else 1)
     # No additional global tiebreaker — mod_date is only considered as fallback
     # inside the RECORDING_DATE priority above.
     return tuple(key)
@@ -140,6 +143,15 @@ def select_best_film(
             max_duration_diff_longer,
             max_duration_diff_shorter,
         ),
+    )
+
+
+def _year_matches(r: FileRecord) -> bool:
+    """Return True when the record's .nfo year matches its .txt year."""
+    return (
+        r.nfo_year is not None
+        and r.txt_year is not None
+        and r.nfo_year == r.txt_year
     )
 
 
@@ -197,6 +209,11 @@ def determine_keep_reason(
                             continue
             except Exception:
                 pass
+
+        # YEAR_MATCH
+        if SelectionPriority.YEAR_MATCH in selection_priorities:
+            if _year_matches(best) and any(not _year_matches(o) for o in others):
+                return "year_match"
 
         # CLOSEST_DURATION
         if SelectionPriority.CLOSEST_DURATION in selection_priorities:
@@ -428,6 +445,8 @@ def build_move_plan(
                         video_duration=rep.video_duration,
                         rec_duration=rep.rec_duration,
                         rec_date=rep.rec_date,
+                        nfo_year=rep.nfo_year,
+                        txt_year=rep.txt_year,
                     )
                 else:
                     exists = os.path.exists(f)

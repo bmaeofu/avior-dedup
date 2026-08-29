@@ -26,6 +26,7 @@ class JobRequest(BaseModel):
             SelectionPriority.FEWER_ERRORS,
             SelectionPriority.RECORDING_DATE,
             SelectionPriority.CLOSEST_DURATION,
+            SelectionPriority.YEAR_MATCH,
         ]
     )
     semantic_prefixes: list[str] = Field(default_factory=lambda: [r"terra\s*x\s*-\s*"])
