@@ -64,9 +64,9 @@ def main() -> None:
     parser.add_argument(
         "--selection-priorities",
         nargs="+",
-        default=["multichannel", "resolution", "fewer_errors", "recording_date", "closest_duration", "year_match"],
+        default=["multichannel", "resolution", "fewer_errors", "recording_date", "year_match", "closest_duration"],
         choices=[p.value for p in SelectionPriority],
-        help="Ordered priority list for best-film selection (default: multichannel resolution fewer_errors recording_date closest_duration year_match)",
+        help="Ordered priority list for best-film selection (default: multichannel resolution fewer_errors recording_date year_match closest_duration)",
     )
     parser.add_argument(
         "--semantic-prefixes",

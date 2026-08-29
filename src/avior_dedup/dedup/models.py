@@ -20,8 +20,8 @@ DEFAULT_SELECTION_PRIORITIES = [
     SelectionPriority.RESOLUTION,
     SelectionPriority.FEWER_ERRORS,
     SelectionPriority.RECORDING_DATE,
-    SelectionPriority.CLOSEST_DURATION,
     SelectionPriority.YEAR_MATCH,
+    SelectionPriority.CLOSEST_DURATION,
 ]
 
 
