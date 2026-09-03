@@ -176,3 +176,34 @@ def test_text_search_treats_at_literally(tmp_path: Path):
     txt.write_text("contact: dev@example.com\n", encoding="utf-8")
     m = search_text_file(str(txt), parse_search_expression(["dev@example.com"]))
     assert m is not None
+
+
+def test_negated_value_document_level(nfo_path):
+    """thumb@aspect:!poster matches only when NO thumb has aspect=poster."""
+    from pathlib import Path
+    import tempfile
+    # Build a temp NFO with only a fanart thumb -> should match (no poster)
+    with tempfile.TemporaryDirectory() as tmp:
+        nfo = Path(tmp) / "x.nfo"
+        nfo.write_text(
+            "<movie><thumb aspect='fanart'>https://f.jpg</thumb></movie>",
+            encoding="utf-8",
+        )
+        m = search_xml_file(str(nfo), parse_search_expression(["thumb@aspect:!poster"]))
+        assert m is not None
+
+    with tempfile.TemporaryDirectory() as tmp:
+        nfo = Path(tmp) / "y.nfo"
+        nfo.write_text(
+            "<movie><thumb aspect='poster'>https://p.jpg</thumb></movie>",
+            encoding="utf-8",
+        )
+        m = search_xml_file(str(nfo), parse_search_expression(["thumb@aspect:!poster"]))
+        assert m is None
+
+    with tempfile.TemporaryDirectory() as tmp:
+        # No thumb at all -> poster absent -> matches
+        nfo = Path(tmp) / "z.nfo"
+        nfo.write_text("<movie><title>A</title></movie>", encoding="utf-8")
+        m = search_xml_file(str(nfo), parse_search_expression(["thumb@aspect:!poster"]))
+        assert m is not None

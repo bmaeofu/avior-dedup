@@ -422,8 +422,11 @@ def _xml_attr_match(root: ET.Element, search_string: str) -> str | None:
 
     ``path`` resolves via ``findall``; bare paths (no ``/``) search the whole
     tree recursively (``.//path``) so nested elements like
-    ``<ratings><rating>`` match without knowing the path. Every
-    ``@selector:cond`` spec must be satisfied by the *same* element.
+    ``<ratings><rating>`` match without knowing the path. Positive specs must
+    be satisfied by the *same* element. A negated-value condition (``!value``,
+    e.g. ``thumb@aspect:!poster``) is evaluated at document level: the term
+    matches only if NO element in the document has that selector equal to the
+    value (also true when no such element exists at all).
     """
     path, spec_str = search_string.split("@", 1)
     path = path.strip()
@@ -443,17 +446,36 @@ def _xml_attr_match(root: ET.Element, search_string: str) -> str | None:
         # Malformed XPath in an @ term never raises; treat as no match.
         return None
 
+    parsed: list[tuple[str, str]] = []
+    for spec in specs:
+        selector, _, cond = spec.partition(":")
+        selector = selector.strip().lower()
+        if not selector:
+            return None
+        parsed.append((selector, cond.strip().lower()))
+
+    def _is_neg_value(cond: str) -> bool:
+        return cond.startswith("!") and cond != "!exists"
+
+    neg = [(s, c) for s, c in parsed if _is_neg_value(c)]
+    pos = [(s, c) for s, c in parsed if not _is_neg_value(c)]
+
+    # A negated-value spec is violated if any element has selector == value.
+    for sel, cond in neg:
+        value = cond[1:]
+        if any(_match_attr_or_child(node, sel, value) is not None for node in nodes):
+            return None
+
+    if not pos:
+        # Pure negation: matched because no element violates it.
+        return " | ".join(c for _, c in neg)
+
+    # Positive specs: some element must satisfy all of them.
     for node in nodes:
         values: list[str] = []
         ok = True
-        for spec in specs:
-            selector, _, cond = spec.partition(":")
-            selector = selector.strip().lower()
-            if not selector:
-                ok = False
-                break
-            cond = cond.strip().lower()
-            value = _match_attr_or_child(node, selector, cond)
+        for sel, cond in pos:
+            value = _match_attr_or_child(node, sel, cond)
             if value is None:
                 ok = False
                 break
