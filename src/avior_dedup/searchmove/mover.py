@@ -21,6 +21,8 @@ _KNOWN_RELATED_SUFFIXES: tuple[str, ...] = tuple(
 )
 
 _DIRECTORY_FILE_INDEX_CACHE: dict[str, dict[str, str]] = {}
+#: Bereits angelegte Zielverzeichnisse (prozesslokal, wird gegen das FS verifiziert).
+_ENSURED_DEST_DIRS: set[str] = set()
 
 
 def _strip_to_stem(filename: str) -> str:
@@ -196,6 +198,12 @@ def execute_file_action(
             log_fn(f"{src}\t{dst}\ttest run")
             return MoveRecord(src=src, dst=dst, status="test run")
     except FileNotFoundError:
+        # ``shutil.move``/``copy2`` raise FileNotFoundError for a missing source
+        # *and* for a missing destination directory. Distinguish both, otherwise
+        # an absent target directory is reported as "source not found".
+        if os.path.exists(src):
+            log_fn(f"{src}\t{dst}\terror: destination directory missing")
+            return MoveRecord(src=src, dst=dst, status="error: destination directory missing")
         log_fn(f"{src}\t{dst}\tsource not found")
         return MoveRecord(src=src, dst=dst, status="error: source not found")
     except IOError as e:
@@ -245,10 +253,17 @@ def _resolve_case_insensitive(path: str) -> str:
     return resolved
 
 
-@lru_cache(maxsize=512)
 def _ensure_dest_dir(path: str) -> str:
-    """Create destination directory once per path and return it."""
-    os.makedirs(path, exist_ok=True)
+    """Create destination directory once per path and return it.
+
+    The process-local cache is verified against the filesystem before being
+    trusted: in a long-running server process a cached path can point to a
+    directory that was removed between two jobs. Skipping ``makedirs`` then
+    makes every action fail with a misleading "source not found".
+    """
+    if path not in _ENSURED_DEST_DIRS or not os.path.isdir(path):
+        os.makedirs(path, exist_ok=True)
+        _ENSURED_DEST_DIRS.add(path)
     return path
 
 
