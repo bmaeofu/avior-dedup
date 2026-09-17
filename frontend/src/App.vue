@@ -75,6 +75,11 @@ onMounted(() => {
           title="Settings"
           to="/config"
         />
+        <v-list-item
+          prepend-icon="mdi-history"
+          title="History"
+          to="/history"
+        />
 
         <v-divider class="my-1" />
 
@@ -88,6 +93,11 @@ onMounted(() => {
           prepend-icon="mdi-cog"
           title="Settings"
           to="/searchmove/config"
+        />
+        <v-list-item
+          prepend-icon="mdi-history"
+          title="History"
+          to="/searchmove/history"
         />
       </v-list>
     </v-navigation-drawer>

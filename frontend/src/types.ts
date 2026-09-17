@@ -21,6 +21,17 @@ export interface JobRequest {
   require_year_match: boolean
 }
 
+export interface RunHistoryEntry {
+  id: number
+  module: string
+  mode: string
+  params: Record<string, unknown>
+  status: string
+  created_at: string
+  finished_at: string | null
+  summary: Record<string, unknown> | null
+}
+
 export interface ProgressSnapshot {
   phase: string
   current_file: string | null

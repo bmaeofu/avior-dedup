@@ -31,8 +31,12 @@ from avior_dedup.server.schemas import (
     JobResult,
     JobStatus,
     ProgressSnapshot,
+    RerunRequest,
+    SearchMoveRequest,
 )
 from avior_dedup.server.searchmove_routes import router as searchmove_router
+from avior_dedup.server.searchmove_routes import start_searchmove_job as _start_searchmove_job
+from avior_dedup.server import history
 
 
 @dataclass
@@ -40,6 +44,7 @@ class JobEntry:
     """In-memory state for a running or completed job."""
     status: JobStatus
     reporter: ProgressReporter
+    run_id: int | None = None
 
 
 GIT_HASH = os.getenv("GIT_HASH", "dev")
@@ -265,6 +270,16 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             progress=reporter.snapshot.model_copy(),
             result=result,
         )
+        history.finish_run(
+            _jobs[job_id].run_id,
+            "completed",
+            {
+                "files_scanned": result.files_scanned,
+                "groups_found": result.groups_found,
+                "action_counts": result.action_counts,
+                "log_path": result.log_path,
+            },
+        )
 
     except JobCancelled:
         _jobs[job_id].status = JobStatus(
@@ -272,6 +287,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             state="cancelled",
             progress=reporter.snapshot.model_copy(),
         )
+        history.finish_run(_jobs[job_id].run_id, "cancelled")
     except Exception as exc:  # noqa: BLE001
         _jobs[job_id].status = JobStatus(
             job_id=job_id,
@@ -279,6 +295,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             progress=reporter.snapshot.model_copy(),
             error=str(exc),
         )
+        history.finish_run(_jobs[job_id].run_id, "failed", {"error": str(exc)})
 
 
 # ---------------------------------------------------------------------------
@@ -291,12 +308,13 @@ async def get_version() -> dict[str, str]:
     return {"git_hash": GIT_HASH}
 
 
-@app.post("/api/jobs", response_model=dict[str, str], status_code=201)
-async def create_job(req: JobRequest) -> dict[str, str]:
-    """Start a dedup job. Returns the job_id immediately."""
+def _start_dedup_job(req: JobRequest) -> str:
+    """Start a dedup job for the given request and return the new job_id."""
     loop = asyncio.get_running_loop()
     job_id = str(uuid.uuid4())
     reporter = ProgressReporter(loop)
+
+    run_id = history.record_run("dedup", req.mode, req.model_dump(mode="json"))
 
     _jobs[job_id] = JobEntry(
         status=JobStatus(
@@ -305,10 +323,41 @@ async def create_job(req: JobRequest) -> dict[str, str]:
             progress=ProgressSnapshot(),
         ),
         reporter=reporter,
+        run_id=run_id,
     )
 
     loop.run_in_executor(_executor, _run_job, job_id, req, reporter)
-    return {"job_id": job_id}
+    return job_id
+
+
+@app.post("/api/jobs", response_model=dict[str, str], status_code=201)
+async def create_job(req: JobRequest) -> dict[str, str]:
+    """Start a dedup job. Returns the job_id immediately."""
+    return {"job_id": _start_dedup_job(req)}
+
+
+@app.get("/api/history")
+async def get_history(module: str | None = None) -> dict[str, list[dict]]:
+    """Return stored run history (newest first), optionally filtered by module."""
+    return {"runs": history.list_runs(module)}
+
+
+@app.post("/api/history/{run_id}/rerun", response_model=dict[str, str], status_code=201)
+async def rerun_from_history(run_id: int, body: RerunRequest) -> dict[str, str]:
+    """Start a new run with the stored parameters; the mode may be overridden."""
+    run = history.get_run(run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="Run not found")
+
+    params = dict(run["params"])
+    if body.mode:
+        params["mode"] = body.mode
+
+    if run["module"] == "dedup":
+        return {"job_id": _start_dedup_job(JobRequest(**params))}
+    if run["module"] == "searchmove":
+        return {"job_id": _start_searchmove_job(SearchMoveRequest(**params))}
+    raise HTTPException(status_code=400, detail=f"Unknown module: {run['module']}")
 
 
 @app.get("/api/jobs/{job_id}", response_model=JobStatus)
@@ -448,6 +497,10 @@ def run() -> None:
     host = os.getenv("AVIOR_DEDUP_HOST", "0.0.0.0")
     port = int(os.getenv("AVIOR_DEDUP_PORT", "8642"))
     reload = os.getenv("AVIOR_DEDUP_RELOAD", "").lower() in ("1", "true", "yes")
+    try:
+        history.init_db()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[avior-dedup] WARN: could not initialise run history: {exc}")
     print(f"[avior-dedup] Starting server (commit: {GIT_HASH})")
     uvicorn.run("avior_dedup.server.server:app", host=host, port=port, reload=reload)
 

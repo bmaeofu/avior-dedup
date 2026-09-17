@@ -37,6 +37,11 @@ class JobRequest(BaseModel):
     require_year_match: bool = False
 
 
+class RerunRequest(BaseModel):
+    """Body for repeating a stored run; only the mode may be overridden."""
+    mode: str | None = None
+
+
 class ProgressSnapshot(BaseModel):
     phase: str = ""
     current_file: str | None = None

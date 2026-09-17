@@ -21,6 +21,7 @@ from avior_dedup.searchmove.runner import run_search_move_job
 from avior_dedup.searchmove.mover import clear_directory_file_index_cache
 from avior_dedup.server.progress import JobCancelled, ProgressReporter
 from avior_dedup.permissions import ensure_output_permissions
+from avior_dedup.server import history
 from avior_dedup.server.schemas import (
     JobStatus,
     ProgressSnapshot,
@@ -44,6 +45,7 @@ class _SmJobEntry:
     """In-memory state for a running or completed search-move job."""
     status: JobStatus
     reporter: ProgressReporter
+    run_id: int | None = None
 
 
 _jobs: dict[str, _SmJobEntry] = {}
@@ -183,6 +185,16 @@ def _run_searchmove_job(
             progress=reporter.snapshot.model_copy(),
             result=sm_result,
         )
+        history.finish_run(
+            _jobs[job_id].run_id,
+            "completed",
+            {
+                "files_scanned": sm_result.files_scanned,
+                "files_matched": sm_result.files_matched,
+                "action_counts": sm_result.action_counts,
+                "log_path": sm_result.log_path,
+            },
+        )
         log_handle.close()
 
     except JobCancelled:
@@ -191,6 +203,7 @@ def _run_searchmove_job(
             state="cancelled",
             progress=reporter.snapshot.model_copy(),
         )
+        history.finish_run(_jobs[job_id].run_id, "cancelled")
     except Exception as exc:  # noqa: BLE001
         _jobs[job_id].status = JobStatus(
             job_id=job_id,
@@ -198,6 +211,7 @@ def _run_searchmove_job(
             progress=reporter.snapshot.model_copy(),
             error=str(exc),
         )
+        history.finish_run(_jobs[job_id].run_id, "failed", {"error": str(exc)})
     finally:
         if "log_handle" in locals() and not log_handle.closed:
             log_handle.close()
@@ -213,12 +227,13 @@ def _run_searchmove_job(
 # REST endpoints
 # ---------------------------------------------------------------------------
 
-@router.post("/jobs", response_model=dict[str, str], status_code=201)
-async def create_searchmove_job(req: SearchMoveRequest) -> dict[str, str]:
-    """Start a search-move job. Returns the job_id immediately."""
+def start_searchmove_job(req: SearchMoveRequest) -> str:
+    """Start a search-move job for the given request; returns the new job_id."""
     loop = asyncio.get_running_loop()
     job_id = str(uuid.uuid4())
     reporter = ProgressReporter(loop)
+
+    run_id = history.record_run("searchmove", req.mode, req.model_dump(mode="json"))
 
     _jobs[job_id] = _SmJobEntry(
         status=JobStatus(
@@ -227,10 +242,17 @@ async def create_searchmove_job(req: SearchMoveRequest) -> dict[str, str]:
             progress=ProgressSnapshot(),
         ),
         reporter=reporter,
+        run_id=run_id,
     )
 
     loop.run_in_executor(_executor, _run_searchmove_job, job_id, req, reporter)
-    return {"job_id": job_id}
+    return job_id
+
+
+@router.post("/jobs", response_model=dict[str, str], status_code=201)
+async def create_searchmove_job(req: SearchMoveRequest) -> dict[str, str]:
+    """Start a search-move job. Returns the job_id immediately."""
+    return {"job_id": start_searchmove_job(req)}
 
 
 @router.get("/jobs/{job_id}", response_model=JobStatus)
