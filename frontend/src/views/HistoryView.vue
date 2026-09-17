@@ -78,6 +78,15 @@ function targetOf(run: RunHistoryEntry): string {
   return param(run, 'target') || param(run, 'dest')
 }
 
+function formatParams(run: RunHistoryEntry): string {
+  const p = run.params as Record<string, unknown> | null
+  if (!p) return ''
+  return Object.entries(p)
+    .filter(([, v]) => v !== null && v !== undefined && v !== '' && !(Array.isArray(v) && v.length === 0))
+    .map(([k, v]) => `${k}=${Array.isArray(v) ? v.join(',') : String(v)}`)
+    .join(' ')
+}
+
 function summaryText(run: RunHistoryEntry): string {
   const s = run.summary as Record<string, unknown> | null
   if (!s) return run.status === 'running' ? 'running…' : ''
@@ -131,6 +140,7 @@ onMounted(load)
             <th>Status</th>
             <th>Created</th>
             <th>Result</th>
+            <th>Parameters</th>
             <th>Repeat</th>
           </tr>
         </thead>
@@ -145,6 +155,9 @@ onMounted(load)
             </td>
             <td class="text-no-wrap">{{ run.created_at }}</td>
             <td>{{ summaryText(run) }}</td>
+            <td>
+              <code class="params-cell">{{ formatParams(run) }}</code>
+            </td>
             <td>
               <v-menu>
                 <template #activator="{ props: menuProps }">
@@ -174,3 +187,15 @@ onMounted(load)
     </v-card-text>
   </v-card>
 </template>
+
+<style scoped>
+.params-cell {
+  display: block;
+  max-width: 480px;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: rgba(var(--v-theme-on-surface), 0.8);
+}
+</style>
