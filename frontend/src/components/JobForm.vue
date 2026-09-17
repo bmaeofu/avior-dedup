@@ -33,6 +33,9 @@ onMounted(async () => {
 
     // Show only entries from ignored_dirs.yaml for the ignored-directories chooser
     ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
+    // Pre-select all configured entries: most are needed and non-existent
+    // directories are harmless. The user can deselect the unneeded ones.
+    form.ignored_directories = [...ignoredDirSuggestions.value]
     // Semantic prefix suggestions (admin-configurable)
     semanticPrefixSuggestions.value =
       semRes.status === 'fulfilled' && semRes.value.ok ? await semRes.value.json() : []

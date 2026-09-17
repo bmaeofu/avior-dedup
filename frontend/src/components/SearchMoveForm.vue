@@ -53,6 +53,9 @@ onMounted(async () => {
   if (ignoredRes?.ok) {
     const ignoredFromConfig = await ignoredRes.json()
     ignoredDirSuggestions.value = Array.isArray(ignoredFromConfig) ? ignoredFromConfig : []
+    // Pre-select all configured entries: most are needed and non-existent
+    // directories are harmless. The user can deselect the unneeded ones.
+    ignoredDirectories.value = [...ignoredDirSuggestions.value]
   }
 
   if (templatesRes?.ok) {
