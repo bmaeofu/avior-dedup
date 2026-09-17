@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import type { RunHistoryEntry } from '../types'
 
 const props = defineProps<{ module: 'dedup' | 'searchmove' }>()
 
 const router = useRouter()
+const route = useRoute()
 const runs = ref<RunHistoryEntry[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
@@ -106,7 +107,14 @@ function statusColor(status: string): string {
   return 'info'
 }
 
-onMounted(load)
+// Reload whenever the history view is entered or the module changes. Both
+// history routes reuse this component, so onMounted alone would keep showing
+// the previously loaded module's runs.
+watch(
+  () => [route.path, props.module],
+  () => { load() },
+  { immediate: true }
+)
 </script>
 
 <template>
