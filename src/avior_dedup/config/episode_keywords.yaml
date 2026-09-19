@@ -84,10 +84,14 @@ episode_keep_keywords:
   - ist sie für beifall noch zu jung
   - familienkomödie,
   - über das meer für ihr land und ihre familie
+  - dramedy
+  - miniserie
+  - anthologie
+  - dokuserie
+  - comedy
 
 # Year-based keywords that prevent episode number stripping (for multi-part entries)
 episode_keep_keywords_years:
-  - großbritannien
   - "2017"
   - "2018"
   - "2019"
