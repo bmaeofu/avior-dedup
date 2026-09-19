@@ -244,6 +244,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_episode_nos = req.remove_episode_nos
             remove_spaces = req.remove_spaces
             remove_non_episode_parens = req.remove_non_episode_parens
+            replace_underscores = req.replace_underscores
+            require_year_match = req.require_year_match
             execution_date = exec_time
             # start_time will be attached after class creation to avoid NameError
             ignored_directories = req.ignored_directories
