@@ -107,6 +107,24 @@ function statusColor(status: string): string {
   return 'info'
 }
 
+const confirmClear = ref(false)
+const clearing = ref(false)
+
+async function clearHistory() {
+  clearing.value = true
+  error.value = null
+  try {
+    const res = await fetch(`/api/history?module=${props.module}`, { method: 'DELETE' })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    confirmClear.value = false
+    await load()
+  } catch (e: any) {
+    error.value = e.message
+  } finally {
+    clearing.value = false
+  }
+}
+
 // Reload whenever the history view is entered or the module changes. Both
 // history routes reuse this component, so onMounted alone would keep showing
 // the previously loaded module's runs.
@@ -132,7 +150,32 @@ watch(
         <v-btn size="small" variant="tonal" prepend-icon="mdi-refresh" @click="load" :loading="loading">
           Refresh
         </v-btn>
+        <v-spacer />
+        <v-btn
+          size="small"
+          variant="tonal"
+          color="error"
+          prepend-icon="mdi-delete-sweep"
+          :disabled="runs.length === 0"
+          @click="confirmClear = true"
+        >
+          Clear history
+        </v-btn>
       </div>
+
+      <v-dialog v-model="confirmClear" max-width="420">
+        <v-card>
+          <v-card-title class="text-none">Clear history?</v-card-title>
+          <v-card-text>
+            This permanently deletes all {{ title }} entries. Running jobs are not affected.
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn variant="text" @click="confirmClear = false">Cancel</v-btn>
+            <v-btn color="error" variant="tonal" :loading="clearing" @click="clearHistory">Delete</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
       <div v-if="!loading && runs.length === 0" class="text-medium-emphasis">
         No runs yet.

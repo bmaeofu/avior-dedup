@@ -63,3 +63,20 @@ def test_init_marks_stale_running_as_failed(history):
     assert history.get_run(rid)["status"] == "running"
     history.init_db()
     assert history.get_run(rid)["status"] == "failed"
+
+
+def test_delete_run(history):
+    rid = history.record_run("dedup", "m", {})
+    assert history.delete_run(rid) is True
+    assert history.get_run(rid) is None
+    assert history.delete_run(rid) is False
+
+
+def test_clear_runs_by_module(history):
+    history.record_run("dedup", "m", {})
+    history.record_run("dedup", "f", {})
+    history.record_run("searchmove", "test", {})
+    assert history.clear_runs("dedup") == 2
+    assert [r["module"] for r in history.list_runs()] == ["searchmove"]
+    assert history.clear_runs() == 1
+    assert history.list_runs() == []

@@ -115,3 +115,20 @@ def get_run(run_id: int) -> dict[str, Any] | None:
     with _connect() as conn:
         row = conn.execute("SELECT * FROM runs WHERE id = ?", (run_id,)).fetchone()
     return _row_to_dict(row) if row is not None else None
+
+
+def delete_run(run_id: int) -> bool:
+    """Delete a single run. Returns True when a row was removed."""
+    with _connect() as conn:
+        cur = conn.execute("DELETE FROM runs WHERE id = ?", (run_id,))
+        return cur.rowcount > 0
+
+
+def clear_runs(module: str | None = None) -> int:
+    """Delete runs (all, or only the given module). Returns the row count removed."""
+    with _connect() as conn:
+        if module:
+            cur = conn.execute("DELETE FROM runs WHERE module = ?", (module,))
+        else:
+            cur = conn.execute("DELETE FROM runs")
+        return int(cur.rowcount)

@@ -344,6 +344,20 @@ async def get_history(module: str | None = None) -> dict[str, list[dict]]:
     return {"runs": history.list_runs(module)}
 
 
+@app.delete("/api/history", status_code=200)
+async def clear_history(module: str | None = None) -> dict[str, int]:
+    """Delete history entries (all, or only the given module)."""
+    return {"deleted": history.clear_runs(module)}
+
+
+@app.delete("/api/history/{run_id}", status_code=200)
+async def delete_history_entry(run_id: int) -> dict[str, bool]:
+    """Delete a single history entry."""
+    if not history.delete_run(run_id):
+        raise HTTPException(status_code=404, detail="Run not found")
+    return {"deleted": True}
+
+
 @app.post("/api/history/{run_id}/rerun", response_model=dict[str, str], status_code=201)
 async def rerun_from_history(run_id: int, body: RerunRequest) -> dict[str, str]:
     """Start a new run with the stored parameters; the mode may be overridden."""
