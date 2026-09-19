@@ -439,6 +439,50 @@ def _year_from_txt(base: str) -> Optional[int]:
     return None
 
 
+def _video_duration_for(dir_path: str, stem: str) -> Optional[float]:
+    """Return the ffprobe duration (seconds) of the stem's video file, or None."""
+    for ext in config.video_suffixes():
+        candidate = os.path.join(dir_path, stem + ext)
+        try:
+            if os.path.exists(candidate):
+                return get_media_duration_ffprobe(candidate)
+        except OSError:
+            continue
+    return None
+
+
+def _cluster_by_duration(
+    items: list[tuple[str, Optional[float]]],
+    tolerance: float = 0.05,
+) -> list[list[str]]:
+    """Cluster ``(path, duration)`` pairs so members stay within *tolerance*
+    (relative to the cluster's shortest duration).
+
+    Items without a duration are dropped (cannot be verified). Returns
+    clusters of file paths.
+    """
+    valid: list[tuple[str, float]] = []
+    for fp, dur in items:
+        try:
+            value = float(dur) if dur is not None else 0.0
+        except (TypeError, ValueError):
+            value = 0.0
+        if value > 0:
+            valid.append((fp, value))
+    valid.sort(key=lambda x: x[1])
+
+    clusters: list[list[tuple[str, float]]] = []
+    for fp, dur in valid:
+        for cluster in clusters:
+            reference = cluster[0][1]
+            if abs(dur - reference) / reference <= tolerance:
+                cluster.append((fp, dur))
+                break
+        else:
+            clusters.append([(fp, dur)])
+    return [[fp for fp, _ in cluster] for cluster in clusters]
+
+
 def get_video_md(
     file_list: list[str],
     progress_cb: Callable[[str, int], None] | None = None,
@@ -577,6 +621,8 @@ def find_duplicates(
     remove_non_episode_parens: bool = False,
     replace_underscores: bool = False,
     require_identical_nfo_year: bool = False,
+    require_identical_txt_year: bool = False,
+    require_videoduration_match: bool = False,
     ignored_directories: list[str] | None = None,
     progress_cb: Callable[..., None] | None = None,
 ) -> tuple[list[list[str]], dict[str, dict[str, str]]]:
@@ -779,11 +825,16 @@ def find_duplicates(
 
     # Semantic grouping remains stem-based and uses normalized stems
     if stems_with_log and duptype in ("semantic", "all"):
-        if require_identical_nfo_year:
+        strict_options = (
+            require_identical_nfo_year
+            or require_identical_txt_year
+            or require_videoduration_match
+        )
+        if strict_options:
             # Group candidate log files by normalized name first. Only name
             # groups with more than one log file can become duplicates, so the
-            # (slower) .nfo year lookup runs for those alone — otherwise every
-            # film in the library would incur a file read.
+            # slower lookups (.nfo/.txt year, ffprobe duration) run for those
+            # alone — otherwise every film in the library would incur them.
             sem_to_entries: dict[str, list[tuple[str, str]]] = {}
             for stem in stems_with_log:
                 sem = normalize_film_name(
@@ -801,22 +852,45 @@ def find_duplicates(
                     sem_to_entries.setdefault(sem, []).append((stem, fp))
 
             _year_cache: dict[str, int | None] = {}
-            key_to_paths: dict[tuple[str, int], list[str]] = {}
-            for sem, entries in sem_to_entries.items():
+            for entries in sem_to_entries.values():
                 if len(entries) < 2:
-                    continue  # not a duplicate candidate -> no .nfo read
+                    continue  # not a duplicate candidate -> no metadata reads
+                # Exact criteria (years) first: split into sub-groups that agree
+                # on every enabled year criterion.
+                by_year: dict[tuple, list[tuple[str, str]]] = {}
                 for stem, fp in entries:
-                    nfo_path = os.path.join(os.path.dirname(fp), stem + ".nfo")
-                    if nfo_path not in _year_cache:
-                        _year_cache[nfo_path] = _year_from_nfo(nfo_path)
-                    year = _year_cache[nfo_path]
-                    if year is None:
-                        continue  # no nfo_year -> not a duplicate candidate
-                    key_to_paths.setdefault((sem, year), []).append(fp)
+                    dir_path = os.path.dirname(fp)
+                    nfo_year = None
+                    txt_year = None
+                    if require_identical_nfo_year:
+                        nfo_path = os.path.join(dir_path, stem + ".nfo")
+                        if nfo_path not in _year_cache:
+                            _year_cache[nfo_path] = _year_from_nfo(nfo_path)
+                        nfo_year = _year_cache[nfo_path]
+                        if nfo_year is None:
+                            continue  # no nfo_year -> not a duplicate candidate
+                    if require_identical_txt_year:
+                        base = os.path.join(dir_path, stem)
+                        if base not in _year_cache:
+                            _year_cache[base] = _year_from_txt(base)
+                        txt_year = _year_cache[base]
+                        if txt_year is None:
+                            continue  # no txt_year -> not a duplicate candidate
+                    by_year.setdefault((nfo_year, txt_year), []).append((stem, fp))
 
-            for paths in key_to_paths.values():
-                if len(paths) > 1:
-                    groups.append(sorted(paths))
+                for items in by_year.values():
+                    if len(items) < 2:
+                        continue
+                    if require_videoduration_match:
+                        annotated = [
+                            (fp, _video_duration_for(os.path.dirname(fp), stem))
+                            for stem, fp in items
+                        ]
+                        for cluster in _cluster_by_duration(annotated, 0.05):
+                            if len(cluster) > 1:
+                                groups.append(sorted(cluster))
+                    else:
+                        groups.append(sorted(fp for _, fp in items))
         else:
             # Default: group by normalized stem only (no nfo_year requirement).
             semantic_to_stems: dict[str, list[str]] = {}

@@ -100,6 +100,16 @@ def main() -> None:
         help="Only group as duplicates when BOTH recordings have an identical nfo_year (files without nfo_year are excluded)",
     )
     parser.add_argument(
+        "--require-identical-txt-year",
+        action="store_true",
+        help="Only group as duplicates when BOTH recordings have an identical txt_year (files without txt_year are excluded)",
+    )
+    parser.add_argument(
+        "--require-videoduration-match",
+        action="store_true",
+        help="Only group as duplicates when the ffprobe video durations match within 5%% (files without duration are excluded)",
+    )
+    parser.add_argument(
         "--ignored-directories",
         nargs="+",
         help="List of directories to ignore for this run (full paths or directory names)",
@@ -149,6 +159,8 @@ def main() -> None:
     print(f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}")
     print(f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}")
     print(f"  Require identical nfo year:      {'yes' if getattr(args, 'require_identical_nfo_year', False) else 'no'}")
+    print(f"  Require identical txt year:      {'yes' if getattr(args, 'require_identical_txt_year', False) else 'no'}")
+    print(f"  Require video duration match:    {'yes' if getattr(args, 'require_videoduration_match', False) else 'no'}")
     print(f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}")
 
     os.makedirs(target_root, exist_ok=True)
@@ -200,6 +212,8 @@ def main() -> None:
         args.remove_non_episode_parens,
         args.replace_underscores,
         args.require_identical_nfo_year,
+        args.require_identical_txt_year,
+        args.require_videoduration_match,
         args.ignored_directories,
     )
 

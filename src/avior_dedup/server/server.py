@@ -143,6 +143,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             req.remove_non_episode_parens,
             req.replace_underscores,
             req.require_identical_nfo_year,
+            req.require_identical_txt_year,
+            req.require_videoduration_match,
             req.ignored_directories,
             progress_cb=scan_cb,
         )
@@ -246,6 +248,8 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_non_episode_parens = req.remove_non_episode_parens
             replace_underscores = req.replace_underscores
             require_identical_nfo_year = req.require_identical_nfo_year
+            require_identical_txt_year = req.require_identical_txt_year
+            require_videoduration_match = req.require_videoduration_match
             execution_date = exec_time
             # start_time will be attached after class creation to avoid NameError
             ignored_directories = req.ignored_directories

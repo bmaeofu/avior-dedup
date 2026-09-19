@@ -63,6 +63,8 @@ const form = reactive<JobRequest>({
   replace_underscores: false,
   remove_non_episode_parens: false,
   require_identical_nfo_year: false,
+  require_identical_txt_year: false,
+  require_videoduration_match: false,
 })
 
 const canSubmit = computed(() => form.source.trim() !== '' && form.target.trim() !== '')
@@ -376,6 +378,22 @@ function submit() {
           <v-checkbox
             v-model="form.require_identical_nfo_year"
             label="Require identical nfo year"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-checkbox
+            v-model="form.require_identical_txt_year"
+            label="Require identical txt year"
+            density="compact"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-checkbox
+            v-model="form.require_videoduration_match"
+            label="Require video duration match (5%)"
             density="compact"
             hide-details
           />
