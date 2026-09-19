@@ -18,7 +18,7 @@ class JobRequest(BaseModel):
     novideo_target: str | None = None
     max_errors_when_mc: int = 0
     max_duration_diff_longer: int = 600
-    max_duration_diff_shorter: int = 120
+    max_duration_diff_shorter: int = 240
     selection_priorities: list[SelectionPriority] = Field(
         default_factory=lambda: [
             SelectionPriority.MULTICHANNEL,

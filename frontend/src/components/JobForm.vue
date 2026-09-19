@@ -55,7 +55,7 @@ const form = reactive<JobRequest>({
   novideo_target: null,
   max_errors_when_mc: 3,
   max_duration_diff_longer: 600,
-  max_duration_diff_shorter: 180,
+  max_duration_diff_shorter: 240,
   selection_priorities: ['multichannel', 'resolution', 'fewer_errors', 'recording_date', 'year_match', 'closest_duration'] as SelectionPriority[],
   semantic_prefixes: [],
   remove_episode_nos: false,

@@ -41,7 +41,7 @@ def _sort_key(
     priorities: list[SelectionPriority],
     max_errors_when_mc: int | None = None,
     max_duration_diff_longer: int = 600,
-    max_duration_diff_shorter: int = 120,
+    max_duration_diff_shorter: int = 240,
 ) -> tuple:
     """Build a comparable sort key based on the priority list (lower = better).
 
@@ -107,7 +107,7 @@ def _sort_key(
 def select_best_film(
     valid_records: list[FileRecord],
     max_duration_diff_longer: int = 600,
-    max_duration_diff_shorter: int = 120,
+    max_duration_diff_shorter: int = 240,
     selection_priorities: list[SelectionPriority] | None = None,
     max_errors_when_mc: int | None = None,
 ) -> FileRecord:
@@ -255,7 +255,7 @@ def build_move_plan(
     log_fn: Callable[[str], None],
     progress_cb: Callable[[int, int], None] | None = None,
     max_duration_diff_longer: int = 600,
-    max_duration_diff_shorter: int = 120,
+    max_duration_diff_shorter: int = 240,
     selection_priorities: list[SelectionPriority] | None = None,
 ) -> tuple[dict[str, MoveAction], Counter, Counter, dict[str, Counter], dict[str, Counter]]:
     """Decide what to do with each file.
