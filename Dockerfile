@@ -35,7 +35,7 @@ RUN GIT_HEAD=$(cat /app/.git/HEAD); \
 # ---- Stage 2: Production image ----
 FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg tzdata && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -69,6 +69,7 @@ COPY --from=frontend-build /app/frontend/dist /app/frontend-dist
 COPY --from=frontend-build /app/git_hash.txt /app/git_hash.txt
 
 # Environment defaults
+ENV TZ=Europe/Berlin
 ENV AVIOR_DEDUP_HOST=0.0.0.0
 ENV AVIOR_DEDUP_PORT=8642
 ENV AVIOR_DEDUP_FRONTEND_DIST=/app/frontend-dist

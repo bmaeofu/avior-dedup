@@ -665,6 +665,9 @@ def find_duplicates(
             lower=lower_name,
             semantic=semantic_name,
         )
+        # Report periodically so large directories do not look frozen.
+        if progress_cb is not None and files_scanned % 250 == 0:
+            progress_cb(dir_path, units_done, total_units, files_scanned)
 
     def _scan_dir(dir_path: str) -> None:
         """Recursively scan a directory using scandir, reporting after each subdir."""
@@ -777,11 +780,11 @@ def find_duplicates(
     # Semantic grouping remains stem-based and uses normalized stems
     if stems_with_log and duptype in ("semantic", "all"):
         if require_year_match:
-            # Strict: group log files by (normalized stem, nfo_year). Two
-            # recordings are duplicates only if BOTH have an nfo_year and they
-            # are identical; files without an nfo_year are excluded.
-            _year_cache: dict[str, int | None] = {}
-            key_to_paths: dict[tuple[str, int], list[str]] = {}
+            # Group candidate log files by normalized name first. Only name
+            # groups with more than one log file can become duplicates, so the
+            # (slower) .nfo year lookup runs for those alone — otherwise every
+            # film in the library would incur a file read.
+            sem_to_entries: dict[str, list[tuple[str, str]]] = {}
             for stem in stems_with_log:
                 sem = normalize_film_name(
                     stem,
@@ -795,6 +798,14 @@ def find_duplicates(
                     suf = match_suffix(os.path.basename(fp))[1]
                     if not (suf and suf.lower().endswith('.log')):
                         continue
+                    sem_to_entries.setdefault(sem, []).append((stem, fp))
+
+            _year_cache: dict[str, int | None] = {}
+            key_to_paths: dict[tuple[str, int], list[str]] = {}
+            for sem, entries in sem_to_entries.items():
+                if len(entries) < 2:
+                    continue  # not a duplicate candidate -> no .nfo read
+                for stem, fp in entries:
                     nfo_path = os.path.join(os.path.dirname(fp), stem + ".nfo")
                     if nfo_path not in _year_cache:
                         _year_cache[nfo_path] = _year_from_nfo(nfo_path)
