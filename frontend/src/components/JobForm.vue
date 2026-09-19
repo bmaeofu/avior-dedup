@@ -62,7 +62,7 @@ const form = reactive<JobRequest>({
   remove_spaces: false,
   replace_underscores: false,
   remove_non_episode_parens: false,
-  require_year_match: false,
+  require_identical_nfo_year: false,
 })
 
 const canSubmit = computed(() => form.source.trim() !== '' && form.target.trim() !== '')
@@ -374,7 +374,7 @@ function submit() {
       <v-row dense class="mt-1">
         <v-col cols="12" md="3">
           <v-checkbox
-            v-model="form.require_year_match"
+            v-model="form.require_identical_nfo_year"
             label="Require identical nfo year"
             density="compact"
             hide-details

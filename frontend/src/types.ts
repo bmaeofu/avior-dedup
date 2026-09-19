@@ -18,7 +18,7 @@ export interface JobRequest {
   remove_spaces: boolean
   replace_underscores: boolean
   remove_non_episode_parens: boolean
-  require_year_match: boolean
+  require_identical_nfo_year: boolean
 }
 
 export interface RunHistoryEntry {

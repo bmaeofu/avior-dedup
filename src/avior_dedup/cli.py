@@ -95,7 +95,7 @@ def main() -> None:
         help="Replace underscores with spaces before semantic normalization (useful for filenames with _ separators)",
     )
     parser.add_argument(
-        "--require-year-match",
+        "--require-identical-nfo-year",
         action="store_true",
         help="Only group as duplicates when BOTH recordings have an identical nfo_year (files without nfo_year are excluded)",
     )
@@ -148,7 +148,7 @@ def main() -> None:
     print(f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}")
     print(f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}")
     print(f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}")
-    print(f"  Require identical nfo year:      {'yes' if getattr(args, 'require_year_match', False) else 'no'}")
+    print(f"  Require identical nfo year:      {'yes' if getattr(args, 'require_identical_nfo_year', False) else 'no'}")
     print(f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}")
 
     os.makedirs(target_root, exist_ok=True)
@@ -199,7 +199,7 @@ def main() -> None:
         args.remove_spaces,
         args.remove_non_episode_parens,
         args.replace_underscores,
-        args.require_year_match,
+        args.require_identical_nfo_year,
         args.ignored_directories,
     )
 

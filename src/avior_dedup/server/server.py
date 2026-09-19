@@ -142,7 +142,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             req.remove_spaces,
             req.remove_non_episode_parens,
             req.replace_underscores,
-            req.require_year_match,
+            req.require_identical_nfo_year,
             req.ignored_directories,
             progress_cb=scan_cb,
         )
@@ -245,7 +245,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             remove_spaces = req.remove_spaces
             remove_non_episode_parens = req.remove_non_episode_parens
             replace_underscores = req.replace_underscores
-            require_year_match = req.require_year_match
+            require_identical_nfo_year = req.require_identical_nfo_year
             execution_date = exec_time
             # start_time will be attached after class creation to avoid NameError
             ignored_directories = req.ignored_directories

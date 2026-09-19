@@ -576,7 +576,7 @@ def find_duplicates(
     remove_spaces: bool = False,
     remove_non_episode_parens: bool = False,
     replace_underscores: bool = False,
-    require_year_match: bool = False,
+    require_identical_nfo_year: bool = False,
     ignored_directories: list[str] | None = None,
     progress_cb: Callable[..., None] | None = None,
 ) -> tuple[list[list[str]], dict[str, dict[str, str]]]:
@@ -779,7 +779,7 @@ def find_duplicates(
 
     # Semantic grouping remains stem-based and uses normalized stems
     if stems_with_log and duptype in ("semantic", "all"):
-        if require_year_match:
+        if require_identical_nfo_year:
             # Group candidate log files by normalized name first. Only name
             # groups with more than one log file can become duplicates, so the
             # (slower) .nfo year lookup runs for those alone — otherwise every

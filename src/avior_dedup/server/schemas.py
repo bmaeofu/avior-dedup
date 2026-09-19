@@ -34,7 +34,7 @@ class JobRequest(BaseModel):
     remove_spaces: bool = False
     remove_non_episode_parens: bool = False
     replace_underscores: bool = False
-    require_year_match: bool = False
+    require_identical_nfo_year: bool = False
 
 
 class RerunRequest(BaseModel):
