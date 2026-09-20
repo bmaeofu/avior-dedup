@@ -158,6 +158,7 @@ def main() -> None:
     print(f"  Remove episode nos:    {'yes' if args.remove_episode_nos else 'no'}")
     print(f"  Remove spaces:         {'yes' if getattr(args, 'remove_spaces', False) else 'no'}")
     print(f"  Remove non-episode parentheses: {'yes' if getattr(args, 'remove_non_episode_parens', False) else 'no'}")
+    print(f"  Replace underscores:   {'yes' if getattr(args, 'replace_underscores', False) else 'no'}")
     print(f"  Require identical nfo year:      {'yes' if getattr(args, 'require_identical_nfo_year', False) else 'no'}")
     print(f"  Require identical txt year:      {'yes' if getattr(args, 'require_identical_txt_year', False) else 'no'}")
     print(f"  Require video duration match:    {'yes' if getattr(args, 'require_videoduration_match', False) else 'no'}")

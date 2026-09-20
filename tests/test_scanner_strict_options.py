@@ -91,3 +91,39 @@ def test_videoduration_mismatch_not_duplicates(tmp_path, monkeypatch):
     _base(tmp_path, "Film (2019)")
     _base(tmp_path, "Film")
     assert _groups(tmp_path, require_videoduration_match=True) == []
+
+
+# ---------------------------------------------------------------------------
+# Probe progress forwarding (ffprobe phase during planning)
+# ---------------------------------------------------------------------------
+
+def test_build_move_plan_reports_probe_progress(tmp_path, monkeypatch):
+    from avior_dedup.dedup import planner
+    from avior_dedup.dedup.models import FileRecord
+
+    log = tmp_path / "Film.log"
+    log.write_text("x", encoding="utf-8")
+    calls: list[tuple[str, int, int]] = []
+
+    def fake_get_video_md(files, progress_cb=None, log_fn=None):
+        for i, f in enumerate(files):
+            if progress_cb is not None:
+                progress_cb(f, i + 1)
+            yield FileRecord(file=f, video_exists=False)
+
+    monkeypatch.setattr(planner, "get_video_md", fake_get_video_md)
+
+    planner.build_move_plan(
+        groups=[[str(log)]],
+        target_root=str(tmp_path),
+        error_target=str(tmp_path),
+        novideo_target=str(tmp_path),
+        max_errors_when_mc=0,
+        duptype="semantic",
+        file_to_groupkey={},
+        log_fn=lambda msg: None,
+        probe_progress_cb=lambda path, current, total: calls.append((path, current, total)),
+    )
+
+    assert calls, "probe progress callback was not invoked"
+    assert calls[-1][1] == calls[-1][2] == 1

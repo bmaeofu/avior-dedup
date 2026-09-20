@@ -55,6 +55,8 @@ class ProgressSnapshot(BaseModel):
     files_planned: int = 0
     files_moved: int = 0
     total_files_to_move: int = 0
+    probe_done: int = 0
+    probe_total: int = 0
 
 
 class JobResult(BaseModel):

@@ -160,6 +160,17 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             # accordingly. `groups_found` was already set before planning.
             reporter.update(phase="planning", files_planned=current, total_files_to_move=total)
 
+        def probe_cb(path: str, current: int, total: int) -> None:
+            """Report metadata probing (ffprobe) progress during planning."""
+            if reporter.cancelled:
+                raise JobCancelled
+            reporter.update(
+                phase="planning",
+                current_file=path,
+                probe_done=current,
+                probe_total=total,
+            )
+
         files_to_move, action_counter, size_counter, resolution_by_action_build, resolution_size_by_action_build, attr_matrix_build, attrs_by_file, errors_by_file = build_move_plan(
             groups=groups,
             target_root=target_root,
@@ -170,6 +181,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             file_to_groupkey=file_to_groupkey,
             log_fn=log_fn,
             progress_cb=plan_cb,
+            probe_progress_cb=probe_cb,
             max_duration_diff_longer=req.max_duration_diff_longer,
             max_duration_diff_shorter=req.max_duration_diff_shorter,
             selection_priorities=req.selection_priorities,

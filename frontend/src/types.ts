@@ -45,6 +45,8 @@ export interface ProgressSnapshot {
   files_planned: number
   files_moved: number
   total_files_to_move: number
+  probe_done: number
+  probe_total: number
 }
 
 export interface JobResult {

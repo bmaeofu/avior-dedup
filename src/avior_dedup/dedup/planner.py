@@ -254,6 +254,7 @@ def build_move_plan(
     file_to_groupkey: dict[str, GroupKeys],
     log_fn: Callable[[str], None],
     progress_cb: Callable[[int, int], None] | None = None,
+    probe_progress_cb: Callable[[str, int, int], None] | None = None,
     max_duration_diff_longer: int = 600,
     max_duration_diff_shorter: int = 240,
     selection_priorities: list[SelectionPriority] | None = None,
@@ -375,8 +376,14 @@ def build_move_plan(
     global_uncached = [f for f in dict.fromkeys(input_files) if f not in film_info_cache]
     if global_uncached:
         t_fetch_start = time.perf_counter()
+        probe_total = len(global_uncached)
+
+        def _probe_cb(path: str, idx: int) -> None:
+            if probe_progress_cb is not None:
+                probe_progress_cb(path, idx, probe_total)
+
         try:
-            for rec in get_video_md(global_uncached, log_fn=log_fn):
+            for rec in get_video_md(global_uncached, log_fn=log_fn, progress_cb=_probe_cb):
                 film_info_cache[rec.file] = rec
         except Exception:
             # Keep going even if metadata probing fails for some files

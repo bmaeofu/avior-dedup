@@ -73,6 +73,12 @@ const scanLabel = computed(() => {
   }
   return ''
 })
+
+const probeLabel = computed(() => {
+  const p = props.progress
+  if (!p || p.phase !== 'planning' || !p.probe_total) return ''
+  return `Probing metadata: ${p.probe_done.toLocaleString()} / ${p.probe_total.toLocaleString()} files`
+})
 </script>
 
 <template>
@@ -82,6 +88,7 @@ const scanLabel = computed(() => {
         {{ phaseLabel }}
       </v-chip>
       <span v-if="scanLabel" class="text-body-2 text-medium-emphasis ml-2">{{ scanLabel }}</span>
+      <span v-if="probeLabel" class="text-body-2 text-medium-emphasis ml-2">{{ probeLabel }}</span>
       <v-spacer />
       <v-btn
         color="error"
