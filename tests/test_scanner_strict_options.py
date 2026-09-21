@@ -127,3 +127,27 @@ def test_build_move_plan_reports_probe_progress(tmp_path, monkeypatch):
 
     assert calls, "probe progress callback was not invoked"
     assert calls[-1][1] == calls[-1][2] == 1
+
+
+# ---------------------------------------------------------------------------
+# Parallel probing: order preserved, progress reported for every file
+# ---------------------------------------------------------------------------
+
+def test_get_video_md_parallel_preserves_order_and_reports(tmp_path):
+    from avior_dedup.dedup.scanner import get_video_md
+
+    files = []
+    for i in range(25):
+        base = tmp_path / f"Film {i:02d}"
+        (tmp_path / f"Film {i:02d}.log").write_text("1\n2\n", encoding="utf-8")
+        base.with_suffix(".mkv").write_bytes(b"x")
+        files.append(str(base.with_suffix(".mkv")))
+
+    seen: list[str] = []
+    records = get_video_md(files, progress_cb=lambda path, idx: seen.append(path))
+
+    # Order must match the input list exactly.
+    assert [r.file for r in records] == files
+    # Every file reported exactly once.
+    assert len(seen) == len(files)
+    assert set(seen) == set(files)

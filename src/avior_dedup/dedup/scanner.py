@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import functools
 import unicodedata
 import datetime
@@ -223,7 +224,7 @@ def get_recording_resolution_from_log(lines: list[str], max_seconds: int = 15) -
 # ffprobe
 # -----------------------------
 
-@functools.lru_cache(maxsize=1024)
+@functools.lru_cache(maxsize=8192)
 def get_media_duration_ffprobe(path: str, timeout: int = 10) -> Optional[float]:
     """Run ffprobe to get media duration. Uses a timeout and an LRU cache to
     avoid repeated slow probes on networked filesystems. Returns None on
@@ -488,14 +489,20 @@ def get_video_md(
     progress_cb: Callable[[str, int], None] | None = None,
     log_fn: Callable[[str], None] | None = None,
 ) -> list[FileRecord]:
-    """Analyze a list of file paths and return FileRecord for each, including error counts from logs."""
+    """Analyze a list of file paths and return FileRecord for each, including error counts from logs.
+
+    The expensive per-file work (log parsing, .nfo/.txt year extraction and the
+    ffprobe duration probe) dominates the runtime and is I/O- and
+    subprocess-bound, so it runs in a bounded thread pool. The worker count can
+    be overridden via ``AVIOR_DEDUP_PROBE_WORKERS`` (default 8).
+    """
     video_suffixes = config.video_suffixes()
-    results: list[FileRecord] = []
     # cache directory listings to reduce IO
     dir_files_cache: dict[str, set[str]] = {}
 
-    for idx, file_path in enumerate(file_list):
-        t_start = time.perf_counter()
+    # Cheap, sequential first pass: resolve sibling paths from cached listings.
+    prepared: list[tuple] = []
+    for file_path in file_list:
         film_dir = os.path.dirname(file_path)
         film_base, _ = match_suffix(os.path.basename(file_path))
 
@@ -516,12 +523,34 @@ def get_video_md(
                     video_filepath = os.path.join(film_dir, candidate)
                     break
 
-        if not video_exists:
-            tried = [os.path.join(film_dir, film_base + ext) for ext in video_suffixes]
-            # logging.debug("No video found for base '%s' in '%s'. Tried: %s", film_base, film_dir, tried)
+        # Always attempt to locate and parse a matching log file (if present),
+        # even when no video file exists for this stem. This ensures .log-only
+        # input paths receive the metadata extracted from their logs.
+        main_log = None
+        for cand_name in (film_base + ".log", film_base + "mkv.log"):
+            if cand_name in files_in_dir:
+                p = os.path.join(film_dir, cand_name)
+                if os.path.exists(p):
+                    main_log = p
+                    break
 
-        video_duration=None
-        rec_duration=None
+        prepared.append(
+            (file_path, film_dir, film_base, files_in_dir, video_exists, video_filepath, main_log)
+        )
+
+    def _analyze(item: tuple) -> FileRecord:
+        (
+            file_path,
+            film_dir,
+            film_base,
+            files_in_dir,
+            video_exists,
+            video_filepath,
+            main_log,
+        ) = item
+        t_start = time.perf_counter()
+        video_duration = None
+        rec_duration = None
         error_count = None
         mod_date = None
         multichannel = None
@@ -536,17 +565,6 @@ def get_video_md(
             nfo_year = _year_from_nfo(os.path.join(film_dir, film_base + ".nfo"))
         if (film_base + ".txt") in files_in_dir:
             txt_year = _year_from_txt(os.path.join(film_dir, film_base))
-
-        # Always attempt to locate and parse a matching log file (if present),
-        # even when no video file exists for this stem. This ensures .log-only
-        # input paths receive the metadata extracted from their logs.
-        main_log = None
-        for cand_name in (film_base + ".log", film_base + "mkv.log"):
-            if cand_name in files_in_dir:
-                p = os.path.join(film_dir, cand_name)
-                if os.path.exists(p):
-                    main_log = p
-                    break
 
         if main_log and os.path.exists(main_log):
             try:
@@ -578,7 +596,9 @@ def get_video_md(
                 # Unified call: allow video_filepath to be None. The function will
                 # skip ffprobe when path is None and will attempt real-time and
                 # EPG parsing according to availability.
-                ok, msg, video_duration, rec_duration = get_video_length(video_filepath, content=content, use_epg=True)
+                ok, msg, video_duration, rec_duration = get_video_length(
+                    video_filepath, content=content, use_epg=True
+                )
 
             except (OSError, UnicodeDecodeError, ValueError):
                 error_count = None
@@ -587,7 +607,7 @@ def get_video_md(
                 resolution = None
                 rec_date = None
 
-        results.append(FileRecord(
+        rec = FileRecord(
             file=file_path,
             video_exists=video_exists,
             error_count=error_count,
@@ -599,17 +619,49 @@ def get_video_md(
             rec_date=rec_date,
             nfo_year=nfo_year,
             txt_year=txt_year,
-        ))
+        )
         t_end = time.perf_counter()
         if log_fn is not None:
             try:
                 log_fn(f"TIMING get_video_md {file_path} {t_end - t_start:.3f}s")
             except Exception:
                 pass
-        if progress_cb is not None:
-            progress_cb(file_path, idx + 1)
+        return rec
 
-    return results
+    total = len(prepared)
+    if not total:
+        return []
+
+    try:
+        workers = int(os.getenv("AVIOR_DEDUP_PROBE_WORKERS", "8") or "8")
+    except (TypeError, ValueError):
+        workers = 8
+
+    results: list[FileRecord | None] = [None] * total
+    if workers <= 1:
+        for idx, item in enumerate(prepared):
+            try:
+                results[idx] = _analyze(item)
+            except Exception:
+                results[idx] = FileRecord(file=item[0], video_exists=item[4])
+            if progress_cb is not None:
+                progress_cb(item[0], idx + 1)
+    else:
+        done = 0
+        with ThreadPoolExecutor(max_workers=min(workers, total)) as pool:
+            futures = {pool.submit(_analyze, item): idx for idx, item in enumerate(prepared)}
+            for fut in as_completed(futures):
+                idx = futures[fut]
+                item = prepared[idx]
+                try:
+                    results[idx] = fut.result()
+                except Exception:
+                    results[idx] = FileRecord(file=item[0], video_exists=item[4])
+                done += 1
+                if progress_cb is not None:
+                    progress_cb(item[0], done)
+
+    return [r for r in results if r is not None]
 
 
 def find_duplicates(
