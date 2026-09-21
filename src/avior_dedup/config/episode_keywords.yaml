@@ -18,6 +18,71 @@ series_keep_episode_nos:
   - hader spielt
   - bestes kabarett
   - nuhr
+  # Ergänzt aus DokHD-Dedup-Log: mehrteilige Folgen (N_M) mit kleinem M sowie
+  # Serien mit generischem/repetitivem Episodentitel — sonst würden verschiedene
+  # Folgen/Teile als Duplikat zusammengeführt.
+  - 100 % berlin
+  - 100% berlin
+  - 16xdeutschland
+  - abenteuer erde die wilden 12 - unsere zoos im westen
+  - alpha-centauri
+  - auf dem dach europas
+  - der globale zoo
+  - der traum vom gesamtkunstwerk
+  - der weg der weisheit
+  - die gentlemen baten zur kasse
+  - die hälfte der welt gehört uns
+  - die karibik
+  - die philippinen - ein reiseerlebnis
+  - die winzlinge in freier wildbahn
+  - donau
+  - ecuador, hotspot der artenvielfalt
+  - einsatzbefehl mali
+  - elstners reisen
+  - fokus japan
+  - fuck the planet
+  - geh doch nach drüben!
+  - helden auf vier pfoten
+  - ins heiße herz afrikas
+  - irlands küsten
+  - kesslers expedition
+  - königliche gärten an der nordsee
+  - lateinamerika erhebt sich
+  - lost women art
+  - länder - menschen - abenteuer
+  - länder-menschen-abenteuer
+  - mein zuhause hat vier räder
+  - mit dem zug durch neuseeland
+  - mit offenen karten
+  - mord im konsulat
+  - mythen - michael köhlmeier erzählt sagen des klassischen altertums
+  - paul merton in europa
+  - planet schule david and red clips
+  - schneller als das auge
+  - schwarzes meer und weiße nächte
+  - schweizer erfolgsgeschichten
+  - schätze der welt
+  - sehnsuchtsorte an der adria
+  - sex shop ddr
+  - soundtrack deutschland
+  - terra x - expedition deutschland
+  - terra x expedition deutschland
+  - terra x history - putins blutspur
+  - totally phenomenal
+  - traumgärten auf la réunion
+  - traumziele südostasiens
+  - unser krieg
+  - unsere wälder
+  - vertreibung - odsun
+  - welt der tiere
+  - wilde schweiz
+  - worldwide berlin
+  - wunder der natur
+  - wunderschön
+  - zapping international
+  - zurück an die arbeit
+  - zwischen anden und amazonien
+  - raumpatrouille
 
 # Keywords in the episode part that prevent episode number stripping
 episode_keep_keywords:
