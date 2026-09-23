@@ -1,4 +1,4 @@
-# Candidate file suffixes for film-related files
+# Candidate file suffixes for film-related files (sibling files)
 # Ordered longest-first for greedy matching
 candidate_suffixes:
   - .mp4.INFO.log
@@ -18,12 +18,13 @@ candidate_suffixes:
   - .ts
   - .mpg
   - .nfo
+  - .scrapefail
   - -fanart.jpg
   - -poster.jpg
   - -landscape.jpg
   - -thumb.jpg
   - -keyart.jpg
-
+  
 # Video file extensions used to check if a recording exists
 video_suffixes:
   - .mkv
