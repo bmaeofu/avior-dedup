@@ -1,4 +1,5 @@
 - 'terra\s*x\s*-\s*'
+- '42\s*-\s*die\s+antwort\s+auf\s+fast\s+alles'
 - '^erlebnis\s+erde\s*-?\s*'
 - '^abenteuer\s+wildnis\s*-?\s*'
 - '^heiter\s+bis\s+t[oö]dlich*'
