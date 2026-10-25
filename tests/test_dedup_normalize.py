@@ -63,3 +63,19 @@ def test_stripping_allowed_when_number_is_episode():
         txt_available=True, txt_episode=1188, txt_year=2019,
     )
     assert "serie 1 " not in out and "serie 1" not in out.replace("  ", " ")
+
+
+def test_trailing_year_in_parentheses_or_bare():
+    from avior_dedup.dedup.normalize import _trailing_year_value
+    assert _trailing_year_value("titel (2019)") == 2019
+    assert _trailing_year_value("titel 2019") == 2019
+    assert _trailing_year_value("serie (3) - episodentitel") is None
+
+
+def test_parenthesised_year_blocks_stripping():
+    out = normalize_film_name(
+        "Serie (3) - Episodentitel (2019)", [], True,
+        txt_available=True, txt_episode=3, txt_year=2019,
+    )
+    # The episode number 3 must survive: (2019) is the year.
+    assert "serie 3" in out

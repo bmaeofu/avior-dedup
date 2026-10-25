@@ -7,7 +7,15 @@ import unicodedata
 from avior_dedup import config
 
 
-_TRAILING_YEAR_RE = re.compile(r"(\d{4})\s*$")
+_TRAILING_YEAR_RE = re.compile(r"(?:\((\d{4})\)|(\d{4}))\s*$")
+
+
+def _trailing_year_value(stem: str) -> int | None:
+    """Return the 4-digit number that ends *stem* (in parentheses or bare)."""
+    m = _TRAILING_YEAR_RE.search(stem)
+    if not m:
+        return None
+    return int(m.group(1) or m.group(2))
 
 
 def _trailing_number_is_year(
@@ -23,10 +31,9 @@ def _trailing_number_is_year(
     Anything unproven — no number at all, no .txt, or differing data — counts
     as a year, so episode numbers are not stripped.
     """
-    m = _TRAILING_YEAR_RE.search(stem)
-    if not m:
+    value = _trailing_year_value(stem)
+    if value is None:
         return False
-    value = int(m.group(1))
     if not txt_available:
         return True
     if txt_year is not None and txt_year == value:
