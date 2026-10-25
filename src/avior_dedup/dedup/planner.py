@@ -93,30 +93,14 @@ def _sort_key(
             else:
                 key.append(10**9)
         elif p == SelectionPriority.RECORDING_DATE:
-            # Prefer newer recordings. If rec_date is not available, fall back to
-            # filesystem mod_time. If neither is available use 0.
-            rec_ord = 0
-            if getattr(r, "rec_date", None):
-                try:
-                    rec_dt = datetime.date.fromisoformat(r.rec_date)
-                    rec_ord = rec_dt.toordinal()
-                except Exception:
-                    rec_ord = 0
-            elif r.mod_date:
-                try:
-                    rec_ord = datetime.date.fromtimestamp(r.mod_date).toordinal()
-                except Exception:
-                    rec_ord = 0
-
             # newer should be better -> smaller sort key -> use negative ordinal
-            key.append(-rec_ord)
+            key.append(-_recording_ordinal(r))
         elif p == SelectionPriority.YEAR_MATCH:
             # Prefer records where the .nfo year matches the .txt year.
             key.append(0 if _year_matches(r) else 1)
-    # Fixed final tiebreaker (not configurable): among otherwise equal records
-    # prefer the cleaner name, i.e. the fewest redundant tokens. This must stay
-    # last so it can never override a quality criterion.
-    key.append(_name_token_count(r.file))
+        elif p == SelectionPriority.CLEAN_NAME:
+            # Prefer the cleaner name, i.e. the fewest redundant tokens.
+            key.append(_name_token_count(r.file))
     return tuple(key)
 
 
@@ -171,6 +155,71 @@ def _year_matches(r: FileRecord) -> bool:
     )
 
 
+def _recording_ordinal(r: FileRecord) -> int:
+    """Return a comparable recording date ordinal (0 when unknown).
+
+    Mirrors the RECORDING_DATE sort key: ``rec_date`` wins, filesystem
+    ``mod_date`` is only the fallback.
+    """
+    if getattr(r, "rec_date", None):
+        try:
+            return datetime.date.fromisoformat(r.rec_date).toordinal()
+        except Exception:
+            return 0
+    if r.mod_date:
+        try:
+            return datetime.date.fromtimestamp(r.mod_date).toordinal()
+        except Exception:
+            return 0
+    return 0
+
+
+def _reason_for_priority(
+    priority: SelectionPriority,
+    best: FileRecord,
+    others: list[FileRecord],
+    max_errors_when_mc: int | None,
+) -> str | None:
+    """Return the reason label when *priority* separates `best` from `others`."""
+    try:
+        if priority == SelectionPriority.MULTICHANNEL:
+            if best.multichannel:
+                for o in others:
+                    if not o.multichannel:
+                        # If best has acceptable errors when MC is considered
+                        if max_errors_when_mc is None or (best.error_count or 0) <= max_errors_when_mc:
+                            return "multichannel"
+        elif priority == SelectionPriority.RESOLUTION:
+            best_res = best.resolution or 0
+            if any((o.resolution or 0) < best_res for o in others):
+                return "higher_resolution"
+        elif priority == SelectionPriority.FEWER_ERRORS:
+            best_err = best.error_count if best.error_count is not None else 10**9
+            if any(((o.error_count if o.error_count is not None else 10**9) > best_err) for o in others):
+                return "fewer_errors"
+        elif priority == SelectionPriority.CLEAN_NAME:
+            best_tokens = _name_token_count(best.file)
+            if any(_name_token_count(o.file) > best_tokens for o in others):
+                return "cleaner_name"
+        elif priority == SelectionPriority.RECORDING_DATE:
+            if any(_recording_ordinal(o) < _recording_ordinal(best) for o in others):
+                return "newer"
+        elif priority == SelectionPriority.YEAR_MATCH:
+            if _year_matches(best) and any(not _year_matches(o) for o in others):
+                return "year_match"
+        elif priority == SelectionPriority.CLOSEST_DURATION:
+            def penalty(r: FileRecord) -> float:
+                if r.video_duration is not None and r.rec_duration is not None:
+                    return abs(r.video_duration - r.rec_duration)
+                return 10**9
+
+            if any(penalty(o) > penalty(best) for o in others):
+                return "closest_duration"
+    except Exception:
+        return None
+    return None
+
+
 def determine_keep_reason(
     best: FileRecord,
     others: list[FileRecord],
@@ -179,81 +228,15 @@ def determine_keep_reason(
 ) -> str:
     """Return a short reason string why `best` was selected over `others`.
 
-    Reasons follow selection priorities: 'multichannel', 'higher_resolution',
-    'fewer_errors', 'newer', 'closest_duration'. If none applies, return
-    'selected'.
+    The first configured priority that separates `best` from `others` names the
+    reason: 'multichannel', 'higher_resolution', 'fewer_errors',
+    'cleaner_name', 'newer', 'year_match', 'closest_duration'. If none applies,
+    return 'selected'.
     """
-    try:
-        # MULTICHANNEL
-        if SelectionPriority.MULTICHANNEL in selection_priorities:
-            if best.multichannel:
-                for o in others:
-                    if not o.multichannel:
-                        # If best has acceptable errors when MC is considered
-                        if max_errors_when_mc is None or (best.error_count or 0) <= max_errors_when_mc:
-                            return "multichannel"
-
-        # RESOLUTION
-        if SelectionPriority.RESOLUTION in selection_priorities:
-            try:
-                best_res = best.resolution or 0
-                if any((o.resolution or 0) < best_res for o in others):
-                    return "higher_resolution"
-            except Exception:
-                pass
-
-        # FEWER_ERRORS
-        if SelectionPriority.FEWER_ERRORS in selection_priorities:
-            try:
-                best_err = best.error_count if best.error_count is not None else 10**9
-                if any(((o.error_count if o.error_count is not None else 10**9) > best_err) for o in others):
-                    return "fewer_errors"
-            except Exception:
-                pass
-
-        # RECORDING_DATE
-        if SelectionPriority.RECORDING_DATE in selection_priorities:
-            try:
-                if getattr(best, "rec_date", None):
-                    for o in others:
-                        if not getattr(o, "rec_date", None):
-                            return "newer"
-                        try:
-                            if datetime.date.fromisoformat(best.rec_date) > datetime.date.fromisoformat(o.rec_date):
-                                return "newer"
-                        except Exception:
-                            continue
-            except Exception:
-                pass
-
-        # YEAR_MATCH
-        if SelectionPriority.YEAR_MATCH in selection_priorities:
-            if _year_matches(best) and any(not _year_matches(o) for o in others):
-                return "year_match"
-
-        # CLOSEST_DURATION
-        if SelectionPriority.CLOSEST_DURATION in selection_priorities:
-            try:
-                def penalty(r: FileRecord) -> float:
-                    if r.video_duration is not None and r.rec_duration is not None:
-                        diff = r.video_duration - r.rec_duration
-                        if diff > 0:
-                            return diff
-                        return -diff
-                    return 10**9
-
-                best_pen = penalty(best)
-                if any(penalty(o) > best_pen for o in others):
-                    return "closest_duration"
-            except Exception:
-                pass
-
-        # Fixed final tiebreaker: cleaner name (fewer redundant tokens).
-        best_tokens = _name_token_count(best.file)
-        if any(_name_token_count(o.file) > best_tokens for o in others):
-            return "cleaner_name"
-    except Exception:
-        pass
+    for priority in selection_priorities:
+        reason = _reason_for_priority(priority, best, others, max_errors_when_mc)
+        if reason:
+            return reason
     return "selected"
 
 

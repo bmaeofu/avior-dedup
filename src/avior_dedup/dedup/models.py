@@ -13,12 +13,14 @@ class SelectionPriority(str, Enum):
     RECORDING_DATE = "recording_date"
     CLOSEST_DURATION = "closest_duration"
     YEAR_MATCH = "year_match"
+    CLEAN_NAME = "clean_name"
 
 
 DEFAULT_SELECTION_PRIORITIES = [
     SelectionPriority.MULTICHANNEL,
     SelectionPriority.RESOLUTION,
     SelectionPriority.FEWER_ERRORS,
+    SelectionPriority.CLEAN_NAME,
     SelectionPriority.RECORDING_DATE,
     SelectionPriority.YEAR_MATCH,
     SelectionPriority.CLOSEST_DURATION,

@@ -21,10 +21,11 @@ Once it finds duplicates, it picks which copy to keep based on:
 
 Selection behavior notes:
 
-- Default priority order: `multichannel`, `resolution`, `fewer_errors`, `recording_date`, `closest_duration`.
+- Default priority order: `multichannel`, `resolution`, `fewer_errors`, `clean_name`, `recording_date`, `year_match`, `closest_duration`. See [docs/selection-priorities.md](docs/selection-priorities.md) for what each criterion does, how the order works, and how to change it.
 - Multichannel detection uses the recording-start section of `.log` files: the last AC3 audio state within the first ~15 seconds after `Start`/`Start Recording` decides.
 - Resolution detection uses the recording-start section of `.log` files: the last video resolution in the first ~15 seconds decides (e.g. `1920x1080` and `1920x1088` are treated as `1080`).
 - Trailing `avior-go` metadata is excluded from log-based analysis.
+- `clean_name` prefers the filename with the fewest redundant tokens, so a name that repeats the series title loses against a plain one.
 - `recording_date` prefers newer recordings when present; if a recording has no `rec_date`, the filesystem `mod_date` is used as a fallback only when `recording_date` is part of the active priority list.
 - `closest_duration` only penalizes candidates that fall outside the configured duration thresholds; recordings within the allowed window are treated as equal for that criterion.
 - Independent of the configurable priorities, a fixed last tiebreaker prefers the cleaner filename: among candidates that are otherwise equal, the one with the fewest redundant tokens wins (e.g. a name where the series title appears twice loses). It always runs last, so it can never override a quality criterion.

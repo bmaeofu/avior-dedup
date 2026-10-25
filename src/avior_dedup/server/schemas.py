@@ -24,6 +24,7 @@ class JobRequest(BaseModel):
             SelectionPriority.MULTICHANNEL,
             SelectionPriority.RESOLUTION,
             SelectionPriority.FEWER_ERRORS,
+            SelectionPriority.CLEAN_NAME,
             SelectionPriority.RECORDING_DATE,
             SelectionPriority.YEAR_MATCH,
             SelectionPriority.CLOSEST_DURATION,
