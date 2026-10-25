@@ -27,6 +27,7 @@ Selection behavior notes:
 - Trailing `avior-go` metadata is excluded from log-based analysis.
 - `recording_date` prefers newer recordings when present; if a recording has no `rec_date`, the filesystem `mod_date` is used as a fallback only when `recording_date` is part of the active priority list.
 - `closest_duration` only penalizes candidates that fall outside the configured duration thresholds; recordings within the allowed window are treated as equal for that criterion.
+- Independent of the configurable priorities, a fixed last tiebreaker prefers the cleaner filename: among candidates that are otherwise equal, the one with the fewest redundant tokens wins (e.g. a name where the series title appears twice loses). It always runs last, so it can never override a quality criterion.
 
 Everything that isn't the best copy gets moved out: normal duplicates to one directory, error-laden copies to another, orphaned metadata to a third. You can also run in dry-run mode to just see what it would do before committing.
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 from collections import Counter, defaultdict
 from typing import Callable
@@ -34,6 +35,19 @@ def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, Gro
     elif duptype == "both":
         return basename.lower()
     return basename
+
+
+_TOKEN_RE = re.compile(r"[0-9A-Za-zÄÖÜäöüß]+")
+
+
+def _name_token_count(path: str) -> int:
+    """Return the number of word tokens in a file's stem.
+
+    Inside one group every record normalizes to the same key, so a larger token
+    count means redundancy in the raw name (e.g. the series name repeated).
+    """
+    stem = os.path.splitext(os.path.basename(path))[0]
+    return len(_TOKEN_RE.findall(stem))
 
 
 def _sort_key(
@@ -99,8 +113,10 @@ def _sort_key(
         elif p == SelectionPriority.YEAR_MATCH:
             # Prefer records where the .nfo year matches the .txt year.
             key.append(0 if _year_matches(r) else 1)
-    # No additional global tiebreaker — mod_date is only considered as fallback
-    # inside the RECORDING_DATE priority above.
+    # Fixed final tiebreaker (not configurable): among otherwise equal records
+    # prefer the cleaner name, i.e. the fewest redundant tokens. This must stay
+    # last so it can never override a quality criterion.
+    key.append(_name_token_count(r.file))
     return tuple(key)
 
 
@@ -231,6 +247,11 @@ def determine_keep_reason(
                     return "closest_duration"
             except Exception:
                 pass
+
+        # Fixed final tiebreaker: cleaner name (fewer redundant tokens).
+        best_tokens = _name_token_count(best.file)
+        if any(_name_token_count(o.file) > best_tokens for o in others):
+            return "cleaner_name"
     except Exception:
         pass
     return "selected"

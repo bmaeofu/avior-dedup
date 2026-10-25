@@ -321,3 +321,29 @@ class TestDurationWindow:
         )
         assert best.file == "mc.ts"
         print("  PASS: all out of window -> fallback to full list, MC wins by priority")
+
+
+def test_cleaner_name_wins_on_full_tie():
+    """Equal quality: the name without a repeated series title is kept."""
+    series = "42 - Die Antwort auf fast alles"
+    double = _rec(f"{series} - Werden wir uns einfrieren - {series}.mkv")
+    clean = _rec(f"{series} - Werden wir uns einfrieren.mkv")
+    assert select_best_film([double, clean]).file == clean.file
+
+
+def test_name_tiebreaker_never_overrides_quality():
+    """The name tiebreaker runs last: better resolution still wins."""
+    short_name = _rec("Serie - Titel.mkv", resolution=720)
+    long_name = _rec("Serie - Titel - Serie.mkv", resolution=1080)
+    assert select_best_film([short_name, long_name]).file == long_name.file
+
+
+def test_keep_reason_reports_cleaner_name():
+    from avior_dedup.dedup.models import DEFAULT_SELECTION_PRIORITIES
+    from avior_dedup.dedup.planner import determine_keep_reason
+
+    series = "42 - Die Antwort auf fast alles"
+    double = _rec(f"{series} - Werden wir uns einfrieren - {series}.mkv")
+    clean = _rec(f"{series} - Werden wir uns einfrieren.mkv")
+    best = select_best_film([double, clean])
+    assert determine_keep_reason(best, [double, clean], DEFAULT_SELECTION_PRIORITIES) == "cleaner_name"
