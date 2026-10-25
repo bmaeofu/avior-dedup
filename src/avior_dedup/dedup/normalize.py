@@ -7,6 +7,35 @@ import unicodedata
 from avior_dedup import config
 
 
+_TRAILING_YEAR_RE = re.compile(r"(\d{4})\s*$")
+
+
+def _trailing_number_is_year(
+    stem: str,
+    txt_available: bool,
+    txt_episode: int | None,
+    txt_year: int | None,
+) -> bool:
+    """Decide whether the trailing 4-digit number of *stem* denotes a year.
+
+    A trailing 4-digit number is only stripped as an episode number when the
+    sibling .txt proves it (``Episode == number`` and ``year != number``).
+    Anything unproven — no number at all, no .txt, or differing data — counts
+    as a year, so episode numbers are not stripped.
+    """
+    m = _TRAILING_YEAR_RE.search(stem)
+    if not m:
+        return False
+    value = int(m.group(1))
+    if not txt_available:
+        return True
+    if txt_year is not None and txt_year == value:
+        return True
+    if txt_episode is not None and txt_episode == value:
+        return False
+    return True
+
+
 def normalize_film_name(
     name: str,
     semantic_prefixes: list[str],
@@ -15,6 +44,9 @@ def normalize_film_name(
     remove_non_episode_parens: bool = False,
     replace_underscores: bool = False,
     ignore_keep_keywords: bool = False,
+    txt_available: bool = False,
+    txt_episode: int | None = None,
+    txt_year: int | None = None,
 ) -> str:
     """Normalize a film filename for semantic duplicate detection."""
     # Normalize Unicode representation first and use casefold for robust case-insensitive matching.
@@ -73,15 +105,16 @@ def normalize_film_name(
             if kw in base:
                 apply_regex = False
                 break
-    if apply_regex and rest and not ignore_keep_keywords:
-        # If the 'rest' contains a 4-digit year, do not remove episode numbers.
-        if re.search(r"\b\d{4}\b", rest):
+    if apply_regex and not ignore_keep_keywords:
+        # A trailing 4-digit number counts as a year (and blocks stripping)
+        # unless the sibling .txt proves it is the episode number.
+        if _trailing_number_is_year(stem, txt_available, txt_episode, txt_year):
             apply_regex = False
-        else:
-            for kw in config.episode_keep_keywords():
-                if kw in rest:
-                    apply_regex = False
-                    break
+    if apply_regex and rest and not ignore_keep_keywords:
+        for kw in config.episode_keep_keywords():
+            if kw in rest:
+                apply_regex = False
+                break
 
     if apply_regex and len(parts) > 2 and not ignore_keep_keywords:
         for kw in config.episode_keep_keywords_years():

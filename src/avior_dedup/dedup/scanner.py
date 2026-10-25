@@ -14,7 +14,7 @@ from typing import Callable, Optional, Tuple
 from avior_dedup import config
 from avior_dedup.dedup.io_utils import read_text
 from avior_dedup.dedup.models import FileRecord, GroupKeys
-from avior_dedup.dedup.normalize import normalize_film_name
+from avior_dedup.dedup.normalize import _TRAILING_YEAR_RE, normalize_film_name
 from avior_dedup.dedup.suffix import match_suffix
 
 
@@ -768,6 +768,30 @@ def find_duplicates(
 
     ignored_files_lower = {_canonical_case_key(x) for x in config.ignored_files()}
 
+    # Lazily resolved .txt context for the trailing-year rule. Only stems whose
+    # name ends in a 4-digit number need the metadata read.
+    _txt_ctx_cache: dict[str, tuple[bool, int | None, int | None]] = {}
+
+    def _txt_ctx(stem: str, dir_path: str) -> tuple[bool, int | None, int | None]:
+        """Return (txt_available, episode, year) for a stem, cached."""
+        if not _TRAILING_YEAR_RE.search(stem):
+            return False, None, None
+        base = os.path.join(dir_path, stem)
+        cached = _txt_ctx_cache.get(base)
+        if cached is not None:
+            return cached
+        txt_path = base + ".txt"
+        available = os.path.exists(txt_path)
+        episode = None
+        year = None
+        if available:
+            ep_id = _episode_id_from_txt(txt_path)
+            episode = ep_id[1] if ep_id else None
+            year = _year_from_txt(base)
+        result = (available, episode, year)
+        _txt_ctx_cache[base] = result
+        return result
+
     # Map stem (base name without known suffix) -> list of files with that stem
     stems_to_files: dict[str, list[str]] = {}
     # Map full basename (including suffix) -> list of files with that basename
@@ -825,6 +849,7 @@ def find_duplicates(
 
         # Build group keys based on the stem so the whole set is identified by the stem
         lower_name = _canonical_case_key(stem)
+        _txt_available, _txt_ep, _txt_yr = _txt_ctx(stem, dir_path)
         semantic_name = normalize_film_name(
             stem,
             semantic_prefixes,
@@ -833,6 +858,9 @@ def find_duplicates(
             remove_non_episode_parens,
             replace_underscores,
             ignore_keep_keywords=discard_groups_with_distinct_episodes,
+            txt_available=_txt_available,
+            txt_episode=_txt_ep,
+            txt_year=_txt_yr,
         )
         file_to_groupkey[full_path] = GroupKeys(
             exact=stem,
@@ -965,6 +993,10 @@ def find_duplicates(
             # alone — otherwise every film in the library would incur them.
             sem_to_entries: dict[str, list[tuple[str, str]]] = {}
             for stem in stems_with_log:
+                _stem_paths = stems_to_files.get(stem, [])
+                _txt_available, _txt_ep, _txt_yr = _txt_ctx(
+                    stem, os.path.dirname(_stem_paths[0]) if _stem_paths else ""
+                )
                 sem = normalize_film_name(
                     stem,
                     semantic_prefixes,
@@ -973,6 +1005,9 @@ def find_duplicates(
                     remove_non_episode_parens,
                     replace_underscores,
                     ignore_keep_keywords=discard_groups_with_distinct_episodes,
+                    txt_available=_txt_available,
+                    txt_episode=_txt_ep,
+                    txt_year=_txt_yr,
                 )
                 for fp in stems_to_files.get(stem, []):
                     suf = match_suffix(os.path.basename(fp))[1]
@@ -1024,6 +1059,10 @@ def find_duplicates(
             # Default: group by normalized stem only (no nfo_year requirement).
             semantic_to_stems: dict[str, list[str]] = {}
             for stem in stems_with_log:
+                _stem_paths = stems_to_files.get(stem, [])
+                _txt_available, _txt_ep, _txt_yr = _txt_ctx(
+                    stem, os.path.dirname(_stem_paths[0]) if _stem_paths else ""
+                )
                 sem = normalize_film_name(
                     stem,
                     semantic_prefixes,
@@ -1032,6 +1071,9 @@ def find_duplicates(
                     remove_non_episode_parens,
                     replace_underscores,
                     ignore_keep_keywords=discard_groups_with_distinct_episodes,
+                    txt_available=_txt_available,
+                    txt_episode=_txt_ep,
+                    txt_year=_txt_yr,
                 )
                 semantic_to_stems.setdefault(sem, []).append(stem)
 
