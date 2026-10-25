@@ -151,3 +151,67 @@ def test_get_video_md_parallel_preserves_order_and_reports(tmp_path):
     # Every file reported exactly once.
     assert len(seen) == len(files)
     assert set(seen) == set(files)
+
+
+# ---------------------------------------------------------------------------
+# discard_groups_with_distinct_episodes
+# ---------------------------------------------------------------------------
+
+def _groups_ep(path: Path, remove_episode_nos: bool = True, **opts) -> list:
+    groups, _ = find_duplicates(
+        str(path),
+        duptype="semantic",
+        remove_episode_nos=remove_episode_nos,
+        remove_non_episode_parens=True,
+        semantic_prefixes=[],
+        **opts,
+    )
+    return groups
+
+
+def _pair(tmp_path, stem, title, info=""):
+    Path(tmp_path, stem + ".log").write_text("x", encoding="utf-8")
+    Path(tmp_path, stem + ".txt").write_text(
+        f"Title={title}\nInfo={info}\n", encoding="utf-8"
+    )
+
+
+def test_distinct_episodes_discarded(tmp_path):
+    _pair(tmp_path, "Raumpatrouille (1_7) - Orion", "Raumpatrouille (1/7)", "Orion")
+    _pair(tmp_path, "Raumpatrouille (2_7) - Orion", "Raumpatrouille (2/7)", "Orion")
+    groups = _groups_ep(tmp_path, discard_groups_with_distinct_episodes=True)
+    assert groups == []
+
+
+def test_same_episode_different_numbering_kept(tmp_path):
+    _pair(tmp_path, "Poirot (8_71) - Kidnapper", "Poirot (8/71)", "Kidnapper")
+    _pair(tmp_path, "Poirot (S01_E08) - Kidnapper", "Poirot (S01/E08)", "Kidnapper")
+    groups = _groups_ep(tmp_path, discard_groups_with_distinct_episodes=True)
+    assert len(groups) == 1
+
+
+def test_option_is_noop_without_remove_episode_nos(tmp_path):
+    _pair(tmp_path, "Raumpatrouille (1_7) - Orion", "Raumpatrouille (1/7)", "Orion")
+    _pair(tmp_path, "Raumpatrouille (2_7) - Orion", "Raumpatrouille (2/7)", "Orion")
+    # Without stripping the numbers keep the names apart -> no group either way.
+    assert _groups_ep(tmp_path, remove_episode_nos=False, discard_groups_with_distinct_episodes=True) == []
+
+
+def test_option_bypasses_series_keep_keywords(tmp_path):
+    # 'raumpatrouille' is in series_keep_episode_nos: stripping is normally
+    # blocked, so the option could never act. With the option it is bypassed.
+    _pair(tmp_path, "Raumpatrouille (1_7) - Orion", "Raumpatrouille (1/7)", "Orion")
+    _pair(tmp_path, "Raumpatrouille (2_7) - Orion", "Raumpatrouille (2/7)", "Orion")
+    assert _groups_ep(tmp_path) == []                                # blocked, no group
+    assert _groups_ep(tmp_path, discard_groups_with_distinct_episodes=True) == []  # stripped + discarded
+
+
+def test_episode_id_helpers():
+    from avior_dedup.dedup.scanner import _episode_ids_consistent
+
+    assert _episode_ids_consistent([(None, 1), (None, 2)]) is False
+    assert _episode_ids_consistent([(None, 8), (1, 8)]) is True
+    assert _episode_ids_consistent([(1, 10), (2, 12)]) is False
+    assert _episode_ids_consistent([(1, 10), (2, 10)]) is False
+    assert _episode_ids_consistent([(None, 3), None]) is True
+    assert _episode_ids_consistent([None, None]) is True

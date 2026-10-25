@@ -145,6 +145,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             req.require_identical_nfo_year,
             req.require_identical_txt_year,
             req.require_videoduration_match,
+            req.discard_groups_with_distinct_episodes,
             req.ignored_directories,
             progress_cb=scan_cb,
         )
@@ -262,6 +263,7 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             require_identical_nfo_year = req.require_identical_nfo_year
             require_identical_txt_year = req.require_identical_txt_year
             require_videoduration_match = req.require_videoduration_match
+            discard_groups_with_distinct_episodes = req.discard_groups_with_distinct_episodes
             execution_date = exec_time
             # start_time will be attached after class creation to avoid NameError
             ignored_directories = req.ignored_directories

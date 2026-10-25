@@ -58,6 +58,7 @@ def write_summary(
         f"  Require identical nfo year:      {'yes' if getattr(args, 'require_identical_nfo_year', False) else 'no'}",
         f"  Require identical txt year:      {'yes' if getattr(args, 'require_identical_txt_year', False) else 'no'}",
         f"  Require video duration match:    {'yes' if getattr(args, 'require_videoduration_match', False) else 'no'}",
+        f"  Discard distinct episode groups: {'yes' if getattr(args, 'discard_groups_with_distinct_episodes', False) else 'no'}",
         f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}",
     ]
 

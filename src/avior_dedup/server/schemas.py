@@ -37,6 +37,7 @@ class JobRequest(BaseModel):
     require_identical_nfo_year: bool = False
     require_identical_txt_year: bool = False
     require_videoduration_match: bool = False
+    discard_groups_with_distinct_episodes: bool = False
 
 
 class RerunRequest(BaseModel):

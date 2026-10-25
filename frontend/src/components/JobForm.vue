@@ -65,6 +65,7 @@ const form = reactive<JobRequest>({
   require_identical_nfo_year: false,
   require_identical_txt_year: false,
   require_videoduration_match: false,
+  discard_groups_with_distinct_episodes: false,
 })
 
 const canSubmit = computed(() => form.source.trim() !== '' && form.target.trim() !== '')
@@ -396,6 +397,22 @@ function submit() {
             label="Require video duration match (5%)"
             density="compact"
             hide-details
+          />
+        </v-col>
+      </v-row>
+
+      <v-row dense class="mt-1">
+        <v-col cols="12" md="6">
+          <v-checkbox
+            v-model="form.discard_groups_with_distinct_episodes"
+            label="Discard groups with distinct episodes"
+            density="compact"
+            hide-details
+            :disabled="!form.remove_episode_nos"
+            :hint="form.remove_episode_nos
+              ? 'Reads the .txt episode id; bypasses the series/episode keep-keyword lists.'
+              : 'Requires “Remove episode numbers”.'"
+            persistent-hint
           />
         </v-col>
       </v-row>

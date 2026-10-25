@@ -440,6 +440,80 @@ def _year_from_txt(base: str) -> Optional[int]:
     return None
 
 
+_EP_SXXEYY_RE = re.compile(r"\(\s*S(\d{1,3})\s*[/_\-]\s*E(\d{1,4})\s*\)", re.IGNORECASE)
+_EP_STAFFEL_FOLGE_RE = re.compile(r"Staffel\s*(\d{1,3})\s*,?\s*Folge\s*(\d{1,4})", re.IGNORECASE)
+_EP_PART_RE = re.compile(r"\(\s*(\d{1,3})\s*/\s*(\d{1,4})\s*\)")
+_EP_PLAIN_RE = re.compile(r"\(\s*(\d{1,3})\s*\)")
+
+
+def _episode_id_from_txt(txt_path: str) -> tuple[int | None, int] | None:
+    """Return ``(season, episode)`` parsed from a recorder .txt, or None.
+
+    The EPG ``Title=`` line reliably carries the episode identifier in one of
+    the observed schemes ``(S01/E03)``, ``(8/71)`` or ``(18)``. The
+    ``(Staffel 2, Folge 18)`` form may appear in ``Title=`` or ``Info=`` and
+    the optional ``Episode=`` field is only present for some broadcasters.
+    """
+    try:
+        content = read_text(txt_path)
+    except Exception:
+        return None
+    if not content:
+        return None
+
+    title = ""
+    info = ""
+    episode_field = None
+    for line in content.splitlines():
+        if line.startswith("Title="):
+            title = line[6:].strip()
+        elif line.startswith("Info="):
+            info = line[5:].strip()
+        elif line.startswith("Episode="):
+            value = line[8:].strip()
+            if value.isdigit():
+                episode_field = int(value)
+
+    m = _EP_SXXEYY_RE.search(title)
+    if m:
+        return int(m.group(1)), int(m.group(2))
+
+    m = _EP_STAFFEL_FOLGE_RE.search(f"{title} {info}")
+    if m:
+        return int(m.group(1)), int(m.group(2))
+
+    m = _EP_PART_RE.search(title)
+    if m:
+        return None, int(m.group(1))
+
+    m = _EP_PLAIN_RE.search(title)
+    if m:
+        return None, int(m.group(1))
+
+    if episode_field is not None:
+        return None, episode_field
+    return None
+
+
+def _episode_ids_consistent(ids: list[tuple[int | None, int] | None]) -> bool:
+    """Return True when the known episode ids may denote the same episode.
+
+    Fewer than two known ids counts as "unknown" (consistent) so that missing
+    metadata never discards a group. A season comparison only rejects when both
+    sides actually carry a season.
+    """
+    known = [i for i in ids if i is not None]
+    if len(known) < 2:
+        return True
+    first_season, first_episode = known[0]
+    for season, episode in known[1:]:
+        if episode != first_episode:
+            return False
+        if first_season is not None and season is not None and season != first_season:
+            return False
+    return True
+
+
 def _video_duration_for(dir_path: str, stem: str) -> Optional[float]:
     """Return the ffprobe duration (seconds) of the stem's video file, or None."""
     for ext in config.video_suffixes():
@@ -675,6 +749,7 @@ def find_duplicates(
     require_identical_nfo_year: bool = False,
     require_identical_txt_year: bool = False,
     require_videoduration_match: bool = False,
+    discard_groups_with_distinct_episodes: bool = False,
     ignored_directories: list[str] | None = None,
     progress_cb: Callable[..., None] | None = None,
 ) -> tuple[list[list[str]], dict[str, dict[str, str]]]:
@@ -757,6 +832,7 @@ def find_duplicates(
             remove_spaces,
             remove_non_episode_parens,
             replace_underscores,
+            ignore_keep_keywords=discard_groups_with_distinct_episodes,
         )
         file_to_groupkey[full_path] = GroupKeys(
             exact=stem,
@@ -896,6 +972,7 @@ def find_duplicates(
                     remove_spaces,
                     remove_non_episode_parens,
                     replace_underscores,
+                    ignore_keep_keywords=discard_groups_with_distinct_episodes,
                 )
                 for fp in stems_to_files.get(stem, []):
                     suf = match_suffix(os.path.basename(fp))[1]
@@ -954,6 +1031,7 @@ def find_duplicates(
                     remove_spaces,
                     remove_non_episode_parens,
                     replace_underscores,
+                    ignore_keep_keywords=discard_groups_with_distinct_episodes,
                 )
                 semantic_to_stems.setdefault(sem, []).append(stem)
 
@@ -967,6 +1045,29 @@ def find_duplicates(
                                 group_paths.append(fp)
                     if len(group_paths) > 1:
                         groups.append(group_paths)
+
+    # Optionally drop semantic groups whose .txt metadata proves that the
+    # members are different episodes. They only looked identical because the
+    # episode number was stripped, so this is meaningful only together with
+    # episode number stripping — without it the numbers stay part of the key.
+    if (
+        discard_groups_with_distinct_episodes
+        and remove_episode_nos
+        and duptype in ("semantic", "all")
+    ):
+        _ep_cache: dict[str, tuple[int | None, int] | None] = {}
+        filtered: list[list[str]] = []
+        for group in groups:
+            ids: list[tuple[int | None, int] | None] = []
+            for fp in group:
+                stem = match_suffix(os.path.basename(fp))[0]
+                txt_path = os.path.join(os.path.dirname(fp), stem + ".txt")
+                if txt_path not in _ep_cache:
+                    _ep_cache[txt_path] = _episode_id_from_txt(txt_path)
+                ids.append(_ep_cache[txt_path])
+            if _episode_ids_consistent(ids):
+                filtered.append(group)
+        groups = filtered
 
     # Deduplicate groups (same set of file paths may have been added above
     # through different grouping heuristics). Normalize each group to a

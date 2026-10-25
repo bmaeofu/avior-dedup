@@ -14,6 +14,7 @@ def normalize_film_name(
     remove_spaces: bool = False,
     remove_non_episode_parens: bool = False,
     replace_underscores: bool = False,
+    ignore_keep_keywords: bool = False,
 ) -> str:
     """Normalize a film filename for semantic duplicate detection."""
     # Normalize Unicode representation first and use casefold for robust case-insensitive matching.
@@ -63,12 +64,16 @@ def normalize_film_name(
     # Determine whether to apply episode number removal
     apply_regex = remove_episode_nos
 
-    if apply_regex:
+    # The keyword lists exist to *prevent* stripping for series whose episode
+    # titles are not unique. When the data-driven episode check is enabled they
+    # are bypassed, so stripping applies uniformly and the .txt metadata decides
+    # which groups are genuine duplicates.
+    if apply_regex and not ignore_keep_keywords:
         for kw in config.series_keep_episode_nos():
             if kw in base:
                 apply_regex = False
                 break
-    if apply_regex and rest:
+    if apply_regex and rest and not ignore_keep_keywords:
         # If the 'rest' contains a 4-digit year, do not remove episode numbers.
         if re.search(r"\b\d{4}\b", rest):
             apply_regex = False
@@ -78,7 +83,7 @@ def normalize_film_name(
                     apply_regex = False
                     break
 
-    if apply_regex and len(parts) > 2:
+    if apply_regex and len(parts) > 2 and not ignore_keep_keywords:
         for kw in config.episode_keep_keywords_years():
             if kw in parts[-1]:
                 apply_regex = False

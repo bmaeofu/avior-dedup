@@ -110,6 +110,15 @@ def main() -> None:
         help="Only group as duplicates when the ffprobe video durations match within 5%% (files without duration are excluded)",
     )
     parser.add_argument(
+        "--discard-groups-with-distinct-episodes",
+        action="store_true",
+        help=(
+            "With --remove-episode-nos: read each candidate's .txt (Title=/Episode=) "
+            "and drop groups whose members are provably different episodes. "
+            "Bypasses the series/episode keep-keyword lists so stripping applies uniformly."
+        ),
+    )
+    parser.add_argument(
         "--ignored-directories",
         nargs="+",
         help="List of directories to ignore for this run (full paths or directory names)",
@@ -162,6 +171,7 @@ def main() -> None:
     print(f"  Require identical nfo year:      {'yes' if getattr(args, 'require_identical_nfo_year', False) else 'no'}")
     print(f"  Require identical txt year:      {'yes' if getattr(args, 'require_identical_txt_year', False) else 'no'}")
     print(f"  Require video duration match:    {'yes' if getattr(args, 'require_videoduration_match', False) else 'no'}")
+    print(f"  Discard distinct episode groups: {'yes' if getattr(args, 'discard_groups_with_distinct_episodes', False) else 'no'}")
     print(f"  Ignored directories:   {', '.join(getattr(args, 'ignored_directories')) if getattr(args, 'ignored_directories', None) else 'none'}")
 
     os.makedirs(target_root, exist_ok=True)
@@ -215,6 +225,7 @@ def main() -> None:
         args.require_identical_nfo_year,
         args.require_identical_txt_year,
         args.require_videoduration_match,
+        args.discard_groups_with_distinct_episodes,
         args.ignored_directories,
     )
 

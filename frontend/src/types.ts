@@ -21,6 +21,7 @@ export interface JobRequest {
   require_identical_nfo_year: boolean
   require_identical_txt_year: boolean
   require_videoduration_match: boolean
+  discard_groups_with_distinct_episodes: boolean
 }
 
 export interface RunHistoryEntry {
