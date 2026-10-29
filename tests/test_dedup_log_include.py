@@ -67,7 +67,7 @@ def test_terms_come_from_mongo_only(monkeypatch):
 def test_no_mongo_url_means_no_terms(monkeypatch):
     from avior_dedup import config
 
-    monkeypatch.delenv("AVIOR_DEDUP_MONGO_URL", raising=False)
+    monkeypatch.delenv("AVIOR_GO_MONGO_URL", raising=False)
     config.reload()
     assert config._log_include_from_mongo() is None
     assert config.log_include_terms() == []

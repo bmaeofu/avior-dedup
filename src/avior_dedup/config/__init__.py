@@ -104,9 +104,9 @@ def log_include_terms() -> list[str]:
     """Return the log_include terms from avior-go's MongoDB collection.
 
     The collection ``Avior.log_include`` (field ``Name``) is the single source of
-    truth. ``AVIOR_DEDUP_MONGO_URL`` selects the database; without it — or when
-    the database is unreachable — the list is empty and the `log_include`
-    selection priority is inert.
+    truth. ``AVIOR_GO_MONGO_URL`` points at the avior-go MongoDB instance; without
+    it — or when the instance is unreachable — the list is empty and the
+    `log_include` selection priority is inert.
     """
     cached = _cache.get(_LOG_INCLUDE_CACHE_KEY)
     if cached is not None:
@@ -124,8 +124,9 @@ def invalidate_log_include() -> None:
 
 def _log_include_from_mongo() -> list[str] | None:
     """Read avior-go's log_include collection; ``None`` when unavailable."""
-    url = (os.getenv("AVIOR_DEDUP_MONGO_URL") or "").strip()
+    url = (os.getenv("AVIOR_GO_MONGO_URL") or "").strip()
     if not url:
+        print("[avior-dedup] log_include: AVIOR_GO_MONGO_URL not set, priority inactive")
         return None
     try:
         from pymongo import MongoClient
@@ -134,10 +135,11 @@ def _log_include_from_mongo() -> list[str] | None:
     client = None
     try:
         client = MongoClient(url, serverSelectionTimeoutMS=3000)
+        # "Avior" is avior-go's database (consts.DB_NAME).
         docs = client["Avior"]["log_include"].find({}, {"Name": 1})
         terms = [str(doc.get("Name") or "").strip() for doc in docs]
     except Exception:
-        print(f"[avior-dedup] log_include: MongoDB unreachable ({url})")
+        print(f"[avior-dedup] log_include: avior-go MongoDB unreachable ({url})")
         return None
     finally:
         if client is not None:
