@@ -258,6 +258,20 @@ def get_media_duration_ffprobe(path: str, timeout: int = 10) -> Optional[float]:
 # -----------------------------
 # Log Parsing
 # -----------------------------
+def log_matches_include_terms(content: str, terms: list[str] | None = None) -> bool:
+    """Return True when the log text contains a configured log_include term.
+
+    Terms come from ``log_include.yaml`` (avior-go's ``log_include`` list). A
+    match means avior-go marks this recording as the replaceable one.
+    """
+    if terms is None:
+        terms = config.log_include_terms()
+    if not terms:
+        return False
+    lowered = content.lower()
+    return any(term.lower() in lowered for term in terms if term)
+
+
 def _truncate_log(content: str) -> str:
     """Entfernt den Statistik-/Nachlaufteil, inkl. avior-go Zusatzdaten."""
     cut_markers = ("Removed Filler Data", "Total Size", "avior-go info", "avior-go")
@@ -632,6 +646,7 @@ def get_video_md(
         rec_date = None
         nfo_year = None
         txt_year = None
+        log_include_match = None
 
         # Extract release year from sibling metadata: <year> from the .nfo and
         # the year parsed from the EPG .txt (via the shared movie_metadata lib).
@@ -663,6 +678,7 @@ def get_video_md(
                     except ValueError:
                         rec_date = None
 
+                log_include_match = log_matches_include_terms(content or "")
                 error_count = count_errors(lines)
                 multichannel = is_multichannel_from_log(lines)
                 resolution = get_recording_resolution_from_log(lines)
@@ -680,6 +696,7 @@ def get_video_md(
                 multichannel = None
                 resolution = None
                 rec_date = None
+                log_include_match = None
 
         rec = FileRecord(
             file=file_path,
@@ -693,6 +710,7 @@ def get_video_md(
             rec_date=rec_date,
             nfo_year=nfo_year,
             txt_year=txt_year,
+            log_include_match=log_include_match,
         )
         t_end = time.perf_counter()
         if log_fn is not None:

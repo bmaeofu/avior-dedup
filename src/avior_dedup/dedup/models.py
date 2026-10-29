@@ -14,12 +14,14 @@ class SelectionPriority(str, Enum):
     CLOSEST_DURATION = "closest_duration"
     YEAR_MATCH = "year_match"
     CLEAN_NAME = "clean_name"
+    LOG_INCLUDE = "log_include"
 
 
 DEFAULT_SELECTION_PRIORITIES = [
     SelectionPriority.MULTICHANNEL,
     SelectionPriority.RESOLUTION,
     SelectionPriority.FEWER_ERRORS,
+    SelectionPriority.LOG_INCLUDE,
     SelectionPriority.YEAR_MATCH,
     SelectionPriority.CLOSEST_DURATION,
     SelectionPriority.CLEAN_NAME,
@@ -48,6 +50,9 @@ class FileRecord:
     rec_date: Optional[str] = None
     nfo_year: Optional[int] = None
     txt_year: Optional[int] = None
+    # True when the .log matches an avior-go log_include term, i.e. the copy is
+    # marked for replacement. None when no log could be analysed.
+    log_include_match: Optional[bool] = None
 
 
 @dataclass

@@ -88,6 +88,7 @@ def config_files() -> dict[str, str]:
         "ignored_files": "ignored_files.yaml",
         "ignored_dirs": "ignored_dirs.yaml",
         "semantic_prefixes": "semantic_prefixes.yaml",
+        "log_include": "log_include.yaml",
         "suffixes": "suffixes.yaml",
         "episode_keywords": "episode_keywords.yaml",
         "path_suggestions": "path_suggestions.yaml",
@@ -95,6 +96,12 @@ def config_files() -> dict[str, str]:
         "searchmove_templates": "searchmove_templates.yaml",
         "searchmove_ignored_dirs": "searchmove_ignored_dirs.yaml",
     }
+
+
+def log_include_terms() -> list[str]:
+    """Return the log_include terms that mark a recording as replaceable."""
+    data = _load_yaml("log_include.yaml")
+    return [str(term) for term in data] if data else []
 
 
 def semantic_prefixes() -> list[str]:

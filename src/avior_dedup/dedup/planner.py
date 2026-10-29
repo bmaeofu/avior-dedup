@@ -101,6 +101,10 @@ def _sort_key(
         elif p == SelectionPriority.CLEAN_NAME:
             # Prefer the cleaner name, i.e. the fewest redundant tokens.
             key.append(_name_token_count(r.file))
+        elif p == SelectionPriority.LOG_INCLUDE:
+            # Prefer the copy that avior-go did not mark as replaceable.
+            # Unknown (no log) ranks with the marked copies.
+            key.append(0 if r.log_include_match is False else 1)
     return tuple(key)
 
 
@@ -201,6 +205,9 @@ def _reason_for_priority(
             best_tokens = _name_token_count(best.file)
             if any(_name_token_count(o.file) > best_tokens for o in others):
                 return "cleaner_name"
+        elif priority == SelectionPriority.LOG_INCLUDE:
+            if best.log_include_match is False and any(o.log_include_match is not False for o in others):
+                return "no_include_match"
         elif priority == SelectionPriority.RECORDING_DATE:
             if any(_recording_ordinal(o) < _recording_ordinal(best) for o in others):
                 return "newer"

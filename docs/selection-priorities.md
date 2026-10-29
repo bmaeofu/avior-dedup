@@ -16,16 +16,17 @@ ignored completely.
 | 1 | `multichannel` | multichannel (5.1) audio |
 | 2 | `resolution` | the higher resolution |
 | 3 | `fewer_errors` | fewer encoding errors |
-| 4 | `year_match` | an `.nfo` year that matches the `.txt` year |
-| 5 | `closest_duration` | the duration closest to the recorded length |
-| 6 | `clean_name` | the cleaner filename |
-| 7 | `recording_date` | the newer recording |
+| 4 | `log_include` | a `.log` **without** an avior-go `log_include` match |
+| 5 | `year_match` | an `.nfo` year that matches the `.txt` year |
+| 6 | `closest_duration` | the duration closest to the recorded length |
+| 7 | `clean_name` | the cleaner filename |
+| 8 | `recording_date` | the newer recording |
 
 The order is grouped by what a criterion actually says about the copy:
 
 | Tier | Criteria | Meaning |
 |------|----------|---------|
-| Quality | `multichannel`, `resolution`, `fewer_errors` | the source is technically better |
+| Quality | `multichannel`, `resolution`, `fewer_errors`, `log_include` | the source is technically better / not marked for replacement |
 | Correctness | `year_match`, `closest_duration` | the file belongs to this episode and is complete |
 | Cosmetics | `clean_name` | only the filename is nicer |
 | Tiebreak | `recording_date` | no information; keeps the choice deterministic |
@@ -56,6 +57,21 @@ the `.log`. `1920x1080` and `1920x1088` are both counted as `1080`, so the usual
 ### `fewer_errors`
 Prefers the copy with fewer error lines in its `.log`. Copies without a log file
 are treated as having an unknown (very high) error count and therefore lose.
+
+### `log_include`
+Prefers the copy that is **not** marked for replacement by avior-go.
+
+In avior-go a `log_include` match on a file means "this recording is the one to
+replace" (see `comparator/logmatch.go`, `LogMatchModule` mode `include`). The
+terms are configured in `log_include.yaml` and match as case-insensitive
+substrings of the `.log`.
+
+The comparison uses the log with the avior-go trailer removed (everything from
+`avior-go info` onwards), so a recording never matches through its own module
+output — e.g. its own `LogMatchModule: allow replacement …` line.
+
+A copy without any analysable log ranks with the marked copies: only an
+explicitly clean log wins.
 
 ### `clean_name`
 Prefers the filename with the **fewest redundant word tokens**. Inside one group
@@ -122,13 +138,20 @@ kept.
 **CLI**
 
 ```bash
-avior-dedup --selection-priorities resolution clean_name multichannel fewer_errors recording_date year_match closest_duration ...
+avior-dedup --selection-priorities resolution log_include multichannel fewer_errors year_match closest_duration clean_name recording_date ...
 ```
 
 Order matters, values are space-separated. Omitting a criterion removes it.
 
 **Web UI** — the job form shows the list with up/down buttons; the top entry has
 the highest weight.
+
+**`log_include` terms** — the terms themselves are not part of the priority list;
+they live in `log_include.yaml` in the config directory
+(`AVIOR_DEDUP_CONFIG_DIR`, default: the bundled package config). The bundled
+default carries the terms observed in the avior-go setup (`-tune hq`,
+`-c:v av1_qsv -global_quality:v`, `encoder x265`, `Lost Data:`, …). An empty list
+makes the criterion inert — nothing is then marked as replaceable.
 
 ## Reading the log
 
@@ -139,6 +162,7 @@ The keep report (`keep_dedup_log.txt`) names the criterion that decided:
 | `multichannel` | `multichannel` |
 | `higher_resolution` | `resolution` |
 | `fewer_errors` | `fewer_errors` |
+| `no_include_match` | `log_include` |
 | `cleaner_name` | `clean_name` |
 | `newer` | `recording_date` |
 | `year_match` | `year_match` |
