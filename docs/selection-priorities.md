@@ -16,10 +16,26 @@ ignored completely.
 | 1 | `multichannel` | multichannel (5.1) audio |
 | 2 | `resolution` | the higher resolution |
 | 3 | `fewer_errors` | fewer encoding errors |
-| 4 | `clean_name` | the cleaner filename |
-| 5 | `recording_date` | the newer recording |
-| 6 | `year_match` | an `.nfo` year that matches the `.txt` year |
-| 7 | `closest_duration` | the duration closest to the recorded length |
+| 4 | `year_match` | an `.nfo` year that matches the `.txt` year |
+| 5 | `closest_duration` | the duration closest to the recorded length |
+| 6 | `clean_name` | the cleaner filename |
+| 7 | `recording_date` | the newer recording |
+
+The order is grouped by what a criterion actually says about the copy:
+
+| Tier | Criteria | Meaning |
+|------|----------|---------|
+| Quality | `multichannel`, `resolution`, `fewer_errors` | the source is technically better |
+| Correctness | `year_match`, `closest_duration` | the file belongs to this episode and is complete |
+| Cosmetics | `clean_name` | only the filename is nicer |
+| Tiebreak | `recording_date` | no information; keeps the choice deterministic |
+
+`recording_date` is **last on purpose**: a re-run of the same episode always has a
+different date, so this criterion fires in almost every group and would shadow
+everything below it. In a real 241-group library run it decided 229 groups (95 %),
+while `year_match` and `clean_name` never got a chance. It is not a quality
+signal — it only picks a stable winner when two copies are otherwise identical
+(including their names).
 
 ## The criteria in detail
 
@@ -52,15 +68,28 @@ Werden wir uns einfrieren - 42 - Die Antwort auf fast alles.mkv              (10
 42 - Die Antwort auf fast alles - Werden wir uns einfrieren - 42 - Die …      (17 tokens)  ← loses
 ```
 
-The first two are equally clean and tie; the repeated series title loses. This
-criterion is about cosmetics only — place it below the quality criteria unless
-you really want a tidy name to outrank, say, a newer recording.
+The first two are equally clean and tie; the repeated series title loses.
+
+This criterion is about cosmetics only, so it sits below every quality and
+correctness criterion: a tidier name never overrides a better source or a
+correctly matched episode. It still beats `recording_date`, because the recording
+date carries no information about which copy is better.
+
+Note that the *kept copy* determines the resulting filename set; the duplicate is
+moved away unchanged.
 
 ### `recording_date`
 Prefers the newer recording, using `rec_date` from the `.log`. Only when a copy
 has no `rec_date` does the filesystem modification time act as a fallback — and
 only because `recording_date` is part of the active list. Modification times have
 day granularity, so two recordings from the same day tie.
+
+This is the **last** criterion by default, and deliberately so: a second
+recording of the same broadcast always carries a different date, so as a
+high-priority criterion it would decide nearly every group and hide every
+criterion below it. In a real library run it decided 95 % of all groups while
+`year_match` and `clean_name` never fired. Keep it last — or move it up only if
+you really want "the later broadcast" to outrank correctness and cosmetics.
 
 ### `year_match`
 Prefers the copy whose `.nfo` year equals its `.txt` year. A mismatch usually
@@ -76,6 +105,10 @@ configured window, so everything inside the window counts as equal:
 |--------|---------|---------|
 | `--max-duration-diff-longer` | `600` | allowed seconds the video may be longer than the recording |
 | `--max-duration-diff-shorter` | `240` | allowed seconds the video may be shorter than the recording |
+
+Because the hard pre-filter below already removes every copy outside that window,
+this criterion is `0` for all remaining candidates and only decides when the
+fallback pool is used (no copy was inside the window at all).
 
 ## Hard pre-filter (runs before any priority)
 
