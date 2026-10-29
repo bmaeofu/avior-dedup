@@ -347,3 +347,31 @@ def test_keep_reason_reports_cleaner_name():
     clean = _rec(f"{series} - Werden wir uns einfrieren.mkv")
     best = select_best_film([double, clean])
     assert determine_keep_reason(best, [double, clean], DEFAULT_SELECTION_PRIORITIES) == "cleaner_name"
+
+
+def test_year_in_name_is_not_redundancy():
+    """A year is metadata, not redundancy: both names are equally clean."""
+    from avior_dedup.dedup.planner import _name_redundancy
+
+    assert _name_redundancy("Alles in bester Ordnung.mkv") == 0
+    assert _name_redundancy("Alles in bester Ordnung (2021).mkv") == 0
+
+
+def test_repeated_series_title_counts_as_redundancy():
+    from avior_dedup.dedup.planner import _name_redundancy
+
+    doubled = "42 - Die Antwort auf fast alles - Werden wir uns einfrieren - 42 - Die Antwort auf fast alles.mkv"
+    clean = "42 - Die Antwort auf fast alles - Werden wir uns einfrieren.mkv"
+    assert _name_redundancy(doubled) > _name_redundancy(clean) == 0
+
+
+def test_closest_duration_reason_matches_sort_key():
+    """Inside the window every copy counts as equal, so it must not be the reason."""
+    from avior_dedup.dedup.planner import determine_keep_reason
+    from avior_dedup.dedup.models import SelectionPriority
+
+    near = _rec("near.mkv", video_duration=3601.0, rec_duration=3600)
+    far = _rec("far.mkv", video_duration=3900.0, rec_duration=3600)  # well inside 600 s
+    best = select_best_film([near, far], selection_priorities=[SelectionPriority.CLOSEST_DURATION])
+    reason = determine_keep_reason(best, [near, far] if best is far else [far], [SelectionPriority.CLOSEST_DURATION])
+    assert reason == "selected"

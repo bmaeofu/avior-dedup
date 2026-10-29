@@ -40,14 +40,17 @@ def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, Gro
 _TOKEN_RE = re.compile(r"[0-9A-Za-zÄÖÜäöüß]+")
 
 
-def _name_token_count(path: str) -> int:
-    """Return the number of word tokens in a file's stem.
+def _name_redundancy(path: str) -> int:
+    """Return how many word tokens of a file's stem are repeats.
 
-    Inside one group every record normalizes to the same key, so a larger token
-    count means redundancy in the raw name (e.g. the series name repeated).
+    Inside one group every record normalizes to the same key, so a token that
+    occurs more than once is redundant (e.g. a series title repeated in the raw
+    name). Extra *distinct* tokens — a year, an episode number, a subtitle — are
+    metadata and therefore not penalized.
     """
     stem = os.path.splitext(os.path.basename(path))[0]
-    return len(_TOKEN_RE.findall(stem))
+    tokens = [t.lower() for t in _TOKEN_RE.findall(stem)]
+    return len(tokens) - len(set(tokens))
 
 
 def _sort_key(
@@ -99,8 +102,8 @@ def _sort_key(
             # Prefer records where the .nfo year matches the .txt year.
             key.append(0 if _year_matches(r) else 1)
         elif p == SelectionPriority.CLEAN_NAME:
-            # Prefer the cleaner name, i.e. the fewest redundant tokens.
-            key.append(_name_token_count(r.file))
+            # Prefer the cleaner name, i.e. the fewest repeated tokens.
+            key.append(_name_redundancy(r.file))
         elif p == SelectionPriority.LOG_INCLUDE:
             # Prefer the copy that avior-go did not mark as replaceable.
             # Unknown (no log) ranks with the marked copies.
@@ -183,6 +186,8 @@ def _reason_for_priority(
     best: FileRecord,
     others: list[FileRecord],
     max_errors_when_mc: int | None,
+    max_duration_diff_longer: int = 600,
+    max_duration_diff_shorter: int = 240,
 ) -> str | None:
     """Return the reason label when *priority* separates `best` from `others`."""
     try:
@@ -202,8 +207,8 @@ def _reason_for_priority(
             if any(((o.error_count if o.error_count is not None else 10**9) > best_err) for o in others):
                 return "fewer_errors"
         elif priority == SelectionPriority.CLEAN_NAME:
-            best_tokens = _name_token_count(best.file)
-            if any(_name_token_count(o.file) > best_tokens for o in others):
+            best_redundancy = _name_redundancy(best.file)
+            if any(_name_redundancy(o.file) > best_redundancy for o in others):
                 return "cleaner_name"
         elif priority == SelectionPriority.LOG_INCLUDE:
             if best.log_include_match is False and any(o.log_include_match is not False for o in others):
@@ -215,12 +220,19 @@ def _reason_for_priority(
             if _year_matches(best) and any(not _year_matches(o) for o in others):
                 return "year_match"
         elif priority == SelectionPriority.CLOSEST_DURATION:
-            def penalty(r: FileRecord) -> float:
-                if r.video_duration is not None and r.rec_duration is not None:
-                    return abs(r.video_duration - r.rec_duration)
-                return 10**9
+            # Same definition as the sort key: only the excess beyond the allowed
+            # window counts, everything inside the window is equal (0).
+            def excess(r: FileRecord) -> float:
+                if r.video_duration is None or r.rec_duration is None:
+                    return 10**9
+                diff = r.video_duration - r.rec_duration
+                if diff > max_duration_diff_longer:
+                    return diff - max_duration_diff_longer
+                if diff < -max_duration_diff_shorter:
+                    return (-diff) - max_duration_diff_shorter
+                return 0
 
-            if any(penalty(o) > penalty(best) for o in others):
+            if any(excess(o) > excess(best) for o in others):
                 return "closest_duration"
     except Exception:
         return None
@@ -232,6 +244,8 @@ def determine_keep_reason(
     others: list[FileRecord],
     selection_priorities: list[SelectionPriority],
     max_errors_when_mc: int | None = None,
+    max_duration_diff_longer: int = 600,
+    max_duration_diff_shorter: int = 240,
 ) -> str:
     """Return a short reason string why `best` was selected over `others`.
 
@@ -241,7 +255,10 @@ def determine_keep_reason(
     return 'selected'.
     """
     for priority in selection_priorities:
-        reason = _reason_for_priority(priority, best, others, max_errors_when_mc)
+        reason = _reason_for_priority(
+            priority, best, others, max_errors_when_mc,
+            max_duration_diff_longer, max_duration_diff_shorter,
+        )
         if reason:
             return reason
     return "selected"
@@ -568,7 +585,14 @@ def build_move_plan(
                     err_count = rep.error_count if getattr(rep, "error_count", None) is not None else 0
 
                     # For KEEP lines include a reason in the found_path column
-                    reason = determine_keep_reason(rep, [r for r in valid_records if r.file != rep.file], selection_priorities or DEFAULT_SELECTION_PRIORITIES, max_errors_when_mc)
+                    reason = determine_keep_reason(
+                        rep,
+                        [r for r in valid_records if r.file != rep.file],
+                        selection_priorities or DEFAULT_SELECTION_PRIORITIES,
+                        max_errors_when_mc,
+                        max_duration_diff_longer,
+                        max_duration_diff_shorter,
+                    )
                     log_fn(f"{group_name}\t[{action}]\t{src}\t{reason}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
                     action_counter[action] += 1
                     size_counter[action] += file_size

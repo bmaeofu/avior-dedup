@@ -161,30 +161,38 @@ time parsed from the log.
 Because the hard pre-filter already discards everything outside the window, this
 value is `0` for all remaining candidates in a normal run. It therefore only
 decides when the fallback pool is used (no copy was inside the window at all) —
-in practice a handful of groups per library run.
+in practice a handful of groups per library run. The log reason uses exactly the
+same definition as the sort key, so an in-window difference never shows up as
+`closest_duration`.
 
 ### `clean_name`
-**Prefers** the filename with the **fewest redundant word tokens**.
+**Prefers** the filename with the **fewest repeated word tokens**.
 
 **Data source** — the filename only. Tokens are matched with
-`[0-9A-Za-zÄÖÜäöüß]+` on the stem (extension stripped).
+`[0-9A-Za-zÄÖÜäöüß]+` on the stem (extension stripped), compared
+case-insensitively.
 
-Inside one group every candidate normalizes to the same key, so extra tokens in
-the raw name are redundancy:
+**Metric** — redundancy = number of tokens minus number of *distinct* tokens.
+A token that occurs only once is never penalized, so a year, an episode number or
+a subtitle stays metadata; only genuine repetition counts:
 
-```text
-42 - Die Antwort auf fast alles - Werden wir uns einfrieren.mkv              (10 tokens)
-Werden wir uns einfrieren - 42 - Die Antwort auf fast alles.mkv              (10 tokens)
-42 - Die Antwort auf fast alles - Werden wir uns einfrieren - 42 - Die …      (17 tokens)  ← loses
-```
+| Stem | Tokens | Redundancy |
+|---|---|---|
+| `Alles in bester Ordnung` | 4 | **0** |
+| `Alles in bester Ordnung (2021)` | 5 | **0** (the year is metadata) |
+| `42 - … - Werden wir uns einfrieren` | 10 | **0** |
+| `42 - … - Werden wir uns einfrieren - 42 - …` | 16 | **6** ← loses |
 
-The first two tie; the repeated series title loses. Prefix-first and
-title-first spellings are equally clean and therefore arbitrary among themselves.
+Inside one group every candidate normalizes to the same key, so any repetition is
+redundant by definition. The repeated series title loses; the prefix-first and
+title-first spellings are equally clean and tie.
 
-**Sort value** — the token count.
+**Sort value** — the redundancy count.
 
 **Note** — only the *kept* copy's name survives in place; the duplicate is moved
-away unchanged.
+away unchanged. Because the metric ignores single occurrences, a name that keeps
+its year is not penalized against a bare one — such a group falls through to the
+next criterion.
 
 ### `recording_date`
 **Prefers** the newer recording.

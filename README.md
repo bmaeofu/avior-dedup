@@ -28,7 +28,7 @@ Selection behavior notes:
 - `log_include` prefers the copy whose `.log` does **not** match an avior-go `log_include` term, i.e. the copy avior-go did not mark for replacement. The terms come from avior-go's own MongoDB instance (`Avior.log_include`, default `mongodb://192.168.178.75:27017`, override with `AVIOR_GO_MONGO_URL`). Matching ignores the avior-go trailer.
 - `year_match` prefers the copy whose `.nfo` `<year>` equals the year extracted from the EPG `.txt` (via the shared `movie_metadata` library). A missing year on either side counts as a mismatch.
 - `closest_duration` only penalizes candidates that fall outside the configured duration thresholds; recordings within the allowed window are treated as equal for that criterion.
-- `clean_name` prefers the filename with the fewest redundant tokens, so a name that repeats the series title loses against a plain one.
+- `clean_name` prefers the filename with the fewest repeated tokens (a year or episode number is metadata, not redundancy), so a name that repeats the series title loses against a plain one.
 - `recording_date` prefers newer recordings when present; if a recording has no `rec_date`, the filesystem `mod_date` is used as a fallback only when `recording_date` is part of the active priority list. It is the last default criterion on purpose: a re-recording always has a different date, so this fires in almost every group and would shadow everything below it.
 - Trailing `avior-go` metadata is excluded from all log-based analysis.
 
