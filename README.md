@@ -22,8 +22,8 @@ Once it finds duplicates, it picks which copy to keep based on:
 Selection behavior notes:
 
 - Default priority order: `multichannel`, `resolution`, `fewer_errors`, `log_include`, `year_match`, `closest_duration`, `clean_name`, `recording_date`. See [docs/selection-priorities.md](docs/selection-priorities.md) for what each criterion does, how the order works, and how to change it.
-- Multichannel detection uses the recording-start section of `.log` files: the last AC3 audio state within the first ~15 seconds after `Start`/`Start Recording` decides.
-- Resolution detection uses the recording-start section of `.log` files: the last video resolution in the first ~15 seconds decides (e.g. `1920x1080` and `1920x1088` are treated as `1080`).
+- Multichannel detection uses the recording-start window of `.log` files: the last AC3 audio state within the first 25 seconds after `Start`/`Start Recording` decides (whole log as fallback when no start marker exists).
+- Resolution detection uses the whole recording block (`Start`…`Stop`) of `.log` files: the last video resolution decides (e.g. `1920x1080` and `1920x1088` are treated as `1080`).
 - Trailing `avior-go` metadata is excluded from log-based analysis.
 - `log_include` prefers the copy whose `.log` does **not** match an avior-go `log_include` term, i.e. the copy avior-go did not mark for replacement. The terms come from avior-go's own MongoDB instance (`Avior.log_include`, default `mongodb://192.168.178.75:27017`, override with `AVIOR_GO_MONGO_URL`). Matching ignores the avior-go trailer.
 - `clean_name` prefers the filename with the fewest redundant tokens, so a name that repeats the series title loses against a plain one.
