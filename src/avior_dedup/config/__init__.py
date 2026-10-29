@@ -14,6 +14,9 @@ _cache: dict[str, Any] = {}
 # Cache key for the log_include term list read from MongoDB.
 _LOG_INCLUDE_CACHE_KEY = "__log_include_terms__"
 
+# avior-go MongoDB instance. Override with AVIOR_GO_MONGO_URL.
+DEFAULT_AVIOR_GO_MONGO_URL = "mongodb://192.168.178.75:27017"
+
 
 def _resolve_config_dir() -> Path:
     """Return the active config directory, initialising from defaults if needed."""
@@ -104,9 +107,10 @@ def log_include_terms() -> list[str]:
     """Return the log_include terms from avior-go's MongoDB collection.
 
     The collection ``Avior.log_include`` (field ``Name``) is the single source of
-    truth. ``AVIOR_GO_MONGO_URL`` points at the avior-go MongoDB instance; without
-    it — or when the instance is unreachable — the list is empty and the
-    `log_include` selection priority is inert.
+    truth. The avior-go MongoDB instance defaults to
+    :data:`DEFAULT_AVIOR_GO_MONGO_URL` and can be overridden with
+    ``AVIOR_GO_MONGO_URL``. When the instance is unreachable the list is empty and
+    the `log_include` selection priority is inert.
     """
     cached = _cache.get(_LOG_INCLUDE_CACHE_KEY)
     if cached is not None:
@@ -124,10 +128,7 @@ def invalidate_log_include() -> None:
 
 def _log_include_from_mongo() -> list[str] | None:
     """Read avior-go's log_include collection; ``None`` when unavailable."""
-    url = (os.getenv("AVIOR_GO_MONGO_URL") or "").strip()
-    if not url:
-        print("[avior-dedup] log_include: AVIOR_GO_MONGO_URL not set, priority inactive")
-        return None
+    url = (os.getenv("AVIOR_GO_MONGO_URL") or "").strip() or DEFAULT_AVIOR_GO_MONGO_URL
     try:
         from pymongo import MongoClient
     except ImportError:

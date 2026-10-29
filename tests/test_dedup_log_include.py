@@ -64,13 +64,68 @@ def test_terms_come_from_mongo_only(monkeypatch):
     assert config.log_include_terms() == ["from-mongo"]
 
 
-def test_no_mongo_url_means_no_terms(monkeypatch):
+def test_default_url_points_at_avior_go_instance(monkeypatch):
     from avior_dedup import config
 
+    seen = {}
+
+    class FakeCollection:
+        def find(self, *_args, **_kwargs):
+            return [{"Name": "from-default-db"}]
+
+    class FakeDatabase:
+        def __getitem__(self, _name):
+            return FakeCollection()
+
+    class FakeClient:
+        def __init__(self, url, **_kwargs):
+            seen["url"] = url
+
+        def __getitem__(self, _name):
+            return FakeDatabase()
+
+        def close(self):
+            pass
+
     monkeypatch.delenv("AVIOR_GO_MONGO_URL", raising=False)
-    config.reload()
+    monkeypatch.setattr("pymongo.MongoClient", FakeClient)
+    assert config._log_include_from_mongo() == ["from-default-db"]
+    assert seen["url"] == config.DEFAULT_AVIOR_GO_MONGO_URL
+
+
+def test_env_overrides_default_url(monkeypatch):
+    from avior_dedup import config
+
+    seen = {}
+
+    class FakeClient:
+        def __init__(self, url, **_kwargs):
+            seen["url"] = url
+
+        def __getitem__(self, _name):
+            raise RuntimeError("no data needed")
+
+        def close(self):
+            pass
+
+    monkeypatch.setenv("AVIOR_GO_MONGO_URL", "mongodb://example:27017")
+    monkeypatch.setattr("pymongo.MongoClient", FakeClient)
     assert config._log_include_from_mongo() is None
+    assert seen["url"] == "mongodb://example:27017"
+
+
+def test_unreachable_instance_yields_no_terms(monkeypatch, capsys):
+    from avior_dedup import config
+
+    class FakeClient:
+        def __init__(self, url, **_kwargs):
+            self.url = url
+            raise RuntimeError("connection refused")
+
+    monkeypatch.setattr("pymongo.MongoClient", FakeClient)
+    config.reload()
     assert config.log_include_terms() == []
+    assert "unreachable" in capsys.readouterr().out
 
 
 def test_terms_are_cached_until_invalidated(monkeypatch):

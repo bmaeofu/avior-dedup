@@ -66,16 +66,14 @@ replace" (see `comparator/logmatch.go`, `LogMatchModule` mode `include`).
 
 The terms are read from avior-go's MongoDB collection `Avior.log_include` (field
 `Name`) in the avior-go MongoDB instance — the same list avior-go itself uses.
-`AVIOR_GO_MONGO_URL` (e.g. `mongodb://192.168.178.75:27017`) points at that
-instance; database `Avior`, collection `log_include`. Terms match as
+The instance defaults to `mongodb://192.168.178.75:27017`, overridable with
+`AVIOR_GO_MONGO_URL`; database `Avior`, collection `log_include`. Terms match as
 case-insensitive substrings of the `.log`; avior-go itself matches
 case-sensitively, which is why the collection carries both `PHOENIX HD` and
 `phoenix HD`.
 
-avior-go's MongoDB is the only source — there is no local copy. When
-`AVIOR_GO_MONGO_URL` is unset, the run prints
-`[avior-dedup] log_include: AVIOR_GO_MONGO_URL not set, priority inactive` and the
-criterion is inert. When the instance is unreachable, it prints
+avior-go's MongoDB is the only source — there is no local copy. When the
+instance is unreachable, the run prints
 `[avior-dedup] log_include: avior-go MongoDB unreachable (<url>)` and the
 criterion is inert for that run. The list is cached per run and re-read at the
 start of every job.
@@ -167,8 +165,8 @@ the highest weight.
 
 **`log_include` terms** — the terms themselves are not part of the priority list;
 they come from avior-go's MongoDB (`Avior.log_include`), read fresh at the start
-of every job. Without `AVIOR_GO_MONGO_URL` the criterion is inert — nothing is
-marked as replaceable.
+of every job. `AVIOR_GO_MONGO_URL` only overrides the instance URL; no Compose
+change is required.
 
 ## Reading the log
 
