@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import os
 import re
 import shutil
@@ -472,19 +473,10 @@ def build_move_plan(
                         break
 
                 if rep is not None:
-                    rec = FileRecord(
-                        file=f,
-                        video_exists=rep.video_exists,
-                        error_count=rep.error_count,
-                        mod_date=rep.mod_date,
-                        multichannel=rep.multichannel,
-                        resolution=rep.resolution,
-                        video_duration=rep.video_duration,
-                        rec_duration=rep.rec_duration,
-                        rec_date=rep.rec_date,
-                        nfo_year=rep.nfo_year,
-                        txt_year=rep.txt_year,
-                    )
+                    # Carry over *every* field from the stem's representative so
+                    # a newly added FileRecord field cannot silently be forgotten
+                    # here (that is how log_include_match ended up as None).
+                    rec = dataclasses.replace(rep, file=f)
                 else:
                     exists = os.path.exists(f)
                     mod_date = None
