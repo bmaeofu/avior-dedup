@@ -29,7 +29,6 @@ Selection behavior notes:
 - `clean_name` prefers the filename with the fewest redundant tokens, so a name that repeats the series title loses against a plain one.
 - `recording_date` prefers newer recordings when present; if a recording has no `rec_date`, the filesystem `mod_date` is used as a fallback only when `recording_date` is part of the active priority list. It is the last default criterion on purpose: a re-recording always has a different date, so this fires in almost every group and would shadow everything below it.
 - `closest_duration` only penalizes candidates that fall outside the configured duration thresholds; recordings within the allowed window are treated as equal for that criterion.
-- Independent of the configurable priorities, a fixed last tiebreaker prefers the cleaner filename: among candidates that are otherwise equal, the one with the fewest redundant tokens wins (e.g. a name where the series title appears twice loses). It always runs last, so it can never override a quality criterion.
 
 Everything that isn't the best copy gets moved out: normal duplicates to one directory, error-laden copies to another, orphaned metadata to a third. You can also run in dry-run mode to just see what it would do before committing.
 
@@ -98,6 +97,7 @@ services:
 | `AVIOR_DEDUP_HOST` | `0.0.0.0` | Server bind address |
 | `AVIOR_DEDUP_PORT` | `8642` | Server port |
 | `AVIOR_DEDUP_CONFIG_DIR` | `/config` | Config directory (mounted volume) |
+| `AVIOR_GO_MONGO_URL` | `mongodb://192.168.178.75:27017` | avior-go MongoDB instance (`log_include` terms) |
 
 ```bash
 docker compose up -d
