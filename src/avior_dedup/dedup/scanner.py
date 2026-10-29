@@ -261,8 +261,8 @@ def get_media_duration_ffprobe(path: str, timeout: int = 10) -> Optional[float]:
 def log_matches_include_terms(content: str, terms: list[str] | None = None) -> bool:
     """Return True when the log text contains a configured log_include term.
 
-    Terms come from ``log_include.yaml`` (avior-go's ``log_include`` list). A
-    match means avior-go marks this recording as the replaceable one.
+    Terms come from avior-go's MongoDB collection ``Avior.log_include``. A match
+    means avior-go marks this recording as the replaceable one.
     """
     if terms is None:
         terms = config.log_include_terms()
@@ -585,6 +585,9 @@ def get_video_md(
     be overridden via ``AVIOR_DEDUP_PROBE_WORKERS`` (default 8).
     """
     video_suffixes = config.video_suffixes()
+    # Resolve the log_include terms once: the collector may query MongoDB and
+    # must not be hit once per file.
+    log_include_terms = config.log_include_terms()
     # cache directory listings to reduce IO
     dir_files_cache: dict[str, set[str]] = {}
 
@@ -678,7 +681,7 @@ def get_video_md(
                     except ValueError:
                         rec_date = None
 
-                log_include_match = log_matches_include_terms(content or "")
+                log_include_match = log_matches_include_terms(content or "", log_include_terms)
                 error_count = count_errors(lines)
                 multichannel = is_multichannel_from_log(lines)
                 resolution = get_recording_resolution_from_log(lines)

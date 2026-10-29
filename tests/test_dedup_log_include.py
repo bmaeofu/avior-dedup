@@ -54,3 +54,38 @@ def test_criterion_is_inert_when_not_configured():
     plain = _rec("plain.mkv", False)
     prios = [p for p in DEFAULT_SELECTION_PRIORITIES if p != SelectionPriority.LOG_INCLUDE]
     assert select_best_film([marked, plain], selection_priorities=prios).file == "marked.mkv"
+
+
+def test_terms_come_from_mongo_only(monkeypatch):
+    from avior_dedup import config
+
+    monkeypatch.setattr(config, "_log_include_from_mongo", lambda: ["from-mongo"])
+    config.reload()
+    assert config.log_include_terms() == ["from-mongo"]
+
+
+def test_no_mongo_url_means_no_terms(monkeypatch):
+    from avior_dedup import config
+
+    monkeypatch.delenv("AVIOR_DEDUP_MONGO_URL", raising=False)
+    config.reload()
+    assert config._log_include_from_mongo() is None
+    assert config.log_include_terms() == []
+
+
+def test_terms_are_cached_until_invalidated(monkeypatch):
+    from avior_dedup import config
+
+    calls = []
+
+    def fake() -> list[str]:
+        calls.append(1)
+        return [f"term-{len(calls)}"]
+
+    monkeypatch.setattr(config, "_log_include_from_mongo", fake)
+    config.reload()
+    assert config.log_include_terms() == ["term-1"]
+    assert config.log_include_terms() == ["term-1"]
+    config.invalidate_log_include()
+    assert config.log_include_terms() == ["term-2"]
+    assert len(calls) == 2

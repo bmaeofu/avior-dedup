@@ -386,6 +386,8 @@ def build_move_plan(
     # for all input paths (no placeholders), so probe them unconditionally.
     global_uncached = [f for f in dict.fromkeys(input_files) if f not in film_info_cache]
     if global_uncached:
+        # Re-read the log_include terms once per run so MongoDB changes apply.
+        config.invalidate_log_include()
         t_fetch_start = time.perf_counter()
         probe_total = len(global_uncached)
 

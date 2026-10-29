@@ -62,9 +62,26 @@ are treated as having an unknown (very high) error count and therefore lose.
 Prefers the copy that is **not** marked for replacement by avior-go.
 
 In avior-go a `log_include` match on a file means "this recording is the one to
-replace" (see `comparator/logmatch.go`, `LogMatchModule` mode `include`). The
-terms are configured in `log_include.yaml` and match as case-insensitive
-substrings of the `.log`.
+replace" (see `comparator/logmatch.go`, `LogMatchModule` mode `include`).
+
+The terms are read from avior-go's MongoDB collection `Avior.log_include` (field
+`Name`) — the same list avior-go itself uses. `AVIOR_DEDUP_MONGO_URL` (e.g.
+`mongodb://192.168.178.75:27017`) selects the database. Terms match as
+case-insensitive substrings of the `.log`; avior-go itself matches
+case-sensitively, which is why the collection carries both `PHOENIX HD` and
+`phoenix HD`.
+
+MongoDB is the only source — there is no local copy. When
+`AVIOR_DEDUP_MONGO_URL` is unset, the criterion is inert (nothing is marked as
+replaceable). When the database is unreachable, the run prints
+`[avior-dedup] log_include: MongoDB unreachable (<url>)` and the criterion is
+inert for that run. The list is cached per run and re-read at the start of every
+job.
+
+Note that some terms (`Device: Digital Devices DVB-S/S2 Tuner`) appear in almost
+every recording. They do not break the ranking — within a group both copies carry
+them and tie — but they also do not discriminate. The criterion only decides when
+the copies differ in these markers, e.g. one has `Lost Data:`.
 
 The comparison uses the log with the avior-go trailer removed (everything from
 `avior-go info` onwards), so a recording never matches through its own module
@@ -147,11 +164,9 @@ Order matters, values are space-separated. Omitting a criterion removes it.
 the highest weight.
 
 **`log_include` terms** — the terms themselves are not part of the priority list;
-they live in `log_include.yaml` in the config directory
-(`AVIOR_DEDUP_CONFIG_DIR`, default: the bundled package config). The bundled
-default carries the terms observed in the avior-go setup (`-tune hq`,
-`-c:v av1_qsv -global_quality:v`, `encoder x265`, `Lost Data:`, …). An empty list
-makes the criterion inert — nothing is then marked as replaceable.
+they come from avior-go's MongoDB (`Avior.log_include`), read fresh at the start
+of every job. Without `AVIOR_DEDUP_MONGO_URL` the criterion is inert — nothing is
+marked as replaceable.
 
 ## Reading the log
 

@@ -11,6 +11,9 @@ _BUNDLED_DIR = Path(__file__).parent
 _CONFIG_DIR: Path | None = None
 _cache: dict[str, Any] = {}
 
+# Cache key for the log_include term list read from MongoDB.
+_LOG_INCLUDE_CACHE_KEY = "__log_include_terms__"
+
 
 def _resolve_config_dir() -> Path:
     """Return the active config directory, initialising from defaults if needed."""
@@ -88,7 +91,6 @@ def config_files() -> dict[str, str]:
         "ignored_files": "ignored_files.yaml",
         "ignored_dirs": "ignored_dirs.yaml",
         "semantic_prefixes": "semantic_prefixes.yaml",
-        "log_include": "log_include.yaml",
         "suffixes": "suffixes.yaml",
         "episode_keywords": "episode_keywords.yaml",
         "path_suggestions": "path_suggestions.yaml",
@@ -99,9 +101,51 @@ def config_files() -> dict[str, str]:
 
 
 def log_include_terms() -> list[str]:
-    """Return the log_include terms that mark a recording as replaceable."""
-    data = _load_yaml("log_include.yaml")
-    return [str(term) for term in data] if data else []
+    """Return the log_include terms from avior-go's MongoDB collection.
+
+    The collection ``Avior.log_include`` (field ``Name``) is the single source of
+    truth. ``AVIOR_DEDUP_MONGO_URL`` selects the database; without it — or when
+    the database is unreachable — the list is empty and the `log_include`
+    selection priority is inert.
+    """
+    cached = _cache.get(_LOG_INCLUDE_CACHE_KEY)
+    if cached is not None:
+        return list(cached)
+
+    terms = _log_include_from_mongo() or []
+    _cache[_LOG_INCLUDE_CACHE_KEY] = list(terms)
+    return terms
+
+
+def invalidate_log_include() -> None:
+    """Drop the cached log_include list so the next access re-reads MongoDB."""
+    _cache.pop(_LOG_INCLUDE_CACHE_KEY, None)
+
+
+def _log_include_from_mongo() -> list[str] | None:
+    """Read avior-go's log_include collection; ``None`` when unavailable."""
+    url = (os.getenv("AVIOR_DEDUP_MONGO_URL") or "").strip()
+    if not url:
+        return None
+    try:
+        from pymongo import MongoClient
+    except ImportError:
+        return None
+    client = None
+    try:
+        client = MongoClient(url, serverSelectionTimeoutMS=3000)
+        docs = client["Avior"]["log_include"].find({}, {"Name": 1})
+        terms = [str(doc.get("Name") or "").strip() for doc in docs]
+    except Exception:
+        print(f"[avior-dedup] log_include: MongoDB unreachable ({url})")
+        return None
+    finally:
+        if client is not None:
+            try:
+                client.close()
+            except Exception:
+                pass
+    return [term for term in terms if term]
 
 
 def semantic_prefixes() -> list[str]:
