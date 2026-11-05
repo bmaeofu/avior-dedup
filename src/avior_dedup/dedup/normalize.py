@@ -143,7 +143,11 @@ def normalize_film_name(
     if apply_regex:
         # Recognize simple numbers with optional separator (1_5, 1-5, 1 5, 01_05)
         # and season/episode forms like S01E05, S01_E05, S01 E05
-        episode_re = re.compile(r"\(\s*([sS]?\d{1,2}(?:[ _\-]?[eE]?\d{1,2}|[ _\-]\d{1,2})?)\s*\)(?=.*\S)")
+        # The same token grammar the non-episode cleanup uses: 1_5, 01-05,
+        # 27 - 28, 19+20, 17 und 18, 10-11_13, 7+8_18 and S01E05. Four plain
+        # digits stay out of it so a release year is never stripped.
+        _EP_TOKEN = r"(?:\d{1,3}(?:\s*(?:[+\-/_]|und|&)\s*\d{1,4})*|[sS]\d{1,2}\s*[ _\-]?\s*[eE]?\d{1,2})"
+        episode_re = re.compile(r"\(\s*(" + _EP_TOKEN + r")\s*\)(?=.*\S)")
 
         def _parse_season_episode(token: str):
             t = token.strip()
@@ -176,9 +180,7 @@ def normalize_film_name(
         # Behind an episode title it is as redundant as one in the middle:
         # "Weissensee - Am Ende des Tages (Staffel 4, Folge 6)" must meet
         # "Weissensee (24) - Am Ende des Tages".
-        tail_re = re.compile(
-            r"\s*\(\s*[sS]?\d{1,2}(?:[ _\-]?[eE]?\d{1,2}|[ _\-]\d{1,2})?\s*\)\s*$"
-        )
+        tail_re = re.compile(r"\s*\(" + _EP_TOKEN + r"\)\s*$")
         tail = tail_re.search(stem)
         if tail:
             # Only behind an actual episode title ("Series - Title (marker)").

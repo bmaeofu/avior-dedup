@@ -165,3 +165,16 @@ def test_trailing_marker_is_stripped_only_behind_an_episode_title():
 
     # Without a title the marker is the only identity and stays.
     assert normalize_film_name("Serie (5)", [], True, remove_non_episode_parens=True) == "serie 5"
+
+
+def test_every_episode_notation_is_stripped_when_a_title_follows():
+    """The strip understands the same token grammar as the non-episode cleanup."""
+    cases = [
+        ("Die Märchenbraut (8-9_13) - Hänsel und Gretel", "8 9_13"),
+        ("Oktoberfest 1900 (1+2_6) - Titel", "1 2_6"),
+        ("Serie (17 und 18) - Titel", "17 und 18"),
+        ("Serie (S01 - E05) - Titel", "s01 e05"),
+    ]
+    for stem, marker in cases:
+        key = normalize_film_name(stem, [], True, remove_non_episode_parens=True)
+        assert marker not in key, (stem, key)
