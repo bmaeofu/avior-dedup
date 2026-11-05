@@ -134,3 +134,19 @@ def test_episode_group_notations_survive_the_cleanup():
         stem = f"Weissensee {token} - Titel"
         assert normalize_film_name(stem, [], False, remove_non_episode_parens=True) == \
             normalize_film_name(stem, [], False), token
+
+
+def test_spelled_out_episode_marker_maps_to_season_episode():
+    """(Staffel 4, Folge 1) is the episode marker S04E01, not noise."""
+    on = normalize_film_name(
+        "Weissensee - Am Ende des Tages (Staffel 4, Folge 6)", [], False,
+        remove_non_episode_parens=True,
+    )
+    assert "s04e06" in on
+
+    # Same treatment as the short notation: stripping removes it as an episode.
+    stripped = normalize_film_name(
+        "Little Britain - (Staffel 2, Folge 1) - Titel", [], True,
+        remove_non_episode_parens=True,
+    )
+    assert stripped == normalize_film_name("Little Britain - Titel", [], True)

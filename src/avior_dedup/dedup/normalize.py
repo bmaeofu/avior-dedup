@@ -96,6 +96,16 @@ def normalize_film_name(
     for pattern in semantic_prefixes:
         stem = re.sub(pattern, "", stem, flags=re.IGNORECASE)
 
+    # Broadcasters also write the episode as "(Staffel 4, Folge 6)". Normalise it
+    # to the SxxEyy form the rest of the pipeline already understands, so the
+    # marker counts as an episode number instead of being dropped as noise.
+    stem = re.sub(
+        r"\(\s*staffel\s*(\d{1,3})\s*,?\s*folge\s*(\d{1,3})\s*\)",
+        lambda m: f"(s{int(m.group(1)):02d}e{int(m.group(2)):02d})",
+        stem,
+        flags=re.IGNORECASE,
+    )
+
     # Split into first block / rest on " - "
     parts = stem.split(" - ")
     rest = parts[-1].strip() if len(parts) > 1 else ""
