@@ -168,14 +168,17 @@ def normalize_film_name(
     if remove_non_episode_parens:
         def _is_episode_token(tok: str) -> bool:
             tok = tok.strip()
-            # A standalone 4-digit number is a release year (e.g. (2020)), not
-            # an episode token — so remove_non_episode_parens removes it.
-            if re.fullmatch(r"\d{4}", tok):
+            # A plausible release year (e.g. (2020)) is not an episode token —
+            # so remove_non_episode_parens removes it. A 4-digit number outside
+            # that range is an episode number: long-running series reach
+            # (1045) and must keep their marker.
+            if re.fullmatch(r"(?:19|20|21)\d{2}", tok):
                 return False
-            # matches: numeric-only tokens (episode numbers) and numeric pairs
-            # like 1_5, 01-05, 1 5 and the spaced range form (27 - 28), which
-            # marks a double episode and is therefore still an episode token.
-            if re.fullmatch(r"\d+(?:\s*[ _\-]\s*\d+)?", tok):
+            # matches: numeric-only tokens and every episode-group notation the
+            # broadcasters use: 1_5, 01-05, 1 5, 27 - 28, 19+20, 17 und 18,
+            # 10-11_13, 7+8_18. All of them mark one or more episodes and must
+            # survive the non-episode cleanup.
+            if re.fullmatch(r"\d{1,4}(?:\s*(?:[+\-/_]|und|&)\s*\d{1,4})*", tok, re.IGNORECASE):
                 return True
             # matches: S01E05, S01_E05, S01 E05, s1e5, s01-e05
             if re.fullmatch(r"[sS]\d{1,2}\s*[ _-]?\s*[eE]?\d{1,2}", tok):

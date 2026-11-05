@@ -113,3 +113,24 @@ def test_roman_numeral_parts_are_episode_tokens():
     assert normalize_film_name(
         "Candice Renoir - Was Frau will", [], False, remove_non_episode_parens=True
     ) not in keys
+
+
+def test_long_running_episode_numbers_are_not_treated_as_years():
+    """(1045) is an episode of a long-running series, not a release year."""
+    kept = normalize_film_name(
+        "Sturm der Liebe (1045)", [], False, remove_non_episode_parens=True
+    )
+    assert kept == "sturm der liebe 1045"
+
+    # A plausible release year is still removed.
+    assert normalize_film_name(
+        "Ein Film (2020)", [], False, remove_non_episode_parens=True
+    ) == "ein film"
+
+
+def test_episode_group_notations_survive_the_cleanup():
+    """(19+20), (17 und 18), (21 + 22), (10-11_13) all mark episodes."""
+    for token in ["(19+20)", "(17 und 18)", "(21 + 22)", "(10-11_13)", "(7+8_18)", "(3_6)"]:
+        stem = f"Weissensee {token} - Titel"
+        assert normalize_film_name(stem, [], False, remove_non_episode_parens=True) == \
+            normalize_film_name(stem, [], False), token
