@@ -150,3 +150,18 @@ def test_spelled_out_episode_marker_maps_to_season_episode():
         remove_non_episode_parens=True,
     )
     assert stripped == normalize_film_name("Little Britain - Titel", [], True)
+
+
+def test_trailing_marker_is_stripped_only_behind_an_episode_title():
+    """Weissensee (24) and … Am Ende des Tages (Staffel 4, Folge 6) are one episode."""
+    a = normalize_film_name(
+        "Weissensee - Am Ende des Tages (Staffel 4, Folge 6)", [], True,
+        remove_non_episode_parens=True,
+    )
+    b = normalize_film_name(
+        "Weissensee (24) - Am Ende des Tages", [], True, remove_non_episode_parens=True
+    )
+    assert a == b == "weissensee am ende des tages"
+
+    # Without a title the marker is the only identity and stays.
+    assert normalize_film_name("Serie (5)", [], True, remove_non_episode_parens=True) == "serie 5"
