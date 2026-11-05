@@ -172,11 +172,13 @@ def normalize_film_name(
             # an episode token — so remove_non_episode_parens removes it.
             if re.fullmatch(r"\d{4}", tok):
                 return False
-            # matches: numeric-only tokens (episode numbers) and numeric pairs like 1_5, 01-05, 1 5
-            if re.fullmatch(r"\d+(?:[ _\-]\d+)?", tok):
+            # matches: numeric-only tokens (episode numbers) and numeric pairs
+            # like 1_5, 01-05, 1 5 and the spaced range form (27 - 28), which
+            # marks a double episode and is therefore still an episode token.
+            if re.fullmatch(r"\d+(?:\s*[ _\-]\s*\d+)?", tok):
                 return True
             # matches: S01E05, S01_E05, S01 E05, s1e5, s01-e05
-            if re.fullmatch(r"[sS]\d{1,2}[ _-]?[eE]?\d{1,2}", tok):
+            if re.fullmatch(r"[sS]\d{1,2}\s*[ _-]?\s*[eE]?\d{1,2}", tok):
                 return True
             return False
 

@@ -79,3 +79,20 @@ def test_parenthesised_year_blocks_stripping():
     )
     # The episode number 3 must survive: (2019) is the year.
     assert "serie 3" in out
+
+
+def test_spaced_episode_range_is_an_episode_token():
+    """(27 - 28) marks a double episode and must survive the non-episode cleanup."""
+    for stem in ["Babylon Berlin (27 - 28)", "Babylon Berlin (4 - 6)", "Babylon Berlin (20 - 22)"]:
+        kept = normalize_film_name(stem, [], False, remove_non_episode_parens=True)
+        assert kept == normalize_film_name(stem, [], False), stem
+        assert "berlin" in kept and kept.split()[-1].isdigit(), kept
+
+
+def test_non_episode_parentheses_are_still_removed():
+    assert "omu" not in normalize_film_name(
+        "Babylon Berlin (OmU)", [], False, remove_non_episode_parens=True
+    )
+    assert "2020" not in normalize_film_name(
+        "Babylon Berlin (2020)", [], False, remove_non_episode_parens=True
+    )
