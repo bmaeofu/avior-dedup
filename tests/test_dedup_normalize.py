@@ -96,3 +96,20 @@ def test_non_episode_parentheses_are_still_removed():
     assert "2020" not in normalize_film_name(
         "Babylon Berlin (2020)", [], False, remove_non_episode_parens=True
     )
+
+
+def test_roman_numeral_parts_are_episode_tokens():
+    """(I)/(II) split a double episode, so the non-episode cleanup must keep them."""
+    stems = [
+        "Candice Renoir - Was Frau will (I)",
+        "Candice Renoir - Was Frau will (II)",
+        "Candice Renoir - Was Frau will (IV)",
+    ]
+    keys = [normalize_film_name(stem, [], False, remove_non_episode_parens=True) for stem in stems]
+
+    assert len(set(keys)) == 3
+    assert keys[0].endswith(" i") and keys[1].endswith(" ii") and keys[2].endswith(" iv")
+    # A bare name without a part marker stays a separate key, as before.
+    assert normalize_film_name(
+        "Candice Renoir - Was Frau will", [], False, remove_non_episode_parens=True
+    ) not in keys

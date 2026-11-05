@@ -180,6 +180,10 @@ def normalize_film_name(
             # matches: S01E05, S01_E05, S01 E05, s1e5, s01-e05
             if re.fullmatch(r"[sS]\d{1,2}\s*[ _-]?\s*[eE]?\d{1,2}", tok):
                 return True
+            # matches: roman numerals marking a part, e.g. (I), (II), (III), (IV)
+            # - the broadcaster's way of splitting a double episode.
+            if re.fullmatch(r"(?i:i{1,4}|iv|vi{0,4}|ix|x{1,4})", tok):
+                return True
             return False
 
         def _paren_repl(m: re.Match) -> str:
