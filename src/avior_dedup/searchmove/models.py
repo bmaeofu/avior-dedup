@@ -56,6 +56,8 @@ MD_CANDIDATES: list[str] = [
     ".mp2.log", ".mpg.log", ".mkv.log", ".plot.txt",
     "-fanart.jpg", "-poster.jpg", "-landscape.jpg", "-thumb.jpg",
     ".mp4.INFO.log", ".mp2.INFO.log", ".ts.INFO.log", ".mkv.INFO.log",
+    # Subtitles belong to the recording and move with it.
+    ".srt", ".ttml", ".ass",
 ]
 
 # Video suffixes used for stem normalization and sibling grouping.

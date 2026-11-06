@@ -18,6 +18,9 @@ candidate_suffixes:
   - .ts
   - .mpg
   - .nfo
+  - .srt
+  - .ttml
+  - .ass
   - .scrapefail
   - -fanart.jpg
   - -poster.jpg
