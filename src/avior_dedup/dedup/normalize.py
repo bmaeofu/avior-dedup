@@ -207,17 +207,19 @@ def normalize_film_name(
                 return True
             return False
 
-        # A written-out part marker ("Teil 2", "Folge 6") is an episode identity
-        # of its own - but only when the name carries no other one. Next to
-        # "(6_8)" it is redundant and goes with the rest of the noise. The check
-        # uses the original name, because the episode strip above may already
-        # have removed the other marker.
-        _part_re = re.compile(r"(?:teil|part|folge|episode|kapitel)\s*\.?\s*\d{1,3}", re.IGNORECASE)
+        # "Teil 2" and "Folge 6" are two different things:
+        #   * "Teil"/"Part" mark a *part* of a work. They never repeat an
+        #     episode number, so they are always an identity of their own -
+        #     otherwise Teil 1 and Teil 2 collapse.
+        #   * "Folge"/"Episode"/"Kapitel" restate the episode number. Next to a
+        #     real marker like "(6_8)" they are redundant and go with the noise.
+        _part_re = re.compile(r"(?:teil|part)\s*\.?\s*\d{1,3}", re.IGNORECASE)
+        _repeat_re = re.compile(r"(?:folge|episode|kapitel)\s*\.?\s*\d{1,3}", re.IGNORECASE)
         _inner_tokens = [
             m.group(1).strip() for m in re.finditer(r"\(([^)]*)\)", pre_strip_stem)
         ]
         _other_episode_identity = any(
-            t and not _part_re.fullmatch(t) and _is_basic_episode_token(t)
+            t and not _part_re.fullmatch(t) and not _repeat_re.fullmatch(t) and _is_basic_episode_token(t)
             for t in _inner_tokens
         )
         # Only the first episode identity counts. A second one is the same
@@ -232,6 +234,8 @@ def normalize_film_name(
             if tok in _redundant_tokens:
                 return False
             if _part_re.fullmatch(tok):
+                return True          # a part is never a repetition
+            if _repeat_re.fullmatch(tok):
                 return not _other_episode_identity
             return _is_basic_episode_token(tok)
 
