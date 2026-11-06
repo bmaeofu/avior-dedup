@@ -176,18 +176,6 @@ def normalize_film_name(
 
         stem = episode_re.sub(_ep_repl, stem)
 
-        # A marker that ends the name is only kept when it is the sole identity.
-        # Behind an episode title it is as redundant as one in the middle:
-        # "Weissensee - Am Ende des Tages (Staffel 4, Folge 6)" must meet
-        # "Weissensee (24) - Am Ende des Tages".
-        tail_re = re.compile(r"\s*\(" + _EP_TOKEN + r"\)\s*$")
-        tail = tail_re.search(stem)
-        if tail:
-            # Only behind an actual episode title ("Series - Title (marker)").
-            before = stem[: tail.start()].strip(" -_\t")
-            if " - " in before and before.rsplit(" - ", 1)[1].strip(" -_\t"):
-                stem = stem[: tail.start()]
-
     base = stem
 
     # Optionally remove parenthetical expressions that are NOT episode numbers
