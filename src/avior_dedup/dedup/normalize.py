@@ -139,6 +139,10 @@ def normalize_film_name(
                 apply_regex = False
                 break
 
+    # Snapshot before stripping: the non-episode cleanup needs to know which
+    # episode identities the name carried, even the ones stripped below.
+    pre_strip_stem = stem
+
     # Remove or normalize episode parentheses like (1), (2_3) or (S01_E05)
     if apply_regex:
         # Recognize simple numbers with optional separator (1_5, 1-5, 1 5, 01_05)
@@ -210,16 +214,24 @@ def normalize_film_name(
         # have removed the other marker.
         _part_re = re.compile(r"(?:teil|part|folge|episode|kapitel)\s*\.?\s*\d{1,3}", re.IGNORECASE)
         _inner_tokens = [
-            m.group(1).strip()
-            for m in re.finditer(r"\(([^)]*)\)", unicodedata.normalize("NFKC", name).casefold())
+            m.group(1).strip() for m in re.finditer(r"\(([^)]*)\)", pre_strip_stem)
         ]
         _other_episode_identity = any(
             t and not _part_re.fullmatch(t) and _is_basic_episode_token(t)
             for t in _inner_tokens
         )
+        # Only the first episode identity counts. A second one is the same
+        # episode written twice, e.g.
+        # "(4_5) - … bekam (Staffel 1, Folge 4)"; it goes with the noise so the
+        # name still meets its counterpart without the repetition.
+        _identities = [t for t in _inner_tokens if t and _is_basic_episode_token(t)]
+        _redundant_tokens = set(_identities[1:])
 
         def _is_episode_token(tok: str) -> bool:
-            if _part_re.fullmatch(tok.strip()):
+            tok = tok.strip()
+            if tok in _redundant_tokens:
+                return False
+            if _part_re.fullmatch(tok):
                 return not _other_episode_identity
             return _is_basic_episode_token(tok)
 

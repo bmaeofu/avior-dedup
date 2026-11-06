@@ -186,3 +186,14 @@ def test_redundant_part_marker_goes_with_the_noise():
         "Tokyo Vice (6_8) - Die Lieferung (Folge 6)", [], True, remove_non_episode_parens=True
     )
     assert plain == marked
+
+
+def test_second_episode_identity_is_redundant():
+    """Same episode written twice: "(4_5) … (Staffel 1, Folge 4)" meets the plain name."""
+    base = "Die Nacht, als Laurier erwachte (4_5) - Die Nacht, in der Julien Angst bekam"
+    plain = normalize_film_name(base, [], True, remove_non_episode_parens=True)
+    repeated = normalize_film_name(
+        base + " (Staffel 1, Folge 4)", [], True, remove_non_episode_parens=True
+    )
+    assert plain == repeated
+    assert "s01e04" not in repeated
