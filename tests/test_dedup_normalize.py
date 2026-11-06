@@ -163,3 +163,26 @@ def test_every_episode_notation_is_stripped_when_a_title_follows():
     for stem, marker in cases:
         key = normalize_film_name(stem, [], True, remove_non_episode_parens=True)
         assert marker not in key, (stem, key)
+
+
+def test_written_out_part_marker_is_an_episode_identity():
+    """(Teil 1) and (Teil 2) are different episodes, not noise."""
+    one = normalize_film_name(
+        "Die Bergretter - Die Hoffnung stirbt zuletzt (Teil 1)", [], True,
+        remove_non_episode_parens=True,
+    )
+    two = normalize_film_name(
+        "Die Bergretter - Die Hoffnung stirbt zuletzt (Teil 2)", [], True,
+        remove_non_episode_parens=True,
+    )
+    assert one != two
+    assert one.endswith("teil 1") and two.endswith("teil 2")
+
+
+def test_redundant_part_marker_goes_with_the_noise():
+    """Next to a real episode marker, "(Folge 6)" only repeats it."""
+    plain = normalize_film_name("Tokyo Vice (6_8) - Die Lieferung", [], True, remove_non_episode_parens=True)
+    marked = normalize_film_name(
+        "Tokyo Vice (6_8) - Die Lieferung (Folge 6)", [], True, remove_non_episode_parens=True
+    )
+    assert plain == marked

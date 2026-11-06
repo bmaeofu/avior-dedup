@@ -180,7 +180,7 @@ def normalize_film_name(
 
     # Optionally remove parenthetical expressions that are NOT episode numbers
     if remove_non_episode_parens:
-        def _is_episode_token(tok: str) -> bool:
+        def _is_basic_episode_token(tok: str) -> bool:
             tok = tok.strip()
             # A plausible release year (e.g. (2020)) is not an episode token —
             # so remove_non_episode_parens removes it. A 4-digit number outside
@@ -202,6 +202,26 @@ def normalize_film_name(
             if re.fullmatch(r"(?i:i{1,4}|iv|vi{0,4}|ix|x{1,4})", tok):
                 return True
             return False
+
+        # A written-out part marker ("Teil 2", "Folge 6") is an episode identity
+        # of its own - but only when the name carries no other one. Next to
+        # "(6_8)" it is redundant and goes with the rest of the noise. The check
+        # uses the original name, because the episode strip above may already
+        # have removed the other marker.
+        _part_re = re.compile(r"(?:teil|part|folge|episode|kapitel)\s*\.?\s*\d{1,3}", re.IGNORECASE)
+        _inner_tokens = [
+            m.group(1).strip()
+            for m in re.finditer(r"\(([^)]*)\)", unicodedata.normalize("NFKC", name).casefold())
+        ]
+        _other_episode_identity = any(
+            t and not _part_re.fullmatch(t) and _is_basic_episode_token(t)
+            for t in _inner_tokens
+        )
+
+        def _is_episode_token(tok: str) -> bool:
+            if _part_re.fullmatch(tok.strip()):
+                return not _other_episode_identity
+            return _is_basic_episode_token(tok)
 
         def _paren_repl(m: re.Match) -> str:
             inner = m.group(1)
