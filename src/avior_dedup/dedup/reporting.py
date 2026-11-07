@@ -221,7 +221,7 @@ def sort_and_finalize_log(
     resolution_size_counter: Counter | None = None,
     attr_matrix: dict[str, Counter] | None = None,
 ) -> None:
-    """Sort the log file by group name and action, then append summary."""
+    """Sort the log by group name, then source path, then action; append summary."""
     if not log_path or not os.path.exists(log_path):
         return
 
