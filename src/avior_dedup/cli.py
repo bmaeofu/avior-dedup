@@ -113,7 +113,7 @@ def main() -> None:
         "--discard-groups-with-distinct-episodes",
         action="store_true",
         help=(
-            "With --remove-episode-nos: read each candidate's .txt (Title=/Episode=) "
+            "With --remove-episode-nos: read each candidate's .txt (Title=/Info=) "
             "and drop groups whose members are provably different episodes. "
             "Bypasses the series/episode keep-keyword lists so stripping applies uniformly."
         ),
