@@ -465,8 +465,8 @@ def _episode_id_from_txt(txt_path: str) -> tuple[int | None, int] | None:
 
     The EPG ``Title=`` line reliably carries the episode identifier in one of
     the observed schemes ``(S01/E03)``, ``(8/71)`` or ``(18)``. The
-    ``(Staffel 2, Folge 18)`` form may appear in ``Title=`` or ``Info=`` and
-    the optional ``Episode=`` field is only present for some broadcasters.
+    ``(Staffel 2, Folge 18)`` form may appear in ``Title=`` or ``Info=``.
+    A DVBViewer ``.txt`` has no episode field of its own.
     """
     try:
         content = read_text(txt_path)
@@ -477,16 +477,11 @@ def _episode_id_from_txt(txt_path: str) -> tuple[int | None, int] | None:
 
     title = ""
     info = ""
-    episode_field = None
     for line in content.splitlines():
         if line.startswith("Title="):
             title = line[6:].strip()
         elif line.startswith("Info="):
             info = line[5:].strip()
-        elif line.startswith("Episode="):
-            value = line[8:].strip()
-            if value.isdigit():
-                episode_field = int(value)
 
     m = _EP_SXXEYY_RE.search(title)
     if m:
@@ -504,8 +499,6 @@ def _episode_id_from_txt(txt_path: str) -> tuple[int | None, int] | None:
     if m:
         return None, int(m.group(1))
 
-    if episode_field is not None:
-        return None, episode_field
     return None
 
 
