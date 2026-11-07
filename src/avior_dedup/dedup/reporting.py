@@ -232,10 +232,12 @@ def sort_and_finalize_log(
 
     sorted_lines = sorted(
         set(line.rstrip("\n") for line in lines if line.strip()),
-        # The action is column 0, the group name column 1. Sorting stays by
-        # group name first so a group's files remain together in the log.
+        # Column 1 is the action, column 2 the group name, column 3 the source
+        # path. Sorting by group and then by path keeps one film's files next to
+        # each other; the action is only the final tiebreak.
         key=lambda line: (
             line.split("\t")[1] if len(line.split("\t")) > 1 else "",
+            line.split("\t")[2] if len(line.split("\t")) > 2 else "",
             line.split("\t")[0] if line.split("\t") else "",
         ),
     )
