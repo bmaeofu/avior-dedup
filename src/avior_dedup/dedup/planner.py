@@ -585,7 +585,7 @@ def build_move_plan(
                         max_duration_diff_longer,
                         max_duration_diff_shorter,
                     )
-                    log_fn(f"{group_name}\t[{action}]\t{src}\t{reason}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
+                    log_fn(f"[{action}]\t{group_name}\t{src}\t{reason}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
                     action_counter[action] += 1
                     size_counter[action] += file_size
                     # record resolution counters for kept files
@@ -742,7 +742,7 @@ def execute_move_plan(
 
         # err_count is numeric
         # Log with destination and appended attributes
-        log_fn(f"{move.group_name}\t[{move.action}]\t{file_path}\t{dst}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
+        log_fn(f"[{move.action}]\t{move.group_name}\t{file_path}\t{dst}\t{res_str}\t{audio_str}\t{length_flag}\t{err_count}")
         action_counter[move.action] += 1
         size_counter[move.action] += file_size
         # Only count resolution and attributes for actual video files (e.g., .mkv)
@@ -811,18 +811,18 @@ def execute_move_plan(
                         for entry in os.listdir(parent):
                             if entry.lower() == base.lower():
                                 candidate = os.path.join(parent, entry)
-                                log_fn(f"{move.group_name}\t[CHECK_RESOLVE]\t{file_path}\tresolved_to={candidate}")
+                                log_fn(f"[CHECK_RESOLVE]\t{move.group_name}\t{file_path}\tresolved_to={candidate}")
                                 src_to_move = candidate
                                 exists = True
                                 break
                     except Exception as e:
-                        log_fn(f"{move.group_name}\t[CHECK_RESOLVE_FAIL]\t{file_path}\t{e}")
+                        log_fn(f"[CHECK_RESOLVE_FAIL]\t{move.group_name}\t{file_path}\t{e}")
 
                 if not os.path.exists(dst):
                     try:
                         if not os.path.exists(src_to_move):
                             # Source still missing — log and continue
-                            log_fn(f"{move.group_name}\t[ERROR_MOVE]\t{src_to_move}\t{dst}\t[WinError 2] The system cannot find the file specified")
+                            log_fn(f"[ERROR_MOVE]\t{move.group_name}\t{src_to_move}\t{dst}\t[WinError 2] The system cannot find the file specified")
                             action_counter["ERROR_MOVE"] += 1
                         else:
                             # If resolution changed, adjust size counters to reflect actual file
@@ -839,13 +839,13 @@ def execute_move_plan(
                             ensure_output_permissions(dst, is_dir=False)
                     except OSError as e:
                         # OS errors (permissions, etc.) — log and continue
-                        log_fn(f"{move.group_name}\t[ERROR_MOVE]\t{src_to_move}\t{dst}\t{e}")
+                        log_fn(f"[ERROR_MOVE]\t{move.group_name}\t{src_to_move}\t{dst}\t{e}")
                         action_counter["ERROR_MOVE"] += 1
                 else:
-                    log_fn(f"{move.group_name}\t[SKIP_EXISTS]\t{dst}")
+                    log_fn(f"[SKIP_EXISTS]\t{move.group_name}\t{dst}")
                     action_counter["SKIP_EXISTS"] += 1
             except Exception as e:
                 # Catch-all to prevent aborting the run; log and continue
-                log_fn(f"{move.group_name}\t[ERROR_MOVE]\t{file_path}\t{dst}\t{e}")
+                log_fn(f"[ERROR_MOVE]\t{move.group_name}\t{file_path}\t{dst}\t{e}")
                 action_counter["ERROR_MOVE"] += 1
     return resolution_by_action, resolution_size_by_action, attr_matrix

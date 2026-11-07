@@ -232,9 +232,11 @@ def sort_and_finalize_log(
 
     sorted_lines = sorted(
         set(line.rstrip("\n") for line in lines if line.strip()),
+        # The action is column 0, the group name column 1. Sorting stays by
+        # group name first so a group's files remain together in the log.
         key=lambda line: (
-            line.split("\t")[0] if line.split("\t") else "",
             line.split("\t")[1] if len(line.split("\t")) > 1 else "",
+            line.split("\t")[0] if line.split("\t") else "",
         ),
     )
 
@@ -303,7 +305,7 @@ def sort_and_finalize_log(
             combo_counter[combo] += 1
 
             # determine keep vs duplicate by looking at action token (second column)
-            action_token = parts[1] if len(parts) > 1 else ""
+            action_token = parts[0] if parts else ""
             if "KEEP" in action_token:
                 combo_keep[combo] += 1
             elif "DUPLICATE" in action_token:
@@ -343,7 +345,7 @@ def sort_and_finalize_log(
             src_path = parts[2] if len(parts) > 2 else ""
             if not src_path.lower().endswith(".mkv"):
                 continue
-            action_token = parts[1] if len(parts) > 1 else ""
+            action_token = parts[0] if parts else ""
             res_raw = parts[-4]
             audio_raw = parts[-3]
             length_raw = parts[-2]
@@ -422,14 +424,14 @@ def sort_and_finalize_log(
             parts = line.split("\t")
             if len(parts) < 4:
                 continue
-            action_token = parts[1] if len(parts) > 1 else ""
+            action_token = parts[0] if parts else ""
             src_path = parts[2] if len(parts) > 2 else ""
             if "KEEP" not in action_token:
                 continue
             if not src_path.lower().endswith(".mkv"):
                 continue
             # For KEEP lines the expected columns are:
-            # group_name, [ACTION], src_path, reason, resolution, audio, length, errors
+            # [ACTION], group_name, src_path, reason, resolution, audio, length, errors
             # last 4 columns are resolution, audio, length, errors — reason is at index 3
             reason = parts[3] if len(parts) > 3 else ""
             res = parts[-4] if len(parts) >= 4 else "unknown"

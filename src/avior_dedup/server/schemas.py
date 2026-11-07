@@ -68,7 +68,6 @@ class JobResult(BaseModel):
     action_counts: dict[str, int]
     action_sizes: dict[str, int] = {}
     log_path: str | None
-    timing_path: str | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +98,6 @@ class SearchMoveResult(BaseModel):
     action_counts: dict[str, int]
     matches: list[SearchMoveMatchEntry] = []
     log_path: str | None
-    timing_path: str | None = None
 
 
 # ---------------------------------------------------------------------------

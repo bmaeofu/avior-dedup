@@ -185,31 +185,14 @@ def main() -> None:
     log_handle = open(log_path, "w", encoding="utf-8")
     ensure_output_permissions(log_path, is_dir=False)
 
-    # Create a corresponding timing log next to the main log with the
-    # same numbering as the dedup log and keep files. If the numbered
-    # dedup log follows the pattern 'dedup_log_<suffix>' we create
-    # 'dedup_timing_<suffix>' so numbering matches exactly.
-    import re
-
-    orig_name = os.path.basename(log_path)
-    base, ext = os.path.splitext(orig_name)
-    # Name timing files as `timing_{logbasename_no_ext}{ext}` so the
-    # timing file clearly relates to the original log file.
-    timing_name = f"timing_{base}{ext}"
-
-    timing_path = os.path.join(os.path.dirname(log_path), timing_name)
-    timing_handle = open(timing_path, "w", encoding="utf-8")
-    ensure_output_permissions(timing_path, is_dir=False)
-
     def log_fn(msg: str) -> None:
-        # TIMING lines go only to the timing diagnostic log (and not to
-        # the user-facing main log). Other messages go to stdout + main log.
+        # TIMING diagnostics are switched off: they wrote a second log next to
+        # every run. Other messages go to stdout + main log.
         try:
             if isinstance(msg, str) and msg.startswith("TIMING"):
-                timing_handle.write(msg + "\n")
-            else:
-                print(msg)
-                log_handle.write(msg + "\n")
+                return
+            print(msg)
+            log_handle.write(msg + "\n")
         except Exception:
             # Best-effort logging; ignore failures to avoid aborting run
             pass
@@ -279,10 +262,6 @@ def main() -> None:
         attr_matrix_build[a].update(ctr)
 
     log_handle.close()
-    try:
-        timing_handle.close()
-    except Exception:
-        pass
     # Expose the actual log path for reporting so the SUMMARY shows the real file
     args.logname = log_path
     # Diagnostic: verify 720p DUPLICATE counts match between resolution counters and attribute matrix

@@ -99,23 +99,13 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
         log_handle = open(log_path, "w", encoding="utf-8")
         ensure_output_permissions(log_path, is_dir=False)
 
-        # Create a corresponding timing log next to the main log. Name it
-        # `timing_{logbasename_no_ext}{ext}` so the relation to the main
-        # log file is explicit (e.g. `timing_dedup_log.txt`).
-        orig_name = os.path.basename(log_path)
-        base, ext = os.path.splitext(orig_name)
-        timing_name = f"timing_{base}{ext}"
-
-        timing_path = os.path.join(os.path.dirname(log_path), timing_name)
-        timing_handle = open(timing_path, "w", encoding="utf-8")
-        ensure_output_permissions(timing_path, is_dir=False)
-
         def log_fn(msg: str) -> None:
+            # TIMING diagnostics are switched off: they wrote a second log next
+            # to every run and nobody read it.
             try:
                 if isinstance(msg, str) and msg.startswith("TIMING"):
-                    timing_handle.write(msg + "\n")
-                else:
-                    log_handle.write(msg + "\n")
+                    return
+                log_handle.write(msg + "\n")
             except Exception:
                 # best-effort logging; ignore to avoid aborting job
                 pass
@@ -233,10 +223,6 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             log_handle.close()
         except Exception:
             pass
-        try:
-            timing_handle.close()
-        except Exception:
-            pass
 
         # Build a minimal args-like object for sort_and_finalize_log
         # capture job end time explicitly (useful when running inside containers)
@@ -282,7 +268,6 @@ def _run_job(job_id: str, req: JobRequest, reporter: ProgressReporter) -> None:
             action_counts=dict(action_counter),
             action_sizes=dict(size_counter),
             log_path=log_path,
-            timing_path=timing_path,
         )
         _jobs[job_id].status = JobStatus(
             job_id=job_id,
