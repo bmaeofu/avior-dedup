@@ -953,17 +953,12 @@ def find_duplicates(
             stems_to_files[stem] = new_fps
 
     # Build groups based on requested duptype.
-    # For 'exact' and 'case' we group by full basename (including suffix/extension),
-    # ensuring the extension is part of identity. Only .log basenames are used
-    # as the primary duplicate signal (matching historical behavior relying on logs).
+    # Exact and case modes group full basenames, including metadata-only files.
+    # Semantic mode groups normalized stems and expands each stem to its files.
     if duptype in ("exact", "both", "all", "case"):
         # exact (case-sensitive) grouping by basename
         if duptype in ("exact", "both", "all"):
             for basename, fps in basename_to_files.items():
-                # only consider log basenames as duplicate signals
-                suf = match_suffix(basename)[1]
-                if not (suf and suf.lower().endswith('.log')):
-                    continue
                 if len(fps) > 1:
                     groups.append(sorted(fps))
 
@@ -971,9 +966,6 @@ def find_duplicates(
         if duptype in ("case", "both", "all"):
             lower_to_basenames: dict[str, list[str]] = {}
             for basename, fps in basename_to_files.items():
-                suf = match_suffix(basename)[1]
-                if not (suf and suf.lower().endswith('.log')):
-                    continue
                 lower = _canonical_case_key(basename)
                 lower_to_basenames.setdefault(lower, []).extend(fps)
             for fps in lower_to_basenames.values():
@@ -986,15 +978,12 @@ def find_duplicates(
     # exactly the same (e.g. identical .log names in different folders).
     if duptype in ("semantic", "all"):
         for basename, fps in basename_to_files.items():
-            suf = match_suffix(basename)[1]
-            if not (suf and suf.lower().endswith('.log')):
-                continue
             parent_dirs = {os.path.dirname(fp) for fp in fps}
             if len(parent_dirs) > 1 and len(fps) > 1:
                 groups.append(sorted(fps))
 
     # Semantic grouping remains stem-based and uses normalized stems
-    if stems_with_log and duptype in ("semantic", "all"):
+    if stems_to_files and duptype in ("semantic", "all"):
         strict_options = (
             require_identical_nfo_year
             or require_identical_txt_year
@@ -1072,7 +1061,7 @@ def find_duplicates(
         else:
             # Default: group by normalized stem only (no nfo_year requirement).
             semantic_to_stems: dict[str, list[str]] = {}
-            for stem in stems_with_log:
+            for stem in stems_to_files:
                 _stem_paths = stems_to_files.get(stem, [])
                 _txt_available, _txt_ep, _txt_yr = _txt_ctx(
                     stem, os.path.dirname(_stem_paths[0]) if _stem_paths else ""
@@ -1095,10 +1084,7 @@ def find_duplicates(
                 if len(stems) > 1:
                     group_paths = []
                     for s in stems:
-                        for fp in stems_to_files.get(s, []):
-                            suf = match_suffix(os.path.basename(fp))[1]
-                            if suf and suf.lower().endswith('.log'):
-                                group_paths.append(fp)
+                        group_paths.extend(stems_to_files.get(s, []))
                     if len(group_paths) > 1:
                         groups.append(group_paths)
 

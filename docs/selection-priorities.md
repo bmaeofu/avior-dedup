@@ -1,8 +1,35 @@
 # Selection priorities
 | 7 | `series_marker_completeness` | the filename with the most explicit episode marker | filename only |
 | Episode identity | `series_marker_completeness` | the filename carries an explicit episode marker |
+**Sort value** — the absolute difference between video and recorded duration.
+Smaller differences are better. Both durations unknown → `10^9`.
+The hard pre-filter still excludes copies outside the configured duration window;
+among the remaining candidates this priority selects the closest duration. The
+keep reason uses the same absolute-difference definition.
 ### `series_marker_completeness`
 **Prefers** the filename with the highest configured episode-marker score.
+**Data source** — the original filename stem only. The marker is evaluated
+before semantic episode-number removal and does not change grouping keys.
+**Default scores** — the highest matching pattern wins; matching scores are
+never added:
+| Points | Marker form | Example |
+|---:|---|---|
+| 1 | single episode number | `(7)` |
+| 2 | episode range/group | `(1_7)`, `(1-7)`, `(1/7)` |
+| 3 | explicit season and episode | `(Staffel 1, Folge 3)`, `3. Staffel (1_10)` |
+| 4 | compact season/episode | `(S10_E03)`, `(S10E03)`, `(S10-E03)` |
+The rules are configured in `series_marker_scores.yaml`. Additional formats can
+be added as regular-expression entries without changing Python code. A missing
+or unrecognised marker scores `0`.
+Example: `(6)` scores `1`, while `(Staffel 1, Folge 6)` scores `3`; the latter
+wins when all earlier priorities tie.
+This priority selects the better copy inside an already formed group. It does
+not prevent distinct episodes from entering one semantic group; that requires
+the separate distinct-episode protection.
+`clean_name` remains available when explicitly requested, but is no longer a
+default priority. It prefers the filename with fewer repeated word tokens and
+is only a cosmetic criterion.
+
 **Data source** — the original filename stem only. The marker is evaluated
 before semantic episode-number removal and does not change grouping keys.
 **Default scores** — the highest matching pattern wins; matching scores are
@@ -26,6 +53,10 @@ the separate distinct-episode protection.
 default priority. It prefers the filename with fewer repeated word tokens and
 is only a cosmetic criterion.
 
+**Sort value** — the negative ordinal of the recording date. Parsed log dates
+have day granularity; when the log date is unavailable, filesystem modification
+time is compared with its available timestamp precision. Totally unknown → `0`
+(oldest).
   --selection-priorities resolution log_include multichannel fewer_errors year_match closest_duration series_marker_completeness recording_date
 | `series_marker_completeness` | `series_marker_completeness` |
 | `cleaner_name` | `clean_name` when explicitly configured |

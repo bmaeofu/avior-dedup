@@ -17,86 +17,6 @@ def _series_marker_completeness(path: str) -> int:
     return best
 
 
-        elif p == SelectionPriority.SERIES_MARKER_COMPLETENESS:
-            # Higher marker completeness should sort first.
-            key.append(-_series_marker_completeness(r.file))
-
-        try:
-            matched = re.search(pattern, stem, flags=re.IGNORECASE) is not None
-        except re.error as exc:
-            raise ValueError(f"Invalid series marker pattern {pattern!r}: {exc}") from exc
-        if matched:
-            best = max(best, int(item["points"]))
-    return best
-
-
-        elif p == SelectionPriority.SERIES_MARKER_COMPLETENESS:
-            # Higher marker completeness should sort first.
-            key.append(-_series_marker_completeness(r.file))
-        elif priority == SelectionPriority.SERIES_MARKER_COMPLETENESS:
-            best_score = _series_marker_completeness(best.file)
-            if any(_series_marker_completeness(o.file) < best_score for o in others):
-                return "series_marker_completeness"
-
-        elif priority == SelectionPriority.SERIES_MARKER_COMPLETENESS:
-            best_score = _series_marker_completeness(best.file)
-            if any(_series_marker_completeness(o.file) < best_score for o in others):
-                return "series_marker_completeness"
-
-import dataclasses
-import os
-import re
-import shutil
-from collections import Counter, defaultdict
-from typing import Callable
-import datetime
-import time
-
-from avior_dedup.dedup.models import (
-    DEFAULT_SELECTION_PRIORITIES,
-    FileRecord,
-    GroupKeys,
-    MoveAction,
-    SelectionPriority,
-)
-from avior_dedup.dedup.scanner import get_video_md
-from avior_dedup.dedup.io_utils import read_text
-from avior_dedup import config
-from avior_dedup.dedup.suffix import match_suffix
-from avior_dedup.permissions import ensure_output_permissions
-
-
-def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, GroupKeys]) -> str:
-    """Return the grouping name relevant for the given duptype."""
-    basename = os.path.basename(file_path)
-    if duptype == "exact":
-        return basename
-    elif duptype == "case":
-        return basename.lower()
-    elif duptype in ("semantic", "all"):
-        keys = file_to_groupkey.get(file_path)
-        return keys.semantic if keys else basename
-    elif duptype == "both":
-        return basename.lower()
-    return basename
-
-
-_TOKEN_RE = re.compile(r"[0-9A-Za-zÄÖÜäöüß]+")
-
-
-def _name_redundancy(path: str) -> int:
-    """Return how many word tokens of a file's stem are repeats.
-
-    Inside one group every record normalizes to the same key, so a token that
-    occurs more than once is redundant (e.g. a series title repeated in the raw
-    name). Extra *distinct* tokens — a year, an episode number, a subtitle — are
-    metadata and therefore not penalized.
-    """
-    stem = os.path.splitext(os.path.basename(path))[0]
-    tokens = [t.lower() for t in _TOKEN_RE.findall(stem)]
-    return len(tokens) - len(set(tokens))
-
-
 def _sort_key(
     r: FileRecord,
     priorities: list[SelectionPriority],
@@ -125,18 +45,9 @@ def _sort_key(
         elif p == SelectionPriority.FEWER_ERRORS:
             key.append(r.error_count if r.error_count is not None else 10**9)
         elif p == SelectionPriority.CLOSEST_DURATION:
-            # Only penalize recordings that deviate more than the configured
-            # duration thresholds. If within thresholds, treat as equal (0).
+            # Prefer the recording whose duration is closest to the EPG duration.
             if r.video_duration is not None and r.rec_duration is not None:
-                diff = r.video_duration - r.rec_duration
-                if diff > max_duration_diff_longer:
-                    # amount exceeding the allowed longer threshold
-                    key.append(diff - max_duration_diff_longer)
-                elif diff < -max_duration_diff_shorter:
-                    # amount exceeding the allowed shorter threshold
-                    key.append((-diff) - max_duration_diff_shorter)
-                else:
-                    key.append(0)
+                key.append(abs(r.video_duration - r.rec_duration))
             else:
                 key.append(10**9)
         elif p == SelectionPriority.RECORDING_DATE:
@@ -145,6 +56,10 @@ def _sort_key(
         elif p == SelectionPriority.YEAR_MATCH:
             # Prefer records where the .nfo year matches the .txt year.
             key.append(0 if _year_matches(r) else 1)
+        elif p == SelectionPriority.SERIES_MARKER_COMPLETENESS:
+            # Higher marker completeness should sort first.
+            key.append(-_series_marker_completeness(r.file))
+
         elif p == SelectionPriority.CLEAN_NAME:
             # Prefer the cleaner name, i.e. the fewest repeated tokens.
             key.append(_name_redundancy(r.file))
@@ -206,23 +121,16 @@ def _year_matches(r: FileRecord) -> bool:
     )
 
 
-def _recording_ordinal(r: FileRecord) -> int:
-    """Return a comparable recording date ordinal (0 when unknown).
-
-    Mirrors the RECORDING_DATE sort key: ``rec_date`` wins, filesystem
-    ``mod_date`` is only the fallback.
-    """
+def _recording_ordinal(r: FileRecord) -> float:
+    """Return a comparable recording date, preserving mtime precision."""
     if getattr(r, "rec_date", None):
         try:
-            return datetime.date.fromisoformat(r.rec_date).toordinal()
-        except Exception:
-            return 0
-    if r.mod_date:
-        try:
-            return datetime.date.fromtimestamp(r.mod_date).toordinal()
-        except Exception:
-            return 0
-    return 0
+            matched = re.search(pattern, stem, flags=re.IGNORECASE) is not None
+        except re.error as exc:
+            raise ValueError(f"Invalid series marker pattern {pattern!r}: {exc}") from exc
+        if matched:
+            best = max(best, int(item["points"]))
+    return best
 
 
 def _reason_for_priority(
@@ -250,6 +158,10 @@ def _reason_for_priority(
             best_err = best.error_count if best.error_count is not None else 10**9
             if any(((o.error_count if o.error_count is not None else 10**9) > best_err) for o in others):
                 return "fewer_errors"
+        elif priority == SelectionPriority.SERIES_MARKER_COMPLETENESS:
+            best_score = _series_marker_completeness(best.file)
+            if any(_series_marker_completeness(o.file) < best_score for o in others):
+                return "series_marker_completeness"
         elif priority == SelectionPriority.CLEAN_NAME:
             best_redundancy = _name_redundancy(best.file)
             if any(_name_redundancy(o.file) > best_redundancy for o in others):
@@ -264,197 +176,27 @@ def _reason_for_priority(
             if _year_matches(best) and any(not _year_matches(o) for o in others):
                 return "year_match"
         elif priority == SelectionPriority.CLOSEST_DURATION:
-            # Same definition as the sort key: only the excess beyond the allowed
-            # window counts, everything inside the window is equal (0).
-            def excess(r: FileRecord) -> float:
+            def distance(r: FileRecord) -> float:
                 if r.video_duration is None or r.rec_duration is None:
                     return 10**9
-                diff = r.video_duration - r.rec_duration
-                if diff > max_duration_diff_longer:
-                    return diff - max_duration_diff_longer
-                if diff < -max_duration_diff_shorter:
-                    return (-diff) - max_duration_diff_shorter
-                return 0
+                return abs(r.video_duration - r.rec_duration)
 
-            if any(excess(o) > excess(best) for o in others):
-                return "closest_duration"
-    except Exception:
-        return None
-    return None
-
-
-def determine_keep_reason(
-    best: FileRecord,
-    others: list[FileRecord],
-    selection_priorities: list[SelectionPriority],
-    max_errors_when_mc: int | None = None,
-    max_duration_diff_longer: int = 600,
-    max_duration_diff_shorter: int = 240,
-) -> str:
-    """Return a short reason string why `best` was selected over `others`.
-
-    The first configured priority that separates `best` from `others` names the
-    reason: 'multichannel', 'higher_resolution', 'fewer_errors',
-    'cleaner_name', 'newer', 'year_match', 'closest_duration'. If none applies,
-    return 'selected'.
-    """
-    for priority in selection_priorities:
-        reason = _reason_for_priority(
-            priority, best, others, max_errors_when_mc,
-            max_duration_diff_longer, max_duration_diff_shorter,
-        )
-        if reason:
-            return reason
-    return "selected"
-
-
-def _get_file_size(path: str) -> int:
-    """Return the file size in bytes, or 0 if the file cannot be accessed."""
-    try:
-        return os.path.getsize(path)
-    except OSError:
-        return 0
-
-
-def build_move_plan(
-    groups: list[list[str]],
-    target_root: str,
-    error_target: str,
-    novideo_target: str,
-    max_errors_when_mc: int,
-    duptype: str,
-    file_to_groupkey: dict[str, GroupKeys],
-    log_fn: Callable[[str], None],
-    progress_cb: Callable[[int, int], None] | None = None,
-    probe_progress_cb: Callable[[str, int, int], None] | None = None,
-    max_duration_diff_longer: int = 600,
-    max_duration_diff_shorter: int = 240,
-    selection_priorities: list[SelectionPriority] | None = None,
-) -> tuple[dict[str, MoveAction], Counter, Counter, dict[str, Counter], dict[str, Counter]]:
-    """Decide what to do with each file.
-
-    Returns (files_to_move, action_counter, size_counter, resolution_by_action, resolution_size_by_action).
-    """
-    film_info_cache: dict[str, FileRecord] = {}
-    files_to_move: dict[str, MoveAction] = {}
-    already_logged: set[tuple[str, str]] = set()
-    action_counter: Counter = Counter()
-    size_counter: Counter = Counter()
-    # Per-action resolution counters for KEEP (since kept files are not in files_to_move)
-    resolution_by_action: dict[str, Counter] = defaultdict(Counter)
-    resolution_size_by_action: dict[str, Counter] = defaultdict(Counter)
-    # Cross-tab attribute matrix: attr -> Counter(attr->count) (KEEP entries only)
-    attr_matrix: dict[str, Counter] = defaultdict(Counter)
-    # Per-file attribute list for files that will be moved (counted later in execute)
-    attrs_by_file: dict[str, list[str]] = {}
-    errors_by_file: dict[str, int] = {}
-    
-    total_groups = len(groups)
-    # For finer-grained planning progress, count total files to be processed
-    # (after potential expansion) and report progress per file.
-    total_files_to_plan = sum(len(g) for g in groups)
-    files_processed = 0
-    # Limit progress updates to a configurable number of steps to avoid UI/request overhead.
-    # Controlled by environment variable `AVIOR_DEDUP_PROGRESS_UPDATES` (default 20).
-    try:
-        target_updates = int(os.getenv("AVIOR_DEDUP_PROGRESS_UPDATES", "100"))
-    except Exception:
-        target_updates = 100
-    progress_interval = max(1, total_files_to_plan // max(1, target_updates))
-
-    # Expand groups: if caller supplied groups consisting of .log files only
-    # (scanner now groups by .log stems), expand each log-file entry into the
-    # full set of sibling files that share the same stem in the same
-    # directory according to configured `candidate_suffixes`.
-    t_build_start = time.perf_counter()
-    film_info_accumulator = 0.0
-    t_expand_start = time.perf_counter()
-    # Capture the original files passed in via `groups` (before expansion).
-    # The caller may pass only a few files (e.g. .log stems); we want to
-    # prefetch metadata only for those files, not for every expanded sibling.
-    input_files = [f for g in groups for f in g]
-    expanded_groups: list[list[str]] = []
-    suffixes = config.candidate_suffixes()
-    # Cache directory listings to avoid repeated os.path.exists calls
-    dir_listing_cache: dict[str, set[str]] = {}
-    for group in groups:
-        collected: set[str] = set()
-        for f in group:
-            stem, _ = match_suffix(os.path.basename(f))
-            dirpath = os.path.dirname(f)
-            if dirpath not in dir_listing_cache:
-                try:
-                    dir_listing_cache[dirpath] = set(os.listdir(dirpath))
-                except OSError:
-                    dir_listing_cache[dirpath] = set()
-            files_in_dir = dir_listing_cache[dirpath]
-            for suf in suffixes:
-                candidate_name = stem + suf
-                if candidate_name in files_in_dir:
-                    collected.add(os.path.join(dirpath, candidate_name))
-        if collected:
-            expanded_groups.append(sorted(collected))
-    # Use expanded groups if expansion produced anything, otherwise keep original
-    if expanded_groups:
-        groups = expanded_groups
-        total_groups = len(groups)
-    t_expand = time.perf_counter() - t_expand_start
-    try:
-        log_fn(f"TIMING expand: {t_expand:.3f}s")
-    except Exception:
-        pass
-    # Merge groups that share the same logical group name (e.g. same
-    # semantic key). Scanner can produce separate groups that nevertheless
-    # map to the same group name; merge them so planning selects exactly one
-    # video-set per logical group.
-    merged_groups: dict[str, set[str]] = {}
-    for group in groups:
-        for f in group:
-            try:
-                gname = get_group_name(f, duptype, file_to_groupkey)
-            except Exception:
-                gname = os.path.basename(f)
-            merged_groups.setdefault(gname, set()).add(f)
-    groups = [sorted(v) for v in merged_groups.values()]
-    total_groups = len(groups)
-
-    # Precompute basename/stem/dir for all files in the (possibly expanded and merged) groups
-    all_files = [f for g in groups for f in g]
-    basename_map: dict[str, str] = {f: os.path.basename(f) for f in all_files}
-    stem_map: dict[str, str] = {f: match_suffix(basename_map[f])[0] for f in all_files}
-    dir_map: dict[str, str] = {f: os.path.dirname(f) for f in all_files}
-
-    # (No per-group keep tracking here; groups have been merged so planner
-    # will naturally select at most one representative per logical group.)
-
-    # Determine which stems actually contain a video file in the (possibly
-    # expanded) groups. We only prefetch metadata for input files whose
-    # stem appears in a group that contains a video file — otherwise the
-    # group will be classified as NO_VIDEO and full metadata isn't needed.
-    video_stems = set()
-    for f in all_files:
         try:
-            if str(f).lower().endswith(".mkv"):
-                video_stems.add(match_suffix(os.path.basename(f))[0])
-        except Exception:
-            pass
+            matched = re.search(pattern, stem, flags=re.IGNORECASE) is not None
+        except re.error as exc:
+            raise ValueError(f"Invalid series marker pattern {pattern!r}: {exc}") from exc
+        if matched:
+            best = max(best, int(item["points"]))
+    return best
 
-    # Fetch metadata once for the originally passed-in files whose stems
-    # correspond to groups containing video files.
-    # Probe metadata for all originally provided input files that are not cached.
-    # Previously we limited probing to stems that contained video files; that
-    # skipped probing .log inputs. The user requires that get_video_md be used
-    # for all input paths (no placeholders), so probe them unconditionally.
-    global_uncached = [f for f in dict.fromkeys(input_files) if f not in film_info_cache]
-    if global_uncached:
-        # Re-read the log_include terms once per run so MongoDB changes apply.
-        config.invalidate_log_include()
-        t_fetch_start = time.perf_counter()
-        probe_total = len(global_uncached)
 
-        def _probe_cb(path: str, idx: int) -> None:
-            if probe_progress_cb is not None:
-                probe_progress_cb(path, idx, probe_total)
+        elif p == SelectionPriority.SERIES_MARKER_COMPLETENESS:
+            # Higher marker completeness should sort first.
+            key.append(-_series_marker_completeness(r.file))
+        elif priority == SelectionPriority.SERIES_MARKER_COMPLETENESS:
+            best_score = _series_marker_completeness(best.file)
+            if any(_series_marker_completeness(o.file) < best_score for o in others):
+                return "series_marker_completeness"
 
         try:
             for rec in get_video_md(global_uncached, log_fn=log_fn, progress_cb=_probe_cb):
