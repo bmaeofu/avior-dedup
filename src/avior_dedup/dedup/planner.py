@@ -1,4 +1,27 @@
 from __future__ import annotations
+def _series_marker_completeness(path: str) -> int:
+    """Return the highest configured episode-marker score in a filename."""
+    stem = os.path.splitext(os.path.basename(path))[0]
+    best = 0
+    for item in config.series_marker_scores():
+        pattern = str(item["pattern"])
+        try:
+            matched = re.search(pattern, stem, flags=re.IGNORECASE) is not None
+        except re.error as exc:
+            raise ValueError(f"Invalid series marker pattern {pattern!r}: {exc}") from exc
+        if matched:
+            best = max(best, int(item["points"]))
+    return best
+
+
+        elif p == SelectionPriority.SERIES_MARKER_COMPLETENESS:
+            # Higher marker completeness should sort first.
+            key.append(-_series_marker_completeness(r.file))
+
+        elif priority == SelectionPriority.SERIES_MARKER_COMPLETENESS:
+            best_score = _series_marker_completeness(best.file)
+            if any(_series_marker_completeness(o.file) < best_score for o in others):
+                return "series_marker_completeness"
 
 import dataclasses
 import os
