@@ -1,4 +1,6 @@
 from __future__ import annotations
+        default=["multichannel", "resolution", "fewer_errors", "log_include", "year_match", "closest_duration", "series_marker_completeness", "recording_date"],
+        help="Ordered priority list for best-film selection (default: multichannel resolution fewer_errors log_include year_match closest_duration series_marker_completeness recording_date)",
 
 import argparse
 import os

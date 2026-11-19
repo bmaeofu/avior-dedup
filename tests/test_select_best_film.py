@@ -1,4 +1,46 @@
 """Tests for select_best_film with configurable priority list and max_errors_when_mc."""
+    assert select_best_film(
+        [double, clean], selection_priorities=[SelectionPriority.CLEAN_NAME]
+    ).file == clean.file
+    priorities = [SelectionPriority.CLEAN_NAME]
+    best = select_best_film([double, clean], selection_priorities=priorities)
+    assert determine_keep_reason(best, [double, clean], priorities) == "cleaner_name"
+
+
+def test_series_marker_completeness_prefers_explicit_episode_marker():
+    bare = _rec("Blinded (6) - 48 Stunden.mkv")
+    explicit = _rec("Blinded (6) - 48 Stunden (Staffel 1, Folge 6).mkv")
+    best = select_best_film(
+        [bare, explicit],
+        selection_priorities=[SelectionPriority.SERIES_MARKER_COMPLETENESS],
+    )
+    assert best.file == explicit.file
+
+
+def test_series_marker_completeness_uses_highest_marker_score():
+    from avior_dedup.dedup.planner import _series_marker_completeness
+
+    assert _series_marker_completeness("Serie (7).mkv") == 1
+    assert _series_marker_completeness("Serie (1_7).mkv") == 2
+    assert _series_marker_completeness("Serie (Staffel 1, Folge 3).mkv") == 3
+    assert _series_marker_completeness("Serie 3. Staffel (1_10).mkv") == 3
+    assert _series_marker_completeness("Serie (S10_E03).mkv") == 4
+    assert _series_marker_completeness(
+        "Serie (6) - Titel (Staffel 1, Folge 6).mkv"
+    ) == 3
+    assert _series_marker_completeness("Serie ohne Marker.mkv") == 0
+
+
+def test_series_marker_completeness_is_reported_as_keep_reason():
+    from avior_dedup.dedup.planner import determine_keep_reason
+
+    bare = _rec("Blinded (6) - 48 Stunden.mkv")
+    explicit = _rec("Blinded (6) - 48 Stunden (Staffel 1, Folge 6).mkv")
+    assert determine_keep_reason(
+        explicit,
+        [bare],
+        [SelectionPriority.SERIES_MARKER_COMPLETENESS],
+    ) == "series_marker_completeness"
 
 from __future__ import annotations
 

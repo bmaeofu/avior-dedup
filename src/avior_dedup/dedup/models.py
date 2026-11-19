@@ -1,4 +1,6 @@
 from __future__ import annotations
+    SERIES_MARKER_COMPLETENESS = "series_marker_completeness"
+    SelectionPriority.SERIES_MARKER_COMPLETENESS,
 
 from dataclasses import dataclass
 from enum import Enum

@@ -17,6 +17,24 @@ def series_marker_scores() -> list[dict[str, int | str]]:
         validated.append({"points": points, "pattern": pattern})
     return validated
 
+def series_marker_scores() -> list[dict[str, int | str]]:
+    """Return configurable filename marker patterns and their point values."""
+    data = _load_yaml("series_marker_scores.yaml")
+    if not isinstance(data, list):
+        raise ValueError("series_marker_scores.yaml must contain a list")
+    validated: list[dict[str, int | str]] = []
+    for index, item in enumerate(data):
+        if not isinstance(item, dict):
+            raise ValueError(f"series_marker_scores.yaml entry {index} must be a mapping")
+        points = item.get("points")
+        pattern = item.get("pattern")
+        if isinstance(points, bool) or not isinstance(points, int) or points < 0:
+            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid points")
+        if not isinstance(pattern, str) or not pattern.strip():
+            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid pattern")
+        validated.append({"points": points, "pattern": pattern})
+    return validated
+
         "series_marker_scores": "series_marker_scores.yaml",
 
 import os
