@@ -1,5 +1,4 @@
 from __future__ import annotations
-            SelectionPriority.SERIES_MARKER_COMPLETENESS,
 
 from typing import Any, Literal
 
@@ -9,6 +8,7 @@ from avior_dedup.dedup.models import SelectionPriority
 
 
 class JobRequest(BaseModel):
+    """Request parameters for a duplicate scan or move."""
     mode: Literal["m", "f"]
     source: str
     target: str
@@ -28,7 +28,7 @@ class JobRequest(BaseModel):
             SelectionPriority.LOG_INCLUDE,
             SelectionPriority.YEAR_MATCH,
             SelectionPriority.CLOSEST_DURATION,
-            SelectionPriority.CLEAN_NAME,
+            SelectionPriority.SERIES_MARKER_COMPLETENESS,
             SelectionPriority.RECORDING_DATE,
         ]
     )

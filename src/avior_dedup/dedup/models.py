@@ -1,6 +1,4 @@
 from __future__ import annotations
-    SERIES_MARKER_COMPLETENESS = "series_marker_completeness"
-    SelectionPriority.SERIES_MARKER_COMPLETENESS,
 
 from dataclasses import dataclass
 from enum import Enum
@@ -8,13 +6,14 @@ from typing import Optional
 
 
 class SelectionPriority(str, Enum):
-    """Criteria for selecting the best film, applied in list order."""
+    """Criteria for selecting the best film, applied in configured list order."""
     MULTICHANNEL = "multichannel"
     RESOLUTION = "resolution"
     FEWER_ERRORS = "fewer_errors"
     RECORDING_DATE = "recording_date"
     CLOSEST_DURATION = "closest_duration"
     YEAR_MATCH = "year_match"
+    SERIES_MARKER_COMPLETENESS = "series_marker_completeness"
     CLEAN_NAME = "clean_name"
     LOG_INCLUDE = "log_include"
 
@@ -26,7 +25,7 @@ DEFAULT_SELECTION_PRIORITIES = [
     SelectionPriority.LOG_INCLUDE,
     SelectionPriority.YEAR_MATCH,
     SelectionPriority.CLOSEST_DURATION,
-    SelectionPriority.CLEAN_NAME,
+    SelectionPriority.SERIES_MARKER_COMPLETENESS,
     SelectionPriority.RECORDING_DATE,
 ]
 
