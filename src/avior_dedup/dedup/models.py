@@ -14,7 +14,6 @@ class SelectionPriority(str, Enum):
     CLOSEST_DURATION = "closest_duration"
     YEAR_MATCH = "year_match"
     SERIES_MARKER_COMPLETENESS = "series_marker_completeness"
-    CLEAN_NAME = "clean_name"
     LOG_INCLUDE = "log_include"
 
 

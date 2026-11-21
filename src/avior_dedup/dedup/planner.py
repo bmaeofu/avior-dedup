@@ -41,17 +41,6 @@ def get_group_name(file_path: str, duptype: str, file_to_groupkey: dict[str, Gro
 _TOKEN_RE = re.compile(r"[0-9A-Za-zÄÖÜäöüß]+")
 
 
-def _name_redundancy(path: str) -> int:
-    """Return how many word tokens of a file's stem are repeats.
-
-    Inside one group every record normalizes to the same key, so a token that
-    occurs more than once is redundant (e.g. a series title repeated in the raw
-    name). Extra *distinct* tokens — a year, an episode number, a subtitle — are
-    metadata and therefore not penalized.
-    """
-    stem = os.path.splitext(os.path.basename(path))[0]
-    tokens = [t.lower() for t in _TOKEN_RE.findall(stem)]
-    return len(tokens) - len(set(tokens))
 
 
 def _series_marker_completeness(path: str) -> int:
@@ -112,9 +101,6 @@ def _sort_key(
             # Higher marker completeness should sort first.
             key.append(-_series_marker_completeness(r.file))
 
-        elif p == SelectionPriority.CLEAN_NAME:
-            # Prefer the cleaner name, i.e. the fewest repeated tokens.
-            key.append(_name_redundancy(r.file))
         elif p == SelectionPriority.LOG_INCLUDE:
             # Prefer the copy that avior-go did not mark as replaceable.
             # Unknown (no log) ranks with the marked copies.
@@ -217,10 +203,6 @@ def _reason_for_priority(
             best_score = _series_marker_completeness(best.file)
             if any(_series_marker_completeness(o.file) < best_score for o in others):
                 return "series_marker_completeness"
-        elif priority == SelectionPriority.CLEAN_NAME:
-            best_redundancy = _name_redundancy(best.file)
-            if any(_name_redundancy(o.file) > best_redundancy for o in others):
-                return "cleaner_name"
         elif priority == SelectionPriority.LOG_INCLUDE:
             if best.log_include_match is False and any(o.log_include_match is not False for o in others):
                 return "no_include_match"

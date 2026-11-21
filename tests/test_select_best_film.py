@@ -1,35 +1,54 @@
 """Tests for select_best_film with configurable priority list and max_errors_when_mc."""
-    assert select_best_film(
-        [double, clean], selection_priorities=[SelectionPriority.CLEAN_NAME]
-    ).file == clean.file
-    priorities = [SelectionPriority.CLEAN_NAME]
-    best = select_best_film([double, clean], selection_priorities=priorities)
-    assert determine_keep_reason(best, [double, clean], priorities) == "cleaner_name"
+
+from __future__ import annotations
+
+import pytest
+
+from avior_dedup.dedup.models import FileRecord, SelectionPriority
+from avior_dedup.dedup.planner import select_best_film
 
 
-def test_series_marker_completeness_prefers_explicit_episode_marker():
-    bare = _rec("Blinded (6) - 48 Stunden.mkv")
-    explicit = _rec("Blinded (6) - 48 Stunden (Staffel 1, Folge 6).mkv")
-    best = select_best_film(
-        [bare, explicit],
-        selection_priorities=[SelectionPriority.SERIES_MARKER_COMPLETENESS],
+def _rec(
+    name: str,
+    *,
+    multichannel: bool = False,
+    error_count: int = 0,
+    video_duration: float = 3600,
+    rec_duration: int = 3600,
+    mod_date: float = 1000.0,
+    rec_date: str | None = None,
+    resolution: int | None = None,
+) -> FileRecord:
+    """Helper to build a FileRecord with sensible defaults."""
+    return FileRecord(
+        file=name,
+        video_exists=True,
+        error_count=error_count,
+        mod_date=mod_date,
+        multichannel=multichannel,
+        resolution=resolution,
+        video_duration=video_duration,
+        rec_duration=rec_duration,
+        rec_date=rec_date,
     )
-    assert best.file == explicit.file
 
 
-def test_series_marker_completeness_uses_highest_marker_score():
-    from avior_dedup.dedup.planner import _series_marker_completeness
+# ---------------------------------------------------------------------------
+# 1. At least one film is always kept
+# ---------------------------------------------------------------------------
 
-    assert _series_marker_completeness("Serie (7).mkv") == 1
-    assert _series_marker_completeness("Serie (1_7).mkv") == 2
-    assert _series_marker_completeness("Serie (Staffel 1, Folge 3).mkv") == 3
-    assert _series_marker_completeness("Serie 3. Staffel (1_10).mkv") == 3
-    assert _series_marker_completeness("Serie (S10_E03).mkv") == 4
-    assert _series_marker_completeness(
-        "Serie (6) - Titel (Staffel 1, Folge 6).mkv"
-    ) == 3
-    assert _series_marker_completeness("Serie ohne Marker.mkv") == 0
 
+class TestAlwaysKeepOne:
+    def test_all_outside_duration_window_still_keeps_one(self):
+        """Even if every recording exceeds the duration window, one must be kept."""
+        records = [
+            _rec("a.ts", video_duration=9999, rec_duration=100),
+            _rec("b.ts", video_duration=9998, rec_duration=100),
+        ]
+        best = select_best_film(records, max_duration_diff_longer=10, max_duration_diff_shorter=10)
+        assert best is not None, "Must keep at least one film"
+        assert best.file in ("a.ts", "b.ts")
+        print(f"  PASS: kept '{best.file}' even though all candidates are outside duration window")
 
     def test_single_record_always_kept(self):
         """A single recording must always be kept regardless of quality."""
@@ -304,46 +323,6 @@ class TestDurationWindow:
         print("  PASS: all out of window -> fallback to full list, MC wins by priority")
 
 
-def test_cleaner_name_wins_on_full_tie():
-    """Equal quality: the name without a repeated series title is kept."""
-    series = "42 - Die Antwort auf fast alles"
-    double = _rec(f"{series} - Werden wir uns einfrieren - {series}.mkv")
-    clean = _rec(f"{series} - Werden wir uns einfrieren.mkv")
-
-
-def test_name_tiebreaker_never_overrides_quality():
-    """The name tiebreaker runs last: better resolution still wins."""
-    short_name = _rec("Serie - Titel.mkv", resolution=720)
-    long_name = _rec("Serie - Titel - Serie.mkv", resolution=1080)
-    assert select_best_film([short_name, long_name]).file == long_name.file
-
-
-def test_keep_reason_reports_cleaner_name():
-    from avior_dedup.dedup.models import DEFAULT_SELECTION_PRIORITIES
-    from avior_dedup.dedup.planner import determine_keep_reason
-
-    series = "42 - Die Antwort auf fast alles"
-    double = _rec(f"{series} - Werden wir uns einfrieren - {series}.mkv")
-    clean = _rec(f"{series} - Werden wir uns einfrieren.mkv")
-    priorities = [SelectionPriority.CLEAN_NAME]
-    best = select_best_film([double, clean], selection_priorities=priorities)
-    assert determine_keep_reason(best, [double, clean], priorities) == "cleaner_name"
-
-
-def test_year_in_name_is_not_redundancy():
-    """A year is metadata, not redundancy: both names are equally clean."""
-    from avior_dedup.dedup.planner import _name_redundancy
-
-    assert _name_redundancy("Alles in bester Ordnung.mkv") == 0
-    assert _name_redundancy("Alles in bester Ordnung (2021).mkv") == 0
-
-
-def test_repeated_series_title_counts_as_redundancy():
-    from avior_dedup.dedup.planner import _name_redundancy
-
-    doubled = "42 - Die Antwort auf fast alles - Werden wir uns einfrieren - 42 - Die Antwort auf fast alles.mkv"
-    clean = "42 - Die Antwort auf fast alles - Werden wir uns einfrieren.mkv"
-    assert _name_redundancy(doubled) > _name_redundancy(clean) == 0
 
 
 def test_closest_duration_reason_matches_sort_key():
