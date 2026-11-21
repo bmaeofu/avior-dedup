@@ -390,10 +390,12 @@ function submit() {
         <v-col cols="12" md="3">
           <v-checkbox
             v-model="form.require_identical_txt_year"
-            label="Require identical txt year"
+            label="Match identical TXT years when present"
             density="compact"
             hide-details
-          />
+            hint="Missing TXT years are grouped only with other recordings missing a TXT year."
+            persistent-hint
+            />
         </v-col>
         <v-col cols="12" md="3">
           <v-checkbox

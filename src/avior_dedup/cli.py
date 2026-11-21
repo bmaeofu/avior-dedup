@@ -102,7 +102,7 @@ def main() -> None:
     parser.add_argument(
         "--require-identical-txt-year",
         action="store_true",
-        help="Only group as duplicates when BOTH recordings have an identical txt_year (files without txt_year are excluded)",
+        help="Require identical txt_year values when both recordings provide them; recordings without a txt_year are grouped only with other recordings without one",
     )
     parser.add_argument(
         "--require-videoduration-match",

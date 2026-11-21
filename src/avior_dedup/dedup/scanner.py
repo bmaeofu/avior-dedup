@@ -1043,8 +1043,6 @@ def find_duplicates(
                         if base not in _year_cache:
                             _year_cache[base] = _year_from_txt(base)
                         txt_year = _year_cache[base]
-                        if txt_year is None:
-                            continue  # no txt_year -> not a duplicate candidate
                     by_year.setdefault((nfo_year, txt_year), []).append((stem, fp))
 
                 for items in by_year.values():

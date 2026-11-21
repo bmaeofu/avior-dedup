@@ -145,6 +145,10 @@ must have the same year. Recordings without an NFO year remain eligible for
 semantic grouping with other recordings that also have no NFO year; a known
 year and a missing year are kept separate.
 
+`--require-identical-txt-year` follows the same rule: equal known TXT years
+may group, two missing years may group, and a known year is kept separate from
+a missing year.
+
 ## Project layout
 
 ```
