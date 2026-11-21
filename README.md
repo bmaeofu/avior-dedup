@@ -140,6 +140,11 @@ Keyword lists and filters live in YAML files under `src/avior_dedup/config/`. Yo
 - `episode_keywords.yaml` -- keywords that prevent episode number stripping in semantic mode; these safeguards remain active with distinct-episode filtering
 - `path_suggestions.yaml` -- directory suggestions for the web UI dropdowns
 
+When `--require-identical-nfo-year` is enabled, recordings with known NFO years
+must have the same year. Recordings without an NFO year remain eligible for
+semantic grouping with other recordings that also have no NFO year; a known
+year and a missing year are kept separate.
+
 ## Project layout
 
 ```

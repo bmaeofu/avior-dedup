@@ -1031,8 +1031,8 @@ def find_duplicates(
             for entries in sem_to_entries.values():
                 if len(entries) < 2:
                     continue  # not a duplicate candidate -> no metadata reads
-                # Exact criteria (years) first: split into sub-groups that agree
-                # on every enabled year criterion.
+                # Known years must agree; missing years stay in the None bucket,
+                # so two unknown recordings can group but known/unknown cannot.
                 by_year: dict[tuple, list[tuple[str, str]]] = {}
                 for stem, fp in entries:
                     dir_path = os.path.dirname(fp)
@@ -1043,8 +1043,6 @@ def find_duplicates(
                         if nfo_path not in _year_cache:
                             _year_cache[nfo_path] = _year_from_nfo(nfo_path)
                         nfo_year = _year_cache[nfo_path]
-                        if nfo_year is None:
-                            continue  # no nfo_year -> not a duplicate candidate
                     if require_identical_txt_year:
                         base = os.path.join(dir_path, stem)
                         if base not in _year_cache:

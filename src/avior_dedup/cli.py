@@ -97,7 +97,7 @@ def main() -> None:
     parser.add_argument(
         "--require-identical-nfo-year",
         action="store_true",
-        help="Only group as duplicates when BOTH recordings have an identical nfo_year (files without nfo_year are excluded)",
+        help="Require identical nfo_year values when both recordings provide them; recordings without an nfo_year are grouped only with other recordings without one",
     )
     parser.add_argument(
         "--require-identical-txt-year",

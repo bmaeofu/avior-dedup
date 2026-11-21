@@ -380,9 +380,11 @@ function submit() {
         <v-col cols="12" md="3">
           <v-checkbox
             v-model="form.require_identical_nfo_year"
-            label="Require identical nfo year"
+            label="Match identical NFO years when present"
             density="compact"
             hide-details
+            hint="Missing NFO years are grouped only with other recordings missing an NFO year."
+            persistent-hint
           />
         </v-col>
         <v-col cols="12" md="3">
