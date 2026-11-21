@@ -66,9 +66,9 @@ uv run avior-dedup f /path/to/source /path/to/target log.txt \
 ```
 
 With `--discard-groups-with-distinct-episodes`, configured safeguards from
-`episode_keywords.yaml` remain active. Candidate groups are retained only when
-every member has a parseable `.txt` episode ID and all IDs agree. Groups with
-missing, unparseable, or different episode metadata are left untouched.
+`episode_keywords.yaml` remain active. Candidate groups are discarded only when
+known `.txt` episode IDs differ. Missing or unparseable episode metadata remains
+eligible for semantic grouping.
 
 ```bash
 # Semantic matching with custom prefix stripping

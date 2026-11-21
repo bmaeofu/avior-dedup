@@ -114,8 +114,8 @@ def main() -> None:
         action="store_true",
         help=(
             "With --remove-episode-nos: read each candidate's .txt (Title=/Info=) "
-            "and keep only groups whose members all have the same known episode. "
-            "Configured series/episode keep-keyword safeguards remain active."
+            "and discard groups only when known episode IDs differ. "
+            "Missing or unparseable episode metadata remains eligible; keyword safeguards stay active."
         ),
     )
     parser.add_argument(

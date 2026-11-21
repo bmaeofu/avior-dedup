@@ -520,11 +520,6 @@ def _episode_ids_consistent(ids: list[tuple[int | None, int] | None]) -> bool:
             return False
     return True
 
-def _episode_ids_complete_and_consistent(
-    ids: list[tuple[int | None, int] | None],
-) -> bool:
-    """Return True only when every member has the same known episode ID."""
-    return bool(ids) and all(episode_id is not None for episode_id in ids) and _episode_ids_consistent(ids)
 
 
 def _video_duration_for(dir_path: str, stem: str) -> Optional[float]:
@@ -1096,8 +1091,8 @@ def find_duplicates(
                     if len(group_paths) > 1:
                         groups.append(group_paths)
 
-    # Keep only groups whose .txt metadata identifies one consistent episode.
-    # Unknown metadata is unsafe for moving, so it rejects the whole group.
+    # Discard only groups whose known .txt metadata proves different episodes.
+    # Missing or unparseable metadata is not evidence that episodes differ.
     # The option is meaningful with episode-number stripping; otherwise the
     # numbers remain part of the semantic key.
     if (
@@ -1115,7 +1110,7 @@ def find_duplicates(
                 if txt_path not in _ep_cache:
                     _ep_cache[txt_path] = _episode_id_from_txt(txt_path)
                 ids.append(_ep_cache[txt_path])
-            if _episode_ids_complete_and_consistent(ids):
+            if _episode_ids_consistent(ids):
                 filtered.append(group)
         groups = filtered
 
