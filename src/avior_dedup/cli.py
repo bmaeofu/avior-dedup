@@ -1,6 +1,4 @@
 from __future__ import annotations
-        default=["multichannel", "resolution", "fewer_errors", "log_include", "year_match", "closest_duration", "series_marker_completeness", "recording_date"],
-        help="Ordered priority list for best-film selection (default: multichannel resolution fewer_errors log_include year_match closest_duration series_marker_completeness recording_date)",
 
 import argparse
 import os
@@ -61,14 +59,14 @@ def main() -> None:
         "--max-duration-diff-shorter",
         type=int,
         default=240,
-        help="Maxallowed negative difference (rec_duration - video_duration) in seconds",
+        help="Maximum allowed negative difference (rec_duration - video_duration) in seconds",
     )
     parser.add_argument(
         "--selection-priorities",
         nargs="+",
-        default=["multichannel", "resolution", "fewer_errors", "log_include", "year_match", "closest_duration", "clean_name", "recording_date"],
+        default=["multichannel", "resolution", "fewer_errors", "log_include", "year_match", "closest_duration", "series_marker_completeness", "recording_date"],
         choices=[p.value for p in SelectionPriority],
-        help="Ordered priority list for best-film selection (default: multichannel resolution fewer_errors log_include year_match closest_duration clean_name recording_date)",
+        help="Ordered priority list for best-film selection (default: multichannel resolution fewer_errors log_include year_match closest_duration series_marker_completeness recording_date)",
     )
     parser.add_argument(
         "--semantic-prefixes",
