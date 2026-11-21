@@ -80,6 +80,25 @@ def test_distinct_episode_option_keeps_unknown_episode_metadata(tmp_path):
         Path(tmp_path, stem + ".log").write_text("x", encoding="utf-8")
     assert len(_groups_ep(tmp_path, discard_groups_with_distinct_episodes=True)) == 1
 
+def test_distinct_episodes_in_info_are_discarded(tmp_path):
+    _pair(tmp_path, "Documentary (1_3) - Shared title", "Documentary", "Shared title (1/3)")
+    _pair(tmp_path, "Documentary (2_3) - Shared title", "Documentary", "Shared title (2/3)")
+    assert _groups_ep(tmp_path, discard_groups_with_distinct_episodes=True) == []
+
+
+
+def test_distinct_episode_option_does_not_bypass_series_keep_keywords(tmp_path):
+    # 'raumpatrouille' is in series_keep_episode_nos, so same-episode files
+    # remain separate instead of being normalized into a candidate group.
+    _pair(tmp_path, "Raumpatrouille (1_7) - Orion", "Raumpatrouille (1/7)", "Orion")
+    _pair(tmp_path, "Raumpatrouille (S01_E01) - Orion", "Raumpatrouille (S01/E01)", "Orion")
+    assert _groups_ep(tmp_path, discard_groups_with_distinct_episodes=True) == []
+
+def test_distinct_episode_option_keeps_unknown_episode_metadata(tmp_path):
+    for stem in ("Mystery Show (1) - Episode", "Mystery Show (2) - Episode"):
+        Path(tmp_path, stem + ".log").write_text("x", encoding="utf-8")
+    assert len(_groups_ep(tmp_path, discard_groups_with_distinct_episodes=True)) == 1
+
 
 def test_distinct_episode_option_does_not_bypass_series_keep_keywords(tmp_path):
     # 'raumpatrouille' is in series_keep_episode_nos, so same-episode files

@@ -491,9 +491,10 @@ def _episode_id_from_txt(txt_path: str) -> tuple[int | None, int] | None:
     if m:
         return int(m.group(1)), int(m.group(2))
 
-    m = _EP_PART_RE.search(title)
-    if m:
-        return None, int(m.group(1))
+    for text in (title, info):
+        m = _EP_PART_RE.search(text)
+        if m:
+            return None, int(m.group(1))
 
     m = _EP_PLAIN_RE.search(title)
     if m:
