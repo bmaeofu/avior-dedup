@@ -196,6 +196,16 @@ class TestPriorityOrder:
             f"  PASS: CLOSEST_DURATION first -> close (diff={abs(3610-3600)}s) "
             f"beats far MC (diff={abs(4000-3600)}s)"
         )
+    def test_closest_duration_uses_tolerance_buckets(self):
+        """Differences within one tolerance bucket do not differ by seconds."""
+        one_minute = _rec("one_minute.ts", video_duration=2760, rec_duration=2700, resolution=720)
+        two_minutes = _rec("two_minutes.ts", video_duration=2820, rec_duration=2700, resolution=1080)
+        best = select_best_film(
+            [one_minute, two_minutes],
+            selection_priorities=[SelectionPriority.CLOSEST_DURATION, SelectionPriority.RESOLUTION],
+        )
+        assert best.file == "two_minutes.ts"
+
 
     def test_mc_first_then_closest_duration(self):
         """MC first, then duration as tiebreaker among MC files."""

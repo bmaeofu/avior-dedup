@@ -56,6 +56,29 @@ def _series_marker_completeness(path: str) -> int:
         if matched:
             best = max(best, int(item["points"]))
     return best
+_DURATION_TOLERANCES: tuple[tuple[int, int], ...] = (
+    (10, 2),
+    (60, 3),
+    (90, 4),
+    (120, 5),
+)
+_DEFAULT_DURATION_TOLERANCE_MINUTES = 6
+
+
+def _duration_tolerance_bucket(record: FileRecord) -> int:
+    """Return a duration-difference bucket using recording-length tolerances."""
+    if record.video_duration is None or record.rec_duration is None:
+        return 10**9
+    duration_minutes = record.rec_duration / 60
+    tolerance_minutes = _DEFAULT_DURATION_TOLERANCE_MINUTES
+    for below_minutes, candidate in _DURATION_TOLERANCES:
+        if duration_minutes < below_minutes:
+            tolerance_minutes = candidate
+            break
+    tolerance_seconds = tolerance_minutes * 60
+    difference = abs(record.video_duration - record.rec_duration)
+    return int((difference + tolerance_seconds - 1) // tolerance_seconds)
+
 
 
 def _sort_key(
@@ -86,11 +109,8 @@ def _sort_key(
         elif p == SelectionPriority.FEWER_ERRORS:
             key.append(r.error_count if r.error_count is not None else 10**9)
         elif p == SelectionPriority.CLOSEST_DURATION:
-            # Prefer the recording whose duration is closest to the EPG duration.
-            if r.video_duration is not None and r.rec_duration is not None:
-                key.append(abs(r.video_duration - r.rec_duration))
-            else:
-                key.append(10**9)
+            # Compare tolerance buckets, not individual seconds.
+            key.append(_duration_tolerance_bucket(r))
         elif p == SelectionPriority.RECORDING_DATE:
             # newer should be better -> smaller sort key -> use negative ordinal
             key.append(-_recording_ordinal(r))
@@ -213,18 +233,11 @@ def _reason_for_priority(
             if _year_matches(best) and any(not _year_matches(o) for o in others):
                 return "year_match"
         elif priority == SelectionPriority.CLOSEST_DURATION:
-            def distance(r: FileRecord) -> float:
-                if r.video_duration is None or r.rec_duration is None:
-                    return 10**9
-                return abs(r.video_duration - r.rec_duration)
-
-            if any(distance(o) > distance(best) for o in others):
+            if any(_duration_tolerance_bucket(o) > _duration_tolerance_bucket(best) for o in others):
                 return "closest_duration"
     except Exception:
         return None
     return None
-
-
 def determine_keep_reason(
     best: FileRecord,
     others: list[FileRecord],

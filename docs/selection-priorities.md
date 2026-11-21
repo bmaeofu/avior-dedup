@@ -1,65 +1,4 @@
 # Selection priorities
-| 7 | `series_marker_completeness` | the filename with the most explicit episode marker | filename only |
-| Episode identity | `series_marker_completeness` | the filename carries an explicit episode marker |
-**Sort value** — the absolute difference between video and recorded duration.
-Smaller differences are better. Both durations unknown → `10^9`.
-The hard pre-filter still excludes copies outside the configured duration window;
-among the remaining candidates this priority selects the closest duration. The
-keep reason uses the same absolute-difference definition.
-### `series_marker_completeness`
-**Prefers** the filename with the highest configured episode-marker score.
-**Data source** — the original filename stem only. The marker is evaluated
-before semantic episode-number removal and does not change grouping keys.
-**Default scores** — the highest matching pattern wins; matching scores are
-never added:
-| Points | Marker form | Example |
-|---:|---|---|
-| 1 | single episode number | `(7)` |
-| 2 | episode range/group | `(1_7)`, `(1-7)`, `(1/7)` |
-| 3 | explicit season and episode | `(Staffel 1, Folge 3)`, `3. Staffel (1_10)` |
-| 4 | compact season/episode | `(S10_E03)`, `(S10E03)`, `(S10-E03)` |
-The rules are configured in `series_marker_scores.yaml`. Additional formats can
-be added as regular-expression entries without changing Python code. A missing
-or unrecognised marker scores `0`.
-Example: `(6)` scores `1`, while `(Staffel 1, Folge 6)` scores `3`; the latter
-wins when all earlier priorities tie.
-This priority selects the better copy inside an already formed group. It does
-not prevent distinct episodes from entering one semantic group; that requires
-the separate distinct-episode protection.
-`clean_name` remains available when explicitly requested, but is no longer a
-default priority. It prefers the filename with fewer repeated word tokens and
-is only a cosmetic criterion.
-
-**Data source** — the original filename stem only. The marker is evaluated
-before semantic episode-number removal and does not change grouping keys.
-**Default scores** — the highest matching pattern wins; matching scores are
-never added:
-| Points | Marker form | Example |
-|---:|---|---|
-| 1 | single episode number | `(7)` |
-| 2 | episode range/group | `(1_7)`, `(1-7)`, `(1/7)` |
-| 3 | explicit season and episode | `(Staffel 1, Folge 3)`, `3. Staffel (1_10)` |
-| 4 | compact season/episode | `(S10_E03)`, `(S10E03)`, `(S10-E03)` |
-The rules are configured in `series_marker_scores.yaml`. Additional formats can
-be added as regular-expression entries without changing Python code. A missing
-or unrecognised marker scores `0`.
-Example: `(6)` scores `1`, while `(Staffel 1, Folge 6)` scores `3`; the latter
-wins when all earlier priorities tie.
-This priority selects the better copy inside an already formed group. It does
-not prevent distinct episodes from entering one semantic group; that requires
-the separate distinct-episode protection.
-### `clean_name`
-`clean_name` remains available when explicitly requested, but is no longer a
-default priority. It prefers the filename with fewer repeated word tokens and
-is only a cosmetic criterion.
-
-**Sort value** — the negative ordinal of the recording date. Parsed log dates
-have day granularity; when the log date is unavailable, filesystem modification
-time is compared with its available timestamp precision. Totally unknown → `0`
-(oldest).
-  --selection-priorities resolution log_include multichannel fewer_errors year_match closest_duration series_marker_completeness recording_date
-| `series_marker_completeness` | `series_marker_completeness` |
-| `cleaner_name` | `clean_name` when explicitly configured |
 
 Every duplicate group is reduced to exactly **one kept copy**; everything else is
 moved out. The selection priorities decide which copy survives.
@@ -84,7 +23,7 @@ That is deterministic for a given input but not meaningful — it is why
 | 4 | `log_include` | no avior-go `log_include` match | `.log` (trailer excluded), terms from MongoDB |
 | 5 | `year_match` | `.nfo` year equal to the `.txt` year | `.nfo`, `.txt` |
 | 6 | `closest_duration` | duration closest to the recorded length | ffprobe + `.log`/EPG |
-| 7 | `clean_name` | the cleaner filename | filename only |
+| 7 | `series_marker_completeness` | the filename with the most explicit episode marker | filename only |
 | 8 | `recording_date` | the newer recording | `.log` first line, else file mtime |
 
 The order groups criteria by what they say about a copy:
@@ -94,7 +33,7 @@ The order groups criteria by what they say about a copy:
 | Quality | `multichannel`, `resolution`, `fewer_errors` | the source is technically better |
 | Provenance | `log_include` | avior-go did not mark this copy for replacement |
 | Correctness | `year_match`, `closest_duration` | the file belongs to this episode and is complete |
-| Cosmetics | `clean_name` | only the filename is nicer |
+| Episode identity | `series_marker_completeness` | the filename carries an explicit episode marker |
 | Tiebreak | `recording_date` | carries no information; keeps the choice deterministic |
 
 Why `recording_date` is last: a re-run of the same broadcast always has a
@@ -216,44 +155,53 @@ year also yields `1`).
 `rec_duration` from the EPG data in the log, falling back to the real recording
 time parsed from the log.
 
-**Sort value** — the amount by which the difference exceeds the allowed window
-(`0` inside the window). Both durations unknown → `10^9`.
+**Sort value** — the absolute duration difference is grouped into tolerance
+buckets based on the recorded length:
 
-Because the hard pre-filter already discards everything outside the window, this
-value is `0` for all remaining candidates in a normal run. It therefore only
-decides when the fallback pool is used (no copy was inside the window at all) —
-in practice a handful of groups per library run. The log reason uses exactly the
-same definition as the sort key, so an in-window difference never shows up as
-`closest_duration`.
+| Recorded length | Difference per bucket |
+|---|---:|
+| `< 10` minutes | 2 minutes |
+| `< 60` minutes | 3 minutes |
+| `< 90` minutes | 4 minutes |
+| `< 120` minutes | 5 minutes |
+| `>= 120` minutes | 6 minutes |
+
+Differences inside the same bucket are equal for this priority; individual
+seconds do not decide the winner. Both durations unknown use `10^9`. The hard
+pre-filter still excludes copies outside the configured duration window, and
+the keep reason uses the same bucket definition.
+
+### `series_marker_completeness`
+**Prefers** the filename with the highest configured episode-marker score.
+
+**Data source** — the original filename stem only. The marker is evaluated
+before semantic episode-number removal and does not change grouping keys.
+
+**Default scores** — the highest matching pattern wins; matching scores are
+never added:
+
+| Points | Marker form | Example |
+|---:|---|---|
+| 1 | single episode number | `(7)` |
+| 2 | episode range/group | `(1_7)`, `(1-7)`, `(1/7)` |
+| 3 | explicit season and episode | `(Staffel 1, Folge 3)`, `3. Staffel (1_10)` |
+| 4 | compact season/episode | `(S10_E03)`, `(S10E03)`, `(S10-E03)` |
+
+The rules are configured in `series_marker_scores.yaml`. Additional formats can
+be added as regular-expression entries without changing Python code. A missing
+or unrecognised marker scores `0`.
+
+Example: `(6)` scores `1`, while `(Staffel 1, Folge 6)` scores `3`; the latter
+wins when all earlier priorities tie.
+
+This priority selects the better copy inside an already formed group. It does
+not prevent distinct episodes from entering one semantic group; that requires
+the separate distinct-episode protection.
 
 ### `clean_name`
-**Prefers** the filename with the **fewest repeated word tokens**.
-
-**Data source** — the filename only. Tokens are matched with
-`[0-9A-Za-zÄÖÜäöüß]+` on the stem (extension stripped), compared
-case-insensitively.
-
-**Metric** — redundancy = number of tokens minus number of *distinct* tokens.
-A token that occurs only once is never penalized, so a year, an episode number or
-a subtitle stays metadata; only genuine repetition counts:
-
-| Stem | Tokens | Redundancy |
-|---|---|---|
-| `Alles in bester Ordnung` | 4 | **0** |
-| `Alles in bester Ordnung (2021)` | 5 | **0** (the year is metadata) |
-| `42 - … - Werden wir uns einfrieren` | 10 | **0** |
-| `42 - … - Werden wir uns einfrieren - 42 - …` | 16 | **6** ← loses |
-
-Inside one group every candidate normalizes to the same key, so any repetition is
-redundant by definition. The repeated series title loses; the prefix-first and
-title-first spellings are equally clean and tie.
-
-**Sort value** — the redundancy count.
-
-**Note** — only the *kept* copy's name survives in place; the duplicate is moved
-away unchanged. Because the metric ignores single occurrences, a name that keeps
-its year is not penalized against a bare one — such a group falls through to the
-next criterion.
+`clean_name` remains available when explicitly requested, but is no longer a
+default priority. It prefers the filename with fewer repeated word tokens and
+is only a cosmetic criterion.
 
 ### `recording_date`
 **Prefers** the newer recording.
@@ -262,8 +210,10 @@ next criterion.
 `\b\d{1,2}[./]\d{1,2}[./]\d{4}\b` (`dd.mm.yyyy` or `dd/mm/yyyy`) → ISO date. Only
 when that fails is the `.log` file's modification time used.
 
-**Sort value** — the negative ordinal of that date, i.e. **day granularity**.
-Two recordings from the same day tie. Totally unknown → `0` (oldest).
+**Sort value** — the negative ordinal of the recording date. Parsed log dates
+have day granularity; when the log date is unavailable, filesystem modification
+time is compared with its available timestamp precision. Totally unknown → `0`
+(oldest).
 
 **Caveat** — as a criterion it is nearly information-free (a re-run always has a
 different date), which is why it is last. It only picks a stable winner for
@@ -275,7 +225,7 @@ otherwise identical copies, including identical names.
 
 ```bash
 avior-dedup f /media/source /media/target log.txt \
-  --selection-priorities resolution log_include multichannel fewer_errors year_match closest_duration clean_name recording_date
+  --selection-priorities resolution log_include multichannel fewer_errors year_match series_marker_completeness closest_duration recording_date
 ```
 
 Order matters, values are space-separated. Omitting a criterion removes it from
@@ -298,8 +248,8 @@ The keep report (`keep_dedup_log.txt`) names the criterion that decided:
 | `fewer_errors` | `fewer_errors` |
 | `no_include_match` | `log_include` |
 | `year_match` | `year_match` |
-| `closest_duration` | `closest_duration` |
-| `cleaner_name` | `clean_name` |
+| `series_marker_completeness` | `series_marker_completeness` |
+| `cleaner_name` | `clean_name` when explicitly configured |
 | `newer` | `recording_date` |
 | `selected` | nothing separated the copies; the first one was kept |
 
