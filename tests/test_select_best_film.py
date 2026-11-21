@@ -18,6 +18,7 @@ def _rec(
     mod_date: float = 1000.0,
     rec_date: str | None = None,
     resolution: int | None = None,
+    log_include_match: bool | None = None,
 ) -> FileRecord:
     """Helper to build a FileRecord with sensible defaults."""
     return FileRecord(
@@ -30,6 +31,7 @@ def _rec(
         video_duration=video_duration,
         rec_duration=rec_duration,
         rec_date=rec_date,
+        log_include_match=log_include_match,
     )
 
 
@@ -220,6 +222,18 @@ class TestPriorityOrder:
         )
         assert best.file == "b.ts"
         print("  PASS: single priority (FEWER_ERRORS) -> b with 1 error beats a with 10")
+
+def test_log_include_reason_ignores_unknown_records():
+    from avior_dedup.dedup.planner import determine_keep_reason
+
+    best = _rec("best.ts", log_include_match=False)
+    unknown = _rec("unknown.ts", log_include_match=None)
+    marked = _rec("marked.ts", log_include_match=True)
+    priority = [SelectionPriority.LOG_INCLUDE]
+
+    assert determine_keep_reason(best, [unknown], priority) == "selected"
+    assert determine_keep_reason(best, [marked], priority) == "no_include_match"
+
 
 
 # ---------------------------------------------------------------------------

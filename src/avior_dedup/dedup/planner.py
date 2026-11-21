@@ -204,7 +204,7 @@ def _reason_for_priority(
             if any(_series_marker_completeness(o.file) < best_score for o in others):
                 return "series_marker_completeness"
         elif priority == SelectionPriority.LOG_INCLUDE:
-            if best.log_include_match is False and any(o.log_include_match is not False for o in others):
+            if best.log_include_match is False and any(o.log_include_match is True for o in others):
                 return "no_include_match"
         elif priority == SelectionPriority.RECORDING_DATE:
             if any(_recording_ordinal(o) < _recording_ordinal(best) for o in others):
