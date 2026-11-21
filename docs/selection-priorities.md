@@ -22,8 +22,8 @@ That is deterministic for a given input but not meaningful — it is why
 | 3 | `fewer_errors` | fewer encoding errors | `.log`, `Errors:` lines |
 | 4 | `log_include` | no avior-go `log_include` match | `.log` (trailer excluded), terms from MongoDB |
 | 5 | `year_match` | `.nfo` year equal to the `.txt` year | `.nfo`, `.txt` |
-| 6 | `closest_duration` | duration closest to the recorded length | ffprobe + `.log`/EPG |
-| 7 | `series_marker_completeness` | the filename with the most explicit episode marker | filename only |
+| 6 | `series_marker_completeness` | the filename with the most explicit episode marker | filename only |
+| 7 | `closest_duration` | duration closest to the recorded length | ffprobe + `.log`/EPG |
 | 8 | `recording_date` | the newer recording | `.log` first line, else file mtime |
 
 The order groups criteria by what they say about a copy:

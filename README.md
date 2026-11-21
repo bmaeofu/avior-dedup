@@ -10,14 +10,17 @@ You point it at a source directory and it groups files into duplicate sets. Thre
 - **Exact** -- identical filenames in different subdirectories
 - **Semantic** -- strips configurable prefixes (e.g. "Terra X -"), drops episode numbers, collapses punctuation, then compares what's left
 
-Once it finds duplicates, it picks which copy to keep based on:
+Once it finds duplicates, it picks which copy to keep based on the configured
+selection priorities. The default order is:
 
-- Whether there's actually a video file (or just orphaned metadata)
-- Multichannel audio (AC3 5.x) over stereo, when available
-- Video resolution from timer/recording lines (higher wins)
-- Encoding error count from `.log` files
-- Allowed duration delta window (`video_duration - rec_duration`) with separate limits for longer/shorter
-- Recording date from `.log` files (preferred when configured)
+- `multichannel` -- prefers multichannel audio when the recording-start log window supports it
+- `resolution` -- prefers the higher normalized video resolution from the recording block
+- `fewer_errors` -- prefers the copy with the lowest summed log error count
+- `log_include` -- prefers a copy not marked for replacement by avior-go
+- `year_match` -- prefers matching `.nfo` and EPG `.txt` years
+- `series_marker_completeness` -- prefers the filename with the strongest configured episode marker
+- `closest_duration` -- prefers the closest duration within the configured tolerance buckets
+- `recording_date` -- prefers newer recordings as the final tie-breaker
 
 Selection behavior notes:
 

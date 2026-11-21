@@ -30,6 +30,30 @@ def test_distinct_episode_option_keeps_unknown_episode_metadata(tmp_path):
         Path(tmp_path, stem + ".log").write_text("x", encoding="utf-8")
     assert len(_groups_ep(tmp_path, discard_groups_with_distinct_episodes=True)) == 1
 
+def test_nfo_year_missing_on_both_sides_still_groups(tmp_path):
+    _base(tmp_path, "Film (2019)")
+    _base(tmp_path, "Film")
+    assert len(_groups(tmp_path, require_identical_nfo_year=True)) == 1
+
+def test_nfo_year_known_and_missing_stay_separate(tmp_path):
+    _base(tmp_path, "Film (2019)", nfo_year=2019)
+    _base(tmp_path, "Film")
+    assert _groups(tmp_path, require_identical_nfo_year=True) == []
+
+
+
+def test_distinct_episode_option_does_not_bypass_series_keep_keywords(tmp_path):
+    # 'raumpatrouille' is in series_keep_episode_nos, so same-episode files
+    # remain separate instead of being normalized into a candidate group.
+    _pair(tmp_path, "Raumpatrouille (1_7) - Orion", "Raumpatrouille (1/7)", "Orion")
+    _pair(tmp_path, "Raumpatrouille (S01_E01) - Orion", "Raumpatrouille (S01/E01)", "Orion")
+    assert _groups_ep(tmp_path, discard_groups_with_distinct_episodes=True) == []
+
+def test_distinct_episode_option_keeps_unknown_episode_metadata(tmp_path):
+    for stem in ("Mystery Show (1) - Episode", "Mystery Show (2) - Episode"):
+        Path(tmp_path, stem + ".log").write_text("x", encoding="utf-8")
+    assert len(_groups_ep(tmp_path, discard_groups_with_distinct_episodes=True)) == 1
+
 
 def test_distinct_episode_option_does_not_bypass_series_keep_keywords(tmp_path):
     # 'raumpatrouille' is in series_keep_episode_nos, so same-episode files
