@@ -114,8 +114,8 @@ def main() -> None:
         action="store_true",
         help=(
             "With --remove-episode-nos: read each candidate's .txt (Title=/Info=) "
-            "and drop groups whose members are provably different episodes. "
-            "Bypasses the series/episode keep-keyword lists so stripping applies uniformly."
+            "and keep only groups whose members all have the same known episode. "
+            "Configured series/episode keep-keyword safeguards remain active."
         ),
     )
     parser.add_argument(

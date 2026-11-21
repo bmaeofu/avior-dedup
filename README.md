@@ -58,6 +58,19 @@ uv run avior-dedup m /path/to/source /path/to/target log.txt \
   --max-duration-diff-longer 600 \
   --max-duration-diff-shorter 600
 
+# Semantic matching with episode safety checks
+uv run avior-dedup f /path/to/source /path/to/target log.txt \
+  --duptype semantic \
+  --remove-episode-nos \
+  --discard-groups-with-distinct-episodes
+```
+
+With `--discard-groups-with-distinct-episodes`, configured safeguards from
+`episode_keywords.yaml` remain active. Candidate groups are retained only when
+every member has a parseable `.txt` episode ID and all IDs agree. Groups with
+missing, unparseable, or different episode metadata are left untouched.
+
+```bash
 # Semantic matching with custom prefix stripping
 uv run avior-dedup f /path/to/docs /path/to/target log.txt \
   --duptype semantic \
@@ -124,7 +137,7 @@ Keyword lists and filters live in YAML files under `src/avior_dedup/config/`. Yo
 - `ignored_files.yaml` -- filenames to skip
 - `ignored_dirs.yaml` -- directories to skip
 - `suffixes.yaml` -- file suffixes and video extensions
-- `episode_keywords.yaml` -- keywords that prevent episode number stripping in semantic mode
+- `episode_keywords.yaml` -- keywords that prevent episode number stripping in semantic mode; these safeguards remain active with distinct-episode filtering
 - `path_suggestions.yaml` -- directory suggestions for the web UI dropdowns
 
 ## Project layout

@@ -520,6 +520,12 @@ def _episode_ids_consistent(ids: list[tuple[int | None, int] | None]) -> bool:
             return False
     return True
 
+def _episode_ids_complete_and_consistent(
+    ids: list[tuple[int | None, int] | None],
+) -> bool:
+    """Return True only when every member has the same known episode ID."""
+    return bool(ids) and all(episode_id is not None for episode_id in ids) and _episode_ids_consistent(ids)
+
 
 def _video_duration_for(dir_path: str, stem: str) -> Optional[float]:
     """Return the ffprobe duration (seconds) of the stem's video file, or None."""
@@ -871,7 +877,9 @@ def find_duplicates(
             remove_spaces,
             remove_non_episode_parens,
             replace_underscores,
-            ignore_keep_keywords=discard_groups_with_distinct_episodes,
+            # The YAML episode-keyword safeguards remain active even when the
+            # distinct-episode filter is enabled.
+            ignore_keep_keywords=False,
             txt_available=_txt_available,
             txt_episode=_txt_ep,
             txt_year=_txt_yr,
@@ -1007,7 +1015,8 @@ def find_duplicates(
                     remove_spaces,
                     remove_non_episode_parens,
                     replace_underscores,
-                    ignore_keep_keywords=discard_groups_with_distinct_episodes,
+                    # Keep configured episode-keyword safeguards in strict grouping.
+                    ignore_keep_keywords=False,
                     txt_available=_txt_available,
                     txt_episode=_txt_ep,
                     txt_year=_txt_yr,
@@ -1073,7 +1082,8 @@ def find_duplicates(
                     remove_spaces,
                     remove_non_episode_parens,
                     replace_underscores,
-                    ignore_keep_keywords=discard_groups_with_distinct_episodes,
+                    # Keep configured episode-keyword safeguards in strict grouping.
+                    ignore_keep_keywords=False,
                     txt_available=_txt_available,
                     txt_episode=_txt_ep,
                     txt_year=_txt_yr,
@@ -1088,10 +1098,10 @@ def find_duplicates(
                     if len(group_paths) > 1:
                         groups.append(group_paths)
 
-    # Optionally drop semantic groups whose .txt metadata proves that the
-    # members are different episodes. They only looked identical because the
-    # episode number was stripped, so this is meaningful only together with
-    # episode number stripping — without it the numbers stay part of the key.
+    # Keep only groups whose .txt metadata identifies one consistent episode.
+    # Unknown metadata is unsafe for moving, so it rejects the whole group.
+    # The option is meaningful with episode-number stripping; otherwise the
+    # numbers remain part of the semantic key.
     if (
         discard_groups_with_distinct_episodes
         and remove_episode_nos
@@ -1107,7 +1117,7 @@ def find_duplicates(
                 if txt_path not in _ep_cache:
                     _ep_cache[txt_path] = _episode_id_from_txt(txt_path)
                 ids.append(_ep_cache[txt_path])
-            if _episode_ids_consistent(ids):
+            if _episode_ids_complete_and_consistent(ids):
                 filtered.append(group)
         groups = filtered
 

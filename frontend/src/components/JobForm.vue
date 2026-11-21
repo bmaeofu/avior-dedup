@@ -412,7 +412,7 @@ function submit() {
             hide-details
             :disabled="!form.remove_episode_nos"
             :hint="form.remove_episode_nos
-              ? 'Reads the .txt episode id; bypasses the series/episode keep-keyword lists.'
+              ? 'Reads .txt episode ids; keeps keyword safeguards and rejects unknown or different episodes.'
               : 'Requires “Remove episode numbers”.'"
             persistent-hint
           />
