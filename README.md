@@ -17,7 +17,7 @@ selection priorities. The default order is:
 - `resolution` -- prefers the higher normalized video resolution from the recording block
 - `fewer_errors` -- prefers the copy with the lowest summed log error count
 - `log_include` -- prefers a copy not marked for replacement by avior-go
-- `year_match` -- prefers matching `.nfo` and EPG `.txt` years
+- `year_match` -- prefers copies where both the `.nfo` and EPG `.txt` years are present and equal
 - `series_marker_completeness` -- prefers the filename with the strongest configured episode marker
 - `closest_duration` -- prefers the closest duration within the configured tolerance buckets
 - `recording_date` -- prefers newer recordings as the final tie-breaker

@@ -21,7 +21,7 @@ That is deterministic for a given input but not meaningful — it is why
 | 2 | `resolution` | the higher resolution | `.log`, whole `Start`…`Stop` block |
 | 3 | `fewer_errors` | fewer encoding errors | `.log`, `Errors:` lines |
 | 4 | `log_include` | no avior-go `log_include` match | `.log` (trailer excluded), terms from MongoDB |
-| 5 | `year_match` | `.nfo` year equal to the `.txt` year | `.nfo`, `.txt` |
+| 5 | `year_match` | both `.nfo` and `.txt` years are present and equal | `.nfo`, `.txt` |
 | 6 | `series_marker_completeness` | the filename with the most explicit episode marker | filename only |
 | 7 | `closest_duration` | duration closest to the recorded length | ffprobe + `.log`/EPG |
 | 8 | `recording_date` | the newer recording | `.log` first line, else file mtime |
@@ -138,13 +138,13 @@ They do not distort the ranking — inside a group both copies carry them and ti
 but they only discriminate when copies differ, e.g. one has `Lost Data:`.
 
 ### `year_match`
-**Prefers** the copy whose release year is consistent across its metadata.
+**Prefers** a copy whose `.nfo` and EPG `.txt` years are both present and equal.
 
 **Data source** — `.nfo` `<year>` element vs. the year extracted from the EPG
 `.txt` by the shared `movie_metadata` library (which falls back to the `.log`).
 
-**Sort value** — `0` when both years are known and equal, else `1` (a missing
-year also yields `1`).
+**Sort value** — `0` only when both years are known and equal; otherwise `1`.
+That includes a missing year on either side or two different known years.
 
 **Example** — `.nfo` year 1989, `.txt` year 1990 → mismatch → `1`.
 
