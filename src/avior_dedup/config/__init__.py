@@ -1,59 +1,4 @@
 from __future__ import annotations
-def series_marker_scores() -> list[dict[str, int | str]]:
-    """Return configurable filename marker patterns and their point values."""
-    data = _load_yaml("series_marker_scores.yaml")
-    if not isinstance(data, list):
-        raise ValueError("series_marker_scores.yaml must contain a list")
-    validated: list[dict[str, int | str]] = []
-    for index, item in enumerate(data):
-        if not isinstance(item, dict):
-            raise ValueError(f"series_marker_scores.yaml entry {index} must be a mapping")
-        points = item.get("points")
-        pattern = item.get("pattern")
-        if isinstance(points, bool) or not isinstance(points, int) or points < 0:
-            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid points")
-        if not isinstance(pattern, str) or not pattern.strip():
-            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid pattern")
-        validated.append({"points": points, "pattern": pattern})
-    return validated
-
-def series_marker_scores() -> list[dict[str, int | str]]:
-    """Return configurable filename marker patterns and their point values."""
-    data = _load_yaml("series_marker_scores.yaml")
-    if not isinstance(data, list):
-        raise ValueError("series_marker_scores.yaml must contain a list")
-    validated: list[dict[str, int | str]] = []
-    for index, item in enumerate(data):
-        if not isinstance(item, dict):
-            raise ValueError(f"series_marker_scores.yaml entry {index} must be a mapping")
-        points = item.get("points")
-        pattern = item.get("pattern")
-        if isinstance(points, bool) or not isinstance(points, int) or points < 0:
-            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid points")
-        if not isinstance(pattern, str) or not pattern.strip():
-            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid pattern")
-        validated.append({"points": points, "pattern": pattern})
-    return validated
-
-def series_marker_scores() -> list[dict[str, int | str]]:
-    """Return configurable filename marker patterns and their point values."""
-    data = _load_yaml("series_marker_scores.yaml")
-    if not isinstance(data, list):
-        raise ValueError("series_marker_scores.yaml must contain a list")
-    validated: list[dict[str, int | str]] = []
-    for index, item in enumerate(data):
-        if not isinstance(item, dict):
-            raise ValueError(f"series_marker_scores.yaml entry {index} must be a mapping")
-        points = item.get("points")
-        pattern = item.get("pattern")
-        if isinstance(points, bool) or not isinstance(points, int) or points < 0:
-            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid points")
-        if not isinstance(pattern, str) or not pattern.strip():
-            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid pattern")
-        validated.append({"points": points, "pattern": pattern})
-    return validated
-
-        "series_marker_scores": "series_marker_scores.yaml",
 
 import os
 import shutil
@@ -128,6 +73,24 @@ def series_keep_episode_nos() -> list[str]:
     return data["series_keep_episode_nos"]
 
 
+def series_marker_scores() -> list[dict[str, int | str]]:
+    """Return configurable filename marker patterns and their point values."""
+    data = _load_yaml("series_marker_scores.yaml")
+    if not isinstance(data, list):
+        raise ValueError("series_marker_scores.yaml must contain a list")
+    validated: list[dict[str, int | str]] = []
+    for index, item in enumerate(data):
+        if not isinstance(item, dict):
+            raise ValueError(f"series_marker_scores.yaml entry {index} must be a mapping")
+        points = item.get("points")
+        pattern = item.get("pattern")
+        if isinstance(points, bool) or not isinstance(points, int) or points < 0:
+            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid points")
+        if not isinstance(pattern, str) or not pattern.strip():
+            raise ValueError(f"series_marker_scores.yaml entry {index} has invalid pattern")
+        validated.append({"points": points, "pattern": pattern})
+    return validated
+
 def episode_keep_keywords() -> list[str]:
     data = _load_yaml("episode_keywords.yaml")
     return data["episode_keep_keywords"]
@@ -144,13 +107,14 @@ def config_dir() -> Path:
 
 
 def config_files() -> dict[str, str]:
-    """Return a mapping of config name to YAML filename."""
+    """Return the complete mapping of config names to bundled YAML filenames."""
     return {
         "ignored_files": "ignored_files.yaml",
         "ignored_dirs": "ignored_dirs.yaml",
         "semantic_prefixes": "semantic_prefixes.yaml",
         "suffixes": "suffixes.yaml",
         "episode_keywords": "episode_keywords.yaml",
+        "series_marker_scores": "series_marker_scores.yaml",
         "path_suggestions": "path_suggestions.yaml",
         "searchmove_paths": "searchmove_paths.yaml",
         "searchmove_templates": "searchmove_templates.yaml",
